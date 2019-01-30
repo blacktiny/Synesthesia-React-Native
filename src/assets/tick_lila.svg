@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="9px" viewBox="0 0 13 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>Path 11</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="2.7281746%" x2="3.84397645%" y2="95.6845238%" id="linearGradient-1">
+            <stop stop-color="#6F58ED" offset="0%"></stop>
+            <stop stop-color="#AEA2F2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="create-account-all-filled" transform="translate(-323.000000, -371.000000)" fill="url(#linearGradient-1)">
+            <path d="M334.286709,371.299132 C334.673788,370.905192 335.306929,370.89963 335.700868,371.286709 C336.094808,371.673788 336.10037,372.306929 335.713291,372.700868 L328.8352,379.700868 C328.443304,380.099711 327.800515,380.099711 327.408619,379.700868 L323.286709,375.505901 C322.89963,375.111961 322.905192,374.47882 323.299132,374.091742 C323.693071,373.704663 324.326212,373.710224 324.713291,374.104164 L328.12191,377.573198 L334.286709,371.299132 Z" id="Path-11"></path>
+        </g>
+    </g>
+</svg>
