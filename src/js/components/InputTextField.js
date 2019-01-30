@@ -1,9 +1,9 @@
-import { PropTypes } from 'prop-types';
 import React, { Component } from 'react';
-import { Text, TextInput, View, Image } from 'react-native';
-import { StyleSheet, Platform } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import TickLila from '../icons/TickLila';
+import { Theme } from '../constants/constants'
 
 class InputTextField extends Component {
 
@@ -28,7 +28,7 @@ class InputTextField extends Component {
       <LinearGradient
         start={{ x: 1, y: 1 }} end={{ x: 1, y: 1 }}
         locations={[0, 1]}
-        colors={['#D32439', '#D32439']}
+        colors={['#DA152C', '#DA152C']}
         style={styles.linearGradient}>
 
       </LinearGradient>
@@ -105,8 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderBottomWidth: 0,
     paddingBottom: 0,
-    marginBottom: 0,
-
+    marginBottom: 0
   },
   correctInputTick: {
     position: 'absolute',
@@ -121,9 +120,11 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   rootError: {
-    color: '#D32439',
+    color: '#DA152C',
     marginBottom: 3,
     marginTop: 3,
+    opacity: 1,
+    fontFamily: Theme.FONT_MEDIUM
   },
 });
 

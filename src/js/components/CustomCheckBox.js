@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, Text, StyleSheet, Image, Platform } from 'react-native';
+import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import TickGreen from '../icons/TickGreen';
+import { Theme } from '../constants/constants'
 
 class CustomCheckBox extends Component {
   constructor() {
@@ -32,7 +33,7 @@ class CustomCheckBox extends Component {
         underlayColor="transparent" style={styles.checkBoxButton}>
         <View style={styles.checkBoxHolder}>
           <View style={{
-            width: this.props.size, height: this.props.size, backgroundColor: this.props.color, padding: 2, borderRadius: 4, overflow: 'hidden'
+            width: this.props.size, height: this.props.size, backgroundColor: this.props.color, padding: 0, borderRadius: 4, overflow: 'hidden'
           }}>
             {
               (this.state.checked)
@@ -47,17 +48,6 @@ class CustomCheckBox extends Component {
           <Text style={[styles.checkBoxLabel, { color: this.props.color }]}>
             {this.props.label}
           </Text>
-
-          {/* <Text style={styles.checkBoxText}>
-            {'By signing up you agree on the'}
-            <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
-              {' Terms & Conditions'}</Text>
-            <Text style={styles.checkBoxText}>{' and'}</Text>
-            <Text style={[styles.checkBoxText, { color: '#25B999' }]}>{' Privacy Policy'}</Text>
-            <Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text>
-          </Text> */}
-
-
 
         </View>
       </TouchableHighlight>
@@ -85,7 +75,7 @@ const styles = StyleSheet.create({
   },
   checkBoxHolder: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   checkedView: {
     flex: 1,
@@ -102,8 +92,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#5C5C5C'
   },
   checkBoxLabel: {
-    fontSize: 15,
-    paddingLeft: 10
+    fontSize: 14,
+    marginTop: -3,
+    paddingLeft: 13,
+    fontFamily: Theme.FONT_MEDIUM
   }
 });
 

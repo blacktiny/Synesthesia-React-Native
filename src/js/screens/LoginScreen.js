@@ -11,6 +11,7 @@ import { iPhoneX } from '../../js/util';
 
 import { loginUser } from '../actions/LoginAction'
 import { closeLoginErrorBanner } from '../actions/LoginAction'
+import { closeLoginSuccessBanner } from '../actions/LoginAction'
 
 const { width, height } = Dimensions.get('screen');
 const searchIcon = require('../../assets/google_icon.png')
@@ -38,12 +39,6 @@ class LoginScreen extends Component {
     let email = this.state.email;
     let password = this.state.password;
     this.props.loginUser({ email, password });
-  }
-
-  componentDidUpdate() {
-    const { isLoggedIn, navigation } = this.props;
-
-    if (isLoggedIn) navigation.navigate('User');
   }
 
   validateEmailRegex = (email) => {
@@ -117,7 +112,34 @@ class LoginScreen extends Component {
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 14, marginTop: 10 }}>{'Login failed. Please try again.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Login failed. Please try again.'}</Text>
+        </View>
+      </LinearGradient>
+    )
+  }
+
+  loginSuccessBanner = () => {
+    return (
+      <LinearGradient
+        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+        locations={[0, 1]}
+        colors={['#7059ED', '#00C2FB']}
+        style={styles.loginBanner}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => {
+          this.props.closeLoginSuccessBanner();
+          this.props.navigation.navigate('Sensorium');
+          this.setState({
+            email: '',
+            password: '',
+            emailSuccessBorder: false,
+            passwordSuccessBorder: false,
+          })
+        }}>
+          <BannerCloseIcon style={styles.crossIcon} />
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Yeah! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Login Successful!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -125,6 +147,7 @@ class LoginScreen extends Component {
 
   loginForm = () => {
     const loginButtonDisabled = this.state.emailSuccessBorder && this.state.passwordSuccessBorder;
+    let { requestPending } = this.props;
     return (
       <View style={styles.loginContent}>
         <TouchableOpacity style={styles.crossButton} onPress={() => alert('close')}>
@@ -171,12 +194,12 @@ class LoginScreen extends Component {
         </View>
         <View style={styles.buttonArea}>
           <CustomButton
-            disabled={!loginButtonDisabled}
+            disabled={!loginButtonDisabled || requestPending}
             title="Log in"
             onPress={this.handleOnSubmit}
           />
           <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-            <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13 }]}>{'Forgot password?'}</Text>
+            <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -192,6 +215,7 @@ class LoginScreen extends Component {
     return (
       <View style={styles.container}>
         {!wrongCredentials && !isLoggedIn && this.loginForm()}
+        {!wrongCredentials && isLoggedIn && this.loginSuccessBanner()}
         {wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
       </View>
     )
@@ -214,6 +238,7 @@ const styles = StyleSheet.create({
   emailText: {
     color: '#777778',
     fontSize: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   checkBoxText: {
     color: '#777778',
@@ -222,7 +247,8 @@ const styles = StyleSheet.create({
   loginGoogleText: {
     color: '#FFFFFF',
     fontSize: 14,
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily: Theme.FONT_REGULAR
   },
   googleIcon: {
     width: 20,
@@ -250,16 +276,19 @@ const styles = StyleSheet.create({
   createAccount: {
     color: '#25B999',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 4,
+    fontFamily: Theme.FONT_BOLD
   },
   noAccountYet: {
     color: '#FFFFFF',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   loginText: {
     color: '#FFFFFF',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: Theme.FONT_BOLD
   },
   textContainer: {
     paddingTop: 10,
@@ -296,7 +325,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.loginReducer.isLoggedIn,
-    wrongCredentials: state.loginReducer.wrongCredentials
+    wrongCredentials: state.loginReducer.wrongCredentials,
+    requestPending: state.loginReducer.requestPending
   }
 }
 
@@ -309,7 +339,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   loginUser,
-  closeLoginErrorBanner
+  closeLoginErrorBanner,
+  closeLoginSuccessBanner
 }
 
 export default connect(

@@ -62,7 +62,7 @@ class SideMenu extends Component {
               disabled={false}
               style={styles.button}
               title="Create Free Account"
-              onPress={() => this.handleOnSubmit()}
+              onPress={() => this.props.navigation.navigate('Register')}
             />
           </ImageBackground>
         </View>

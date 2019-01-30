@@ -12,18 +12,10 @@ const multimedia = require('../../assets/multimedia.png')
 const hearing = require('../../assets/hearing.png')
 const watching = require('../../assets/watching.png')
 
-const videosList = [
-  { icon: multimedia, name: 'Start here' },
-  { icon: multimedia, name: 'Awareness of Breathing' },
-  { icon: multimedia, name: 'Awareness of Body' },
-  { icon: multimedia, name: 'Awareness of Body' },
-]
-
 class Synesthesia extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      videosList: videosList
     }
   }
 
@@ -111,27 +103,13 @@ class Synesthesia extends Component {
     const { isFetchingData } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen = {'syensthesia'}/>
+        <BottomBar screen = {'syensthesia'} navigation = {this.props.navigation}/>
         <ScrollView style = {{flexGrow: 1, marginBottom: 35}}>
           <Image
             style={{ height: 137, width: '100%' }}
             resizeMode='cover'
             source={meditateImage}
           />
-          {/* <View style={{ paddingLeft: 10, paddingTop: 10 }}>
-            <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{'Synesthetic Gateway'}</Text>
-            <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{'Start to discover different Types of Synesthesia.'}</Text>
-          </View>
-          <View style={{ height: 145 }}>
-            <FlatList
-              data={this.state.videosList}
-              contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal={true}
-              renderItem={({ item, index }) => this.renderContainerItem(item, index, 'videos')}
-              extraData={this.state.videosList}
-            />
-          </View> */}
           {isFetchingData && this.loadingPage()}
           {this.renderData()}
         </ScrollView>

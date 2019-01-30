@@ -148,6 +148,7 @@ class MindFulness extends Component {
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
+                this.props.navigation.navigate('Pricing')
               }}>
                 <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
               </TouchableOpacity>
@@ -177,7 +178,7 @@ class MindFulness extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen = {'mindfullness'}/>
+        <BottomBar screen = {'mindfullness'} navigation = {this.props.navigation} />
         <ScrollView style = {{flexGrow: 1, marginBottom: 35}}>
           <ImageBackground
               style={{

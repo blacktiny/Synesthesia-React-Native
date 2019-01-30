@@ -8,6 +8,7 @@
 
 import React, { Component } from 'react';
 import { Text, View, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   createSwitchNavigator,
   createAppContainer,
@@ -23,6 +24,7 @@ import LoginScreen from "./src/js/screens/LoginScreen";
 import RegisterScreen from "./src/js/screens/RegisterScreen";
 import ForgotPasswordScreen from "./src/js/screens/ForgotPasswordScreen";
 import UserScreen from "./src/js/screens/UserScreen";
+import PricingScreen from "./src/js/screens/PricingScreen";
 import SideMenu from './src/js/components/SideMenu';
 import SensoriumScreen from './src/js/screens/SensoriumScreen';
 import SynesthesiaScreen from './src/js/screens/SynesthesiaScreen';
@@ -56,7 +58,7 @@ class WelcomeScreen extends Component {
     )
   }
 }
-  
+
 const SensoriumStackNavigator = createStackNavigator({
   Sensorium: {
     screen: SensoriumScreen,
@@ -71,22 +73,46 @@ const SensoriumStackNavigator = createStackNavigator({
     screen: MindFulnessScreen,
   }
 }, {
-    defaultNavigationOptions: ({ navigation }) => {
+  defaultNavigationOptions: ({ navigation }) => {
+    return {
+      headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
+      headerLeft: <MeditateHeader navigation={navigation} />
+    }
+  }
+});
+
+const PricingStackNavigator = createStackNavigator({
+  Pricing: {
+    screen: PricingScreen,
+    navigationOptions: ({ navigation }) => {
       return {
         headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
         headerLeft: <MeditateHeader navigation={navigation} />
       }
     }
-  });
+  },
+}, {
+  defaultNavigationOptions: ({ navigation }) => {
+    return {
+      headerLeft: <Icon
+        style={{ paddingLeft: 10 }}
+        onPress={() => navigation.openDrawer()}
+        name="md-menu"
+        size={30} />
+    }
+  }
+});
 
 const SensoriumDrawerNavigator = createDrawerNavigator({
-  Sensorium: { screen: SensoriumStackNavigator }
-},
-  {
+  Sensorium: { screen: SensoriumStackNavigator },
+  Pricing: { screen: PricingStackNavigator }
+}
+, {
     initialRouteName: 'Sensorium',
     contentComponent: SideMenu,
     drawerWidth: 300
-  });
+  }
+  );
 
 const AppSwitchNavigator = createSwitchNavigator({
   Welcome: { screen: WelcomeScreen },
@@ -94,9 +120,9 @@ const AppSwitchNavigator = createSwitchNavigator({
   Login: { screen: LoginScreen },
   Register: { screen: RegisterScreen },
   User: { screen: UserScreen },
+  Pricing: { screen: PricingScreen },
   ForgotPassword: { screen: ForgotPasswordScreen }
 });
-
 
 class App extends Component {
   render() {
