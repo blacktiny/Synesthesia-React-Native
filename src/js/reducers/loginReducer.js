@@ -12,60 +12,62 @@ const initialState = {
   wrongCredentials: false,
   user: {},
   token: null,
+  requestPending: false
 };
 
 export const loginReducer = (state = initialState, action) => {
-  // console.log("In loginReducer...");
   switch (action.type) {
     case ActionTypes.AUTH_SUCCESS:
       return {
         ...state,
         isLoggedIn: false,
         wrongCredentials: false,
-        token: action.payload.token
+        token: action.payload.token,
+        requestPending: true
       }
     case ActionTypes.AUTH_FAIL:
       return {
         ...state,
         isLoggedIn: false,
-        wrongCredentials: true
+        wrongCredentials: true,
+        requestPending: false
         // token: action.payload.token
+      }
+    case ActionTypes.LOGIN_USER:
+      return {
+        ...state,
+        requestPending: true
       }
     case ActionTypes.LOGIN_USER_SUCCESS:
       return {
         ...state,
         isLoggedIn: true,
         wrongCredentials: false,
-        // loginResponse: action.payload,
-        // isLoggedIn: action.payload.status.success,
+        requestPending: false,
         user: action.payload.user
       }
     case ActionTypes.LOGIN_USER_FAIL:
       return {
         ...state,
         isLoggedIn: false,
-        wrongCredentials: true
-        // loginResponse: action.payload,
-        // isLoggedIn: action.payload.status.success,
+        wrongCredentials: true,
+        requestPending: false
         // user: action.payload.user
       }
     case ActionTypes.CLOSE_LOGIN_BANNER_ERROR:
       return {
         ...state,
         isLoggedIn: false,
-        wrongCredentials: false
-        // loginResponse: action.payload,
-        // isLoggedIn: action.payload.status.success,
+        wrongCredentials: false,
+        requestPending: false
         // user: action.payload.user
       }
     case ActionTypes.CLOSE_LOGIN_BANNER_SUCCESS:
       return {
         ...state,
         isLoggedIn: true,
-        wrongCredentials: false
-        // loginResponse: action.payload,
-        // isLoggedIn: action.payload.status.success,
-        // user: action.payload.user
+        wrongCredentials: false,
+        requestPending: false
       }
     case ActionTypes.LOGOUT_USER_SUCCESS:
       return {
@@ -78,5 +80,4 @@ export const loginReducer = (state = initialState, action) => {
     default:
       return state
   }
-
 }

@@ -20,3 +20,10 @@ export function closeLoginErrorBanner() {
   }
 }
 
+export function closeLoginSuccessBanner() {
+  return {
+    type: ActionTypes.CLOSE_LOGIN_BANNER_SUCCESS,
+    payload: {}
+  }
+}
+

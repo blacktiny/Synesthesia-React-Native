@@ -1,9 +1,9 @@
-import { PropTypes } from 'prop-types';
 import React, { Component } from 'react';
-import { TextInput, Text, Image, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { TextInput, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import EyeOpened from '../icons/EyeOpened';
 import EyeClosed from '../icons/EyeClosed';
+import { Theme } from '../constants/constants'
 
 class PasswordTextField extends Component {
 
@@ -37,7 +37,7 @@ class PasswordTextField extends Component {
       <LinearGradient
         start={{ x: 1, y: 1 }} end={{ x: 1, y: 1 }}
         locations={[0, 1]}
-        colors={['#D32439', '#D32439']}
+        colors={['#DA152C', '#DA152C']}
         style={styles.linearGradient}>
 
       </LinearGradient>
@@ -141,7 +141,10 @@ const styles = StyleSheet.create({
   },
 
   rootError: {
-    color: '#D32439'
+    color: '#DA152C',
+    opacity: 1,
+    fontFamily: Theme.FONT_MEDIUM
+
   }
 });
 

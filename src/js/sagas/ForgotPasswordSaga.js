@@ -3,9 +3,7 @@ import { ActionTypes } from '../constants/constants'
 import { forgotPassword } from '../api/api'
 
 const ForgotPasswordSaga = function* (action) {
-  // debugger;
   const apiObject = yield call(forgotPassword, action.payload.email);
-  // console.log(apiObject);
 
   if (apiObject.code) {
     yield put({

@@ -1,45 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, ImageBackground, Button, Image, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import CircleItemButton from '../components/CircleItemButton';
 
 import { getMindFulness } from '../actions/MindFulnessAction'
 
-const meditateImage = require('../../assets/meditateImage.png')
-const multimedia = require('../../assets/multimedia.png')
+import BannerCloseIcon from '../icons/BannerCloseIcon';
+
 const mindfulessImage = require('../../assets/mindfulnessheader.png')
-const hearing = require('../../assets/hearing.png')
-const watching = require('../../assets/watching.png')
+const banneractivitylockedImage = require('../../assets/lock3.png')
+const bannerpaymentlockedImage = require('../../assets/lock4.png')
 
-// const videosList = [
-//     { icon: multimedia, name: 'Start here' },
-//     { icon: multimedia, name: 'Awareness of Breathing' },
-//     { icon: multimedia, name: 'Awareness of Body' },
-//     { icon: multimedia, name: 'Awareness of Body' },
-//   ]
-
-// const numberList = [
-//     { number: 1, name: 'Start here', viewed: false, locked : false, unviewed: true },
-//     { number: 2, name: 'Awareness of Breathing', viewed: true, locked : false , unviewed: false },
-//     { number: 3, name: 'Awareness of Body', viewed: false, locked : true,  unviewed: false  },
-//     { number: 4, name: 'Awareness of Body', viewed: false, locked : false,  unviewed: false  },
-//   ]
-  
-//   const senseData = [
-//     { icon: hearing, name: 'Hearing' },
-//     { icon: watching, name: 'Watching' },
-//     { icon: watching, name: 'Week 4' },
-//   ]
-  
+const { width, height } = Dimensions.get('screen');
 
 class MindFulness extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // videosList: videosList,
-      // senseData: senseData,
-      // numberList : numberList
+      isLockedBannerVisible: false
     }
   }
 
@@ -116,9 +95,79 @@ class MindFulness extends Component {
           index = {index}
           numberCount = {itemLength}
           item = {item}
+          onPress = { () => this.onLeafClicked(item.locked) }
         />
       </View>
     )
+  }
+
+  LockedModalBanner = () => {
+    const { isLockedBannerVisible } = this.state;
+    const { isLoggedIn } = this.props;
+    if (isLoggedIn) {
+      return (
+        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
+          onRequestClose={ () => console.log('closed')}>
+          <View style={styles.modalContainer}>
+            <View style={[styles.lockedBanner, styles.activityBannerHeight]}>
+              <TouchableOpacity style={styles.crossButton} onPress={() => {
+                this.setState({ isLockedBannerVisible: false })
+              }}>
+                <BannerCloseIcon style={styles.crossIcon} />
+              </TouchableOpacity>
+              <View>
+                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {banneractivitylockedImage}/>
+                <Text style = {{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>This exercise is still locked!</Text>
+                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>Complete the order exercise first</Text>
+              </View>
+              <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
+                this.setState({ isLockedBannerVisible: false })
+              }}>
+                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )
+    } else {
+      return (
+        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
+          onRequestClose={ () => console.log('closed')}>
+          <View style={styles.modalContainer}>
+            <View style={[styles.lockedBanner, styles.paymentBannerHeight]}>
+              <TouchableOpacity style={styles.crossButton} onPress={() => {
+                this.setState({ isLockedBannerVisible: false })
+              }}>
+                <BannerCloseIcon style={styles.crossIcon} />
+              </TouchableOpacity>
+              <View>
+                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {bannerpaymentlockedImage}/>
+                <Text style = {{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18 }}>This exercise is still locked!</Text>
+                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22 }}>To unlock this exercise checkout our attractive Price Plans</Text>
+                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20 }}>Subscribe and get 7 Days of full access</Text>
+              </View>
+              <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
+                this.setState({ isLockedBannerVisible: false })
+                this.props.navigation.navigate('Pricing')
+              }}>
+                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => {
+                this.setState({ isLockedBannerVisible: false })
+              }}>
+                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>No, thanks</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )
+    }
+  }
+
+  onLeafClicked = (locked) => {
+    if (locked == "1") {
+      this.setState({ isLockedBannerVisible: true });
+    }
   }
 
   render() {
@@ -129,7 +178,7 @@ class MindFulness extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen = {'mindfullness'}/>
+        <BottomBar screen = {'mindfullness'} navigation = {this.props.navigation} />
         <ScrollView style = {{flexGrow: 1, marginBottom: 35}}>
           <ImageBackground
               style={{
@@ -157,29 +206,73 @@ class MindFulness extends Component {
           </ImageBackground>
           {isFetchingData && this.loadingPage()}
           {this.renderData(mindFulnessDatas)}
-          
-          {/* <View style={{ paddingTop: 10, paddingLeft: 10 }}>
-            <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{'Groudwork Series'}</Text>
-            <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{'Deepen your mindful experiecne'}</Text>
-          </View> */}
-          {/* <View style={{ flex: 1 }}>
-            <FlatList
-              data={this.state.senseData}
-              contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal={true}
-              renderItem={({ item, index }) => this.renderData(item, index, 'sense')}
-              extraData={this.state.senseData}
-            />
-          </View> */}
+          {this.LockedModalBanner()}
         </ScrollView>
       </View>
     )
   }
 }
 
+const styles = StyleSheet.create({
+  modalContainer: {
+    height: height,
+    width: width,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lockedBanner: {
+    height: height - 550,
+    width: width - 30,
+    borderRadius: 12,
+    paddingRight: 20,
+    paddingLeft: 20,
+    backgroundColor: '#383938',
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    alignItems: 'center'
+  },
+  activityBannerHeight: {
+    height: height - 550
+  },
+  paymentBannerHeight: {
+    height: height - 450
+  },
+  crossButton: {
+    width: 20,
+    height: 20,
+    marginTop: 20,
+    alignSelf: 'flex-end',
+  },
+  crossIcon: {
+    resizeMode: 'contain'
+  },
+  modalButton: {
+    width: width - 100,
+    height: 45,
+    borderWidth: 1,
+    borderRadius: 25,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  continueButton: {
+    marginTop: 30
+  },
+  subscribeButton: {
+    backgroundColor: '#25B999',
+    marginTop: 40,
+    borderWidth: 0
+  },
+  nothanksButton: {
+    marginTop: 15
+  }
+})
+
 function mapStateToProps(state) {
   return {
+    isLoggedIn: state.loginReducer.isLoggedIn,
     error: state.mindfulnessReducer.error,
     isFetchingData: state.mindfulnessReducer.isFetchingData,
     mindfulnessData: state.mindfulnessReducer.mindfulnessData

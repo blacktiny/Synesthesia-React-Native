@@ -14,14 +14,16 @@ class BottomBar extends Component {
   }
 
   render() {
+    const { navigation } = this.state;
+    console.log(navigation);
     return (
       <View style={styles.container}>
        <Image style={{ height: 15, width: 15}} source={leftArrow} />
-          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.push('Synesthesia')}>
+          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.navigate('Synesthesia')}>
             <Text style={{ color: this.state.screen == 'syensthesia' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Synesthesia'}</Text>
             {this.state.screen == 'syensthesia' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} />}
           </TouchableOpacity>
-          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.push('MindFulness')}>
+          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.navigate('MindFulness')}>
             <Text style={{ color: this.state.screen == 'mindfullness' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Mindfulness'}</Text>
             {this.state.screen == 'mindfullness' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} />}
           </TouchableOpacity>

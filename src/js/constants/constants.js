@@ -6,8 +6,13 @@ export const ActionTypes = keyMirror({
   LOGIN_USER_FAIL: null,
 
   CLOSE_LOGIN_BANNER_ERROR: null,
-  CLOSE_REGISTER_ERROR_BANNER: null,
-  CLOSE_SEND_RESET_LINK_ERROR_BANNER: null,
+  CLOSE_LOGIN_BANNER_SUCCESS: null,
+
+  CLOSE_REGISTER_BANNER_ERROR: null,
+  CLOSE_REGISTER_BANNER_SUCCESS: null,
+
+  CLOSE_SEND_RESET_LINK_BANNER_ERROR: null,
+  CLOSE_SEND_RESET_LINK_BANNER_SUCCESS: null,
 
   SEND_RESET_LINK: null,
   SEND_RESET_LINK_SUCCESS: null,
@@ -25,10 +30,6 @@ export const ActionTypes = keyMirror({
   LOGOUT_USER_SUCCESS: null,
   LOGOUT_USER_FAIL: null,
 
-  GET_SENSORIUM: null,
-  GET_SENSORIUM_SUCCESS: null,
-  GET_SENSORIUM_FAIL: null,
-
   GET_SYNESTHESIA: null,
   GET_SYNESTHESIA_SUCCESS: null,
   GET_SYNESTHESIA_FAIL: null,
@@ -40,16 +41,15 @@ export const ActionTypes = keyMirror({
   GET_NODE: null,
   GET_NODE_SUCCESS: null,
   GET_NODE_FAIL: null,
-  
+
   CLEAR_NODE: null,
-  
+
 })
 
 export const Theme = {
-  COLOR_1: '#ee1528',
+  COLOR_1: '#DA152C',
   COLOR_2: '#f2f2f2',
-  COLOR_3: '#0B0B0B',
-  COLOR_4: '#09ACE8',
-  // FONT_REGULAR: '"Raleway-Regular", sans-serif',
-  // FONT_BOLD: '"Raleway-Regular", sans-serif'
+  FONT_REGULAR: 'Raleway-Regular',
+  FONT_MEDIUM: 'Raleway-Medium',
+  FONT_BOLD: 'Raleway-Bold'
 }
