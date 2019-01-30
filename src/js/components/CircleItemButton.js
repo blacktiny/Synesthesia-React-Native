@@ -23,7 +23,7 @@ class CircleItemButton extends React.Component {
     const { id, index, numberCount, item } = this.state;
     return (
       <View key={id} style={{ width: 90, alignItems: 'center', margin: 10 }}>
-        <View style = {{flexDirection: 'row'}}>
+        <View style = {{ flexDirection: 'row', shadowRadius: 16, shadowOffset: { width: 0, height: 8 }, shadowColor: "black", shadowOpacity: 0.5 }}>
           <TouchableOpacity style = {{width: 80, height: 80, borderRadius: 50, borderWidth: item.unviewed == "0" ? 3 : 0, backgroundColor: '#383938', borderColor: item.unviewed == "0" ? '#27BF9E' : '#383938', alignItems: 'center', justifyContent: 'center'}} onPress={() => console.log('test')}>
             <Text style = {{fontSize: 27, color: '#545260'}}>{item.number}</Text>
             {item.viewed == "1" && <Image style = {{height: 25, width: 25, alignSelf: 'flex-end', position: 'absolute', top: 53 }} source = {tick}/>}
