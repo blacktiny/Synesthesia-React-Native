@@ -89,21 +89,21 @@ class MindFulness extends Component {
   renderContainers = (id, header, subHeader, itemList) => {
     return (
       <View key={id}>
-        <View style={{ paddingLeft: 10, paddingTop: 10 }}>
+        <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{subHeader}</Text>
         </View>
-        <View style={{ height: 145 }}>
+        <View style={{ height: 163, paddingTop: 10, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
-            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 10, paddingRight: 10 }}
+            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item, index }) => this.renderNumber(itemList.id, itemList.length, item, index, 'videos')}
             extraData={itemList}
           />
         </View>
-        <View style={{ height: 1, color: '#090909', width: '100%', marginTop: 15, borderColor: '#000000', borderWidth: 1 }} />
+        <View style={{ height: 1, color: '#090909', width: '100%', marginTop: 3, borderColor: '#000000', borderWidth: 1 }} />
       </View>
     )
   }
@@ -141,12 +141,14 @@ class MindFulness extends Component {
               resizeMode='contain'
               source={mindfulessImage}
             >
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{
+                textAlign: 'center',
                 fontSize: 20,
                 color: '#FFFFFF'
               }}>{header}</Text>
               <Text style={{
+                textAlign: 'center',
                 fontSize: 14,
                 paddingTop: 8,
                 color: '#FFFFFF'

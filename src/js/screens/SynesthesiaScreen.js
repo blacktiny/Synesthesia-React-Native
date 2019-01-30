@@ -70,11 +70,11 @@ class Synesthesia extends Component {
   renderContainers = (key, header, subHeader, data) => {
     return (
       <View key={key} >
-        <View style={{ paddingTop: 10, paddingLeft: 10 }}>
+        <View style={{ paddingTop: 30, paddingLeft: 15, paddingRight: 15 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{subHeader}</Text>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingLeft: 5 }}>
           <FlatList
             data={data}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}
@@ -84,7 +84,7 @@ class Synesthesia extends Component {
             extraData={data}
           />
         </View>
-        <View style={{ height: 1, color: '#090909', width: '100%', marginTop: 15, borderColor: '#000000', borderWidth: 1 }} />
+        <View style={{ height: 1, color: '#090909', width: '100%', borderColor: '#000000', borderWidth: 1 }} />
       </View>
     )
   }
@@ -98,8 +98,8 @@ class Synesthesia extends Component {
             style={{ width: type == 'videos' ? 100 : 170, height: type == 'videos' ? 100 : 150, resizeMode: 'contain' }}
           />
         </TouchableOpacity>
-        <View style={{ marginRight: type == 'videos' ? 0 : 70, width: type == 'videos' ? 90 : 150 }}>
-          <Text style={{ textAlign: 'center', fontSize: 14, color: '#FFFFFF' }}>
+        <View style={{ marginLeft: type == 'videos' ? 10 : 20, width: type == 'videos' ? 90 : 150 }}>
+          <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
             {item.name}
           </Text>
         </View>
