@@ -70,11 +70,11 @@ class Synesthesia extends Component {
   renderContainers = (key, header, subHeader, data) => {
     return (
       <View key={key} >
-        <View style={{ paddingTop: 30, paddingLeft: 15, paddingRight: 15 }}>
+        <View style={{ paddingTop: 30, paddingLeft: 12, paddingRight: 12 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{subHeader}</Text>
         </View>
-        <View style={{ flex: 1, paddingLeft: 5 }}>
+        <View style={{ flex: 1, paddingLeft: 2 }}>
           <FlatList
             data={data}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}

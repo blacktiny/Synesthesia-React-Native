@@ -35,13 +35,6 @@ export const forgotPassword = (email) => fetch(`${baseUrl}resetmail/${email}`, {
   }
 }).then(response => response.json());
 
-export const getSensorium = (token) => fetch(`${baseUrl}node/1?token=${token}`, {
-  method: 'GET',
-  headers: {
-    ...commonHeaders,
-  },
-}).then(response => response.json());
-
 export const getSynesthesia = (token) => fetch(`${baseUrl}node/338?token=${token}`, {
   method: 'GET',
   headers: {
