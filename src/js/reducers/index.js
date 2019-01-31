@@ -4,6 +4,7 @@ import { loginReducer } from './loginReducer'
 import { forgotPasswordReducer } from './forgotPasswordReducer'
 import { synesthesiaReducer } from './synesthesiaReducer'
 import { mindfulnessReducer } from './mindfulnessReducer'
+import { beingawareReducer } from './beingawareReducer'
 import { nodeReducer } from './nodeReducer'
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
   forgotPasswordReducer,
   synesthesiaReducer,
   mindfulnessReducer,
+  beingawareReducer,
   nodeReducer,
 })

@@ -49,6 +49,13 @@ export const getMindFulness = (token) => fetch(`${baseUrl}node/337?token=${token
   },
 }).then(response => response.json());
 
+export const getBeingAware = (token) => fetch(`${baseUrl}node/1082?token=${token}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
 export const getNodeByID = (id, token) => fetch(`${baseUrl}node/${id}?token=${token}`, {
   method: 'GET',
   headers: {

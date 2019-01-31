@@ -79,29 +79,31 @@ class Sensorium extends Component {
                 </View>
               </View>
             </TouchableOpacity>
-            <View style={{ marginTop: -10 }}>
-              <ImageBackground
-                style={{
-                  width: '100%',
-                  height: 235,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                resizeMode='contain'
-                source={awarenessImage}
-              >
-                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                    textAlign: 'center'
-                  }}>{'Integrate Awareness \n into life'}</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.push('BeingAware')}>
+              <View style={{ marginTop: -10 }}>
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: 235,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  resizeMode='contain'
+                  source={awarenessImage}
+                >
+                  <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{
+                      fontSize: 20,
+                      color: '#FFFFFF',
+                      textAlign: 'center'
+                    }}>{'Integrate Awareness \n into life'}</Text>
+                  </View>
+                </ImageBackground>
+                <View style={{ paddingLeft: 15, marginTop: -60 }}>
+                  <Text style={{ fontSize: 17, color: '#FFFFFF' }}>{'Life with Awareness'}</Text>
                 </View>
-              </ImageBackground>
-              <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 17, color: '#FFFFFF' }}>{'Life with Awareness'}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={{ marginTop: -20 }}>
               <Image
                 style={{
