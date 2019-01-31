@@ -6,6 +6,7 @@ import ForgotPasswordSaga from './ForgotPasswordSaga'
 import LogoutUserSaga from './LogoutUserSaga'
 import SynesthesiaSaga from './SynesthesiaSaga'
 import MindFulnessSaga from './MindFulnessSaga'
+import BeingAwareSaga from './BeingAwareSaga'
 import NodeSaga from './NodeSaga'
 
 const rootSaga = function* () {
@@ -15,6 +16,7 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGOUT_USER, LogoutUserSaga)
   yield takeLatest(ActionTypes.GET_SYNESTHESIA, SynesthesiaSaga)
   yield takeLatest(ActionTypes.GET_MINDFULNESS, MindFulnessSaga)
+  yield takeLatest(ActionTypes.GET_BEINGAWARE, BeingAwareSaga)
   yield takeLatest(ActionTypes.GET_NODE, NodeSaga)
 }
 

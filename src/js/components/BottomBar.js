@@ -27,10 +27,10 @@ class BottomBar extends Component {
             <Text style={{ color: this.state.screen == 'mindfullness' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Mindfulness'}</Text>
             {this.state.screen == 'mindfullness' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} />}
           </TouchableOpacity>
-          <View style={{ flexDirection: 'column' }}>
+          <TouchableOpacity style={{ flexDirection: 'column' }} onPress = {()=> this.props.navigation.navigate('BeingAware')}>
             <Text style={{ color: this.state.screen == 'beingaware' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Being Aware'}</Text>
             {this.state.screen == 'beingaware' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} /> }
-          </View>
+          </TouchableOpacity>
       </View>
     );
   }

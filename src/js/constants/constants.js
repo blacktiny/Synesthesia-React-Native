@@ -38,6 +38,10 @@ export const ActionTypes = keyMirror({
   GET_MINDFULNESS_SUCCESS: null,
   GET_MINDFULNESS_FAIL: null,
 
+  GET_BEINGAWARE: null,
+  GET_BEINGAWARE_SUCCESS: null,
+  GET_BEINGAWARE_FAIL: null,
+
   GET_NODE: null,
   GET_NODE_SUCCESS: null,
   GET_NODE_FAIL: null,
