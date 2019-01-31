@@ -11,39 +11,53 @@ const loginButton = require('../../../src/assets/loginButton.png');
 const playStore = require('../../../src/assets/playStore.png');
 
 const meanuItems = [
-  { name: 'Meditate in Sensorium' },
-  { name: 'Pricing' },
-  { name: 'Login' },
-  { name: 'How it works' },
-  { name: 'Blog' },
-  { name: 'Contact' },
-  { name: 'About us' },
-  { name: 'FAQ' },
-  { name: 'Privacy Policy' },
-  { name: 'T&C' },
-  { name: 'Disclaimer' },
-  { name: 'playStoreImage', image: playStore }
+  { name: 'Meditate in Sensorium', route: 'Sensorium' },
+  { name: 'Pricing', route: 'Pricing' },
+  { name: 'Login', route: 'Login' },
+  { name: 'How it works', route: '' },
+  { name: 'Blog', route: '' },
+  { name: 'Contact', route: '' },
+  { name: 'About us', route: '' },
+  { name: 'FAQ', route: '' },
+  { name: 'Privacy Policy', route: '' },
+  { name: 'T&C', route: '' },
+  { name: 'Disclaimer', route: '' },
+  { name: 'playStoreImage', image: playStore, route: '' }
 ]
 class SideMenu extends Component {
 
   constructor() {
     super();
     this.state = {
-      menuData: meanuItems
+      menuData: meanuItems,
+      currentItem: "Meditate in Sensorium"
     }
   }
 
+  onMenuItemClicked = (routeName, itemName) => {
+    this.props.navigation.navigate(routeName);
+    this.setState({ currentItem: itemName });
+  }
+
   renderData = (item, index, type) => {
+    const { currentItem } = this.state;
     return (
       <View>
-        {item.name != 'Login' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle}>{item.name}</Text>}
+        {item.name != 'Login' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != currentItem && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>}
         {item.name == 'Login' && <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }}>
           <Image source={loginButton} style={{ height: 20, width: 20 }} />
-          <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10 }}>{'Login'}</Text>
+          <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{'Login'}</Text>
         </View>}
-        {item.name == 'Meditate in Sensorium' && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+        {item.name == 'Meditate in Sensorium' && item.name == currentItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
-          <Text style={styles.textStyle}>{'Meditate in Sensorium'}</Text>
+          <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>
+        </View>}
+        {item.name == 'Meditate in Sensorium' && item.name != currentItem && <View style={{ marginTop: 25 }}>
+          <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>
+        </View>}
+        {item.name == currentItem && item.name != 'Meditate in Sensorium' &&<View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+          <Image source={gradientLine} style={{ height: 45, width: 3 }} />
+          <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>
         </View>}
         {(item.name == 'Privacy Policy' || item.name == 'T&C' || item.name == 'Disclaimer') && <Text style={styles.textStyle2}>{item.name}</Text>}
         {item.name == 'Login' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
