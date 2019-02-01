@@ -30,6 +30,9 @@ export const ActionTypes = keyMirror({
   LOGOUT_USER_SUCCESS: null,
   LOGOUT_USER_FAIL: null,
 
+  SET_MENUITEM: null,
+  GET_MENUITEM: null,
+
   GET_SYNESTHESIA: null,
   GET_SYNESTHESIA_SUCCESS: null,
   GET_SYNESTHESIA_FAIL: null,

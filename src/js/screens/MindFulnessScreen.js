@@ -5,6 +5,7 @@ import BottomBar from '../components/BottomBar';
 import CircleItemButton from '../components/CircleItemButton';
 
 import { getMindFulness } from '../actions/MindFulnessAction'
+import { setMenuItem } from '../actions/SideMenuAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
@@ -148,6 +149,7 @@ class MindFulness extends Component {
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
+                this.props.dispatch(setMenuItem('Pricing'))
                 this.props.navigation.navigate('Pricing')
               }}>
                 <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>

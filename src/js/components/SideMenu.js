@@ -1,8 +1,12 @@
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Text, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { iPhoneX } from '../../js/util';
+
+import { setMenuItem, getCurMenuItem } from '../../js/actions/SideMenuAction';
+
 const { height, width } = Dimensions.get('screen');
 const blurImage = require('../../../src/assets/blurImage.png');
 const cross = require('../../../src/assets/cross.png');
@@ -29,18 +33,21 @@ class SideMenu extends Component {
   constructor() {
     super();
     this.state = {
-      menuData: meanuItems,
-      currentItem: "Meditate in Sensorium"
+      menuData: meanuItems
     }
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getCurMenuItem());
   }
 
   onMenuItemClicked = (routeName, itemName) => {
     this.props.navigation.navigate(routeName);
-    this.setState({ currentItem: itemName });
+    this.props.dispatch(setMenuItem(itemName));
   }
 
   renderData = (item, index, type) => {
-    const { currentItem } = this.state;
+    const { currentItem } = this.props;
     return (
       <View>
         {item.name != 'Login' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != currentItem && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>}
@@ -55,7 +62,7 @@ class SideMenu extends Component {
         {item.name == 'Meditate in Sensorium' && item.name != currentItem && <View style={{ marginTop: 25 }}>
           <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>
         </View>}
-        {item.name == currentItem && item.name != 'Meditate in Sensorium' &&<View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+        {item.name == currentItem && item.name != 'Meditate in Sensorium' && item.name != 'Login' &&<View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{item.name}</Text>
         </View>}
@@ -126,4 +133,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SideMenu;
+function mapStateToProps(state) {
+  return {
+    currentItem: state.sidemenuReducer.currentItem
+  }
+}
+
+export default connect(mapStateToProps)(SideMenu);
