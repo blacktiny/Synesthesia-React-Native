@@ -5,6 +5,7 @@ import BottomBar from '../components/BottomBar';
 import CircleItemButton from '../components/CircleItemButton';
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
+import { setMenuItem } from '../actions/SideMenuAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
@@ -173,6 +174,7 @@ class SynesthesiaItemScreen extends Component {
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
+                this.props.dispatch(setMenuItem('Pricing'))
                 this.props.navigation.navigate('Pricing')
               }}>
                 <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
