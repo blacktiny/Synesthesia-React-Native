@@ -2,12 +2,12 @@ import { AsyncStorage } from 'react-native';
 
 import { put, call } from 'redux-saga/effects'
 import { ActionTypes } from '../constants/constants'
-import { getBeingAware } from '../api/api'
+import { getBeingAware, getBeingAwareAnonymous } from '../api/api'
 
 const BeingAwareSaga = function* (action) {
   // debugger;
   const token = yield AsyncStorage.getItem('token');
-  
+
   if (token !== null) {
     const dataObject = yield call(getBeingAware, token);
     if (dataObject.status.success) {
@@ -25,7 +25,7 @@ const BeingAwareSaga = function* (action) {
     }
   }
   else {
-    const dataObject = null;
+    const dataObject = yield call(getBeingAwareAnonymous);
     yield put({
       type: ActionTypes.GET_BEINGAWARE_SUCCESS,
       payload: {

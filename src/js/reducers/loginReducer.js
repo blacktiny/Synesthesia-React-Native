@@ -72,10 +72,10 @@ export const loginReducer = (state = initialState, action) => {
     case ActionTypes.LOGOUT_USER_SUCCESS:
       return {
         ...state,
-        loginReducer: {},
         isLoggedIn: false,
-        user: {},
-        token: null
+        wrongCredentials: false,
+        token: null,
+        requestPending: false
       }
     default:
       return state

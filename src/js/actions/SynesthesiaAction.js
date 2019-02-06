@@ -6,3 +6,10 @@ export function getSynesthesia() {
     payload: {}
   }
 }
+
+export function cleanSynesthesia() {
+  return {
+    type: ActionTypes.CLEAN_SYNESTHESIA,
+    payload: {}
+  }
+}

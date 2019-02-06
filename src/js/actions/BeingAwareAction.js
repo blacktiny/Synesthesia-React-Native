@@ -6,3 +6,10 @@ export function getBeingAware() {
     payload: {}
   }
 }
+
+export function cleanAwareness() {
+  return {
+    type: ActionTypes.CLEAN_AWARENESS,
+    payload: {}
+  }
+}

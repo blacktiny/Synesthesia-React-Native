@@ -5,7 +5,7 @@ import { ActionTypes } from '../constants/constants'
 import { doLogin, getUser } from '../api/api'
 
 const LoginUserSaga = function* (action) {
-  debugger;
+  // debugger;
   const authObject = yield call(doLogin, action.payload);
 
   if (authObject.status.success) {

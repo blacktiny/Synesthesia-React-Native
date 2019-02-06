@@ -12,13 +12,19 @@ export const synesthesiaReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetchingData: false,
-        synesthesiaData: action.payload.node.children
+        synesthesiaData: action.payload.node
       }
     case ActionTypes.GET_SYNESTHESIA_FAIL:
       return {
         ...state,
         error: true,
         isFetchingData: false
+      }
+    case ActionTypes.CLEAN_SYNESTHESIA:
+      return {
+        ...state,
+        isFetchingData: false,
+        synesthesiaData: []
       }
     default:
       return state

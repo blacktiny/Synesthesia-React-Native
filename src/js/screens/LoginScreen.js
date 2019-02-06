@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Button, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Button, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -14,7 +14,6 @@ import { closeLoginErrorBanner } from '../actions/LoginAction'
 import { closeLoginSuccessBanner } from '../actions/LoginAction'
 
 const { width, height } = Dimensions.get('screen');
-const searchIcon = require('../../assets/google_icon.png')
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 import ModalCloseIcon from '../icons/ModalCloseIcon';
 
@@ -108,11 +107,11 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Login failed. Please try again.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>
         </View>
       </LinearGradient>
     )
@@ -135,11 +134,11 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false,
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Yeah! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Login Successful!'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login Successful!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -151,18 +150,13 @@ class LoginScreen extends Component {
     return (
       <View style={styles.loginContent}>
         <TouchableOpacity style={styles.crossButton} onPress={() => alert('close')}>
-          <ModalCloseIcon style={styles.crossIcon} />
+          <ModalCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={styles.loginText}>{'Login'}</Text>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
             <Text style={styles.noAccountYet}>{'No account yet?'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.loginGoogleButton}>
-            <Image style={styles.googleIcon} source={searchIcon} />
-            <Text style={styles.loginGoogleText}>{'Login with google'}</Text>
-          </TouchableOpacity>
-          <Text style={[styles.loginGoogleText, { marginTop: 10, marginBottom: 10, fontSize: 15 }]}>{'or'}</Text>
         </View>
         <View>
           <Text style={styles.emailText}>{'Email'}</Text>
@@ -171,7 +165,6 @@ class LoginScreen extends Component {
               this.setState({
                 email: value.trim()
               })
-              this.validateEmail(value)
             }}
             value={this.state.email}
             onBlur={() => this.validateEmail(this.state.email)}
@@ -184,7 +177,6 @@ class LoginScreen extends Component {
           <PasswordTextField
             onChange={(value) => {
               this.setState({ password: value.trim() })
-              this.validatePassword(value)
             }}
             onBlur={() => this.validatePassword(this.state.password)}
             error={this.state.passwordError}
@@ -224,6 +216,7 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     height: '100%',
     width: '100%',
     justifyContent: 'center',
@@ -250,28 +243,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontFamily: Theme.FONT_REGULAR
   },
-  googleIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain'
-  },
   crossIcon: {
     alignSelf: 'flex-end',
     marginRight: -12,
     marginTop: 10,
     resizeMode: 'contain'
-  },
-  loginGoogleButton: {
-    borderRadius: 20,
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
-    height: 45,
-    width: '100%',
-    marginTop: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
   },
   createAccount: {
     color: '#25B999',
@@ -293,14 +269,15 @@ const styles = StyleSheet.create({
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
   loginContent: {
-    height: iPhoneX() ? height - 340 : height - 190,
+    height: iPhoneX() ? height - 400 : height - 230,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,

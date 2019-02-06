@@ -8,6 +8,7 @@ import SynesthesiaSaga from './SynesthesiaSaga'
 import MindFulnessSaga from './MindFulnessSaga'
 import BeingAwareSaga from './BeingAwareSaga'
 import NodeSaga from './NodeSaga'
+import getMusicSaga from './GetMusicSaga'
 
 const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGIN_USER, LoginUserSaga)
@@ -18,6 +19,7 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.GET_MINDFULNESS, MindFulnessSaga)
   yield takeLatest(ActionTypes.GET_BEINGAWARE, BeingAwareSaga)
   yield takeLatest(ActionTypes.GET_NODE, NodeSaga)
+  yield takeLatest(ActionTypes.GET_MUSIC, getMusicSaga)
 }
 
 export default rootSaga
