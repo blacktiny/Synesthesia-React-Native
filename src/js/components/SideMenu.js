@@ -8,13 +8,17 @@ import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 import { logoutUser } from '../../js/actions/LogoutAction';
 import { setMenuItem, getCurMenuItem } from '../../js/actions/SideMenuAction';
+import { cleanSynesthesia } from '../actions/SynesthesiaAction'
+import { cleanMindFulness } from '../actions/MindFulnessAction'
+import { cleanAwareness } from '../actions/BeingAwareAction'
+
+import { Theme } from '../constants/constants'
 
 const { height, width } = Dimensions.get('screen');
 const blurImage = require('../../../src/assets/blurImage.png');
 const cross = require('../../../src/assets/cross.png');
 const gradientLine = require('../../../src/assets/gradientLine.png');
 const loginButton = require('../../../src/assets/loginButton.png');
-import { Theme } from '../constants/constants'
 
 const meanuItems = [
   { name: 'Meditate in Sensorium', route: 'Sensorium', url: '' },
@@ -49,6 +53,9 @@ class SideMenu extends Component {
     this.props.navigation.navigate(routeName);
     if (itemName == 'Log out') {
       this.props.dispatch(logoutUser());
+      this.props.dispatch(cleanSynesthesia());
+      this.props.dispatch(cleanMindFulness());
+      this.props.dispatch(cleanAwareness());
     }
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
