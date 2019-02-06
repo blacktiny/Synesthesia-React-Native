@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import { AsyncStorage, Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import CircleItemButton from '../components/CircleItemButton';
 
@@ -11,6 +11,9 @@ import BannerCloseIcon from '../icons/BannerCloseIcon';
 const mindfulessImage = require('../../assets/mindfulnessheader.png')
 const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
+import { Theme } from '../constants/constants'
+import { iPhoneX } from '../../js/util';
+const hearing = require('../../assets/hearing.png')
 
 const { width, height } = Dimensions.get('screen');
 
@@ -29,10 +32,16 @@ class BeingAware extends Component {
   componentWillUnmount() {
   }
 
+  onItemButtonClicked = (id) => {
+    AsyncStorage.setItem('nodeID', id);
+    this.props.navigation.navigate('SynesthesiaItem');
+  }
+
+
   loadingPage = () => {
     return (
       <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ color: "white", fontSize: 30 }}>Loading...</Text>
+        <Text style={{ color: "white", fontSize: 30, fontFamily: Theme.FONT_REGULAR }}>Loading...</Text>
       </View>
     )
   }
@@ -42,63 +51,93 @@ class BeingAware extends Component {
     if (beingAwareDatas && !isFetchingData) {
       let arrData = [];
       beingAwareDatas.map((data) => {
-        let itemList = [];
+        let property = [];
         const header = data.header;
         const subHeader = data.subheader;
         var number = 1;
         data.children.map((item) => {
-          if (item.is_published == 1) {
-            itemList.push({ 
-              id: item.id,
-              number: number,
-              name: item.display_name,
-              viewed: item.is_done,
-              locked: item.is_locked,
-              unviewed: item.is_locked
-            });
-            number ++;
-          }
+          property.push({
+            id: item.id,
+            number: number,
+            icon: hearing,
+            type: item.type,
+            name: item.display_name,
+            is_done: item.is_done,
+            is_free: item.is_free,
+            is_locked: item.is_locked,
+            is_published: item.is_published
+          });
+          number++;
         })
-        arrData.push(this.renderContainers(data.id, header, subHeader, itemList));
+        arrData.push(this.renderContainers(data.id, header, subHeader, property));
       });
       return arrData;
     }
   }
 
-  renderContainers = (id, header, subHeader, itemList) => {
+  renderContainers = (key, header, subHeader, data) => {
+    // debugger
     return (
-      <View key={id}>
+      <View key={key} >
         <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
-          <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
-          <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5 }}>{subHeader}</Text>
+          <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
+          <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
         </View>
-        <View style={{ height: 163, paddingTop: 10, paddingBottom: 0 }}>
+        <View style={{ flex: 1, paddingLeft: 2 }}>
           <FlatList
-            data={itemList}
-            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
+            data={data}
+            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
-            renderItem={({ item, index }) => this.renderNumber(itemList.id, itemList.length, item, index, 'videos')}
-            extraData={itemList}
+            renderItem={({ item, index }) => this.renderContainerItem(item.id, item, index, data.length)}
+            extraData={data}
           />
         </View>
-        <View style={{ height: 1, color: '#090909', width: '100%', marginTop: 3, borderColor: '#000000', borderWidth: 1 }} />
+        <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, marginTop: 15, marginBottom: 15 }} />
       </View>
     )
   }
 
-  renderNumber = (id, itemLength, item, index, type) => {
-    return(
+  renderContainerItem = (id, item, index, itemList) => {
+    // debugger
+    return (
+
       <View>
-        <CircleItemButton 
-          id = {id}
-          index = {index}
-          numberCount = {itemLength}
-          item = {item}
-          onPress = { () => this.onLeafClicked(item.locked) }
-        />
+        {
+          item.type == "leaf" ?
+            <CircleItemButton
+              id={id}
+              index={index}
+              numberCount={itemList}
+              item={item}
+              onPress={() => this.onLeafClicked(item)}
+            />
+            : <View style={{ width: 110, alignItems: 'center', margin: 20 }}>
+              <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
+                <Image
+                  source={item.icon}
+                  style={{ width: 170, height: 150, resizeMode: 'contain' }}
+                />
+              </TouchableOpacity>
+              <View style={{ marginLeft: 20, width: 150 }}>
+                <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
+                  {item.name}
+                </Text>
+              </View>
+            </View>
+        }
       </View>
+
     )
+  }
+
+  onLeafClicked = (item) => {
+    // debugger;
+    if (item.is_locked > 0) {
+      this.setState({ isLockedBannerVisible: true });
+    } else {
+      this.props.navigation.navigate('Player')
+    }
   }
 
   LockedModalBanner = () => {
@@ -106,24 +145,24 @@ class BeingAware extends Component {
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
       return (
-        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
-          onRequestClose={ () => console.log('closed')}>
+        <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
+          onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
             <View style={[styles.lockedBanner, styles.activityBannerHeight]}>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <BannerCloseIcon style={styles.crossIcon} />
+                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
               </TouchableOpacity>
               <View>
-                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {banneractivitylockedImage}/>
-                <Text style = {{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>This exercise is still locked!</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>Complete the order exercise first</Text>
+                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={banneractivitylockedImage} />
+                <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -131,42 +170,36 @@ class BeingAware extends Component {
       )
     } else {
       return (
-        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
-          onRequestClose={ () => console.log('closed')}>
+        <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
+          onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
             <View style={[styles.lockedBanner, styles.paymentBannerHeight]}>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <BannerCloseIcon style={styles.crossIcon} />
+                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
               </TouchableOpacity>
               <View>
-                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {bannerpaymentlockedImage}/>
-                <Text style = {{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18 }}>This exercise is still locked!</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22 }}>To unlock this exercise checkout our attractive Price Plans</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20 }}>Subscribe and get 7 Days of full access</Text>
+                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={bannerpaymentlockedImage} />
+                <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise checkout our attractive Price Plans</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Subscribe and get 7 Days of full access</Text>
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
                 this.props.navigation.navigate('Pricing')
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Subscribe here</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>No, thanks</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>No, thanks</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
       )
-    }
-  }
-
-  onLeafClicked = (locked) => {
-    if (locked == "1") {
-      this.setState({ isLockedBannerVisible: true });
     }
   }
 
@@ -178,29 +211,31 @@ class BeingAware extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen = {'beingaware'} navigation = {this.props.navigation} />
-        <ScrollView style = {{flexGrow: 1, marginBottom: 35}}>
+        <BottomBar screen={'beingaware'} navigation={this.props.navigation} />
+        <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           <ImageBackground
-              style={{
-                width: '100%',
-                height: 137,
-                display: "flex",
-                alignItems: "center",
-              }}
-              resizeMode='contain'
-              source={mindfulessImage}
-            >
+            style={{
+              width: '100%',
+              height: 137,
+              display: "flex",
+              alignItems: "center",
+            }}
+            resizeMode='contain'
+            source={mindfulessImage}
+          >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{
                 textAlign: 'center',
                 fontSize: 20,
-                color: '#FFFFFF'
+                color: '#FFFFFF',
+                fontFamily: Theme.FONT_BOLD
               }}>{header}</Text>
               <Text style={{
                 textAlign: 'center',
                 fontSize: 14,
                 paddingTop: 8,
-                color: '#FFFFFF'
+                color: '#FFFFFF',
+                fontFamily: Theme.FONT_MEDIUM
               }}>{subHeader}</Text>
             </View>
           </ImageBackground>
@@ -234,10 +269,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   activityBannerHeight: {
-    height: height - 550
+    height: iPhoneX() ? height - 450 : height - 550
   },
   paymentBannerHeight: {
-    height: height - 450
+    height: iPhoneX() ? height - 350 : height - 450
   },
   crossButton: {
     width: 20,

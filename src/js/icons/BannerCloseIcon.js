@@ -20,8 +20,8 @@ import Svg, {
 const BannerCloseIcon = props => (
   <Svg width={19} height={19} {...props}>
     <G
-      stroke="#AC9FF4"
-      strokeWidth={3.8}
+      stroke={props.color}
+      strokeWidth={props.strokeWidth ? props.strokeWidth : 3.8}
       fill="none"
       fillRule="evenodd"
       strokeLinecap="round"

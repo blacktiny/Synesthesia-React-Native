@@ -79,11 +79,11 @@ class ForgotPasswordScreen extends Component {
             emailSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#fff" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Reset link not sent.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset link not sent.'}</Text>
         </View>
       </LinearGradient>
     )
@@ -105,11 +105,11 @@ class ForgotPasswordScreen extends Component {
               emailSuccessBorder: false
             })
           }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#fff" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Yeah! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Reset code sent!'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset code sent!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -123,7 +123,7 @@ class ForgotPasswordScreen extends Component {
 
         <View style={styles.forgotPasswordContent}>
           <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Login')}>
-            <ModalCloseIcon style={styles.crossIcon} />
+            <ModalCloseIcon style={styles.crossIcon} color="#777778" />
           </TouchableOpacity>
           <View style={[styles.textContainer, { paddingLeft: 25, paddingRight: 25, paddingTop: 20, flexWrap: 'wrap' }]}>
             <Text style={styles.loginText}>{'Forgot Password'}</Text>
@@ -135,7 +135,6 @@ class ForgotPasswordScreen extends Component {
             <InputTextField
               onChange={(value) => {
                 this.setState({ email: value.trim() })
-                this.validateEmail(value)
               }}
               onBlur={() => this.validateEmail(this.state.email)}
               error={this.state.emailError}
@@ -232,14 +231,15 @@ const styles = StyleSheet.create({
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
   forgotPasswordContent: {
-    height: iPhoneX() ? height - 500 : height - 350,
+    height: iPhoneX() ? height - 460 : height - 310,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,

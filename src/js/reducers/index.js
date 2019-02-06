@@ -7,6 +7,7 @@ import { synesthesiaReducer } from './synesthesiaReducer'
 import { mindfulnessReducer } from './mindfulnessReducer'
 import { beingawareReducer } from './beingawareReducer'
 import { nodeReducer } from './nodeReducer'
+import { musicReducer } from './musicReducer'
 
 export default combineReducers({
   registerReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   mindfulnessReducer,
   beingawareReducer,
   nodeReducer,
+  musicReducer
 })

@@ -27,3 +27,10 @@ export function closeLoginSuccessBanner() {
   }
 }
 
+export function logoutUser() {
+  return {
+    type: ActionTypes.LOGOUT_USER_SUCCESS,
+    payload: {}
+  }
+}
+

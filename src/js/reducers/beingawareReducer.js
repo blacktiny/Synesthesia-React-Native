@@ -20,6 +20,12 @@ export const beingawareReducer = (state = initialState, action) => {
         error: true,
         isFetchingData: false
       }
+    case ActionTypes.CLEAN_AWARENESS:
+      return {
+        ...state,
+        isFetchingData: false,
+        beingawareData: []
+      }
     default:
       return state
   }

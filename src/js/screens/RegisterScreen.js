@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Dimensions, Image, TextInput, Button, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity } from 'react-native';
 import InputTextField from '../components/InputTextField';
 import PasswordTextField from '../components/PasswordTextField';
 import CustomButton from '../components/CustomButton';
@@ -14,7 +14,6 @@ import { closeRegisterErrorBanner } from '../actions/RegisterAction'
 import { closeRegisterSuccessBanner } from '../actions/RegisterAction'
 
 const { width, height } = Dimensions.get('window');
-const searchIcon = require('../../assets/google_icon.png');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
@@ -187,11 +186,11 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Oh no! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center' }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>
         </View>
       </LinearGradient>
     )
@@ -220,11 +219,11 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Welcome! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10 }}>{'Account successfully created!'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Account successfully created!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -234,12 +233,12 @@ class RegisterScreen extends Component {
     // const scrollEnabled = this.state.screenHeight > height;
     const registerButtonDisabled = this.state.userNameSuccessBorder && this.state.emailSuccessBorder &&
       this.state.passwordSuccessBorder && this.state.confirmPasswordSuccessBorder &&
-      this.state.isChecked1 && this.state.isChecked2;
+      this.state.isChecked1;
     let { requestPending } = this.props;
     return (
       <View style={styles.createContent}>
         <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Login')}>
-          <ModalCloseIcon style={styles.crossIcon} />
+          <ModalCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <ScrollView
           style={{ flex: 1, marginBottom: 15 }}
@@ -251,18 +250,12 @@ class RegisterScreen extends Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
               <Text style={styles.noAccountYet}>{'Already have an account?'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginGoogleButton}>
-              <Image style={styles.googleIcon} source={searchIcon} />
-              <Text style={styles.loginGoogleText}>{'Sign up with Google'}</Text>
-            </TouchableOpacity>
-            <Text style={[styles.loginGoogleText, { marginTop: 10, marginBottom: 10, fontSize: 15 }]}>or</Text>
           </View>
           <View>
             <Text style={styles.emailText}>{'Username'}</Text>
             <InputTextField
               onChange={(value) => {
                 this.setState({ userName: value.trim() })
-                this.validateUserName(value)
               }}
               onBlur={() => this.validateUserName(this.state.userName)}
               error={this.state.userNameError}
@@ -274,7 +267,6 @@ class RegisterScreen extends Component {
             <InputTextField
               onChange={(value) => {
                 this.setState({ email: value.trim() })
-                this.validateEmail(value)
               }}
               onBlur={() => this.validateEmail(this.state.email)}
               error={this.state.emailError}
@@ -286,7 +278,6 @@ class RegisterScreen extends Component {
             <PasswordTextField
               onChange={(value) => {
                 this.setState({ password: value.trim() })
-                this.validatePassword(value)
               }}
               onBlur={() => this.validatePassword(this.state.password)}
               error={this.state.passwordError}
@@ -298,13 +289,13 @@ class RegisterScreen extends Component {
             <PasswordTextField
               onChange={(value) => {
                 this.setState({ confirmPassword: value.trim() })
-                this.validateConfirmPassword(value)
               }}
               onBlur={() => this.validateConfirmPassword(this.state.confirmPassword)}
               error={this.state.confirmPasswordError}
               showSuccessBorder={this.state.confirmPasswordSuccessBorder}
               showErrorBorder={this.state.confirmPasswordErrorBorder}
             />
+            <View style={{ paddingTop: 10 }} />
             <CustomCheckBox
               size={24}
               checked={this.state.isChecked1}
@@ -313,7 +304,23 @@ class RegisterScreen extends Component {
                   isChecked1: !this.state.isChecked1
                 })
               }}
-              label={<Text style={[styles.checkBoxText, { marginTop: -100 }]}>{'By signing up you agree on the'}<Text style={[styles.checkBoxText, { color: '#25B999' }]}>{' Terms & Conditions'}</Text><Text style={styles.checkBoxText}>{' and'}</Text><Text style={[styles.checkBoxText, { color: '#25B999' }]}>{' Privacy Policy'}</Text><Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text></Text>}
+              label={
+                <Text>
+                  <Text style={styles.checkBoxText}>{'By signing up you agree on the'}</Text>
+                  <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/TermsAndConditions') }}>
+                    <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                      {' Terms & Conditions'}
+                    </Text>
+                  </Text>
+                  <Text style={styles.checkBoxText}>{' and'}</Text>
+                  <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/privacy') }}>
+                    <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                      {' Privacy Policy'}
+                    </Text>
+                  </Text>
+                  <Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text>
+                </Text>
+              }
             />
             <CustomCheckBox
               size={24}
@@ -399,18 +406,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     resizeMode: 'contain'
   },
-  loginGoogleButton: {
-    borderRadius: 20,
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
-    height: 45,
-    width: '100%',
-    marginTop: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
-  },
   createAccount: {
     color: '#25B999',
     fontSize: 14,
@@ -430,14 +425,15 @@ const styles = StyleSheet.create({
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
   createContent: {
-    height: height - 80,
+    height: height - 130,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,

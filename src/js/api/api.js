@@ -28,6 +28,13 @@ export const doRegister = (payload) => fetch(`${baseUrl}user`, {
   body: JSON.stringify(payload)
 }).then(response => response.json());
 
+export const getMusic = (payload, token) => fetch(`${baseUrl}node/1073?token=${token}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
 export const forgotPassword = (email) => fetch(`${baseUrl}resetmail/${email}`, {
   method: 'GET',
   headers: {
@@ -42,6 +49,14 @@ export const getSynesthesia = (token) => fetch(`${baseUrl}node/338?token=${token
   },
 }).then(response => response.json());
 
+export const getSynesthesiaAnonymous = () => fetch(`${baseUrl}node/338`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
+
 export const getMindFulness = (token) => fetch(`${baseUrl}node/337?token=${token}`, {
   method: 'GET',
   headers: {
@@ -49,7 +64,21 @@ export const getMindFulness = (token) => fetch(`${baseUrl}node/337?token=${token
   },
 }).then(response => response.json());
 
+export const getMindFulnessAnonymous = () => fetch(`${baseUrl}node/337`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
 export const getBeingAware = (token) => fetch(`${baseUrl}node/1082?token=${token}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
+export const getBeingAwareAnonymous = () => fetch(`${baseUrl}node/1082`, {
   method: 'GET',
   headers: {
     ...commonHeaders,

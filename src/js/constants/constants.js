@@ -30,6 +30,9 @@ export const ActionTypes = keyMirror({
   LOGOUT_USER_SUCCESS: null,
   LOGOUT_USER_FAIL: null,
 
+  GET_MUSIC: null,
+  GET_MUSIC_SUCCESS: null,
+
   SET_MENUITEM: null,
   GET_MENUITEM: null,
 
@@ -51,12 +54,20 @@ export const ActionTypes = keyMirror({
 
   CLEAR_NODE: null,
 
+  CLEAN_SYNESTHESIA: null,
+  CLEAN_MINDFULNESS: null,
+  CLEAN_AWARENESS: null,
+
 })
 
 export const Theme = {
   COLOR_1: '#DA152C',
   COLOR_2: '#f2f2f2',
+  FONT_LIGHT: 'Raleway-Light',
   FONT_REGULAR: 'Raleway-Regular',
   FONT_MEDIUM: 'Raleway-Medium',
+  FONT_SEMIBOLD: 'Raleway-SemiBold',
   FONT_BOLD: 'Raleway-Bold'
 }
+
+export const MUSIC_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'

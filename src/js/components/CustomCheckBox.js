@@ -45,9 +45,9 @@ class CustomCheckBox extends Component {
                 (<View style={styles.uncheckedView} />)
             }
           </View>
-          <Text style={[styles.checkBoxLabel, { color: this.props.color }]}>
+          <View style={[styles.checkBoxLabel, { color: this.props.color }]}>
             {this.props.label}
-          </Text>
+          </View>
 
         </View>
       </TouchableHighlight>

@@ -13,6 +13,9 @@ const synesthesiaImage = require('../../assets/synesthesiaheader.png')
 const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
 
+import { Theme } from '../constants/constants'
+import { iPhoneX } from '../../js/util';
+
 const { width, height } = Dimensions.get('screen');
 
 class SynesthesiaItemScreen extends Component {
@@ -34,34 +37,33 @@ class SynesthesiaItemScreen extends Component {
   loadingPage = () => {
     return (
       <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator
-          animating = 'true'
-          color = '#bc2b78'
-          size = "large" />
+        <ActivityIndicator />
       </View>
     )
   }
 
   renderData = () => {
+
     const { isFetchingData, nodeData } = this.props;
     if (nodeData && !isFetchingData) {
       let arrData = [];
-      if (nodeData.children[0].type == 'leaf') {
+      if (nodeData.children[0] && nodeData.children[0].type == 'leaf') {
         let itemDataList = [];
         const header = nodeData.header;
         const subHeader = nodeData.subheader;
         var number = 1;
         nodeData.children.map((item) => {
           if (item.is_published == 1) {
-            itemDataList.push({ 
+            itemDataList.push({
               id: item.id,
               number: number,
               name: item.display_name,
-              viewed: item.is_done,
-              locked: item.is_locked,
-              unviewed: item.is_locked
+              is_done: item.is_done,
+              is_free: item.is_free,
+              is_locked: item.is_locked,
+              is_published: item.is_published
             });
-            number ++;
+            number++;
           }
         })
         arrData.push(this.renderContainers(nodeData.id, header, subHeader, itemDataList));
@@ -73,15 +75,16 @@ class SynesthesiaItemScreen extends Component {
           var number = 1;
           data.children.map((item) => {
             if (item.is_published == 1) {
-              itemList.push({ 
+              itemList.push({
                 id: item.id,
                 number: number,
                 name: item.display_name,
-                viewed: item.is_done,
-                locked: item.is_locked,
-                unviewed: item.is_locked
+                is_done: item.is_done,
+                is_free: item.is_free,
+                is_locked: item.is_locked,
+                is_published: item.is_published
               });
-              number ++;
+              number++;
             }
           })
           arrData.push(this.renderContainers(data.id, header, subHeader, itemList));
@@ -98,7 +101,7 @@ class SynesthesiaItemScreen extends Component {
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, lineHeight: 19 }}>{subHeader}</Text>
         </View>
-        <View style={{ height: 150, paddingTop: 10, paddingBottom: 0 }}> 
+        <View style={{ height: 150, paddingTop: 10, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -108,20 +111,20 @@ class SynesthesiaItemScreen extends Component {
             extraData={itemList}
           />
         </View>
-        <View style={{ height: 1, color: '#090909', width: '100%', marginTop: 3, borderColor: '#000000', borderWidth: 1 }} />
+        <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, marginTop: 15, marginBottom: 15 }} />
       </View>
     )
   }
 
   renderNumber = (id, itemLength, item, index, type) => {
-    return(
+    return (
       <View>
-        <CircleItemButton 
-          id = {id}
-          index = {index}
-          numberCount = {itemLength}
-          item = {item}
-          onPress = {() => this.onLeafClicked(item.locked)}
+        <CircleItemButton
+          id={id}
+          index={index}
+          numberCount={itemLength}
+          item={item}
+          onPress={() => this.onLeafClicked(item.is_locked)}
         />
       </View>
     )
@@ -132,24 +135,24 @@ class SynesthesiaItemScreen extends Component {
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
       return (
-        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
-          onRequestClose={ () => console.log('closed')}>
+        <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
+          onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
             <View style={[styles.lockedBanner, styles.activityBannerHeight]}>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <BannerCloseIcon style={styles.crossIcon} />
+                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
               </TouchableOpacity>
               <View>
-                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {banneractivitylockedImage}/>
-                <Text style = {{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>This exercise is still locked!</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20 }}>Complete the order exercise first</Text>
+                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={banneractivitylockedImage} />
+                <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -157,32 +160,32 @@ class SynesthesiaItemScreen extends Component {
       )
     } else {
       return (
-        <Modal visible={isLockedBannerVisible} animationType = "slide" transparent={true}
-          onRequestClose={ () => console.log('closed')}>
+        <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
+          onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
             <View style={[styles.lockedBanner, styles.paymentBannerHeight]}>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <BannerCloseIcon style={styles.crossIcon} />
+                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
               </TouchableOpacity>
               <View>
-                <Image style = {{alignSelf: 'center', height: 78, width: 84, marginTop: 1}} resizeMode = 'contain' source = {bannerpaymentlockedImage}/>
-                <Text style = {{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18 }}>This exercise is still locked!</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22 }}>To unlock this exercise checkout our attractive Price Plans</Text>
-                <Text style = {{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20 }}>Subscribe and get 7 Days of full access</Text>
+                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={bannerpaymentlockedImage} />
+                <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18 }}>This exercise is still locked!</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22 }}>To unlock this exercise checkout our attractive Price Plans</Text>
+                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20 }}>Subscribe and get 7 Days of full access</Text>
               </View>
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
                 this.props.dispatch(setMenuItem('Pricing'))
                 this.props.navigation.navigate('Pricing')
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style = {{ fontSize: 15, color: '#FFFFFF' }}>No, thanks</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>No, thanks</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -191,10 +194,13 @@ class SynesthesiaItemScreen extends Component {
     }
   }
 
-  onLeafClicked = (locked) => {
-    if (locked == "1") {
+  onLeafClicked = (is_locked) => {
+    if (is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
+    } else {
+      this.props.navigation.navigate('Player')
     }
+
   }
 
   render() {
@@ -204,18 +210,18 @@ class SynesthesiaItemScreen extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen = {'syensthesia'} navigation = {this.props.navigation} />
-        <ScrollView style = {{flexGrow: 1, marginBottom: 35}}>
+        <BottomBar screen={'syensthesia'} navigation={this.props.navigation} />
+        <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           <ImageBackground
-              style={{
-                width: '100%',
-                height: 137,
-                display: "flex",
-                alignItems: "center",
-              }}
-              resizeMode='contain'
-              source={synesthesiaImage}
-            >
+            style={{
+              width: '100%',
+              height: 137,
+              display: "flex",
+              alignItems: "center",
+            }}
+            resizeMode='contain'
+            source={synesthesiaImage}
+          >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{
                 textAlign: 'center',
@@ -260,10 +266,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   activityBannerHeight: {
-    height: height - 550
+    height: iPhoneX() ? height - 450 : height - 550
   },
   paymentBannerHeight: {
-    height: height - 450
+    height: iPhoneX() ? height - 350 : height - 450
   },
   crossButton: {
     width: 20,
