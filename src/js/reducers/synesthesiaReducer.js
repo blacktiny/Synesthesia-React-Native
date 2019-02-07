@@ -23,7 +23,7 @@ export const synesthesiaReducer = (state = initialState, action) => {
     case ActionTypes.CLEAN_SYNESTHESIA:
       return {
         ...state,
-        isFetchingData: false,
+        isFetchingData: true,
         synesthesiaData: []
       }
     default:

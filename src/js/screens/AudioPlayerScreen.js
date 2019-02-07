@@ -1,30 +1,52 @@
 import React, { Component } from 'react'
-import { Text, View, ImageBackground, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, ImageBackground, TouchableHighlight, StyleSheet, ActivityIndicator, Animated, Image, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux'
+import LinearGradient from 'react-native-linear-gradient';
+
 import ProgressPlayButton from '../components/ProgressPlayButton'
 import { iPhoneX } from '../util'
+import { completeNode } from '../actions/NodeAction'
 import Sound from 'react-native-sound';
-import { MUSIC_URL } from '../constants/constants'
-
+import { FILES_URL } from '../constants/constants'
+import { getMusicUrl } from '../helpers/getUrl'
+import { getCompletionPeriod } from '../helpers/getCompletionPeriod'
+import { doCompletion } from '../api/api'
 Sound.setCategory('Playback');
 const prev = require('../../assets/prev.png')
 const next = require('../../assets/next.png')
+const prevDisable = require('../../assets/prev-disable.png')
+const nextDisable = require('../../assets/next-disable.png')
+const warning = require('../../assets/warning.png')
 const background = require('../../assets/audioBg.png')
 
 class AudioPlayer extends Component {
+  
   player
   tracker = null
-  state = {
-    play: true,
-    currentTime: 0,
-    totalTime: 0,
-    progress: 0,
-    loaded: false,
-    url: null
+
+  constructor() {
+    super();
+  
+    this.state = {
+      play: true,
+      currentTime: 0,
+      totalTime: 0,
+      progress: 0,
+      loaded: false,
+      disableMove: false,
+      showNotification: false,
+      completion: getCompletionPeriod(this.props.exercise.item_itemsets),
+      fadeAnim: new Animated.Value(0),
+      completionSended: false,
+      prevBtnPressStatus: false,
+      nextBtnPressStatus: false
+    }
   }
+
   componentDidMount() {
     this.initAudioPlayer()
   }
+
   componentWillUnmount() {
     this.player.release()
     clearInterval(this.tracker)
@@ -32,12 +54,24 @@ class AudioPlayer extends Component {
 
   trackTime = () => {
     this.tracker = setInterval(() => {
-      this.player.getCurrentTime((seconds) => this.setState({ currentTime: seconds }));
+      const { completion } = this.state
+      const { completeNode, nodeCompleted } = this.props
+      this.player.getCurrentTime((seconds) => {
+        this.setState({ currentTime: seconds })
+        if ((seconds >= completion.startAt) && (seconds <= completion.startAt + completion.endAfter)) {
+          this.setState({ disableMove: true })
+          if (!nodeCompleted) {
+            completeNode()
+          }
+        } else if ((seconds > completion.startAt + completion.endAfter)) {
+          this.setState({ disableMove: false })
+        }
+      });
     }, 1000);
   }
 
   initAudioPlayer = () => {
-    this.player = new Sound(MUSIC_URL + this.props.url, null, (error) => {
+    this.player = new Sound(FILES_URL + getMusicUrl(this.props.exercise.item_itemsets), null, (error) => {
       if (error) {
         return;
       }
@@ -54,15 +88,17 @@ class AudioPlayer extends Component {
       });
     });
   }
+
   pressPlayButton = () => {
-    const play = !this.state.play
+    const {play} = this.state
     if (play) {
       this.player.play()
     } else {
       this.player.pause()
     }
-    this.setState({ play })
+    this.setState({ play: !play })
   }
+
   secondsToMinutes = (time) => {
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
@@ -70,8 +106,32 @@ class AudioPlayer extends Component {
     const stringSeconds = seconds < 10 ? '0' + seconds : seconds
     return stringMinutes + ':' + stringSeconds;
   }
+
+  showNotification = () => {
+    Animated.timing(
+      this.state.fadeAnim,
+      {
+        toValue: 1,
+        duration: 500,
+      }
+    ).start();
+    setTimeout(() => {
+      Animated.timing(
+        this.state.fadeAnim,
+        {
+          toValue: 0,
+          duration: 500,
+        }
+      ).start();
+    }, 2000);
+  }
+
   pressNext = () => {
-    const { currentTime, totalTime } = this.state
+    const { currentTime, totalTime, disableMove } = this.state
+    if (disableMove) {
+      this.showNotification()
+      return
+    }
     let newTime = currentTime + 15
     if (newTime < totalTime) {
       this.player.setCurrentTime(newTime)
@@ -82,8 +142,13 @@ class AudioPlayer extends Component {
       this.setState({ currentTime: 0, play: false })
     }
   }
+
   pressPrev = () => {
-    const { currentTime, totalTime } = this.state
+    const { currentTime, disableMove } = this.state
+    if (disableMove) {
+      this.showNotification()
+      return
+    }
     let newTime = currentTime - 15
     if (newTime > 0) {
       this.player.setCurrentTime(newTime)
@@ -94,8 +159,27 @@ class AudioPlayer extends Component {
       this.setState({ currentTime: 0 })
     }
   }
+
+  onHideUnderlay(itemName) {
+    if (itemName == 'prev') {
+      this.setState({ prevBtnPressStatus: false });
+    } else if (itemName == 'next') {
+      this.setState({ nextBtnPressStatus: false });
+    }
+  }
+
+  onShowUnderlay(itemName) {
+    if (itemName == 'prev') {
+      this.setState({ prevBtnPressStatus: true });
+    } else if (itemName == 'next') {
+      this.setState({ nextBtnPressStatus: true });
+    }
+  }
+
   render() {
-    const { totalTime, currentTime, loaded, play } = this.state
+    const { totalTime, currentTime, loaded, play, disableMove, fadeAnim, prevBtnPressStatus, nextBtnPressStatus } = this.state
+    const { exercise } = this.props
+
     return !loaded ? (
       <ImageBackground source={background} style={[styles.container, styles.indicatorStyle]}>
         <ActivityIndicator />
@@ -103,22 +187,35 @@ class AudioPlayer extends Component {
     ) : (
         <ImageBackground source={background} style={styles.container}>
           <View style={styles.top}>
-            <Text style={styles.topTextTitle}>Sound of vision</Text>
-            <Text style={styles.topText}>What’s the sound of the shape?</Text>
+            <Text style={styles.topTextTitle}>{exercise.header}</Text>
+            <Text style={styles.topText}>{exercise.subheader}</Text>
           </View>
           <View style={styles.bottomBar}>
+            <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
+              <LinearGradient
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 0 }}
+                colors={['#505052', '#3D3D3E']}
+                style={styles.linearGradient}>
+                <Image source={warning} style={{ marginRight: 20, marginLeft: 10 }} />
+                <Text style={styles.buttonText}>
+                  You can’t move at the moment!
+              </Text>
+              </LinearGradient>
+            </Animated.View>
+
             <View style={styles.row}>
-              <TouchableOpacity onPress={this.pressPrev}>
-                <ImageBackground source={prev} style={styles.controlButton}>
-                  <Text style={styles.textStyle}>15</Text>
+              <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
+                <ImageBackground source={disableMove ? prevDisable : prev} style={styles.controlButton}>
+                  <Text style={[styles.textStyle, disableMove && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
-              </TouchableOpacity>
-              <ProgressPlayButton onPress={this.pressPlayButton} play={play} progress={(currentTime / totalTime) * 100} />
-              <TouchableOpacity onPress={this.pressNext}>
-                <ImageBackground source={next} style={styles.controlButton}>
-                  <Text style={styles.textStyle}>15</Text>
+              </TouchableHighlight>
+              <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / totalTime) * 100} />
+              <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
+                <ImageBackground source={disableMove ? nextDisable : next} style={styles.controlButton}>
+                  <Text style={[styles.textStyle, disableMove && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
-              </TouchableOpacity>
+              </TouchableHighlight>
             </View>
             <Text style={[styles.textStyle, { marginVertical: iPhoneX() ? 50 : 30 }]}>{this.secondsToMinutes(currentTime)}</Text>
           </View>
@@ -162,6 +259,7 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: 0,
+    paddingTop: 100,
     alignItems: 'center'
   },
   row: {
@@ -182,17 +280,39 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: '#FFFFFF'
+  },
+  animatedView: {
+    position: 'absolute',
+    width: '85%',
+    height: 56
+  },
+  linearGradient: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 35,
+    height: 56
+  },
+  buttonText: {
+    fontSize: 17,
+    color: '#FFFFFF',
+    letterSpacing: 0,
   }
 });
 
 
 function mapStateToProps(state) {
   return {
-    url: state.musicReducer.url
+    exercise: state.exerciseReducer.currentExercise,
+    nodeCompleted: state.nodeReducer.nodeComplete
   }
 }
-
+const mapDispatchToProps = {
+  completeNode
+}
 export default connect(
   mapStateToProps,
-  {}
+  mapDispatchToProps
 )(AudioPlayer)

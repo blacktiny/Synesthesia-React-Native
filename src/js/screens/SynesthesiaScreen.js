@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, Text, View, ScrollView, ImageBackground, Button, Image, TouchableOpacity, FlatList } from 'react-native';
+import { AsyncStorage, Text, View, ScrollView, ImageBackground, ActivityIndicator, Image, TouchableOpacity, FlatList } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import PlayIcon from '../icons/PlayIcon';
 import CircleItemButton from '../components/CircleItemButton';
@@ -13,6 +13,7 @@ const multimedia = require('../../assets/multimedia.png')
 const hearing = require('../../assets/hearing.png')
 const watching = require('../../assets/watching.png')
 import { Theme } from '../constants/constants'
+import { FILES_URL } from '../constants/constants'
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class Synesthesia extends Component {
   loadingPage = () => {
     return (
       <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ color: "white", fontSize: 30, fontFamily: Theme.FONT_REGULAR }}>Loading...</Text>
+        <ActivityIndicator />
       </View>
     )
   }
@@ -52,12 +53,13 @@ class Synesthesia extends Component {
         if (data.type != "leaf") {
           const header = data.header;
           const subHeader = data.subheader;
+          const imageBanner = FILES_URL + data.image_banner;
           var number = 1;
           data.children.map((item) => {
             property.push({
               id: item.id,
               number: number,
-              icon: hearing,
+              icon: FILES_URL + item.image_square,
               type: item.type,
               name: item.display_name,
               is_done: item.is_done,
@@ -67,20 +69,53 @@ class Synesthesia extends Component {
             });
             number++;
           })
-          arrData.push(this.renderContainers(data.id, header, subHeader, property));
+          arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, property));
         }
       });
       return arrData;
     }
   }
 
-  renderContainers = (key, header, subHeader, data) => {
+  renderContainers = (key, header, subHeader, imageBanner, data) => {
     return (
       <View key={key} >
-        <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
-          <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
-          <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
-        </View>
+
+        {imageBanner.includes("null") ?
+          <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
+            <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
+            <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
+          </View>
+          :
+          <View style={{ marginTop: -30 }}>
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: 137,
+                display: "flex",
+                alignItems: "center",
+              }}
+              resizeMode='contain'
+              source={{ uri: imageBanner }}
+            >
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
+                <Text style={{
+                  textAlign: 'center',
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                  fontFamily: Theme.FONT_BOLD
+                }}>{header}</Text>
+                <Text style={{
+                  textAlign: 'center',
+                  fontSize: 14,
+                  paddingTop: 8,
+                  color: '#FFFFFF',
+                  fontFamily: Theme.FONT_MEDIUM
+                }}>{subHeader}</Text>
+              </View>
+            </ImageBackground>
+          </View>
+        }
+
         <View style={{ flex: 1, paddingLeft: 2 }}>
           <FlatList
             data={data}
@@ -92,7 +127,7 @@ class Synesthesia extends Component {
           />
         </View>
         <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, marginTop: 15, marginBottom: 15 }} />
-      </View>
+      </View >
     )
   }
 
@@ -110,12 +145,21 @@ class Synesthesia extends Component {
             />
             : <View style={{ width: 110, alignItems: 'center', margin: 20 }}>
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
-                <Image
-                  source={item.icon}
-                  style={{ width: 170, height: 150, resizeMode: 'contain' }}
-                />
+                <View style={{ width: 130, height: 130 }}>
+                  {item.icon.includes("null") ?
+                    <Image
+                      source={hearing}
+                      style={{ width: 130, height: 130, resizeMode: 'contain' }}
+                    />
+                    :
+                    <Image
+                      source={{ uri: item.icon }}
+                      style={{ width: 120, height: 120, resizeMode: 'contain' }}
+                    />
+                  }
+                </View>
               </TouchableOpacity>
-              <View style={{ marginLeft: 20, width: 150 }}>
+              <View style={{ marginTop: 10, marginLeft: 20, width: 150 }}>
                 <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
                   {item.name}
                 </Text>
@@ -139,6 +183,7 @@ class Synesthesia extends Component {
     const { isFetchingData, synesthesiaData } = this.props;
     const header = synesthesiaData.header;
     const subHeader = synesthesiaData.subheader;
+    const imageBanner = FILES_URL + synesthesiaData.image_banner;
     const synesthesiaDatas = synesthesiaData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
@@ -152,7 +197,7 @@ class Synesthesia extends Component {
               alignItems: "center",
             }}
             resizeMode='contain'
-            source={synesthesiaImage}
+            source={{ uri: imageBanner }}
           >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{

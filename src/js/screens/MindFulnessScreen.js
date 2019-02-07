@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import CircleItemButton from '../components/CircleItemButton';
 
@@ -14,6 +14,7 @@ const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
 import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
+import { FILES_URL } from '../constants/constants'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -27,15 +28,13 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
-  }
-
-  componentWillUnmount() {
+    console.log("called componentDidMount Of Mindfulness");
   }
 
   loadingPage = () => {
     return (
       <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Text style={{ color: "white", fontSize: 30, fontFamily: Theme.FONT_REGULAR }}>Loading...</Text>
+        <ActivityIndicator />
       </View>
     )
   }
@@ -175,6 +174,7 @@ class MindFulness extends Component {
     if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
+      AsyncStorage.setItem('nodeID', item.id);
       this.props.navigation.navigate('Player')
     }
   }
@@ -183,6 +183,7 @@ class MindFulness extends Component {
     const { isFetchingData, mindfulnessData } = this.props;
     const header = mindfulnessData.header;
     const subHeader = mindfulnessData.subheader;
+    const imageBanner = FILES_URL + mindfulnessData.image_banner;
     const mindFulnessDatas = mindfulnessData.children;
 
     return (
@@ -197,7 +198,7 @@ class MindFulness extends Component {
               alignItems: "center",
             }}
             resizeMode='contain'
-            source={mindfulessImage}
+            source={{ uri: imageBanner }}
           >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{

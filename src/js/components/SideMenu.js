@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Text, TouchableOpacity, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList, Linking } from 'react-native';
+import { Text, TouchableHighlight, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList, Linking } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { iPhoneX } from '../../js/util';
 import ModalCloseIcon from '../icons/ModalCloseIcon';
@@ -41,7 +41,9 @@ class SideMenu extends Component {
   constructor() {
     super();
     this.state = {
-      menuData: meanuItems
+      menuData: meanuItems,
+      loginBtnPressStatus: false,
+      logoutBtnPressStatus: false
     }
   }
 
@@ -103,7 +105,24 @@ class SideMenu extends Component {
     );
   }
 
+  onHideUnderlay(itemName) {
+    if (itemName == 'Login') {
+      this.setState({ loginBtnPressStatus: false });
+    } else if (itemName == 'Log out') {
+      this.setState({ logoutBtnPressStatus: false });
+    }
+  }
+
+  onShowUnderlay(itemName) {
+    if (itemName == 'Login') {
+      this.setState({ loginBtnPressStatus: true });
+    } else if (itemName == 'Log out') {
+      this.setState({ logoutBtnPressStatus: true });
+    }
+  }
+
   renderData = (item, index, type) => {
+    const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
     const { currentItem, isLoggedIn } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
@@ -115,10 +134,12 @@ class SideMenu extends Component {
       <View>
         {item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != curItem && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
-        {!isLoggedIn && item.name == 'Login' && <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }}>
-          <Image source={loginButton} style={{ height: 20, width: 20 }} />
-          <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)}>{'Login'}</Text>
-        </View>}
+        {!isLoggedIn && item.name == 'Login' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
+            <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
+          </View>
+        </TouchableHighlight>}
         {item.name == 'Meditate in Sensorium' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
@@ -131,10 +152,12 @@ class SideMenu extends Component {
           <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
         </View>}
         {isLoggedIn && item.name == 'Log out' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
-        {isLoggedIn && item.name == 'Log out' && <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }}>
-          <Image source={loginButton} style={{ height: 20, width: 20 }} />
-          <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
-        </View>}
+        {isLoggedIn && item.name == 'Log out' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
+            <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Log out'}</Text>
+          </View>
+        </TouchableHighlight>}
         {/* {item.name == curItem && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Meditate in Sensorium' && item.name != 'Login' && <View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>

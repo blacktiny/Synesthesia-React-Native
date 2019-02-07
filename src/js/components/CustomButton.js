@@ -1,26 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
+import { TouchableHighlight, Text, View, StyleSheet } from 'react-native'
 import { Theme } from '../constants/constants'
 
 const CustomButton = ({
   title,
   onPress,
   disabled,
-  style
+  style,
 }) => {
 
   return (
-    <TouchableOpacity
+    <TouchableHighlight
       onPress = {onPress}
       disabled = {disabled}
       style = {style ? style : [
         styles.button,
         disabled && { opacity: 0.7 }
       ]}
+      underlayColor={'#25B999CC'}
     >
       <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
+    </TouchableHighlight>
   )
 
 

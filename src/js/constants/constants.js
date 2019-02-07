@@ -30,8 +30,12 @@ export const ActionTypes = keyMirror({
   LOGOUT_USER_SUCCESS: null,
   LOGOUT_USER_FAIL: null,
 
-  GET_MUSIC: null,
-  GET_MUSIC_SUCCESS: null,
+  GET_EXERCISES: null,
+  GET_CURRENT_EXERCISE: null,
+
+  COMPLETE_NODE: null,
+  COMPLETE_NODE_SUCCESS: null,
+  COMPLETE_NODE_FAIL: null,
 
   SET_MENUITEM: null,
   GET_MENUITEM: null,
@@ -70,4 +74,4 @@ export const Theme = {
   FONT_BOLD: 'Raleway-Bold'
 }
 
-export const MUSIC_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'
+export const FILES_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'

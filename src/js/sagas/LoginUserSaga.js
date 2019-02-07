@@ -5,7 +5,6 @@ import { ActionTypes } from '../constants/constants'
 import { doLogin, getUser } from '../api/api'
 
 const LoginUserSaga = function* (action) {
-  // debugger;
   const authObject = yield call(doLogin, action.payload);
 
   if (authObject.status.success) {
@@ -19,7 +18,7 @@ const LoginUserSaga = function* (action) {
     // AsyncStorage.setItem('token', userObject.token); // example
     AsyncStorage.setItem('token', authObject.token);
     const user = yield call(getUser, action.payload, authObject.token);
-
+    AsyncStorage.setItem('userId', user.user.id);
     if (user.status.success) {
       yield put({
         type: ActionTypes.LOGIN_USER_SUCCESS,

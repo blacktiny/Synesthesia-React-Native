@@ -23,7 +23,7 @@ export const beingawareReducer = (state = initialState, action) => {
     case ActionTypes.CLEAN_AWARENESS:
       return {
         ...state,
-        isFetchingData: false,
+        isFetchingData: true,
         beingawareData: []
       }
     default:

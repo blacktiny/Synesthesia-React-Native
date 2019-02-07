@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Button, Image, TouchableOpacity, AsyncStorage } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Button, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { connect } from 'react-redux'
 
@@ -18,6 +18,9 @@ class Sensorium extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      mindBtnPressStatus: false,
+      awareBtnPressStatus: false,
+      synesBtnPressStatus: false
     }
   }
 
@@ -31,31 +34,44 @@ class Sensorium extends Component {
     // if (getSynesthesiaSuccess) navigation.navigate('Synesthesia');
   }
 
-  // logout = () => {
-  //   this.props.logoutUser();
-  //   this.props.cleanMindFulness();
-  //   this.props.cleanSynesthesia();
-  //   this.props.cleanAwareness();
-
-  //   AsyncStorage.clear();
-
-  //   // this.props.navigation.navigate('Login');
-  // }
   login = () => {
     this.props.navigation.navigate('Register')
   }
 
+  onHideUnderlay = (itemName) => {
+    if (itemName == 'mindfulness') {
+      this.setState({ mindBtnPressStatus: false });
+    } else if (itemName == 'awareness') {
+      this.setState({ awareBtnPressStatus: false });
+    } else if (itemName == 'synesthesia') {
+      this.setState({ synesBtnPressStatus: false });
+    }
+  }
+
+  onShowUnderlay = (itemName) => {
+    if (itemName == 'mindfulness') {
+      this.setState({ mindBtnPressStatus: true });
+    } else if (itemName == 'awareness') {
+      this.setState({ awareBtnPressStatus: true });
+    } else if (itemName == 'synesthesia') {
+      this.setState({ synesBtnPressStatus: true });
+    }
+  }
+
   render() {
+    const { mindBtnPressStatus, awareBtnPressStatus, synesBtnPressStatus } = this.state;
     const { isLoggedIn, user } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         <BottomBar navigation={this.props.navigation} />
         <ScrollView>
-          <TouchableOpacity onPress={() => {
-            this.props.cleanMindFulness();
+          <TouchableHighlight onPress={() => {
+            // this.props.cleanMindFulness();
             this.props.navigation.push('MindFulness')
-          }
-          }>
+          }}
+          onHideUnderlay={() => this.onHideUnderlay('mindfulness')} 
+          onShowUnderlay={() => this.onShowUnderlay('mindfulness')} 
+          underlayColor={'#1F1F20'}>
             <View style={{ marginTop: -10 }}>
               <ImageBackground
                 style={{
@@ -63,6 +79,7 @@ class Sensorium extends Component {
                   height: 235,
                   display: "flex",
                   alignItems: "center",
+                  opacity: mindBtnPressStatus ? 0.5 : 1.0
                 }}
                 resizeMode='contain'
                 source={mindfulessImage}
@@ -79,11 +96,14 @@ class Sensorium extends Component {
                 <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Path of Mindfulness'}</Text>
               </View>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
+          </TouchableHighlight>
+          <TouchableHighlight onPress={() => {
             this.props.navigation.push('BeingAware')
-            this.props.cleanAwareness();
-          }}>
+            // this.props.cleanAwareness();
+          }}
+          onHideUnderlay={() => this.onHideUnderlay('awareness')} 
+          onShowUnderlay={() => this.onShowUnderlay('awareness')} 
+          underlayColor={'#1F1F20'}>
             <View style={{ marginTop: -10 }}>
               <ImageBackground
                 style={{
@@ -91,6 +111,7 @@ class Sensorium extends Component {
                   height: 235,
                   display: "flex",
                   alignItems: "center",
+                  opacity: awareBtnPressStatus ? 0.5 : 1.0
                 }}
                 resizeMode='contain'
                 source={awarenessImage}
@@ -108,11 +129,14 @@ class Sensorium extends Component {
                 <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Life with Awareness'}</Text>
               </View>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
+          </TouchableHighlight>
+          <TouchableHighlight onPress={() => {
             this.props.navigation.push('Synesthesia')
-            this.props.cleanSynesthesia();
-          }}>
+            // this.props.cleanSynesthesia();
+          }}
+          onHideUnderlay={() => this.onHideUnderlay('synesthesia')} 
+          onShowUnderlay={() => this.onShowUnderlay('synesthesia')} 
+          underlayColor={'#1F1F20'}>
             <View>
               <ImageBackground
                 style={{
@@ -120,6 +144,7 @@ class Sensorium extends Component {
                   height: 235,
                   display: "flex",
                   alignItems: "center",
+                  opacity: synesBtnPressStatus ? 0.5 : 1.0
                 }}
                 resizeMode='contain'
                 source={synesthesiaImage}
@@ -136,18 +161,7 @@ class Sensorium extends Component {
                 <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Garden of Synesthesia'}</Text>
               </View>
             </View>
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={this.logout}>
-            <View style={{ marginTop: -20 }}>
-              <Image
-                style={{
-                  width: '100%',
-                }}
-                resizeMode='contain'
-                source={saveProgressImage}
-              />
-            </View>
-          </TouchableOpacity> */}
+          </TouchableHighlight>
           { !isLoggedIn && 
           <TouchableOpacity onPress={this.login}>
             <View style={{ marginTop: -20 }}>

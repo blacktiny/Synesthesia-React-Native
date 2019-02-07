@@ -1,15 +1,41 @@
 import { PropTypes } from 'prop-types';
-import React from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { TouchableHighlight, View, StyleSheet } from 'react-native';
 import PlayIcon from '../icons/PlayIcon'
-const PlayButton = props => {
-  return (
-    <TouchableOpacity style={styles.container} onPress={() => props.onPress()}>
-      <View style={styles.innerRound}>
-        <PlayIcon colors={['#27BF9E', '#84FAB0']} />
-      </View>
-    </TouchableOpacity>
-  )
+
+class PlayButton extends Component {
+  
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      btnPressStatus: false,
+      onPress: this.props.onPress
+    }
+  }
+
+  onClicked = () => {
+    this.state.onPress();
+  };
+
+  onHideUnderlay() {
+    this.setState({ btnPressStatus: false });
+  }
+
+  onShowUnderlay() {
+    this.setState({ btnPressStatus: true });
+  }
+
+  render() {
+    const { btnPressStatus } = this.state;
+    return (
+      <TouchableHighlight style={styles.container} onPress={() => this.onClicked()} onHideUnderlay={() => this.onHideUnderlay()} onShowUnderlay={() => this.onShowUnderlay()} underlayColor={'#454545'}>
+        <View style={[ styles.innerRound, { backgroundColor: btnPressStatus ? '#ffffff0d' : '#383938' } ]}>
+          <PlayIcon colors={[ '#27BF9E', '#84FAB0' ]} />
+        </View>
+      </TouchableHighlight>
+    )
+  }
 }
 
 const styles = StyleSheet.create({

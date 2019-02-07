@@ -10,21 +10,30 @@ const audioBg = require('../../assets/audioBg.png')
 class PlayerHeader extends Component {
   state = {
     modalVisible: false,
+    onSettingClicked: false
   };
+
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible })
   }
+
   leave = () => {
     this.setState({ modalVisible: false })
-    this.props.navigation.navigate('Synesthesia')
+    this.props.navigation.navigate('MindFulness')
   }
+
+  onSettingClicked = () => {
+    this.setState({ onSettingClicked: true });
+  }
+
   render() {
     const { audioPlayer } = this.props
+    const { onSettingClicked } = this.state
     return (
       <View style={styles.container}>
         <CloseModal modalVisible={this.state.modalVisible} closeModal={() => this.setModalVisible(false)} bg={audioPlayer ? audioBg : playerBG} leave={this.leave} />
         {audioPlayer && <TouchableOpacity onPress={() => console.log('Settings')} style={styles.mainView}>
-          <Image source={settings} style={{ width: 20, height: 18 }} resizeMode='contain' />
+          <Image source={settings} style={[{ width: 20, height: 18 }, onSettingClicked ? {opacity: 0.1}: {opacity: 1.0}]} resizeMode='contain' />
         </TouchableOpacity>}
         <TouchableOpacity onPress={() => this.setModalVisible(true)} style={styles.mainView}>
           <CloseIcon color="#ffffff" strokeWidth={2} />
