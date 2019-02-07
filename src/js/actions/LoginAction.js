@@ -13,6 +13,13 @@ export function loginUser({
   }
 }
 
+export function isLoggedInUser() {
+  return {
+    type: ActionTypes.IS_LOGGEDIN,
+    payload: {}
+  }
+}
+
 export function closeLoginErrorBanner() {
   return {
     type: ActionTypes.CLOSE_LOGIN_BANNER_ERROR,
