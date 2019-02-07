@@ -5,7 +5,6 @@ import { ActionTypes } from '../constants/constants'
 import { getSynesthesia, getSynesthesiaAnonymous } from '../api/api'
 
 const SynesthesiaSaga = function* (action) {
-  // debugger;
   const token = yield AsyncStorage.getItem('token');
 
   if (token !== null) {

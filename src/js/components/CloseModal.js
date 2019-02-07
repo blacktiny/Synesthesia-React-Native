@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, View, ImageBackground, StyleSheet, Text } from 'react-native'
+import { Modal, View, ImageBackground, StyleSheet, Text, TouchableHighlight } from 'react-native'
 import Button from './Button'
 export default CloseModal = (props) => (
   <Modal
@@ -13,8 +13,8 @@ export default CloseModal = (props) => (
       <View style={styles.content}>
         <Text style={styles.text}>Are you sure you want to close this exercise?</Text>
         <View style={styles.row}>
-          <Button style={{ width: "45%" }} onPress={props.leave}><Text style={styles.buttonText}>Yes, close</Text></Button>
-          <Button style={styles.rightButton} onPress={props.closeModal}><Text style={styles.buttonText}>No, continue</Text></Button>
+          <TouchableHighlight style={styles.leftButton} onPress={props.leave} underlayColor={"#ffffff12"}><Text style={styles.buttonText}>Yes, close</Text></TouchableHighlight>
+          <TouchableHighlight style={styles.rightButton} onPress={props.closeModal} underlayColor={"#25b999cc"}><Text style={styles.buttonText}>No, continue</Text></TouchableHighlight>
         </View>
       </View>
     </ImageBackground>
@@ -52,7 +52,8 @@ styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%'
+    width: '100%',
+    marginTop: 20
   },
   buttonText: {
     fontWeight: 'bold',
@@ -62,9 +63,22 @@ styles = StyleSheet.create({
 
     color: '#FFFFFF'
   },
+  leftButton: {
+    width: "45%",
+    height: 40,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#ffffff",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   rightButton: {
     width: "45%",
+    height: 40,
+    borderRadius: 18,
     backgroundColor: '#25b999',
-    borderColor: '#25b999'
+    borderColor: '#25b999',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })

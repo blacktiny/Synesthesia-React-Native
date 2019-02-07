@@ -5,7 +5,6 @@ import { ActionTypes } from '../constants/constants'
 import { getMindFulness, getMindFulnessAnonymous } from '../api/api'
 
 const MindFulnessSaga = function* (action) {
-  // debugger;
   const token = yield AsyncStorage.getItem('token');
 
   if (token !== null) {

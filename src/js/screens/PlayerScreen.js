@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
 import { iPhoneX } from '../util'
-import { getMusic } from '../actions/ExerciseAction'
+import { getNodeByID } from '../actions/NodeAction'
 const settings = require('../../assets/settings.png')
 const background = require('../../assets/bgPlayer.png')
 class Player extends Component {
@@ -13,7 +13,7 @@ class Player extends Component {
     timeParams: [10, 20]
   }
   componentDidMount() {
-    this.props.getMusic()
+    this.props.getNodeByID()
   }
   onPressTime = (time) => {
     this.setState({ activeTime: time })
@@ -34,12 +34,19 @@ class Player extends Component {
     })
   }
   render() {
-    const { navigation } = this.props
+    const { navigation, nodeData } = this.props
+    if (this.props.isFetchingData) {
+      return (
+        <ImageBackground style={[styles.container, {justifyContent: 'center'}]} source={background} resizeMode="cover">
+          <ActivityIndicator />
+        </ImageBackground>
+      )
+    }
     return (
       <ImageBackground style={styles.container} source={background} resizeMode="cover">
         <View style={styles.top}>
-          <Text style={styles.topTextTitle}>Seeing</Text>
-          <Text style={styles.topText}>Discover types of Synesthesia of Vision</Text>
+          <Text style={styles.topTextTitle}>{nodeData.header}</Text>
+          <Text style={styles.topText} numberOfLines={2}>{nodeData.subheader}</Text>
         </View>
         <View style={styles.centralBar}>
           <Text style={styles.centralText}>Need to save your Progress?</Text>
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
   },
   top: {
     paddingVertical: 30,
-    paddingHorizontal: 50,
+    paddingHorizontal: 10,
     marginTop: iPhoneX() ? 15 : 0
   },
   topTextTitle: {
@@ -128,7 +135,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   bottom: {
-    marginTop: iPhoneX() ? '20%' : '3%',
+    marginTop: iPhoneX() ? '10%' : '3%',
     alignItems: 'center',
     width: '80%'
   },
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginTop: iPhoneX() ? 50 : 10,
+    marginTop: iPhoneX() ? 15 : 10,
     justifyContent: 'space-around'
   },
   additionalMargin: {
@@ -171,12 +178,14 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    url: state.musicReducer.url
+    nodeData: state.nodeReducer.nodeData,
+    isFetchingData: state.nodeReducer.isFetchingData,
+    exercises: state.exerciseReducer.exercises
   }
 }
 
 const mapDispatchToProps = {
-  getMusic
+  getNodeByID
 }
 
 export default connect(

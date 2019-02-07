@@ -17,6 +17,7 @@ import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
 
 const { width, height } = Dimensions.get('screen');
+import { FILES_URL } from '../constants/constants'
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -207,12 +208,14 @@ class SynesthesiaItemScreen extends Component {
     const { isFetchingData, nodeData } = this.props;
     const header = nodeData.header;
     const subHeader = nodeData.subheader;
+    const imageBanner = FILES_URL + nodeData.image_banner;
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         <BottomBar screen={'syensthesia'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-          <ImageBackground
+
+          {!isFetchingData && <ImageBackground
             style={{
               width: '100%',
               height: 137,
@@ -220,7 +223,7 @@ class SynesthesiaItemScreen extends Component {
               alignItems: "center",
             }}
             resizeMode='contain'
-            source={synesthesiaImage}
+            source={{ uri: imageBanner }}
           >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
               <Text style={{
@@ -235,7 +238,7 @@ class SynesthesiaItemScreen extends Component {
                 color: '#FFFFFF'
               }}>{subHeader}</Text>
             </View>
-          </ImageBackground>
+          </ImageBackground>}
           {isFetchingData && this.loadingPage()}
           {this.renderData()}
           {this.LockedModalBanner()}

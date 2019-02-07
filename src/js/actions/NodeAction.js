@@ -7,6 +7,13 @@ export function getNodeByID() {
   }
 }
 
+export function completeNode() {
+  return {
+    type: ActionTypes.COMPLETE_NODE,
+    payload: {}
+  }
+}
+
 export function clearNode() {
   return {
     type: ActionTypes.CLEAR_NODE,

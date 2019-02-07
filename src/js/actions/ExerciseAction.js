@@ -1,8 +1,8 @@
 import { ActionTypes } from '../constants/constants'
 
-export function getMusic() {
+export function getExercises(exercises) {
   return {
-    type: ActionTypes.GET_MUSIC,
-    payload: {}
+    type: ActionTypes.GET_EXERCISES,
+    payload: exercises
   }
 }

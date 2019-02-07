@@ -4,6 +4,7 @@ const initialState = {
   error: false,
   isFetchingData: true,
   nodeData: [],
+  nodeComplete: false
 };
 
 export const nodeReducer = (state = initialState, action) => {
@@ -12,7 +13,8 @@ export const nodeReducer = (state = initialState, action) => {
       return {
         ...state,
         isFetchingData: false,
-        nodeData: action.payload.node
+        nodeData: action.payload.node,
+        nodeComplete: false
       }
     case ActionTypes.GET_NODE_FAIL:
       return {
@@ -21,6 +23,24 @@ export const nodeReducer = (state = initialState, action) => {
         isFetchingData: false
       }
     case ActionTypes.CLEAR_NODE:
+      return {
+        ...state,
+        isFetchingData: true,
+        nodeComplete: false
+      }
+    case ActionTypes.COMPLETE_NODE_SUCCESS:
+      return {
+        ...state,
+        isFetchingData: false,
+        nodeComplete: action.payload
+      }
+    case ActionTypes.COMPLETE_NODE_FAIL:
+      return {
+        ...state,
+        error: true,
+        isFetchingData: false
+      }
+    case ActionTypes.COMPLETE_NODE:
       return {
         ...state,
         isFetchingData: true

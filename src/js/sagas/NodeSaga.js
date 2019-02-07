@@ -2,15 +2,19 @@ import { AsyncStorage } from 'react-native';
 
 import { put, call } from 'redux-saga/effects'
 import { ActionTypes } from '../constants/constants'
-import { getNodeByID } from '../api/api'
+import { getNodeByID, getNodeByIDAnonymous } from '../api/api'
 
 const NodeSaga = function* (action) {
-  // debugger;
   const token = yield AsyncStorage.getItem('token');
   const nodeID = yield AsyncStorage.getItem('nodeID');
-  
-  if (token !== null && nodeID !== null) {
-    const dataObject = yield call(getNodeByID, nodeID, token);
+  // debugger;
+
+  if (nodeID !== null) {
+    var dataObject;
+    if (token !== null)
+      dataObject = yield call(getNodeByID, nodeID, token);
+    else
+      dataObject = yield call(getNodeByIDAnonymous, nodeID);
     if (dataObject.status.success) {
       yield put({
         type: ActionTypes.GET_NODE_SUCCESS,
@@ -18,6 +22,10 @@ const NodeSaga = function* (action) {
           ...dataObject
         }
       })
+      // yield put({
+      //   type: ActionTypes.GET_EXERCISES,
+      //   payload: dataObject.node.itemsets
+      // })
     }
     else {
       yield put({

@@ -28,13 +28,6 @@ export const doRegister = (payload) => fetch(`${baseUrl}user`, {
   body: JSON.stringify(payload)
 }).then(response => response.json());
 
-export const getMusic = (payload, token) => fetch(`${baseUrl}node/1073?token=${token}`, {
-  method: 'GET',
-  headers: {
-    ...commonHeaders,
-  },
-}).then(response => response.json());
-
 export const forgotPassword = (email) => fetch(`${baseUrl}resetmail/${email}`, {
   method: 'GET',
   headers: {
@@ -87,6 +80,20 @@ export const getBeingAwareAnonymous = () => fetch(`${baseUrl}node/1082`, {
 
 export const getNodeByID = (id, token) => fetch(`${baseUrl}node/${id}?token=${token}`, {
   method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
+export const getNodeByIDAnonymous = (id) => fetch(`${baseUrl}node/${id}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
+export const doCompletion = (nodeId, userId, token) => fetch(`${baseUrl}response?completion={"state":"","node_id":${nodeId},"user_id":"${userId}","responses":[]}&token=${token}`, {
+  method: 'POST',
   headers: {
     ...commonHeaders,
   },

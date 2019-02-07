@@ -8,7 +8,7 @@ import Svg, {
 
 const PlayIcon = props => props.small ? (
   <Svg width={26} height={29} fill="none">
-    <Path fillRule="evenodd" clipRule="evenodd" d="M22.3515 11.5016C24.314 12.6242 24.3525 15.4406 22.4214 16.6164L7.01455 25.9974C5.03537 27.2025 2.49997 25.7778 2.49997 23.4606L2.49997 5.26663C2.49997 2.98561 4.96467 1.55602 6.94464 2.6886L22.3515 11.5016Z" stroke="white" strokeWidth="4" />
+    <Path fillRule="evenodd" clipRule="evenodd" d="M22.3515 11.5016C24.314 12.6242 24.3525 15.4406 22.4214 16.6164L7.01455 25.9974C5.03537 27.2025 2.49997 25.7778 2.49997 23.4606L2.49997 5.26663C2.49997 2.98561 4.96467 1.55602 6.94464 2.6886L22.3515 11.5016Z" stroke={ props.fill ? props.fill : "white" } strokeWidth="4" />
   </Svg>
 ) : (
     <Svg width={32} height={41}>

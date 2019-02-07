@@ -7,6 +7,7 @@ const initialState = {
 };
 
 export const mindfulnessReducer = (state = initialState, action) => {
+  console.log("MindFulnessReducer: " + action.type);
   switch (action.type) {
     case ActionTypes.GET_MINDFULNESS_SUCCESS:
       return {
@@ -23,7 +24,7 @@ export const mindfulnessReducer = (state = initialState, action) => {
     case ActionTypes.CLEAN_MINDFULNESS:
       return {
         ...state,
-        isFetchingData: false,
+        isFetchingData: true,
         mindfulnessData: []
       }
     default:

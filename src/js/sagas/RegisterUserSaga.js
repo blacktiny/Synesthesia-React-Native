@@ -3,8 +3,6 @@ import { ActionTypes } from '../constants/constants'
 import { doRegister } from '../api/api'
 
 const RegisterUserSaga = function* (action) {
-  // debugger;
-
   const data = { user: JSON.stringify(action.payload) };
 
   const registeredObject = yield call(doRegister, data);
