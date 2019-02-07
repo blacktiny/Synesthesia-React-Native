@@ -7,7 +7,6 @@ const initialState = {
 };
 
 export const mindfulnessReducer = (state = initialState, action) => {
-  console.log("MindFulnessReducer: " + action.type);
   switch (action.type) {
     case ActionTypes.GET_MINDFULNESS_SUCCESS:
       return {

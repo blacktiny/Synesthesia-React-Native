@@ -62,6 +62,11 @@ export const ActionTypes = keyMirror({
   CLEAN_MINDFULNESS: null,
   CLEAN_AWARENESS: null,
 
+  IS_LOGGEDIN: null,
+  IS_LOGGEDIN_SUCCESS: null,
+  IS_LOGGEDIN_NOT: null,
+  IS_LOGGEDIN_FAIL: null,
+
 })
 
 export const Theme = {

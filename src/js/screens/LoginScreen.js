@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Button, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -9,7 +9,7 @@ import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton'
 import { iPhoneX } from '../../js/util';
 
-import { loginUser } from '../actions/LoginAction'
+import { loginUser, isLoggedInUser } from '../actions/LoginAction'
 import { closeLoginErrorBanner } from '../actions/LoginAction'
 import { closeLoginSuccessBanner } from '../actions/LoginAction'
 
@@ -30,6 +30,15 @@ class LoginScreen extends Component {
       passwordSuccessBorder: false,
       passwordErrorBorder: false
     }
+  }
+
+  componentDidMount() {
+    this.props.isLoggedInUser();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.bGotoMainScreen)
+      this.gotoMainScreen();
   }
 
   handleOnSubmit = () => {
@@ -202,13 +211,26 @@ class LoginScreen extends Component {
     )
   }
 
+  gotoMainScreen = () => {
+    this.props.navigation.navigate('Sensorium');
+  }
+
+  loadingPage = () => {
+    return (
+      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
   render() {
-    let { wrongCredentials, isLoggedIn } = this.props;
+    let { isCheckingLoggedIn, wrongCredentials, isLoggedIn } = this.props;
     return (
       <View style={styles.container}>
-        {!wrongCredentials && !isLoggedIn && this.loginForm()}
-        {!wrongCredentials && isLoggedIn && this.loginSuccessBanner()}
-        {wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
+        {isCheckingLoggedIn && this.loadingPage()}
+        {!isCheckingLoggedIn && !wrongCredentials && !isLoggedIn && this.loginForm()}
+        {!isCheckingLoggedIn && !wrongCredentials && isLoggedIn && this.loginSuccessBanner()}
+        {!isCheckingLoggedIn && wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
       </View>
     )
   }
@@ -301,6 +323,8 @@ const styles = StyleSheet.create({
 // })
 function mapStateToProps(state) {
   return {
+    bGotoMainScreen: state.loginReducer.bGotoMainScreen,
+    isCheckingLoggedIn: state.loginReducer.isCheckingLoggedIn,
     isLoggedIn: state.loginReducer.isLoggedIn,
     wrongCredentials: state.loginReducer.wrongCredentials,
     requestPending: state.loginReducer.requestPending
@@ -315,6 +339,7 @@ function mapStateToProps(state) {
 // }
 
 const mapDispatchToProps = {
+  isLoggedInUser,
   loginUser,
   closeLoginErrorBanner,
   closeLoginSuccessBanner

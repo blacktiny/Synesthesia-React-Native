@@ -12,6 +12,7 @@ import completionSaga from './Completion'
 
 const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGIN_USER, LoginUserSaga)
+  yield takeLatest(ActionTypes.IS_LOGGEDIN, LoginUserSaga)
   yield takeLatest(ActionTypes.REGISTER_USER, RegisterUserSaga)
   yield takeLatest(ActionTypes.SEND_RESET_LINK, ForgotPasswordSaga)
   yield takeLatest(ActionTypes.LOGOUT_USER, LogoutUserSaga)
