@@ -39,6 +39,10 @@ class CircleItemButton extends Component {
         <View
           style={{
             flexDirection: "row",
+            backgroundColor: '#1F1F20',
+            width: 80,
+            height: 80,
+            borderRadius: 50,
             shadowRadius: 16,
             shadowOffset: { width: 0, height: 8 },
             shadowColor: "black",

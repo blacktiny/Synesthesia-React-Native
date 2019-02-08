@@ -12,6 +12,9 @@ import { iPhoneX } from '../../js/util';
 import { loginUser, isLoggedInUser } from '../actions/LoginAction'
 import { closeLoginErrorBanner } from '../actions/LoginAction'
 import { closeLoginSuccessBanner } from '../actions/LoginAction'
+import { cleanSynesthesia } from '../actions/SynesthesiaAction'
+import { cleanMindFulness } from '../actions/MindFulnessAction'
+import { cleanAwareness } from '../actions/BeingAwareAction'
 
 const { width, height } = Dimensions.get('screen');
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -39,6 +42,8 @@ class LoginScreen extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.bGotoMainScreen)
       this.gotoMainScreen();
+    if (this.props.isLoggedIn)
+      this.cleanSensorium();
   }
 
   handleOnSubmit = () => {
@@ -124,6 +129,12 @@ class LoginScreen extends Component {
         </View>
       </LinearGradient>
     )
+  }
+
+  cleanSensorium = () => {
+    this.props.cleanSynesthesia();
+    this.props.cleanMindFulness();
+    this.props.cleanAwareness();
   }
 
   loginSuccessBanner = () => {
@@ -339,6 +350,9 @@ function mapStateToProps(state) {
 // }
 
 const mapDispatchToProps = {
+  cleanSynesthesia,
+  cleanMindFulness,
+  cleanAwareness,
   isLoggedInUser,
   loginUser,
   closeLoginErrorBanner,

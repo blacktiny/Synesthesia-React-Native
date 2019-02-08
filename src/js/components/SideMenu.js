@@ -54,10 +54,10 @@ class SideMenu extends Component {
   onMenuItemClicked = (routeName, itemName, url) => {
     this.props.navigation.navigate(routeName);
     if (itemName == 'Log out') {
-      this.props.dispatch(logoutUser());
       this.props.dispatch(cleanSynesthesia());
       this.props.dispatch(cleanMindFulness());
       this.props.dispatch(cleanAwareness());
+      this.props.dispatch(logoutUser());
     }
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
