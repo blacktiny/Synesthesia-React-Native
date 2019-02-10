@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
-import CircleItemButton from '../components/CircleItemButton';
+import ActivityDependentExercise from '../components/ActivityDependentExercise';
 
 import { getBeingAware } from '../actions/BeingAwareAction'
 
@@ -106,7 +106,7 @@ class BeingAware extends Component {
       <View>
         {
           item.type == "leaf" ?
-            <CircleItemButton
+            <ActivityDependentExercise
               id={id}
               index={index}
               numberCount={itemList}

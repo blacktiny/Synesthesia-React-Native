@@ -2,18 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, Text, View, ScrollView, ImageBackground, ActivityIndicator, Image, TouchableOpacity, FlatList } from 'react-native';
 import BottomBar from '../components/BottomBar';
-import PlayIcon from '../icons/PlayIcon';
-import CircleItemButton from '../components/CircleItemButton';
+import ActivityDependentExercise from '../components/ActivityDependentExercise';
 
 import { getSynesthesia } from '../actions/SynesthesiaAction'
-import { getNodeByID } from '../actions/NodeAction'
 
-const synesthesiaImage = require('../../assets/synesthesiaImage.png')
-const multimedia = require('../../assets/multimedia.png')
 const hearing = require('../../assets/hearing.png')
-const watching = require('../../assets/watching.png')
 import { Theme } from '../constants/constants'
 import { FILES_URL } from '../constants/constants'
+import ProgressiveImage from '../components//ProgressiveImage';
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -87,32 +83,36 @@ class Synesthesia extends Component {
           </View>
           :
           <View style={{ marginTop: -30 }}>
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: 137,
-                display: "flex",
-                alignItems: "center",
-              }}
-              resizeMode='contain'
+            <ProgressiveImage
+              thumbnailSource={{ uri: imageBanner }}
               source={{ uri: imageBanner }}
-            >
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
-                <Text style={{
-                  textAlign: 'center',
-                  fontSize: 20,
-                  color: '#FFFFFF',
-                  fontFamily: Theme.FONT_BOLD
-                }}>{header}</Text>
-                <Text style={{
-                  textAlign: 'center',
-                  fontSize: 14,
-                  paddingTop: 8,
-                  color: '#FFFFFF',
-                  fontFamily: Theme.FONT_MEDIUM
-                }}>{subHeader}</Text>
-              </View>
-            </ImageBackground>
+              style={{ width: '100%', height: 137 }}
+              resizeMode="cover"
+              isImageBanner={true}
+            />
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 20,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 40,
+              left: 0,
+              right: 0,
+              fontFamily: Theme.FONT_BOLD
+            }}>{header}</Text>
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 14,
+              paddingTop: 8,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 60,
+              left: 0,
+              right: 0,
+              paddingLeft: 30,
+              paddingRight: 30,
+              fontFamily: Theme.FONT_MEDIUM
+            }}>{subHeader}</Text>
           </View>
         }
 
@@ -136,30 +136,33 @@ class Synesthesia extends Component {
       <View>
         {
           item.type == "leaf" ?
-            <CircleItemButton
+            <ActivityDependentExercise
               id={id}
               index={index}
               numberCount={itemList}
               item={item}
               onPress={() => this.onLeafClicked(item)}
             />
-            : <View style={{ width: 110, alignItems: 'center', margin: 20 }}>
+            :
+            <View style={{ width: 110, alignItems: 'center', marginTop: 20, marginRight: 10, marginLeft: 20, marginBottom: 20 }}>
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
-                <View style={{ width: 130, height: 130 }}>
+                <View>
                   {item.icon.includes("null") ?
                     <Image
                       source={hearing}
                       style={{ width: 130, height: 130, resizeMode: 'contain' }}
                     />
                     :
-                    <Image
+                    <ProgressiveImage
+                      thumbnailSource={{ uri: item.icon }}
                       source={{ uri: item.icon }}
-                      style={{ width: 120, height: 120, resizeMode: 'contain' }}
+                      style={{ width: 120, height: 120, borderRadius: 12 }}
+                      resizeMode="cover"
                     />
                   }
                 </View>
               </TouchableOpacity>
-              <View style={{ marginTop: 10, marginLeft: 20, width: 150 }}>
+              <View style={{ marginTop: 8, marginLeft: 0, width: 120 }}>
                 <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
                   {item.name}
                 </Text>
@@ -189,21 +192,23 @@ class Synesthesia extends Component {
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         <BottomBar screen={'syensthesia'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: 137,
-              display: "flex",
-              alignItems: "center",
-            }}
-            resizeMode='contain'
-            source={{ uri: imageBanner }}
-          >
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
+          {!isFetchingData &&
+            <View>
+              <ProgressiveImage
+                thumbnailSource={{ uri: imageBanner }}
+                source={{ uri: imageBanner }}
+                style={{ width: '100%', height: 137 }}
+                resizeMode="cover"
+                isImageBanner={true}
+              />
               <Text style={{
                 textAlign: 'center',
                 fontSize: 20,
                 color: '#FFFFFF',
+                position: 'absolute',
+                top: 40,
+                left: 0,
+                right: 0,
                 fontFamily: Theme.FONT_BOLD
               }}>{header}</Text>
               <Text style={{
@@ -211,10 +216,15 @@ class Synesthesia extends Component {
                 fontSize: 14,
                 paddingTop: 8,
                 color: '#FFFFFF',
+                position: 'absolute',
+                top: 60,
+                left: 0,
+                right: 0,
+                paddingLeft: 30,
+                paddingRight: 30,
                 fontFamily: Theme.FONT_MEDIUM
               }}>{subHeader}</Text>
-            </View>
-          </ImageBackground>
+            </View>}
 
 
           {isFetchingData && this.loadingPage()}
