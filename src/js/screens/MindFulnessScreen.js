@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
-import CircleItemButton from '../components/CircleItemButton';
+import ActivityDependentExercise from '../components/ActivityDependentExercise';
+import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
 
 import { getMindFulness } from '../actions/MindFulnessAction'
 import { setMenuItem } from '../actions/SideMenuAction'
@@ -57,7 +58,9 @@ class MindFulness extends Component {
               is_done: item.is_done,
               is_free: item.is_free,
               is_locked: item.is_locked,
-              is_published: item.is_published
+              is_published: item.is_published,
+              activity_id: item.activity_id,
+              position_id: item.position_id
             });
             number++;
           }
@@ -91,17 +94,48 @@ class MindFulness extends Component {
   }
 
   renderNumber = (id, itemLength, item, index, type) => {
+    const { mindfulnessData } = this.props;
+    const nodes = mindfulnessData.children;
     return (
       <View>
-        <CircleItemButton
-          id={id}
-          index={index}
-          numberCount={itemLength}
-          item={item}
-          onPress={() => this.onLeafClicked(item)}
-        />
+
+        {this.checkIfExerciseIsActivityDependentOrNot(nodes, item) ?
+          <ActivityDependentExercise
+            id={id}
+            index={index}
+            numberCount={itemLength}
+            item={item}
+            onPress={() => this.onLeafClicked(item)}
+          /> :
+          <NotActivityDependentExercise
+            id={id}
+            index={index}
+            numberCount={itemLength}
+            item={item}
+            onPress={() => this.onLeafClicked(item)}
+          />
+        }
       </View>
     )
+  }
+
+  checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
+    debugger;
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].children) {
+        for (var j = 0; j < nodes[i].children.length; j++) {
+          if (nodes[i].children[j].id === currentLeaf.activity_id && nodes[i].children[j].id === currentLeaf.position_id && nodes[i].children[j + 1].id === currentLeaf.id) {
+            return true;
+          }
+        }
+      }
+      else {
+        if (nodes[i].id === currentLeaf.activity_id && nodes[i].id === currentLeaf.position_id && nodes[i + 1].id === currentLeaf.id) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   LockedModalBanner = () => {

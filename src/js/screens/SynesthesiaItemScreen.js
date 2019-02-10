@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, ScrollView, ImageBackground, FlatList, Image, TouchableOpacity, ActivityIndicator, Modal, StyleSheet, Dimensions } from 'react-native';
 import BottomBar from '../components/BottomBar';
-import CircleItemButton from '../components/CircleItemButton';
+import ActivityDependentExercise from '../components/ActivityDependentExercise';
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
 import { setMenuItem } from '../actions/SideMenuAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
-const synesthesiaImage = require('../../assets/synesthesiaheader.png')
 const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
 
@@ -120,7 +119,7 @@ class SynesthesiaItemScreen extends Component {
   renderNumber = (id, itemLength, item, index, type) => {
     return (
       <View>
-        <CircleItemButton
+        <ActivityDependentExercise
           id={id}
           index={index}
           numberCount={itemLength}
