@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  TouchableOpacity,
   TouchableHighlight,
   ImageBackground,
   Image,
@@ -74,7 +73,15 @@ class ActivityDependentExercise extends Component {
             onPress={() => this.onClicked()}
           >
             <View>
-              <Text style={{ fontSize: 27, color: "#545260" }}>
+              <Text style={{
+                fontSize: 27,
+                color:
+                  item.is_free == "0" &&
+                    item.is_locked == "0" &&
+                    item.is_done != "1"
+                    ? "#ffffff"
+                    : "#545260"
+              }}>
                 {item.number}
               </Text>
               {item.is_done == "1" && (
@@ -134,7 +141,7 @@ class ActivityDependentExercise extends Component {
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
-              color: !item.is_locked != "0" ? "#FFFFFF" : "#707070"
+              color: (item.is_locked != "0" || item.is_done == "1") ? "#707070" : "#FFFFFF"
             }}
           >
             {item.name}

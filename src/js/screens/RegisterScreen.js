@@ -120,7 +120,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.confirmPassword !== '' && this.state.confirmPassword !== password) {
-      error = 'Wrong password!';
+      error = "Passwords don't match!";
       this.setState({
         passwordErrorBorder: true,
         passwordSuccessBorder: false
@@ -148,7 +148,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.password !== confirmPassword) {
-      error = 'Wrong password!';
+      error = "Passwords don't match!";
       this.setState({
         confirmPasswordErrorBorder: true,
         confirmPasswordSuccessBorder: false
@@ -186,7 +186,7 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>
@@ -219,7 +219,7 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>

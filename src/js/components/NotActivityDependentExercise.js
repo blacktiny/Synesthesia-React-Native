@@ -12,7 +12,9 @@ import { Theme } from "../constants/constants";
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
 const lock2 = require("../../assets/lock2.png");
-const playIconNotCompleted = require("../../assets/playIconNotCompletedExercise.png");
+const greenPlayIconNotCompleted = require("../../assets/greenPlayIconNotCompleted.png");
+const greyPlayIconNotCompleted = require("../../assets/greyPlayIconNotCompleted.png");
+const purplePlayIconNotCompleted = require("../../assets/purplePlayIconNotCompleted.png");
 
 class NotActivityDependentExercise extends Component {
   constructor(props) {
@@ -35,6 +37,7 @@ class NotActivityDependentExercise extends Component {
 
   render() {
     const { id, index, numberCount, item, onClickedFlg } = this.state;
+    let icon = item.is_done == "1" ? purplePlayIconNotCompleted : item.is_locked != "0" ? greyPlayIconNotCompleted : greenPlayIconNotCompleted;
     return (
       <View key={id} style={{ width: 90, alignItems: "center", margin: 10, marginLeft: 0 }}>
         <View
@@ -55,19 +58,7 @@ class NotActivityDependentExercise extends Component {
               width: 80,
               height: 80,
               borderRadius: 50,
-              borderWidth:
-                item.is_free == "0" &&
-                  item.is_locked == "0" &&
-                  item.is_done != "1"
-                  ? 3
-                  : 0,
               backgroundColor: "#383938",
-              borderColor:
-                item.is_free == "0" &&
-                  item.is_locked == "0" &&
-                  item.is_done != "1"
-                  ? "#27BF9E"
-                  : "#383938",
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -83,7 +74,7 @@ class NotActivityDependentExercise extends Component {
                   top: -12,
                   left: -9
                 }}
-                source={playIconNotCompleted}
+                source={icon}
               />
               {item.is_done == "1" && (
                 <Image
@@ -132,7 +123,7 @@ class NotActivityDependentExercise extends Component {
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
-              color: !item.is_locked != "0" ? "#FFFFFF" : "#707070"
+              color: (item.is_locked != "0" || item.is_done == "1") ? "#707070" : "#FFFFFF"
             }}
           >
             {item.name}

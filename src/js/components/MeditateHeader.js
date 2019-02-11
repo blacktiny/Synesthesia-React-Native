@@ -4,7 +4,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
 const user = require('../../assets/user.png')
-const home = require('../../assets/home.png')
+const meditateLogo = require('../../assets/meditateLogo.png')
 
 class MeditateHeader extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class MeditateHeader extends Component {
           <Text style={styles.textStyle}>{'Progress'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Sensorium')} style={[styles.mainView, { paddingLeft: 50 }]}>
-          <Image resizeMode='contain' style={styles.imageStyle} source={home} />
+          <Image resizeMode='contain' style={styles.imageStyle} source={meditateLogo} />
           <Text style={[styles.textStyle, { color: '#fff' }]}>{'Meditate'}</Text>
         </TouchableOpacity>
       </View>
