@@ -121,7 +121,7 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
@@ -154,7 +154,7 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false,
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
@@ -197,6 +197,7 @@ class LoginScreen extends Component {
           <PasswordTextField
             onChange={(value) => {
               this.setState({ password: value.trim() })
+              this.validatePassword(value)
             }}
             onBlur={() => this.validatePassword(this.state.password)}
             error={this.state.passwordError}

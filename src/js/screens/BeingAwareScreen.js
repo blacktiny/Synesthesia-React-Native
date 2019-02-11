@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
+import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
 
 import { getBeingAware } from '../actions/BeingAwareAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
-const mindfulessImage = require('../../assets/mindfulnessheader.png')
 const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
 import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
 const hearing = require('../../assets/hearing.png')
 import { FILES_URL } from '../constants/constants'
+import ProgressiveImage from '../components//ProgressiveImage';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -55,12 +56,13 @@ class BeingAware extends Component {
         let property = [];
         const header = data.header;
         const subHeader = data.subheader;
+        const imageBanner = FILES_URL + data.image_banner;
         var number = 1;
         data.children.map((item) => {
           property.push({
             id: item.id,
             number: number,
-            icon: hearing,
+            icon: FILES_URL + item.image_square,
             type: item.type,
             name: item.display_name,
             is_done: item.is_done,
@@ -70,20 +72,55 @@ class BeingAware extends Component {
           });
           number++;
         })
-        arrData.push(this.renderContainers(data.id, header, subHeader, property));
+        arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, property));
       });
       return arrData;
     }
   }
 
-  renderContainers = (key, header, subHeader, data) => {
+  renderContainers = (key, header, subHeader, imageBanner, data) => {
     // debugger
     return (
       <View key={key} >
-        <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
-          <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
-          <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
-        </View>
+        {imageBanner.includes("null") ?
+          <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
+            <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
+            <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
+          </View>
+          :
+          <View style={{ marginTop: -30 }}>
+            <ProgressiveImage
+              thumbnailSource={{ uri: imageBanner }}
+              source={{ uri: imageBanner }}
+              style={{ width: '100%', height: 137 }}
+              resizeMode="cover"
+              isImageBanner={true}
+            />
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 20,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 40,
+              left: 0,
+              right: 0,
+              fontFamily: Theme.FONT_BOLD
+            }}>{header}</Text>
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 14,
+              paddingTop: 8,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 60,
+              left: 0,
+              right: 0,
+              paddingLeft: 30,
+              paddingRight: 30,
+              fontFamily: Theme.FONT_MEDIUM
+            }}>{subHeader}</Text>
+          </View>
+        }
         <View style={{ flex: 1, paddingLeft: 2 }}>
           <FlatList
             data={data}
@@ -100,27 +137,46 @@ class BeingAware extends Component {
   }
 
   renderContainerItem = (id, item, index, itemList) => {
-    // debugger
+    const { beingawareData } = this.props;
+    const nodes = beingawareData.children;
     return (
 
       <View>
         {
           item.type == "leaf" ?
-            <ActivityDependentExercise
-              id={id}
-              index={index}
-              numberCount={itemList}
-              item={item}
-              onPress={() => this.onLeafClicked(item)}
-            />
-            : <View style={{ width: 110, alignItems: 'center', margin: 20 }}>
+            this.checkIfExerciseIsActivityDependentOrNot(nodes, item) ?
+              <ActivityDependentExercise
+                id={id}
+                index={index}
+                numberCount={itemList}
+                item={item}
+                onPress={() => this.onLeafClicked(item)}
+              /> :
+              <NotActivityDependentExercise
+                id={id}
+                index={index}
+                numberCount={itemList}
+                item={item}
+                onPress={() => this.onLeafClicked(item)}
+              />
+            :
+            <View style={{ width: 110, alignItems: 'center', marginTop: 20, marginRight: 10, marginLeft: 20, marginBottom: 20 }}>
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
-                <Image
-                  source={item.icon}
-                  style={{ width: 170, height: 150, resizeMode: 'contain' }}
-                />
+                {item.icon.includes("null") ?
+                  <Image
+                    source={hearing}
+                    style={{ width: 130, height: 130, resizeMode: 'contain' }}
+                  />
+                  :
+                  <ProgressiveImage
+                    thumbnailSource={{ uri: item.icon }}
+                    source={{ uri: item.icon }}
+                    style={{ width: 120, height: 120, borderRadius: 12 }}
+                    resizeMode="cover"
+                  />
+                }
               </TouchableOpacity>
-              <View style={{ marginLeft: 20, width: 150 }}>
+              <View style={{ marginTop: 8, marginLeft: 0, width: 120 }}>
                 <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
                   {item.name}
                 </Text>
@@ -130,6 +186,19 @@ class BeingAware extends Component {
       </View>
 
     )
+  }
+
+  checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].children) {
+        for (var j = 0; j < nodes[i].children.length; j++) {
+          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].activity_id && currentLeaf.id === nodes[i].children[j + 1].position_id) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   onLeafClicked = (item) => {
@@ -215,21 +284,24 @@ class BeingAware extends Component {
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         <BottomBar screen={'beingaware'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: 137,
-              display: "flex",
-              alignItems: "center",
-            }}
-            resizeMode='contain'
-            source={{ uri: imageBanner }}
-          >
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
+
+          {!isFetchingData &&
+            <View>
+              <ProgressiveImage
+                thumbnailSource={{ uri: imageBanner }}
+                source={{ uri: imageBanner }}
+                style={{ width: '100%', height: 137 }}
+                resizeMode="cover"
+                isImageBanner={true}
+              />
               <Text style={{
                 textAlign: 'center',
                 fontSize: 20,
                 color: '#FFFFFF',
+                position: 'absolute',
+                top: 40,
+                left: 0,
+                right: 0,
                 fontFamily: Theme.FONT_BOLD
               }}>{header}</Text>
               <Text style={{
@@ -237,10 +309,16 @@ class BeingAware extends Component {
                 fontSize: 14,
                 paddingTop: 8,
                 color: '#FFFFFF',
+                position: 'absolute',
+                top: 60,
+                left: 0,
+                right: 0,
+                paddingLeft: 30,
+                paddingRight: 30,
                 fontFamily: Theme.FONT_MEDIUM
               }}>{subHeader}</Text>
-            </View>
-          </ImageBackground>
+            </View>}
+
           {isFetchingData && this.loadingPage()}
           {this.renderData(beingawareDatas)}
           {this.LockedModalBanner()}

@@ -9,7 +9,6 @@ const initialState = {
 export const mindfulnessReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.GET_MINDFULNESS_SUCCESS:
-      debugger;
       return {
         ...state,
         isFetchingData: false,

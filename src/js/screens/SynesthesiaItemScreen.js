@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Text, View, ScrollView, ImageBackground, FlatList, Image, TouchableOpacity, ActivityIndicator, Modal, StyleSheet, Dimensions } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
+import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
 import { setMenuItem } from '../actions/SideMenuAction'
@@ -117,17 +118,43 @@ class SynesthesiaItemScreen extends Component {
   }
 
   renderNumber = (id, itemLength, item, index, type) => {
+    const { nodeData } = this.props;
+    const nodes = nodeData.children;
     return (
       <View>
-        <ActivityDependentExercise
-          id={id}
-          index={index}
-          numberCount={itemLength}
-          item={item}
-          onPress={() => this.onLeafClicked(item.is_locked)}
-        />
+
+        {this.checkIfExerciseIsActivityDependentOrNot(nodes, item) ?
+          <ActivityDependentExercise
+            id={id}
+            index={index}
+            numberCount={itemLength}
+            item={item}
+            onPress={() => this.onLeafClicked(item)}
+          /> :
+          <NotActivityDependentExercise
+            id={id}
+            index={index}
+            numberCount={itemLength}
+            item={item}
+            onPress={() => this.onLeafClicked(item)}
+          />
+        }
+
       </View>
     )
+  }
+
+  checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].children) {
+        for (var j = 0; j < nodes[i].children.length; j++) {
+          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].activity_id && currentLeaf.id === nodes[i].children[j + 1].position_id) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   LockedModalBanner = () => {
@@ -194,8 +221,8 @@ class SynesthesiaItemScreen extends Component {
     }
   }
 
-  onLeafClicked = (is_locked) => {
-    if (is_locked > 0) {
+  onLeafClicked = (item) => {
+    if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
       this.props.navigation.navigate('Player')
