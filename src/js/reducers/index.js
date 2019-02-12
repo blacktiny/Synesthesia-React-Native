@@ -8,6 +8,7 @@ import { mindfulnessReducer } from './mindfulnessReducer'
 import { beingawareReducer } from './beingawareReducer'
 import { nodeReducer } from './nodeReducer'
 import { exerciseReducer } from './exerciseReducer'
+import { meditateHeaderReducer } from './meditateHeaderReducer'
 
 export default combineReducers({
   registerReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   mindfulnessReducer,
   beingawareReducer,
   nodeReducer,
-  exerciseReducer
+  exerciseReducer,
+  meditateHeaderReducer
 })

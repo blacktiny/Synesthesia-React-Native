@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+
+import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
 const user = require('../../assets/user.png')
+const user_active = require('../../assets/user_active.png')
 const meditateLogo = require('../../assets/meditateLogo.png')
+
 
 class MeditateHeader extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      curHeaderItem: 'Sensorium'
-    }
   }
 
-  onChangedHeaderItem(headerItem) {
+  componentDidMount() {
+    this.props.dispatch(getHeaderItem());
+  }
+
+  onChangedHeaderItem(headerItem) {    
     this.props.navigation.navigate(headerItem);
-    
-    this.setState({ curHeaderItem: headerItem });
+
+    this.props.dispatch(setHeaderItem(headerItem));
   }
 
   render() {
-    const { curHeaderItem } = this.state;
+    const { curHeaderItem } = this.props;
     return (
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', }}>
         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.mainView, { paddingLeft: 10 }]}>
@@ -34,7 +39,7 @@ class MeditateHeader extends Component {
           <Text style={styles.textStyle}>{'Resume'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.onChangedHeaderItem('Progress')} style={[styles.mainView, { paddingLeft: 50 }]}>
-          <Image resizeMode='contain' style={styles.imageStyle} source={user} />
+          <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == 'Progress' ? user_active : user} />
           <Text style={[styles.textStyle, { color: curHeaderItem == 'Progress' ? '#ffffff' : '#777778' }]}>{'Progress'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.onChangedHeaderItem('Sensorium')} style={[styles.mainView, { paddingLeft: 50 }]}>
@@ -64,4 +69,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MeditateHeader;
+function mapStateToProps(state) {
+  return {
+    curHeaderItem: state.meditateHeaderReducer.curHeaderItem
+  }
+}
+
+export default connect(mapStateToProps)(MeditateHeader);
