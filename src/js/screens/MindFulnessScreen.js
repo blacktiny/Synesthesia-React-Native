@@ -122,12 +122,19 @@ class MindFulness extends Component {
   checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
     // add node_id attribute on currentLeaf and make the loop with the nodes that contain that id and now with all of them
     // make it as component for one for all 3 files
+    if (currentLeaf.activity_id != null && currentLeaf.position_id != null && currentLeaf.activity_id == currentLeaf.position_id) {
+      return true;
+    }
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i].children) {
         for (var j = 0; j < nodes[i].children.length; j++) {
-          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].activity_id && currentLeaf.id === nodes[i].children[j + 1].position_id) {
+          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].position_id && currentLeaf.id === nodes[i].children[j + 1].activity_id) {
             return true;
           }
+        }
+      } else {
+        if (nodes[i + 1] && currentLeaf.id === nodes[i + 1].position_id && currentLeaf.id === nodes[i + 1].activity_id) {
+          return true;
         }
       }
     }

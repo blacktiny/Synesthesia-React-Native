@@ -68,7 +68,9 @@ class BeingAware extends Component {
             is_done: item.is_done,
             is_free: item.is_free,
             is_locked: item.is_locked,
-            is_published: item.is_published
+            is_published: item.is_published,
+            activity_id: item.activity_id,
+            position_id: item.position_id
           });
           number++;
         })
@@ -189,12 +191,19 @@ class BeingAware extends Component {
   }
 
   checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
+    if (currentLeaf.activity_id != null && currentLeaf.position_id != null && currentLeaf.activity_id == currentLeaf.position_id) {
+      return true;
+    }
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i].children) {
         for (var j = 0; j < nodes[i].children.length; j++) {
-          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].activity_id && currentLeaf.id === nodes[i].children[j + 1].position_id) {
+          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].position_id && currentLeaf.id === nodes[i].children[j + 1].activity_id) {
             return true;
           }
+        }
+      } else {
+        if (nodes[i + 1] && currentLeaf.id === nodes[i + 1].position_id && currentLeaf.id === nodes[i + 1].activity_id) {
+          return true;
         }
       }
     }
