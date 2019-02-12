@@ -252,7 +252,7 @@ class RegisterScreen extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.emailText}>{'Username'}</Text>
+            <Text style={styles.emailText}>{'Name'}</Text>
             <InputTextField
               onChange={(value) => {
                 this.setState({ userName: value.trim() })
