@@ -10,6 +10,8 @@ class ProgressBar extends Component {
     super(props);
 
     this.state = {
+      intervalId: 0,
+
       bAnimate: true,
       value: this.props.value,
       progress: 0,
@@ -24,18 +26,20 @@ class ProgressBar extends Component {
   animate() {
     const { value } = this.state;
     
-      setInterval(() => {
-        let nextProgress = 0;
-        const { progress } = this.state;
-        nextProgress = (value / 20) + progress;
-        if (nextProgress > value) {
-          nextProgress = value;
-          clearInterval();
-        }
-        if (this._isMounted) {
-          this.setState({progress: nextProgress});
-        }
-      }, 20);
+    const intervalId = setInterval(() => {
+      let nextProgress = 0;
+      const { progress } = this.state;
+      nextProgress = (value / 20) + progress;
+      if (nextProgress >= value) {
+        nextProgress = value;
+        clearInterval(this.state.intervalId);
+      }
+      if (this._isMounted) {
+        this.setState({progress: nextProgress});
+      }
+    }, 20);
+
+    this.setState({ intervalId });
   }
 
   componentDidMount() {
@@ -48,7 +52,7 @@ class ProgressBar extends Component {
   }
 
   render() {
-    const { value, width, height, color1, color2, backgroundColor, progress } = this.state;
+    const { width, height, color1, color2, backgroundColor, progress } = this.state;
     return (
       <View style={{ width: width ? width : '100%', height: height ? height : 5, backgroundColor: backgroundColor ? backgroundColor : '#5C5C5C', borderRadius: 12 }}>
         <LinearGradient

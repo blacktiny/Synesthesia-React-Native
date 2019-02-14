@@ -11,6 +11,8 @@ import { setMenuItem, getCurMenuItem } from '../../js/actions/SideMenuAction';
 import { cleanSynesthesia } from '../actions/SynesthesiaAction'
 import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
+import { cleanProgress } from '../actions/ProgressAction'
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 import { Theme } from '../constants/constants'
 
@@ -57,6 +59,8 @@ class SideMenu extends Component {
       this.props.dispatch(cleanSynesthesia());
       this.props.dispatch(cleanMindFulness());
       this.props.dispatch(cleanAwareness());
+      this.props.dispatch(cleanProgress());
+      this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(logoutUser());
     }
     this.props.dispatch(setMenuItem(itemName));
