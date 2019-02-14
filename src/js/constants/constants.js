@@ -61,6 +61,7 @@ export const ActionTypes = keyMirror({
   CLEAN_SYNESTHESIA: null,
   CLEAN_MINDFULNESS: null,
   CLEAN_AWARENESS: null,
+  CLEAN_PROGRESS: null,
 
   IS_LOGGEDIN: null,
   IS_LOGGEDIN_SUCCESS: null,
@@ -69,6 +70,11 @@ export const ActionTypes = keyMirror({
 
   GET_HEADERITEM: null,
   SET_HEADERITEM: null,
+  
+  GET_PROGRESS: null,
+  GET_PROGRESS_SUCCESS: null,
+  GET_PROGRESS_ANONYMOUS: null,
+  GET_PROGRESS_FAIL: null,
 
 })
 
