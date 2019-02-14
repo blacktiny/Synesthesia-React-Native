@@ -29,12 +29,11 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
-    console.log("called componentDidMount Of Mindfulness");
   }
 
   loadingPage = () => {
     return (
-      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: height - 455, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )

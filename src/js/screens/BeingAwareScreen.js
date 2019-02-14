@@ -42,7 +42,7 @@ class BeingAware extends Component {
 
   loadingPage = () => {
     return (
-      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
