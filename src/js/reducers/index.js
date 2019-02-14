@@ -2,17 +2,23 @@ import { combineReducers } from 'redux'
 import { registerReducer } from './registerReducer'
 import { loginReducer } from './loginReducer'
 import { forgotPasswordReducer } from './forgotPasswordReducer'
+import { sidemenuReducer } from './sidemenuReducer'
 import { synesthesiaReducer } from './synesthesiaReducer'
-import { sensoriumReducer } from './sensoriumReducer'
 import { mindfulnessReducer } from './mindfulnessReducer'
+import { beingawareReducer } from './beingawareReducer'
 import { nodeReducer } from './nodeReducer'
+import { exerciseReducer } from './exerciseReducer'
+import { meditateHeaderReducer } from './meditateHeaderReducer'
 
 export default combineReducers({
   registerReducer,
   loginReducer,
   forgotPasswordReducer,
-  sensoriumReducer,
+  sidemenuReducer,
   synesthesiaReducer,
   mindfulnessReducer,
+  beingawareReducer,
   nodeReducer,
+  exerciseReducer,
+  meditateHeaderReducer
 })

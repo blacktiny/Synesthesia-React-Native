@@ -1,71 +1,179 @@
 
 import React, { Component } from 'react';
-import { Text, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList } from 'react-native';
+import { connect } from 'react-redux'
+import { Text, TouchableHighlight, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList, Linking } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { iPhoneX } from '../../js/util';
+import ModalCloseIcon from '../icons/ModalCloseIcon';
+
+import { logoutUser } from '../../js/actions/LogoutAction';
+import { setMenuItem, getCurMenuItem } from '../../js/actions/SideMenuAction';
+import { cleanSynesthesia } from '../actions/SynesthesiaAction'
+import { cleanMindFulness } from '../actions/MindFulnessAction'
+import { cleanAwareness } from '../actions/BeingAwareAction'
+
+import { Theme } from '../constants/constants'
+
 const { height, width } = Dimensions.get('screen');
 const blurImage = require('../../../src/assets/blurImage.png');
 const cross = require('../../../src/assets/cross.png');
 const gradientLine = require('../../../src/assets/gradientLine.png');
 const loginButton = require('../../../src/assets/loginButton.png');
-const playStore = require('../../../src/assets/playStore.png');
 
 const meanuItems = [
-  { name: 'Meditate in Sensorium' },
-  { name: 'Pricing' },
-  { name: 'Login' },
-  { name: 'How it works' },
-  { name: 'Blog' },
-  { name: 'Contact' },
-  { name: 'About us' },
-  { name: 'FAQ' },
-  { name: 'Privacy Policy' },
-  { name: 'T&C' },
-  { name: 'Disclaimer' },
-  { name: 'playStoreImage', image: playStore }
+  { name: 'Meditate in Sensorium', route: 'Sensorium', url: '' },
+  { name: 'My account', route: 'User', url: '' },
+  { name: 'Pricing', route: 'Pricing', url: '' },
+  { name: 'Login', route: 'Login', url: '' },
+  { name: 'How it works', route: '', url: 'https://synesthesia.com/#/HowItWorks' },
+  { name: 'Blog', route: '', url: 'https://synesthesia.com/blog/' },
+  { name: 'Contact', route: '', url: 'https://synesthesia.com/#/ContactUs' },
+  { name: 'About us', route: '', url: 'https://synesthesia.com/#/AboutUs' },
+  { name: 'FAQ', route: '', url: 'https://synesthesia.com/#/faq' },
+  { name: 'Privacy Policy', route: '', url: 'https://synesthesia.com/#/privacy' },
+  { name: 'T&C', route: '', url: 'https://synesthesia.com/#/TermsAndConditions' },
+  { name: 'Disclaimer', route: '', url: '' },
+  { name: 'Rate the app', route: '', url: '' },
+  { name: 'Log out', route: 'Login', url: '' }
 ]
 class SideMenu extends Component {
 
   constructor() {
     super();
     this.state = {
-      menuData: meanuItems
+      menuData: meanuItems,
+      loginBtnPressStatus: false,
+      logoutBtnPressStatus: false
+    }
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getCurMenuItem());
+  }
+
+  onMenuItemClicked = (routeName, itemName, url) => {
+    this.props.navigation.navigate(routeName);
+    if (itemName == 'Log out') {
+      this.props.dispatch(cleanSynesthesia());
+      this.props.dispatch(cleanMindFulness());
+      this.props.dispatch(cleanAwareness());
+      this.props.dispatch(logoutUser());
+    }
+    this.props.dispatch(setMenuItem(itemName));
+    if (url) {
+      Linking.openURL(url);
+    } else {
+      console.log("Don't know how to open URI: " + url);
+    }
+  }
+
+  openDisclaimer = () => {
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('Disclaimer');
+  }
+
+  renderHeader = () => {
+    const { isLoggedIn, user } = this.props;
+    let output;
+    if (isLoggedIn) {
+      output = (
+        <View style={styles.userInfo}>
+          <Image style={{ alignSelf: 'flex-end', height: 20, width: 20, margin: 10 }} resizeMode='contain' source={cross} />
+          <Text style={styles.username}>{user.name}</Text>
+          <Text style={styles.useremail}>{user.email}</Text>
+        </View>
+      );
+    } else {
+      output = (
+        <View>
+          <Image style={{ alignSelf: 'flex-end', height: 20, width: 20, margin: 10 }} resizeMode='contain' source={cross} />
+          <CustomButton
+            disabled={false}
+            style={styles.button}
+            title="Create Free Account"
+            onPress={() => this.props.navigation.navigate('Register')}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.blur}>
+        <ImageBackground source={blurImage} style={{ height: iPhoneX() ? height - 670 : height - 530, shadowOffset: { width: 1, height: 1, }, shadowColor: 'black', shadowOpacity: 0.75, }}>
+          {output}
+        </ImageBackground>
+      </View>
+    );
+  }
+
+  onHideUnderlay(itemName) {
+    if (itemName == 'Login') {
+      this.setState({ loginBtnPressStatus: false });
+    } else if (itemName == 'Log out') {
+      this.setState({ logoutBtnPressStatus: false });
+    }
+  }
+
+  onShowUnderlay(itemName) {
+    if (itemName == 'Login') {
+      this.setState({ loginBtnPressStatus: true });
+    } else if (itemName == 'Log out') {
+      this.setState({ logoutBtnPressStatus: true });
     }
   }
 
   renderData = (item, index, type) => {
+    const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
+    const { currentItem, isLoggedIn } = this.props;
+    var curItem;
+    if (currentItem == 'Login' || currentItem == 'Log out') {
+      curItem = 'Meditate in Sensorium';
+    } else {
+      curItem = currentItem;
+    }
     return (
       <View>
-        {item.name != 'Login' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle}>{item.name}</Text>}
-        {item.name == 'Login' && <View style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }}>
-          <Image source={loginButton} style={{ height: 20, width: 20 }} />
-          <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10 }}>{'Login'}</Text>
-        </View>}
-        {item.name == 'Meditate in Sensorium' && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+        {item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != curItem && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {!isLoggedIn && item.name == 'Login' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
+            <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
+          </View>
+        </TouchableHighlight>}
+        {item.name == 'Meditate in Sensorium' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
-          <Text style={styles.textStyle}>{'Meditate in Sensorium'}</Text>
+          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
         </View>}
-        {(item.name == 'Privacy Policy' || item.name == 'T&C' || item.name == 'Disclaimer') && <Text style={styles.textStyle2}>{item.name}</Text>}
-        {item.name == 'Login' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
-        {item.name == 'FAQ' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
-        {item.name == 'playStoreImage' && <Image source={item.image} style={{ height: 50, width: 140, marginLeft: 15, marginBottom: 10, marginTop: 10 }} />}
+        {item.name == 'Meditate in Sensorium' && item.name != curItem && <View style={{ marginTop: 25 }}>
+          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
+        </View>}
+        {item.name == curItem && item.name != 'Meditate in Sensorium' && item.name != 'Login' &&<View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+          <Image source={gradientLine} style={{ height: 45, width: 3 }} />
+          <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
+        </View>}
+        {isLoggedIn && item.name == 'Log out' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
+        {isLoggedIn && item.name == 'Log out' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
+            <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Log out'}</Text>
+          </View>
+        </TouchableHighlight>}
+        {/* {item.name == curItem && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Meditate in Sensorium' && item.name != 'Login' && <View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+          <Image source={gradientLine} style={{ height: 45, width: 3 }} />
+          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
+        </View>} */}
+        {(item.name == 'Privacy Policy' || item.name == 'T&C') && <Text style={styles.textStyle2} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name == 'Login' && <View style={{ backgroundColor: 'rgba(9,9,9, 0.26)', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
+        {item.name == 'FAQ' && <View style={{ backgroundColor: 'rgba(9,9,9, 0.26)', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
+        {item.name == 'Disclaimer' && <Text style={styles.textStyle2} onPress={() => this.openDisclaimer()}>{item.name}</Text>}
       </View>
     )
   }
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.blur}>
-          <ImageBackground source={blurImage} style={{ height: iPhoneX() ? height - 670 : height - 530, shadowOffset: { width: 1, height: 1, }, shadowColor: 'black', shadowOpacity: 0.75, }}>
-            <Image style={{ alignSelf: 'flex-end', height: 20, width: 20, margin: 10 }} resizeMode='contain' source={cross} />
-            <CustomButton
-              disabled={false}
-              style={styles.button}
-              title="Create Free Account"
-              onPress={() => this.handleOnSubmit()}
-            />
-          </ImageBackground>
-        </View>
+        {this.renderHeader()}
         <FlatList
           data={this.state.menuData}
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20, flexDirection: 'column' }}
@@ -81,7 +189,7 @@ class SideMenu extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1F1F1F',
+    backgroundColor: '#1F1F20',
   },
   textStyle: {
     fontSize: 18,
@@ -98,7 +206,23 @@ const styles = StyleSheet.create({
     color: '#777778',
     marginLeft: 15,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: Theme.FONT_LIGHT
+  },
+  userInfo: {
+    paddingLeft: 30
+  },
+  username: {
+    fontFamily: Theme.FONT_BOLD,
+    fontSize: 18,
+    color: 'white',
+    paddingTop: 10
+  },
+  useremail: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 14,
+    color: 'white',
+    paddingTop: 5,
   },
   button: {
     height: 50,
@@ -112,4 +236,12 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SideMenu;
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.loginReducer.isLoggedIn,
+    user: state.loginReducer.user,
+    currentItem: state.sidemenuReducer.currentItem
+  }
+}
+
+export default connect(mapStateToProps)(SideMenu);

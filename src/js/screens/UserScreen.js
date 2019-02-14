@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { connect } from 'react-redux'
-import LinearGradient from 'react-native-linear-gradient';
-
-import BannerCloseIcon from '../icons/BannerCloseIcon';
-
 const { width, height } = Dimensions.get('screen');
 
 class UserScreen extends Component {
@@ -13,51 +9,13 @@ class UserScreen extends Component {
     // this.state = {};
   }
 
-  componentDidUpdate() {
-    const { navigation } = this.props;
-  }
-
-  loginSuccessBanner = () => {
-    return (
-      <LinearGradient
-        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
-        locations={[0, 1]}
-        colors={['#7059ED', '#00C2FB']}
-        style={styles.loginBanner}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => {
-          this.setState({
-            email: '',
-            password: '',
-            emailSuccessBorder: false,
-            passwordSuccessBorder: false,
-          })
-
-          if (this.props.isLoggedIn) this.props.navigation.navigate('Sensorium');
-        }}>
-          <BannerCloseIcon style={styles.crossIcon} />
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Yeah! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 14, marginTop: 10 }}>{'Login Successful!'}</Text>
-        </View>
-      </LinearGradient>
-    )
-  }
-
-
   render() {
     const {
-      user,
-      isLoggedIn,
-      navigation
+      user
     } = this.props
 
     return (
       <View style={styles.main}>
-
-        <View style={styles.container}>
-          {isLoggedIn && this.loginSuccessBanner()}
-        </View>
 
         <ScrollView style={styles.formContainer}>
 
@@ -116,7 +74,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.loginReducer.isLoggedIn,
     user: state.loginReducer.user
   }
 }

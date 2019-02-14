@@ -2,12 +2,11 @@ import { AsyncStorage } from 'react-native';
 
 import { put, call } from 'redux-saga/effects'
 import { ActionTypes } from '../constants/constants'
-import { getMindFulness } from '../api/api'
+import { getMindFulness, getMindFulnessAnonymous } from '../api/api'
 
 const MindFulnessSaga = function* (action) {
-  // debugger;
   const token = yield AsyncStorage.getItem('token');
-  
+
   if (token !== null) {
     const dataObject = yield call(getMindFulness, token);
     if (dataObject.status.success) {
@@ -25,7 +24,7 @@ const MindFulnessSaga = function* (action) {
     }
   }
   else {
-    const dataObject = null;
+    const dataObject = yield call(getMindFulnessAnonymous);
     yield put({
       type: ActionTypes.GET_MINDFULNESS_SUCCESS,
       payload: {

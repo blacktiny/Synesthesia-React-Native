@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Button, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -9,11 +9,14 @@ import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton'
 import { iPhoneX } from '../../js/util';
 
-import { loginUser } from '../actions/LoginAction'
+import { loginUser, isLoggedInUser } from '../actions/LoginAction'
 import { closeLoginErrorBanner } from '../actions/LoginAction'
+import { closeLoginSuccessBanner } from '../actions/LoginAction'
+import { cleanSynesthesia } from '../actions/SynesthesiaAction'
+import { cleanMindFulness } from '../actions/MindFulnessAction'
+import { cleanAwareness } from '../actions/BeingAwareAction'
 
 const { width, height } = Dimensions.get('screen');
-const searchIcon = require('../../assets/google_icon.png')
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 import ModalCloseIcon from '../icons/ModalCloseIcon';
 
@@ -32,18 +35,23 @@ class LoginScreen extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.isLoggedInUser();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.bGotoMainScreen)
+      this.gotoMainScreen();
+    if (this.props.isLoggedIn)
+      this.cleanSensorium();
+  }
+
   handleOnSubmit = () => {
     // event.preventDefault();
     // if (this.state.email != undefined && this.state.email != "" && this.state.password != undefined && this.state.password != "")
     let email = this.state.email;
     let password = this.state.password;
     this.props.loginUser({ email, password });
-  }
-
-  componentDidUpdate() {
-    const { isLoggedIn, navigation } = this.props;
-
-    if (isLoggedIn) navigation.navigate('User');
   }
 
   validateEmailRegex = (email) => {
@@ -113,11 +121,44 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 14, marginTop: 10 }}>{'Login failed. Please try again.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>
+        </View>
+      </LinearGradient>
+    )
+  }
+
+  cleanSensorium = () => {
+    this.props.cleanSynesthesia();
+    this.props.cleanMindFulness();
+    this.props.cleanAwareness();
+  }
+
+  loginSuccessBanner = () => {
+    return (
+      <LinearGradient
+        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+        locations={[0, 1]}
+        colors={['#7059ED', '#00C2FB']}
+        style={styles.loginBanner}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => {
+          this.props.closeLoginSuccessBanner();
+          this.props.navigation.navigate('Sensorium');
+          this.setState({
+            email: '',
+            password: '',
+            emailSuccessBorder: false,
+            passwordSuccessBorder: false,
+          })
+        }}>
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login Successful!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -125,21 +166,17 @@ class LoginScreen extends Component {
 
   loginForm = () => {
     const loginButtonDisabled = this.state.emailSuccessBorder && this.state.passwordSuccessBorder;
+    let { requestPending } = this.props;
     return (
       <View style={styles.loginContent}>
         <TouchableOpacity style={styles.crossButton} onPress={() => alert('close')}>
-          <ModalCloseIcon style={styles.crossIcon} />
+          <ModalCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={styles.loginText}>{'Login'}</Text>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
             <Text style={styles.noAccountYet}>{'No account yet?'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.loginGoogleButton}>
-            <Image style={styles.googleIcon} source={searchIcon} />
-            <Text style={styles.loginGoogleText}>{'Login with google'}</Text>
-          </TouchableOpacity>
-          <Text style={[styles.loginGoogleText, { marginTop: 10, marginBottom: 10, fontSize: 15 }]}>{'or'}</Text>
         </View>
         <View>
           <Text style={styles.emailText}>{'Email'}</Text>
@@ -148,7 +185,6 @@ class LoginScreen extends Component {
               this.setState({
                 email: value.trim()
               })
-              this.validateEmail(value)
             }}
             value={this.state.email}
             onBlur={() => this.validateEmail(this.state.email)}
@@ -171,12 +207,12 @@ class LoginScreen extends Component {
         </View>
         <View style={styles.buttonArea}>
           <CustomButton
-            disabled={!loginButtonDisabled}
+            disabled={!loginButtonDisabled || requestPending}
             title="Log in"
             onPress={this.handleOnSubmit}
           />
           <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-            <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13 }]}>{'Forgot password?'}</Text>
+            <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -187,12 +223,26 @@ class LoginScreen extends Component {
     )
   }
 
+  gotoMainScreen = () => {
+    this.props.navigation.navigate('Sensorium');
+  }
+
+  loadingPage = () => {
+    return (
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
   render() {
-    let { wrongCredentials, isLoggedIn } = this.props;
+    let { isCheckingLoggedIn, wrongCredentials, isLoggedIn } = this.props;
     return (
       <View style={styles.container}>
-        {!wrongCredentials && !isLoggedIn && this.loginForm()}
-        {wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
+        {isCheckingLoggedIn && this.loadingPage()}
+        {!isCheckingLoggedIn && !wrongCredentials && !isLoggedIn && this.loginForm()}
+        {!isCheckingLoggedIn && !wrongCredentials && isLoggedIn && this.loginSuccessBanner()}
+        {!isCheckingLoggedIn && wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
       </View>
     )
   }
@@ -200,6 +250,7 @@ class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     height: '100%',
     width: '100%',
     justifyContent: 'center',
@@ -214,6 +265,7 @@ const styles = StyleSheet.create({
   emailText: {
     color: '#777778',
     fontSize: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   checkBoxText: {
     color: '#777778',
@@ -222,12 +274,8 @@ const styles = StyleSheet.create({
   loginGoogleText: {
     color: '#FFFFFF',
     fontSize: 14,
-    marginLeft: 10
-  },
-  googleIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain'
+    marginLeft: 10,
+    fontFamily: Theme.FONT_REGULAR
   },
   crossIcon: {
     alignSelf: 'flex-end',
@@ -235,43 +283,35 @@ const styles = StyleSheet.create({
     marginTop: 10,
     resizeMode: 'contain'
   },
-  loginGoogleButton: {
-    borderRadius: 20,
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
-    height: 45,
-    width: '100%',
-    marginTop: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
-  },
   createAccount: {
     color: '#25B999',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 4,
+    fontFamily: Theme.FONT_BOLD
   },
   noAccountYet: {
     color: '#FFFFFF',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   loginText: {
     color: '#FFFFFF',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: Theme.FONT_BOLD
   },
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
   loginContent: {
-    height: iPhoneX() ? height - 340 : height - 190,
+    height: iPhoneX() ? height - 400 : height - 230,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,
@@ -295,8 +335,11 @@ const styles = StyleSheet.create({
 // })
 function mapStateToProps(state) {
   return {
+    bGotoMainScreen: state.loginReducer.bGotoMainScreen,
+    isCheckingLoggedIn: state.loginReducer.isCheckingLoggedIn,
     isLoggedIn: state.loginReducer.isLoggedIn,
-    wrongCredentials: state.loginReducer.wrongCredentials
+    wrongCredentials: state.loginReducer.wrongCredentials,
+    requestPending: state.loginReducer.requestPending
   }
 }
 
@@ -308,8 +351,13 @@ function mapStateToProps(state) {
 // }
 
 const mapDispatchToProps = {
+  cleanSynesthesia,
+  cleanMindFulness,
+  cleanAwareness,
+  isLoggedInUser,
   loginUser,
-  closeLoginErrorBanner
+  closeLoginErrorBanner,
+  closeLoginSuccessBanner
 }
 
 export default connect(

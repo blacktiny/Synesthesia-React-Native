@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const rectangle = require('../../assets/rectangle.png')
 const leftArrow = require('../../assets/leftArrow.png')
+import { Theme } from '../constants/constants'
 
 class BottomBar extends Component {
   constructor(props) {
@@ -13,22 +18,42 @@ class BottomBar extends Component {
     }
   }
 
+  moveToRootScreen = () => {
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate({ routeName: 'Sensorium' })]
+    // })
+    // this.props.navigation.dispatch(resetAction);
+    this.props.navigation.navigate('Sensorium');
+
+    this.props.dispatch(setHeaderItem('Sensorium'))
+  }
+
+  onButtomItemClicked = (itemName) => {
+    this.props.navigation.push(itemName)
+
+    this.props.dispatch(setHeaderItem('Sensorium'))
+  }
+
   render() {
+    const { navigation } = this.state;
     return (
       <View style={styles.container}>
-       <Image style={{ height: 15, width: 15}} source={leftArrow} />
-          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.push('Synesthesia')}>
-            <Text style={{ color: this.state.screen == 'syensthesia' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Synesthesia'}</Text>
-            {this.state.screen == 'syensthesia' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} />}
-          </TouchableOpacity>
-          <TouchableOpacity style={{ flexDirection: 'column'}} onPress = {()=> this.props.navigation.push('MindFulness')}>
-            <Text style={{ color: this.state.screen == 'mindfullness' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Mindfulness'}</Text>
-            {this.state.screen == 'mindfullness' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} />}
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'column' }}>
-            <Text style={{ color: this.state.screen == 'beingaware' ? '#FFFFFF':'#777778', fontSize: 15, marginBottom: 10 }}>{'Being Aware'}</Text>
-            {this.state.screen == 'beingaware' && <Image style={{ height: 3, width: 85, alignSelf: 'flex-end', alignContent: 'flex-end' }} source={rectangle} /> }
-          </View>
+        <TouchableOpacity onPress={() => this.moveToRootScreen()}>
+          <Image style={styles.leftArrow} source={leftArrow} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.onButtomItemClicked('MindFulness')} style={styles.direction}>
+          <Text style={[styles.textStyle, { color: this.state.screen == 'mindfullness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+          {this.state.screen == 'mindfullness' && <Image style={styles.imageStyle} source={rectangle} />}
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.onButtomItemClicked('BeingAware')} style={styles.direction}>
+          <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+          {this.state.screen == 'beingaware' && <Image style={styles.imageStyle} source={rectangle} />}
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
+          <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+          {this.state.screen == 'syensthesia' && <Image style={styles.imageStyle} source={rectangle} />}
+        </TouchableOpacity>
       </View>
     );
   }
@@ -52,7 +77,28 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
     // flexDirection : 'row'
   },
+  direction: {
+    flexDirection: 'column'
+  },
+  textStyle: {
+    fontSize: 15,
+    marginBottom: 10,
+    fontFamily: Theme.FONT_SEMIBOLD
+  },
+  leftArrow: {
+    height: 15,
+    width: 15
+  },
+  imageStyle: {
+    height: 3,
+    width: 85,
+    alignSelf: 'flex-end',
+    alignContent: 'flex-end'
+  }
 });
 
+function mapStateToProps(state) {
+  return { }
+}
 
-export default BottomBar;
+export default connect(mapStateToProps)(BottomBar);

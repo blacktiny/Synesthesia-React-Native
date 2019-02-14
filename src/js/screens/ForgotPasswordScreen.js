@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Image, TextInput, Button, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -9,6 +9,7 @@ import CustomButton from '../components/CustomButton'
 
 import { sendResetLink } from '../actions/ForgotPasswordAction'
 import { closeSendResetLinkErrorBanner } from '../actions/ForgotPasswordAction'
+import { closeSendResetLinkSuccessBanner } from '../actions/ForgotPasswordAction'
 
 import { iPhoneX } from '../../js/util';
 
@@ -72,17 +73,17 @@ class ForgotPasswordScreen extends Component {
         colors={['#7059ED', '#DA152C']}
         style={styles.loginBanner}>
         <TouchableOpacity style={styles.crossButton} onPress={() => {
-          this.props.closeResetLinkErrorBanner();
+          this.props.closeSendResetLinkErrorBanner();
           this.setState({
             email: '',
             emailSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 14, marginTop: 10 }}>{'Reset link not sent.'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset link not sent.'}</Text>
         </View>
       </LinearGradient>
     )
@@ -97,17 +98,18 @@ class ForgotPasswordScreen extends Component {
         style={styles.loginBanner}>
         <TouchableOpacity style={styles.crossButton}
           onPress={() => {
-            this.props.navigation.navigate('Login')
+            this.props.closeSendResetLinkSuccessBanner();
+            this.props.navigation.navigate('Login');
             this.setState({
               email: '',
               emailSuccessBorder: false
             })
           }}>
-          <BannerCloseIcon style={styles.crossIcon} />
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19 }}>{'Yeah! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 14, marginTop: 10 }}>{'Reset code sent!'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset code sent!'}</Text>
         </View>
       </LinearGradient>
     )
@@ -115,12 +117,13 @@ class ForgotPasswordScreen extends Component {
 
   forgotPasswordForm = () => {
     const resetLinkButtonDisabled = this.state.emailSuccessBorder;
+    let { requestPending } = this.props;
     return (
       <View style={styles.container}>
 
         <View style={styles.forgotPasswordContent}>
           <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Login')}>
-            <ModalCloseIcon style={styles.crossIcon} />
+            <ModalCloseIcon style={styles.crossIcon} color="#777778" />
           </TouchableOpacity>
           <View style={[styles.textContainer, { paddingLeft: 25, paddingRight: 25, paddingTop: 20, flexWrap: 'wrap' }]}>
             <Text style={styles.loginText}>{'Forgot Password'}</Text>
@@ -143,7 +146,7 @@ class ForgotPasswordScreen extends Component {
           <View style={styles.resetLinkButton}>
             <CustomButton
               title="Send reset link"
-              disabled={!resetLinkButtonDisabled}
+              disabled={!resetLinkButtonDisabled || requestPending}
               onPress={this.handleOnSubmit}
             />
           </View>
@@ -168,13 +171,15 @@ class ForgotPasswordScreen extends Component {
 function mapStateToProps(state) {
   return {
     codeSent: state.forgotPasswordReducer.codeSent,
-    userNotFound: state.forgotPasswordReducer.userNotFound
+    userNotFound: state.forgotPasswordReducer.userNotFound,
+    requestPending: state.forgotPasswordReducer.requestPending
   }
 }
 
 const mapDispatchToProps = {
   sendResetLink,
-  closeSendResetLinkErrorBanner
+  closeSendResetLinkErrorBanner,
+  closeSendResetLinkSuccessBanner
 }
 
 export default connect(
@@ -205,6 +210,7 @@ const styles = StyleSheet.create({
   emailText: {
     color: '#777778',
     fontSize: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   crossIcon: {
     alignSelf: 'flex-end',
@@ -215,23 +221,26 @@ const styles = StyleSheet.create({
   noAccountYet: {
     color: '#FFFFFF',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 4,
+    fontFamily: Theme.FONT_REGULAR
   },
   loginText: {
     color: '#FFFFFF',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: Theme.FONT_BOLD
   },
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
   forgotPasswordContent: {
-    height: iPhoneX() ? height - 500 : height - 350,
+    height: iPhoneX() ? height - 460 : height - 310,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,

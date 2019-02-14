@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Dimensions, Image, TextInput, Button, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity } from 'react-native';
 import InputTextField from '../components/InputTextField';
 import PasswordTextField from '../components/PasswordTextField';
 import CustomButton from '../components/CustomButton';
 import CustomCheckBox from '../components/CustomCheckBox';
 
 import { connect } from 'react-redux'
+import LinearGradient from 'react-native-linear-gradient';
+import { Theme } from '../constants/constants'
 
 import { registerUser } from '../actions/RegisterAction'
 import { closeRegisterErrorBanner } from '../actions/RegisterAction'
+import { closeRegisterSuccessBanner } from '../actions/RegisterAction'
 
 const { width, height } = Dimensions.get('window');
-const searchIcon = require('../../assets/google_icon.png');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
-
+import BannerCloseIcon from '../icons/BannerCloseIcon';
 
 class RegisterScreen extends Component {
   constructor(props) {
@@ -39,6 +41,16 @@ class RegisterScreen extends Component {
       confirmPasswordSuccessBorder: false,
       confirmPasswordErrorBorder: false
     }
+  }
+
+  handleOnSubmit = () => {
+    let name = this.state.userName;
+    let email = this.state.email;
+    let password = this.state.password;
+    let first_name = "";
+    let last_name = "";
+    let user_type_id = "1";
+    this.props.registerUser({ email, password, first_name, last_name, name, user_type_id });
   }
 
   validateUserName = (userName) => {
@@ -108,7 +120,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.confirmPassword !== '' && this.state.confirmPassword !== password) {
-      error = 'Wrong password!';
+      error = "Passwords don't match!";
       this.setState({
         passwordErrorBorder: true,
         passwordSuccessBorder: false
@@ -136,7 +148,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.password !== confirmPassword) {
-      error = 'Wrong password!';
+      error = "Passwords don't match!";
       this.setState({
         confirmPasswordErrorBorder: true,
         confirmPasswordSuccessBorder: false
@@ -152,15 +164,81 @@ class RegisterScreen extends Component {
     this.setState({ screenHeight: contentHeight });
   }
 
+  registerErrorBanner = () => {
+    return (
+      <LinearGradient
+        start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
+        locations={[0, 1]}
+        colors={['#7059ED', '#DA152C']}
+        style={styles.registerErrorBanner}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => {
+          this.props.closeRegisterErrorBanner();
+          this.setState({
+            isChecked1: false,
+            isChecked2: false,
+            userName: '',
+            userNameSuccessBorder: false,
+            email: '',
+            emailSuccessBorder: false,
+            password: '',
+            passwordSuccessBorder: false,
+            confirmPassword: '',
+            confirmPasswordSuccessBorder: false
+          })
+        }}>
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>
+        </View>
+      </LinearGradient>
+    )
+  }
+
+  registerSuccessBanner = () => {
+    return (
+      <LinearGradient
+        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+        locations={[0, 1]}
+        colors={['#7059ED', '#00C2FB']}
+        style={styles.loginBanner}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => {
+          this.props.closeRegisterSuccessBanner();
+          this.props.navigation.navigate('Sensorium');
+          this.setState({
+            isChecked1: false,
+            isChecked2: false,
+            userName: '',
+            userNameSuccessBorder: false,
+            email: '',
+            emailSuccessBorder: false,
+            password: '',
+            passwordSuccessBorder: false,
+            confirmPassword: '',
+            confirmPasswordSuccessBorder: false
+          })
+        }}>
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Account successfully created!'}</Text>
+        </View>
+      </LinearGradient>
+    )
+  }
+
   createAccount = () => {
     // const scrollEnabled = this.state.screenHeight > height;
     const registerButtonDisabled = this.state.userNameSuccessBorder && this.state.emailSuccessBorder &&
       this.state.passwordSuccessBorder && this.state.confirmPasswordSuccessBorder &&
-      this.state.isChecked1 && this.state.isChecked2;
+      this.state.isChecked1;
+    let { requestPending } = this.props;
     return (
       <View style={styles.createContent}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => alert('hiiiii')}>
-          <ModalCloseIcon style={styles.crossIcon} />
+        <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Login')}>
+          <ModalCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <ScrollView
           style={{ flex: 1, marginBottom: 15 }}
@@ -172,18 +250,12 @@ class RegisterScreen extends Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
               <Text style={styles.noAccountYet}>{'Already have an account?'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginGoogleButton}>
-              <Image style={styles.googleIcon} source={searchIcon} />
-              <Text style={styles.loginGoogleText}>{'Sign up with Google'}</Text>
-            </TouchableOpacity>
-            <Text style={[styles.loginGoogleText, { marginTop: 10, marginBottom: 10, fontSize: 15 }]}>or</Text>
           </View>
           <View>
-            <Text style={styles.emailText}>{'Username'}</Text>
+            <Text style={styles.emailText}>{'Name'}</Text>
             <InputTextField
               onChange={(value) => {
                 this.setState({ userName: value.trim() })
-                this.validateUserName(value)
               }}
               onBlur={() => this.validateUserName(this.state.userName)}
               error={this.state.userNameError}
@@ -195,7 +267,6 @@ class RegisterScreen extends Component {
             <InputTextField
               onChange={(value) => {
                 this.setState({ email: value.trim() })
-                this.validateEmail(value)
               }}
               onBlur={() => this.validateEmail(this.state.email)}
               error={this.state.emailError}
@@ -207,7 +278,6 @@ class RegisterScreen extends Component {
             <PasswordTextField
               onChange={(value) => {
                 this.setState({ password: value.trim() })
-                this.validatePassword(value)
               }}
               onBlur={() => this.validatePassword(this.state.password)}
               error={this.state.passwordError}
@@ -219,26 +289,41 @@ class RegisterScreen extends Component {
             <PasswordTextField
               onChange={(value) => {
                 this.setState({ confirmPassword: value.trim() })
-                this.validateConfirmPassword(value)
               }}
               onBlur={() => this.validateConfirmPassword(this.state.confirmPassword)}
               error={this.state.confirmPasswordError}
               showSuccessBorder={this.state.confirmPasswordSuccessBorder}
               showErrorBorder={this.state.confirmPasswordErrorBorder}
             />
+            <View style={{ paddingTop: 10 }} />
             <CustomCheckBox
-              size={30}
+              size={24}
               checked={this.state.isChecked1}
               onClickCustomCheckbox={() => {
                 this.setState({
                   isChecked1: !this.state.isChecked1
                 })
               }}
-              label={<Text style={styles.checkBoxText}>{'By signing up you agree on the'}<Text style={[styles.checkBoxText, { color: '#25B999' }]}>{' Terms & Conditions'}</Text><Text style={styles.checkBoxText}>{' and'}</Text><Text style={[styles.checkBoxText, { color: '#25B999' }]}>{' Privacy Policy'}</Text><Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text></Text>}
+              label={
+                <Text>
+                  <Text style={styles.checkBoxText}>{'By signing up you agree on the'}</Text>
+                  <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/TermsAndConditions') }}>
+                    <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                      {' Terms & Conditions'}
+                    </Text>
+                  </Text>
+                  <Text style={styles.checkBoxText}>{' and'}</Text>
+                  <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/privacy') }}>
+                    <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                      {' Privacy Policy'}
+                    </Text>
+                  </Text>
+                  <Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text>
+                </Text>
+              }
             />
-            <View style={{ paddingTop: 10 }} />
             <CustomCheckBox
-              size={30}
+              size={24}
               checked={this.state.isChecked2}
               onClickCustomCheckbox={() => {
                 this.setState({
@@ -250,8 +335,9 @@ class RegisterScreen extends Component {
 
             <View style={[styles.buttonArea, { marginTop: 20 }]}>
               <CustomButton
-                disabled={!registerButtonDisabled}
+                disabled={!registerButtonDisabled || requestPending}
                 title="Create account"
+                onPress={this.handleOnSubmit}
               />
             </View>
           </View>
@@ -261,53 +347,13 @@ class RegisterScreen extends Component {
     );
   }
 
-  resetPassword = () => {
-    return (
-      <View style={styles.resetPasswordContent}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => alert('hiiiii')}>
-          <ModalCloseIcon tyle={styles.crossIcon} />
-        </TouchableOpacity>
-        <View style={[styles.textContainer, { paddingLeft: 25, paddingRight: 25, paddingTop: 20, flexWrap: 'wrap' }]}>
-          <Text style={styles.loginText}>{'Reset Password'}</Text>
-          <Text style={[styles.noAccountYet, { textAlign: 'center', letterSpacing: .5 }]}>{'Type your new password and sign in'}</Text>
-        </View>
-        <View style={styles.spacer} />
-        <View>
-          <Text style={styles.emailText}>{'Password'}</Text>
-          <View style={styles.spacer} />
-          <InputTextField
-            onChange={() => console.log('hiiii')}
-            onBlur={() => console.log('hiiii')}
-            showSuccessBorder={false}
-          />
-        </View>
-        <View style={styles.spacer} />
-        <View>
-          <Text style={styles.emailText}>{'Confirm Password'}</Text>
-          <View style={styles.spacer} />
-          <InputTextField
-            onChange={() => console.log('hiiii')}
-            onBlur={() => console.log('hiiii')}
-            showSuccessBorder={false}
-          />
-        </View>
-        <View style={styles.resetLinkButton}>
-          <CustomButton
-            title="Resend Link"
-          />
-        </View>
-      </View>
-    );
-  }
-
   render() {
+    let { alreadyRegistered, justRegistered } = this.props;
     return (
       <View style={styles.container}>
-        {this.createAccount()}
-        {/* {!this.state.showForgot && !this.state.showReset && !this.state.showCreateAccount && this.loginContent()} */}
-        {/* {this.state.showForgot && this.forgotPassword()}
-        {this.state.showReset && this.resetPassword()}
-        {this.state.showCreateAccount && this.createAccount()} */}
+        {!alreadyRegistered && !justRegistered && this.createAccount()}
+        {!alreadyRegistered && justRegistered && this.registerSuccessBanner()}
+        {alreadyRegistered && !justRegistered && this.registerErrorBanner()}
       </View>
     );
   }
@@ -337,6 +383,7 @@ const styles = StyleSheet.create({
   emailText: {
     color: '#777778',
     fontSize: 15,
+    fontFamily: Theme.FONT_MEDIUM
   },
   checkBoxText: {
     color: '#777778',
@@ -345,7 +392,8 @@ const styles = StyleSheet.create({
   loginGoogleText: {
     color: '#FFFFFF',
     fontSize: 14,
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily: Theme.FONT_REGULAR
   },
   googleIcon: {
     width: 20,
@@ -358,18 +406,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     resizeMode: 'contain'
   },
-  loginGoogleButton: {
-    borderRadius: 20,
-    borderColor: '#FFFFFF',
-    borderWidth: 2,
-    height: 45,
-    width: '100%',
-    marginTop: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10
-  },
   createAccount: {
     color: '#25B999',
     fontSize: 14,
@@ -378,31 +414,26 @@ const styles = StyleSheet.create({
   noAccountYet: {
     color: '#FFFFFF',
     fontSize: 14,
-    paddingTop: 4
+    paddingTop: 4,
+    fontFamily: Theme.FONT_BOLD
   },
   loginText: {
     color: '#FFFFFF',
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: Theme.FONT_BOLD
   },
   textContainer: {
     paddingTop: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 25
   },
   crossButton: {
     paddingRight: 8,
     paddingTop: 5
   },
-  loginContent: {
-    height: height - 150,
-    width: width - 30,
-    backgroundColor: '#3D3D3E',
-    borderRadius: 20,
-    borderColor: '#3D3D3E',
-    borderWidth: 1
-  },
   createContent: {
-    height: height - 80,
+    height: height - 130,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,
@@ -411,26 +442,36 @@ const styles = StyleSheet.create({
     borderColor: '#3D3D3E',
     borderWidth: 1
   },
-  resetPasswordContent: {
-    height: height - 300,
+  loginBanner: {
+    height: height - 685,
     width: width - 30,
-    backgroundColor: '#3D3D3E',
-    borderRadius: 20,
-    borderColor: '#3D3D3E',
+    borderRadius: 12,
+    paddingRight: 20,
+    paddingLeft: 20,
+    borderWidth: 1
+  },
+  registerErrorBanner: {
+    height: height - 645,
+    width: width - 30,
+    borderRadius: 12,
+    paddingRight: 20,
+    paddingLeft: 20,
     borderWidth: 1
   }
 });
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.loginReducer.isLoggedIn,
-    wrongCredentials: state.loginReducer.wrongCredentials
+    justRegistered: state.registerReducer.justRegistered,
+    alreadyRegistered: state.registerReducer.alreadyRegistered,
+    requestPending: state.registerReducer.requestPending
   }
 }
 
 const mapDispatchToProps = {
   registerUser,
-  closeRegisterErrorBanner
+  closeRegisterErrorBanner,
+  closeRegisterSuccessBanner
 }
 
 export default connect(

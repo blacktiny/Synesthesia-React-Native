@@ -20,6 +20,12 @@ export const mindfulnessReducer = (state = initialState, action) => {
         error: true,
         isFetchingData: false
       }
+    case ActionTypes.CLEAN_MINDFULNESS:
+      return {
+        ...state,
+        isFetchingData: true,
+        mindfulnessData: []
+      }
     default:
       return state
   }

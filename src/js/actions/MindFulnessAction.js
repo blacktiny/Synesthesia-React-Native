@@ -6,3 +6,10 @@ export function getMindFulness() {
     payload: {}
   }
 }
+
+export function cleanMindFulness() {
+  return {
+    type: ActionTypes.CLEAN_MINDFULNESS,
+    payload: {}
+  }
+}

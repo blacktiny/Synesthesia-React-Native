@@ -5,38 +5,60 @@ import { ActionTypes } from '../constants/constants'
 import { doLogin, getUser } from '../api/api'
 
 const LoginUserSaga = function* (action) {
-  debugger;
-  const authObject = yield call(doLogin, action.payload);
-
-  if (authObject.status.success) {
-    yield put({
-      type: ActionTypes.AUTH_SUCCESS,
-      payload: {
-        ...authObject
+  if (action.type == ActionTypes.IS_LOGGEDIN) {
+    const token = yield AsyncStorage.getItem('token');
+    if (token !== null) {
+      const user = yield call(getUser, action.payload, token);
+      if (user.status.success) {
+        yield put({
+          type: ActionTypes.IS_LOGGEDIN_SUCCESS,
+          payload: {
+            ...user
+          }
+        })
+      } else {
+        yield put({
+          type: ActionTypes.IS_LOGGEDIN_FAIL
+        })
       }
-    })
-
-    // AsyncStorage.setItem('token', userObject.token); // example
-    AsyncStorage.setItem('token', authObject.token);
-    const user = yield call(getUser, action.payload, authObject.token);
-
-    if (user.status.success) {
-      yield put({
-        type: ActionTypes.LOGIN_USER_SUCCESS,
-        payload: {
-          ...user
-        }
-      })
     } else {
       yield put({
-        type: ActionTypes.LOGIN_USER_FAIL
+        type: ActionTypes.IS_LOGGEDIN_NOT
       })
     }
-
-  } else {
-    yield put({
-      type: ActionTypes.AUTH_FAIL
-    })
+  } else if (action.type == ActionTypes.LOGIN_USER) {
+    const authObject = yield call(doLogin, action.payload);
+  
+    if (authObject.status.success) {
+      yield put({
+        type: ActionTypes.AUTH_SUCCESS,
+        payload: {
+          ...authObject
+        }
+      })
+  
+      // AsyncStorage.setItem('token', userObject.token); // example
+      AsyncStorage.setItem('token', authObject.token);
+      const user = yield call(getUser, action.payload, authObject.token);
+      AsyncStorage.setItem('userId', user.user.id);
+      if (user.status.success) {
+        yield put({
+          type: ActionTypes.LOGIN_USER_SUCCESS,
+          payload: {
+            ...user
+          }
+        })
+      } else {
+        yield put({
+          type: ActionTypes.LOGIN_USER_FAIL
+        })
+      }
+  
+    } else {
+      yield put({
+        type: ActionTypes.AUTH_FAIL
+      })
+    }
   }
 
 }
