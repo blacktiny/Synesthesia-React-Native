@@ -42,7 +42,7 @@ class BeingAware extends Component {
 
   loadingPage = () => {
     return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
@@ -211,10 +211,12 @@ class BeingAware extends Component {
   }
 
   onLeafClicked = (item) => {
+    console.log(item)
     // debugger;
     if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
+      AsyncStorage.setItem('exerciseNodeID', item.id)
       this.props.navigation.navigate('Player')
     }
   }
