@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
+import { setMenuItem } from '../../js/actions/SideMenuAction';
 
 const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
@@ -10,8 +11,6 @@ const user = require('../../assets/user.png')
 const user_active = require('../../assets/user_active.png')
 const meditateLogo = require('../../assets/meditate_icon_grey.png')
 const meditateLogo_active = require('../../assets/meditateLogo.png')
-
-
 
 class MeditateHeader extends Component {
   constructor(props) {
@@ -24,6 +23,10 @@ class MeditateHeader extends Component {
 
   onChangedHeaderItem(headerItem) {    
     this.props.navigation.navigate(headerItem);
+
+    if (headerItem == 'Sensorium') {
+      this.props.dispatch(setMenuItem('Meditate in Sensorium'));
+    }
 
     this.props.dispatch(setHeaderItem(headerItem));
   }

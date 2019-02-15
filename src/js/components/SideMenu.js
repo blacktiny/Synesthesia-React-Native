@@ -63,6 +63,12 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(logoutUser());
     }
+    if (itemName == 'Meditate in Sensorium') {
+      this.props.dispatch(setHeaderItem('Sensorium'));
+    }
+    if (itemName == 'Pricing') {
+      this.props.dispatch(setHeaderItem(''));
+    }
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
       Linking.openURL(url);
