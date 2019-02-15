@@ -98,10 +98,3 @@ export const doCompletion = (nodeId, userId, token) => fetch(`${baseUrl}response
     ...commonHeaders,
   },
 }).then(response => response.json());
-
-export const getProgress = (token) => fetch(`${baseUrl}progress?token=${token}`, {
-  method: 'GET',
-  headers: {
-    ...commonHeaders,
-  },
-}).then(response => response.json());

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
 import { iPhoneX } from '../util'
-import { getNodeByID } from '../actions/NodeAction'
+import { getExerciseNodeByID } from '../actions/NodeAction'
 const settings = require('../../assets/settings.png')
 const background = require('../../assets/bgPlayer.png')
 class Player extends Component {
@@ -13,7 +13,7 @@ class Player extends Component {
     timeParams: [10, 20]
   }
   componentDidMount() {
-    this.props.getNodeByID()
+    this.props.getExerciseNodeByID()
   }
   onPressTime = (time) => {
     this.setState({ activeTime: time })
@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    nodeData: state.nodeReducer.nodeData,
+    nodeData: state.nodeReducer.exerciseNode,
     isFetchingData: state.nodeReducer.isFetchingData,
-    exercises: state.exerciseReducer.exercises
+    exercises: state.exerciseReducer.exercises,
   }
 }
 
 const mapDispatchToProps = {
-  getNodeByID
+  getExerciseNodeByID
 }
 
 export default connect(

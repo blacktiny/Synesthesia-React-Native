@@ -17,6 +17,12 @@ export const exerciseReducer = (state = initialState, action) => {
         currentExerciseIndex: 0,
         currentExercise: action.payload[0]
       }
+    case ActionTypes.NEXT_EXERCISE: 
+      return {
+        ...state,
+        currentExerciseIndex: state.currentExerciseIndex + 1,
+        currentExercise: state.exercises[state.currentExerciseIndex + 1]
+      }
     default:
       return state
   }

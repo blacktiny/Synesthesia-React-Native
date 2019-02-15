@@ -10,7 +10,7 @@ export const getCompletionPeriod = (item_itemsets) => {
   let startAt, endAfter
 
   item_itemsets.map(item => {
-    if (item.item.type === 'text') {
+    if (item.item && item.item.type === 'text') {
       item.arguments.map(argument => {
         switch (argument.name) {
           case 'start_at': startAt = parseTimeString(argument.value)

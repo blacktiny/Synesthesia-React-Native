@@ -5,18 +5,13 @@ import {
   Dimensions,
   StyleSheet,
   ImageBackground,
-  ScrollView,
-  ActivityIndicator
+  ScrollView
 } from "react-native";
 import { connect } from "react-redux";
 
-import BottomBar from '../components/BottomBar';
 import ProgressBar from "../components/ProgressBar";
 
-import { getUserProgress } from '../actions/ProgressAction'
-
 import { Theme } from "../constants/constants";
-import MindFulnessSaga from '../sagas/MindFulnessSaga';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 
@@ -25,114 +20,91 @@ const { width, height } = Dimensions.get("screen");
 class ProgressScreen extends Component {
   constructor() {
     super();
-  }
 
-  componentDidMount() {
-    this.props.dispatch(getUserProgress());
-  }
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
+    this.state = {
+      totalSession: 153,
+      completedSession: 53,
+      totalMinutes: 20,
+      currentStreak: 2,
+      topStreak: 5,
+      exercise: [
+        {
+          name: 'Synesthesia',
+          completed: 9,
+          total: 43
+        },
+        {
+          name: 'Mindfulness',
+          completed: 29,
+          total: 43
+        },
+        {
+          name: 'Awareness',
+          completed: 19,
+          total: 43
+        }
+      ]
+    };
   }
 
   render() {
-    const { isFetchingData, progressData } = this.props;
-    let summary = {
-        minutes: 0,
-        total: 0,
-        completed: 0,
-        percentage: 0,
-        current_streak: 0,
-        best_streak: 0
-    };
-    let exercise_category = ['Synesthesia', 'Mindfulness', 'Awareness']
-    let exercise = [{
-      completed: 0,
-      total: 0,
-      percentage: 0,
-    },
-    {
-      completed: 0,
-      total: 0,
-      percentage: 0,
-    },
-    {
-      completed: 0,
-      total: 0,
-      percentage: 0,
-    }];
-
-    if (progressData && !isFetchingData) {
-      if (progressData != null) {
-        summary = progressData.summary;
-        exercise[0] = progressData['Garden of Synesthesia'];
-        exercise[1] = progressData['Path of Mindfulness'];
-        exercise[2] = progressData['Sensory Awareness'];
-      }
-    }
-    
+    const { totalSession, completedSession, totalMinutes, currentStreak, topStreak, exercise } = this.state;
     return (
-      <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar navigation={this.props.navigation} />
-        <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-          { isFetchingData && this.loadingPage() }
-          { !isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
-            <View style={styles.backgroundColor}>
+      <ScrollView
+        style={styles.main}
+        scrollEnabled={true}
+      >
+        <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
+          <View style={styles.backgroundColor}>
+          </View>
+          
+          <View style={styles.title}>
+            <Text style={styles.titleText}>Your Progress</Text>
+          </View>
+          <View style={styles.completedSession}>
+            <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
+            <Text style={styles.completedPercentText}>{Math.floor(completedSession * 100 / totalSession)}%</Text>
+            <ProgressBar value={Math.floor(completedSession * 100 / totalSession)}/>
+            <Text style={styles.completedSessionText}>{completedSession}/{totalSession}</Text>
+            <View style={styles.splitterHorizontal} />
+            <Text style={styles.subTitleTextRegular}>Total minutes</Text>
+            <Text style={styles.completedMinuteText}>{totalMinutes} min</Text>
+          </View>
+          <View style={styles.streak}>
+            <View style={styles.currentStreak}>
+              <Text style={styles.subTitleTextRegular}>Current streak</Text>
+              <Text style={styles.streakText}>{currentStreak}</Text>
             </View>
-
-            <View style={styles.title}>
-              <Text style={styles.titleText}>Your Progress</Text>
+            <View style={styles.splitterVertical} />
+            <View style={styles.topStreak}>
+              <Text style={styles.subTitleTextRegular}>Top streak</Text>
+              <Text style={styles.streakText}>{topStreak}</Text>
             </View>
-            <View style={styles.completedSession}>
-              <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
-              <Text style={styles.completedPercentText}>{Math.floor(summary.percentage)}%</Text>
-              <ProgressBar value={Math.floor(summary.percentage)}/>
-              <Text style={styles.completedSessionText}>{summary.completed}/{summary.total}</Text>
-              <View style={styles.splitterHorizontal} />
-              <Text style={styles.subTitleTextRegular}>Total minutes</Text>
-              <Text style={styles.completedMinuteText}>{summary.minutes} min</Text>
-            </View> 
-            <View style={styles.streak}>
-              <View style={styles.currentStreak}>
-                <Text style={styles.subTitleTextRegular}>Current streak</Text>
-                <Text style={styles.streakText}>{summary.current_streak}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={styles.topStreak}>
-                <Text style={styles.subTitleTextRegular}>Top streak</Text>
-                <Text style={styles.streakText}>{summary.best_streak}</Text>
-              </View>
+          </View>
+          <View style={styles.exercise}>
+            <View style={{width: '28%'}}>
+              <Text style={styles.subTitleTextRegular2}>{exercise[0].name}</Text>
+              <Text style={styles.completedPercentText2}>{Math.floor(exercise[0].completed * 100 / exercise[0].total)}%</Text>
+              <ProgressBar value={Math.floor(exercise[0].completed * 100 / exercise[0].total)} width={'80%'}/>
+              <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
             </View>
-            <View style={styles.exercise}>
-              <View style={{width: '28%'}}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[0].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[0].percentage)} width={'80%'}/>
-                <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={{width: '28%'}}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[1]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[1].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[1].percentage)} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
-                <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={{width: '28%'}}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[2]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[2].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[2].percentage)} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
-                <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
-              </View>
+            <View style={styles.splitterVertical} />
+            <View style={{width: '28%'}}>
+              <Text style={styles.subTitleTextRegular2}>{exercise[1].name}</Text>
+              <Text style={styles.completedPercentText2}>{Math.floor(exercise[1].completed * 100 / exercise[1].total)}%</Text>
+              <ProgressBar value={Math.floor(exercise[1].completed * 100 / exercise[1].total)} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
+              <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
             </View>
-          </ImageBackground> }
-        </ScrollView>
-
-      </View>
+            <View style={styles.splitterVertical} />
+            <View style={{width: '28%'}}>
+              <Text style={styles.subTitleTextRegular2}>{exercise[2].name}</Text>
+              <Text style={styles.completedPercentText2}>{Math.floor(exercise[2].completed * 100 / exercise[2].total)}%</Text>
+              <ProgressBar value={Math.floor(exercise[2].completed * 100 / exercise[2].total)} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
+              <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
+            </View>
+          </View>
+        </ImageBackground>
+      </ScrollView>
     );
   }
 }
@@ -284,11 +256,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return {
-    error: state.progressReducer.error,
-    isFetchingData: state.progressReducer.isFetchingData,
-    progressData: state.progressReducer.progressData
-  };
+  return {};
 }
 
 export default connect(
