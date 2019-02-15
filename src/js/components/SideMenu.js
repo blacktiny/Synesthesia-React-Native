@@ -66,7 +66,7 @@ class SideMenu extends Component {
     if (itemName == 'Meditate in Sensorium') {
       this.props.dispatch(setHeaderItem('Sensorium'));
     }
-    if (itemName == 'Pricing') {
+    if (itemName == 'Pricing' || itemName == 'Login') {
       this.props.dispatch(setHeaderItem(''));
     }
     this.props.dispatch(setMenuItem(itemName));

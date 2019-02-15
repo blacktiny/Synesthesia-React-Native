@@ -6,7 +6,8 @@ import {
   StyleSheet,
   ImageBackground,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
 
@@ -16,7 +17,8 @@ import ProgressBar from "../components/ProgressBar";
 import { getUserProgress } from '../actions/ProgressAction'
 
 import { Theme } from "../constants/constants";
-import MindFulnessSaga from '../sagas/MindFulnessSaga';
+
+import BannerCloseIcon from '../icons/BannerCloseIcon';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 
@@ -30,6 +32,8 @@ class ProgressScreen extends Component {
   componentDidMount() {
     this.props.dispatch(getUserProgress());
   }
+
+  componentD
 
   loadingPage = () => {
     return (
@@ -86,6 +90,11 @@ class ProgressScreen extends Component {
 
             <View style={styles.title}>
               <Text style={styles.titleText}>Your Progress</Text>
+              <TouchableOpacity style={styles.crossButton} onPress={() => { 
+                this.props.navigation.goBack(null);
+              }}>
+                <BannerCloseIcon style={styles.crossIcon} color="#ffffff" />
+              </TouchableOpacity>
             </View>
             <View style={styles.completedSession}>
               <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
@@ -166,6 +175,16 @@ const styles = StyleSheet.create({
     fontFamily: Theme.FONT_BOLD,
     fontSize: 26,
     color: '#ffffff'
+  },
+  crossButton: {
+    position: 'absolute',
+    left: width - 160
+  },
+  crossIcon: {
+    alignSelf: 'flex-end',
+    marginRight: -12,
+    resizeMode: 'contain',
+    marginTop: -10
   },
   completedSession: {
     width: width - 40,
