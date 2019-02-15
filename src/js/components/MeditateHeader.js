@@ -8,7 +8,9 @@ const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
 const user = require('../../assets/user.png')
 const user_active = require('../../assets/user_active.png')
-const meditateLogo = require('../../assets/meditateLogo.png')
+const meditateLogo = require('../../assets/meditate_icon_grey.png')
+const meditateLogo_active = require('../../assets/meditateLogo.png')
+
 
 
 class MeditateHeader extends Component {
@@ -43,7 +45,7 @@ class MeditateHeader extends Component {
           <Text style={[styles.textStyle, { color: curHeaderItem == 'Progress' ? '#ffffff' : '#777778' }]}>{'Progress'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.onChangedHeaderItem('Sensorium')} style={[styles.mainView, { paddingLeft: 50 }]}>
-          <Image resizeMode='contain' style={styles.imageStyle} source={meditateLogo} />
+          <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == 'Sensorium' ? meditateLogo_active : meditateLogo} />
           <Text style={[styles.textStyle, { color: curHeaderItem == 'Sensorium' ? '#ffffff' : '#777778' }]}>{'Meditate'}</Text>
         </TouchableOpacity>
       </View>
