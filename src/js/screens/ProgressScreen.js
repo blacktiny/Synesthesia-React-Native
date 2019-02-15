@@ -5,13 +5,17 @@ import {
   Dimensions,
   StyleSheet,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
 
 import ProgressBar from "../components/ProgressBar";
 
 import { Theme } from "../constants/constants";
+
+import BannerCloseIcon from '../icons/BannerCloseIcon';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 
@@ -20,31 +24,14 @@ const { width, height } = Dimensions.get("screen");
 class ProgressScreen extends Component {
   constructor() {
     super();
+  }
 
-    this.state = {
-      totalSession: 153,
-      completedSession: 53,
-      totalMinutes: 20,
-      currentStreak: 2,
-      topStreak: 5,
-      exercise: [
-        {
-          name: 'Synesthesia',
-          completed: 9,
-          total: 43
-        },
-        {
-          name: 'Mindfulness',
-          completed: 29,
-          total: 43
-        },
-        {
-          name: 'Awareness',
-          completed: 19,
-          total: 43
-        }
-      ]
-    };
+  loadingPage = () => {
+    return (
+      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator />
+      </View>
+    )
   }
 
   render() {
@@ -60,6 +47,11 @@ class ProgressScreen extends Component {
           
           <View style={styles.title}>
             <Text style={styles.titleText}>Your Progress</Text>
+            <TouchableOpacity style={styles.crossButton} onPress={() => { 
+                this.props.navigation.goBack(null);
+              }}>
+                <BannerCloseIcon style={styles.crossIcon} color="#ffffff" />
+            </TouchableOpacity>
           </View>
           <View style={styles.completedSession}>
             <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
@@ -138,6 +130,16 @@ const styles = StyleSheet.create({
     fontFamily: Theme.FONT_BOLD,
     fontSize: 26,
     color: '#ffffff'
+  },
+  crossButton: {
+    position: 'absolute',
+    left: width - 160
+  },
+  crossIcon: {
+    alignSelf: 'flex-end',
+    marginRight: -12,
+    resizeMode: 'contain',
+    marginTop: -10
   },
   completedSession: {
     width: width - 40,

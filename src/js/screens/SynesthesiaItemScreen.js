@@ -7,6 +7,7 @@ import NotActivityDependentExercise from '../components/NotActivityDependentExer
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
 import { setMenuItem } from '../actions/SideMenuAction'
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
@@ -37,7 +38,7 @@ class SynesthesiaItemScreen extends Component {
 
   loadingPage = () => {
     return (
-      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
@@ -217,6 +218,7 @@ class SynesthesiaItemScreen extends Component {
               <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
                 this.props.dispatch(setMenuItem('Pricing'))
+                this.props.dispatch(setHeaderItem(''));
                 this.props.navigation.navigate('Pricing')
               }}>
                 <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Subscribe here</Text>
