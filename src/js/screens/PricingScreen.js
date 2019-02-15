@@ -224,10 +224,7 @@ class PricingScreen extends Component {
     }
 
     return (
-      <ScrollView
-        style={styles.main}
-        scrollEnabled={true}
-      >
+      <View style={styles.main}>
         <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
           <View style={styles.backgroundColor}>
           </View>
@@ -243,10 +240,11 @@ class PricingScreen extends Component {
             <Carousel
               delay={2000}
               style={styles.carousel_section}
-              autoplay={false}
+              autoplay
               bullets
+              bulletSylte={styles.carousel_bullet}
               bulletsContainerStyle={styles.carousel_bulletsContainer}
-              currentPage={0}
+              currentPage={2}
               onAnimateNextPage={p => console.log(p)}
             >
               <View style={styles.carousel_slider}>
@@ -319,7 +317,7 @@ class PricingScreen extends Component {
           {moreDetailsSec}
 
         </ImageBackground>
-      </ScrollView>
+      </View>
     );
   }
 }
