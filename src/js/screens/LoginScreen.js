@@ -15,8 +15,6 @@ import { closeLoginSuccessBanner } from '../actions/LoginAction'
 import { cleanSynesthesia } from '../actions/SynesthesiaAction'
 import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
-import { cleanProgress } from '../actions/ProgressAction'
-import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const { width, height } = Dimensions.get('screen');
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -123,7 +121,7 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
@@ -137,8 +135,6 @@ class LoginScreen extends Component {
     this.props.cleanSynesthesia();
     this.props.cleanMindFulness();
     this.props.cleanAwareness();
-    this.props.cleanProgress();
-    this.props.setHeaderItem('Sensorium');
   }
 
   loginSuccessBanner = () => {
@@ -158,7 +154,7 @@ class LoginScreen extends Component {
             passwordSuccessBorder: false,
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
@@ -201,7 +197,6 @@ class LoginScreen extends Component {
           <PasswordTextField
             onChange={(value) => {
               this.setState({ password: value.trim() })
-              this.validatePassword(value)
             }}
             onBlur={() => this.validatePassword(this.state.password)}
             error={this.state.passwordError}
@@ -233,7 +228,7 @@ class LoginScreen extends Component {
 
   loadingPage = () => {
     return (
-      <View>
+      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
@@ -358,8 +353,6 @@ const mapDispatchToProps = {
   cleanSynesthesia,
   cleanMindFulness,
   cleanAwareness,
-  cleanProgress,
-  setHeaderItem,
   isLoggedInUser,
   loginUser,
   closeLoginErrorBanner,

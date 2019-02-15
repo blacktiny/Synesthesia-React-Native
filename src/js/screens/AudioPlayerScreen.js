@@ -2,30 +2,33 @@ import React, { Component } from 'react'
 import { Text, View, ImageBackground, TouchableHighlight, StyleSheet, ActivityIndicator, Animated, Image, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient';
-
 import ProgressPlayButton from '../components/ProgressPlayButton'
 import { iPhoneX } from '../util'
 import { completeNode } from '../actions/NodeAction'
 import Sound from 'react-native-sound';
-import { FILES_URL } from '../constants/constants'
-import { getMusicUrl } from '../helpers/getUrl'
+import { FILES_URL, ITEMS_TYPES } from '../constants/constants'
+import { getFileUrl } from '../helpers/getUrl'
 import { getCompletionPeriod } from '../helpers/getCompletionPeriod'
-import { doCompletion } from '../api/api'
+import { getTriggerPeriod, getShowButton, getLoop } from '../helpers/triggerHelpers'
+import getItems from '../helpers/itemsHelper'
+import Button from '../components/Button'
+
+
 Sound.setCategory('Playback');
 const prev = require('../../assets/prev.png')
 const next = require('../../assets/next.png')
 const prevDisable = require('../../assets/prev-disable.png')
 const nextDisable = require('../../assets/next-disable.png')
 const warning = require('../../assets/warning.png')
-const background = require('../../assets/audioBg.png')
+const musicKey = require('../../assets/musicKey.png')
 
 class AudioPlayer extends Component {
   
   player
   tracker = null
-
-  constructor() {
-    super();
+  triggerPlayer
+  constructor(props) {
+    super(props);
   
     this.state = {
       play: true,
@@ -33,45 +36,164 @@ class AudioPlayer extends Component {
       totalTime: 0,
       progress: 0,
       loaded: false,
-      disableMove: false,
+      disableMoveBack: false,
+      disableMoveForeward: false,
       showNotification: false,
-      completion: getCompletionPeriod(this.props.exercise.item_itemsets),
+      completion: getCompletionPeriod(props.exercise.item_itemsets),
       fadeAnim: new Animated.Value(0),
       completionSended: false,
       prevBtnPressStatus: false,
-      nextBtnPressStatus: false
+      nextBtnPressStatus: false,
+      backgroundImage: FILES_URL + props.exerciseBG,
+      items: getItems(props.exercise.item_itemsets),
+      trigger: null,
+      triggerEngaged: false,
+      triggerIndex: 0,
+      triggerTime: null,
+      triggerType: null,
+      prevTriggerTime: null,
+      showButton: false,
+      additionalText: '',
     }
   }
 
   componentDidMount() {
+    this.setTrigger(this.state.items)
     this.initAudioPlayer()
   }
 
   componentWillUnmount() {
+    this.player.stop()
     this.player.release()
     clearInterval(this.tracker)
   }
 
   trackTime = () => {
     this.tracker = setInterval(() => {
-      const { completion } = this.state
+      const { completion, play, disableMoveBack, disableMoveForeward, trigger, prevTriggerTime, triggerTime, triggerIndex, items } = this.state
       const { completeNode, nodeCompleted } = this.props
+      if (play) {
       this.player.getCurrentTime((seconds) => {
-        this.setState({ currentTime: seconds })
-        if ((seconds >= completion.startAt) && (seconds <= completion.startAt + completion.endAfter)) {
-          this.setState({ disableMove: true })
-          if (!nodeCompleted) {
-            completeNode()
+          this.setState({ currentTime: seconds })
+          if ((seconds >= completion.startAt 
+            && (seconds - 15 <= completion.startAt + completion.endAfter) ) 
+              || (prevTriggerTime 
+                && (Math.floor(seconds) > prevTriggerTime) 
+                && (Math.floor(seconds) - 15 < prevTriggerTime))) {
+                  this.setState({ disableMoveBack: true })
+          } else if (disableMoveBack) {
+            this.setState({ disableMoveBack: false })
           }
-        } else if ((seconds > completion.startAt + completion.endAfter)) {
-          this.setState({ disableMove: false })
-        }
-      });
+          if ((seconds + 15 >= completion.startAt 
+            && (seconds <= completion.startAt + completion.endAfter))
+              || (trigger && (Math.floor(seconds) + 15 > triggerTime)
+                && (Math.floor(seconds) < triggerTime))) {
+                  this.setState({ disableMoveForeward: true })
+          } else if (disableMoveForeward) {
+            this.setState({ disableMoveForeward: false })
+          }
+          if (trigger && Math.floor(seconds) === triggerTime && items.triggers[triggerIndex + 1]) {
+            this.setState({ play: false })
+            this.player.pause()
+            this.startTrigger()
+          }
+          if ((seconds >= completion.startAt) && (seconds <= completion.startAt + completion.endAfter)) {
+            if (!nodeCompleted) {
+              completeNode()
+            }
+          }
+        });
+      }
     }, 1000);
   }
 
+  setTrigger = (items) => {
+    const { triggers } = this.state.items
+    if (triggers.length !== 0) {
+      this.setTriggerContent(triggers[0])
+      this.setState({
+        trigger: triggers[0],
+        triggerIndex: 0,
+        triggerTime: getTriggerPeriod(triggers[0]),
+        triggerType: triggers[0].item.type,
+        showButton: getShowButton(triggers[0])
+      })
+    }
+  }
+
+  nextTrigger = () => {
+    const { triggers } = this.state.items
+    const { triggerIndex, triggerTime } = this.state
+    const newIndex = triggerIndex + 1
+    this.play()
+    if (this.triggerPlayer) {
+      this.triggerPlayer.stop()
+      this.triggerPlayer.release()
+    }
+    this.setTriggerContent(triggers[newIndex])
+    this.setState({
+      trigger: triggers[newIndex],
+      triggerIndex: newIndex,
+      prevTriggerTime: triggerTime,
+      triggerTime: getTriggerPeriod(triggers[newIndex]),
+      showButton: getShowButton(triggers[newIndex]),
+      triggerEngaged: false,
+      play: true,
+      triggerType: triggers[newIndex].item.type
+    })
+  }
+
+  setLoop = () => {
+    const loop = getLoop(this.state.trigger)
+    this.triggerPlayer.play((success) => {
+      if (success) {
+        this.triggerPlayer.pause()
+        if (loop){
+          this.triggerPlayer.setCurrentTime(0)
+          setTimeout(() => {
+            this.setLoop()
+          }, loop);
+        }
+      } else {
+        this.triggerPlayer.reset();
+      }
+    });
+  }
+
+  startTrigger = () => {
+    const { trigger } = this.state
+    switch (trigger.item.type) {
+      case ITEMS_TYPES.text:
+          this.setState({ additionalText: trigger.item.file })
+        break;
+      case ITEMS_TYPES.audio:
+          this.setLoop()
+        break;
+      default:
+        break;
+    }
+    this.setState({triggerEngaged: true})
+  }
+
+  setTriggerContent = (trigger) => {
+    switch (trigger.item.type) {
+      case ITEMS_TYPES.text:
+          this.setState({ additionalText: trigger.item.file })
+        break;
+      case ITEMS_TYPES.audio:
+          this.triggerPlayer = new Sound(FILES_URL + getFileUrl(trigger), null, (error) => {
+            if (error) {
+              return;
+            }      
+          });
+        break;
+      default:
+        break;
+    }
+  }
+  
   initAudioPlayer = () => {
-    this.player = new Sound(FILES_URL + getMusicUrl(this.props.exercise.item_itemsets), null, (error) => {
+    this.player = new Sound(FILES_URL + getFileUrl(this.state.items.main), null, (error) => {
       if (error) {
         return;
       }
@@ -79,26 +201,28 @@ class AudioPlayer extends Component {
 
       this.trackTime()
 
-      this.player.play((success) => {
-        if (success) {
-          this.setState({ play: false })
-        } else {
-          this.player.reset();
-        }
-      });
-    });
+      this.play()
+    })
   }
 
   pressPlayButton = () => {
     const {play} = this.state
-    if (play) {
-      this.player.play()
+    if (!play) {
+      this.play()
     } else {
       this.player.pause()
     }
     this.setState({ play: !play })
   }
-
+  play = () => {
+    this.player.play((success) => {
+      if (success) {
+        this.setState({ play: false })
+      } else {
+        this.player.reset();
+      }
+    });
+  }
   secondsToMinutes = (time) => {
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
@@ -127,8 +251,8 @@ class AudioPlayer extends Component {
   }
 
   pressNext = () => {
-    const { currentTime, totalTime, disableMove } = this.state
-    if (disableMove) {
+    const { currentTime, totalTime, disableMoveForeward, triggerEngaged } = this.state
+    if (disableMoveForeward || triggerEngaged) {
       this.showNotification()
       return
     }
@@ -144,8 +268,8 @@ class AudioPlayer extends Component {
   }
 
   pressPrev = () => {
-    const { currentTime, disableMove } = this.state
-    if (disableMove) {
+    const { currentTime, disableMoveBack, triggerEngaged } = this.state
+    if (disableMoveBack || triggerEngaged) {
       this.showNotification()
       return
     }
@@ -177,18 +301,47 @@ class AudioPlayer extends Component {
   }
 
   render() {
-    const { totalTime, currentTime, loaded, play, disableMove, fadeAnim, prevBtnPressStatus, nextBtnPressStatus } = this.state
+    const {
+      totalTime,
+      currentTime,
+      loaded,
+      play,
+      disableMoveForeward,
+      disableMoveBack, 
+      fadeAnim,
+      prevBtnPressStatus,
+      nextBtnPressStatus,
+      backgroundImage,
+      triggerType,
+      triggerEngaged,
+      additionalText,
+      showButton
+    } = this.state
     const { exercise } = this.props
-
     return !loaded ? (
-      <ImageBackground source={background} style={[styles.container, styles.indicatorStyle]}>
+      <ImageBackground source={{uri: backgroundImage}} style={[styles.container, styles.indicatorStyle]}>
         <ActivityIndicator />
       </ImageBackground>
     ) : (
-        <ImageBackground source={background} style={styles.container}>
+        <ImageBackground source={{uri: backgroundImage}} style={styles.container}>
           <View style={styles.top}>
             <Text style={styles.topTextTitle}>{exercise.header}</Text>
             <Text style={styles.topText}>{exercise.subheader}</Text>
+            {triggerEngaged && triggerType === ITEMS_TYPES.text && (
+              <View style={styles.column}>
+                <Text style={styles.topText}>{additionalText}</Text>
+                <Button onPress={this.nextTrigger} style={styles.button}>
+                  <Text style={styles.topText}>Resume</Text>
+                </Button>
+              </View>)}
+            {triggerEngaged && triggerType === ITEMS_TYPES.audio && (
+              <View style={styles.column}>
+                <Image source={musicKey}/>
+                <Button onPress={this.nextTrigger} style={styles.button}>
+                  <Text style={styles.topText}>Resume</Text>
+                </Button>
+              </View>
+            )}
           </View>
           <View style={styles.bottomBar}>
             <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
@@ -206,14 +359,14 @@ class AudioPlayer extends Component {
 
             <View style={styles.row}>
               <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
-                <ImageBackground source={disableMove ? prevDisable : prev} style={styles.controlButton}>
-                  <Text style={[styles.textStyle, disableMove && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
+                <ImageBackground source={(disableMoveBack || triggerEngaged) ? prevDisable : prev} style={styles.controlButton}>
+                  <Text style={[styles.textStyle, (disableMoveBack || triggerEngaged)  && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
               </TouchableHighlight>
-              <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / totalTime) * 100} />
+              <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / totalTime) * 100} disabled={triggerEngaged} />
               <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
-                <ImageBackground source={disableMove ? nextDisable : next} style={styles.controlButton}>
-                  <Text style={[styles.textStyle, disableMove && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
+                <ImageBackground source={(disableMoveForeward || triggerEngaged) ? nextDisable : next} style={styles.controlButton}>
+                  <Text style={[styles.textStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
               </TouchableHighlight>
             </View>
@@ -237,8 +390,9 @@ const styles = StyleSheet.create({
   },
   top: {
     paddingVertical: 30,
-    paddingHorizontal: 50,
-    marginTop: 15
+    paddingHorizontal: 20,
+    marginTop: 15,
+    alignItems: 'center'
   },
   topTextTitle: {
     fontWeight: 'bold',
@@ -250,8 +404,8 @@ const styles = StyleSheet.create({
   },
   topText: {
     fontWeight: '500',
-    lineHeight: 24,
-    fontSize: 18,
+    lineHeight: 25,
+    fontSize: 16,
     textAlign: 'center',
     color: '#FFFFFF',
   },
@@ -267,6 +421,14 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  column: {
+    marginVertical: 20,
+    flexDirection: 'column',
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 999
   },
   controlButton: {
     width: 55,
@@ -299,6 +461,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#FFFFFF',
     letterSpacing: 0,
+  },
+  button: {
+    width: 136,
+    margin: 10
   }
 });
 
@@ -306,7 +472,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     exercise: state.exerciseReducer.currentExercise,
-    nodeCompleted: state.nodeReducer.nodeComplete
+    nodeCompleted: state.nodeReducer.nodeComplete,
+    exerciseBG: state.nodeReducer.exerciseNode.image_background
   }
 }
 const mapDispatchToProps = {

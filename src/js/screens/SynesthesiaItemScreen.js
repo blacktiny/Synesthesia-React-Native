@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Text, View, ScrollView, ImageBackground, FlatList, Image, TouchableOpacity, ActivityIndicator, Modal, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
-import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
 import { setMenuItem } from '../actions/SideMenuAction'
@@ -62,9 +61,7 @@ class SynesthesiaItemScreen extends Component {
               is_done: item.is_done,
               is_free: item.is_free,
               is_locked: item.is_locked,
-              is_published: item.is_published,
-              activity_id: item.activity_id,
-              position_id: item.position_id
+              is_published: item.is_published
             });
             number++;
           }
@@ -85,9 +82,7 @@ class SynesthesiaItemScreen extends Component {
                 is_done: item.is_done,
                 is_free: item.is_free,
                 is_locked: item.is_locked,
-                is_published: item.is_published,
-                activity_id: item.activity_id,
-                position_id: item.position_id
+                is_published: item.is_published
               });
               number++;
             }
@@ -122,51 +117,18 @@ class SynesthesiaItemScreen extends Component {
   }
 
   renderNumber = (id, itemLength, item, index, type) => {
-    const { nodeData } = this.props;
-    const nodes = nodeData.children;
+    console.log(item)
     return (
       <View>
-
-        {this.checkIfExerciseIsActivityDependentOrNot(nodes, item) ?
-          <ActivityDependentExercise
-            id={id}
-            index={index}
-            numberCount={itemLength}
-            item={item}
-            onPress={() => this.onLeafClicked(item)}
-          /> :
-          <NotActivityDependentExercise
-            id={id}
-            index={index}
-            numberCount={itemLength}
-            item={item}
-            onPress={() => this.onLeafClicked(item)}
-          />
-        }
-
+        <ActivityDependentExercise
+          id={id}
+          index={index}
+          numberCount={itemLength}
+          item={item}
+          onPress={() => this.onLeafClicked(item.is_locked, item.id)}
+        />
       </View>
     )
-  }
-
-  checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
-
-    if (currentLeaf.activity_id != null && currentLeaf.position_id != null && currentLeaf.activity_id == currentLeaf.position_id) {
-      return true;
-    }
-    for (var i = 0; i < nodes.length; i++) {
-      if (nodes[i].children) {
-        for (var j = 0; j < nodes[i].children.length; j++) {
-          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].position_id && currentLeaf.id === nodes[i].children[j + 1].activity_id) {
-            return true;
-          }
-        }
-      } else {
-        if (nodes[i + 1] && currentLeaf.id === nodes[i + 1].position_id && currentLeaf.id === nodes[i + 1].activity_id) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   LockedModalBanner = () => {
@@ -233,11 +195,11 @@ class SynesthesiaItemScreen extends Component {
     }
   }
 
-  onLeafClicked = (item) => {
-    if (item.is_locked > 0) {
+  onLeafClicked = (is_locked, id) => {
+    if (is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
-      AsyncStorage.setItem('nodeID', item.id);
+      AsyncStorage.setItem('exerciseNodeID', id)
       this.props.navigation.navigate('Player')
     }
 

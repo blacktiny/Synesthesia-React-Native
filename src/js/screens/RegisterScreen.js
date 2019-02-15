@@ -120,7 +120,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.confirmPassword !== '' && this.state.confirmPassword !== password) {
-      error = "Passwords don't match!";
+      error = 'Wrong password!';
       this.setState({
         passwordErrorBorder: true,
         passwordSuccessBorder: false
@@ -148,7 +148,7 @@ class RegisterScreen extends Component {
     }
 
     if (this.state.password !== confirmPassword) {
-      error = "Passwords don't match!";
+      error = 'Wrong password!';
       this.setState({
         confirmPasswordErrorBorder: true,
         confirmPasswordSuccessBorder: false
@@ -186,7 +186,7 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>
@@ -219,7 +219,7 @@ class RegisterScreen extends Component {
             confirmPasswordSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>
@@ -252,7 +252,7 @@ class RegisterScreen extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.emailText}>{'Name'}</Text>
+            <Text style={styles.emailText}>{'Username'}</Text>
             <InputTextField
               onChange={(value) => {
                 this.setState({ userName: value.trim() })

@@ -29,11 +29,12 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
+    console.log("called componentDidMount Of Mindfulness");
   }
 
   loadingPage = () => {
     return (
-      <View style={{ height: height - 455, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
@@ -73,7 +74,7 @@ class MindFulness extends Component {
   renderContainers = (id, header, subHeader, itemList) => {
     return (
       <View key={id}>
-        <View style={{ paddingLeft: 18, paddingRight: 7, paddingTop: 20 }}>
+        <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_LIGHT }}>{subHeader}</Text>
         </View>
@@ -119,20 +120,17 @@ class MindFulness extends Component {
   }
 
   checkIfExerciseIsActivityDependentOrNot = (nodes, currentLeaf) => {
-    // add node_id attribute on currentLeaf and make the loop with the nodes that contain that id and now with all of them
-    // make it as component for one for all 3 files
-    if (currentLeaf.activity_id != null && currentLeaf.position_id != null && currentLeaf.activity_id == currentLeaf.position_id) {
-      return true;
-    }
+    debugger;
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i].children) {
         for (var j = 0; j < nodes[i].children.length; j++) {
-          if (nodes[i].children[j + 1] && currentLeaf.id === nodes[i].children[j + 1].position_id && currentLeaf.id === nodes[i].children[j + 1].activity_id) {
+          if (nodes[i].children[j].id === currentLeaf.activity_id && nodes[i].children[j].id === currentLeaf.position_id && nodes[i].children[j + 1].id === currentLeaf.id) {
             return true;
           }
         }
-      } else {
-        if (nodes[i + 1] && currentLeaf.id === nodes[i + 1].position_id && currentLeaf.id === nodes[i + 1].activity_id) {
+      }
+      else {
+        if (nodes[i].id === currentLeaf.activity_id && nodes[i].id === currentLeaf.position_id && nodes[i + 1].id === currentLeaf.id) {
           return true;
         }
       }
@@ -210,7 +208,7 @@ class MindFulness extends Component {
     if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
-      AsyncStorage.setItem('nodeID', item.id);
+      AsyncStorage.setItem('exerciseNodeID', item.id);
       this.props.navigation.navigate('Player')
     }
   }

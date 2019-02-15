@@ -79,7 +79,7 @@ class ForgotPasswordScreen extends Component {
             emailSuccessBorder: false
           })
         }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#fff" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
@@ -105,7 +105,7 @@ class ForgotPasswordScreen extends Component {
               emailSuccessBorder: false
             })
           }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          <BannerCloseIcon style={styles.crossIcon} color="#fff" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
@@ -135,7 +135,6 @@ class ForgotPasswordScreen extends Component {
             <InputTextField
               onChange={(value) => {
                 this.setState({ email: value.trim() })
-                this.validateEmail(value)
               }}
               onBlur={() => this.validateEmail(this.state.email)}
               error={this.state.emailError}
