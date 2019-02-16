@@ -19,6 +19,7 @@ import { getUserProgress } from '../actions/ProgressAction'
 import { Theme } from "../constants/constants";
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
+import { setHeaderItem } from '../actions/MeditateHeaderAction';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 
@@ -32,8 +33,6 @@ class ProgressScreen extends Component {
   componentDidMount() {
     this.props.dispatch(getUserProgress());
   }
-
-  componentD
 
   loadingPage = () => {
     return (
@@ -92,6 +91,8 @@ class ProgressScreen extends Component {
               <Text style={styles.titleText}>Your Progress</Text>
               <TouchableOpacity style={styles.crossButton} onPress={() => { 
                 this.props.navigation.goBack(null);
+
+                this.props.dispatch(setHeaderItem('Sensorium'));
               }}>
                 <BannerCloseIcon style={styles.crossIcon} color="#ffffff" />
               </TouchableOpacity>
