@@ -15,6 +15,8 @@ import { closeLoginSuccessBanner } from '../actions/LoginAction'
 import { cleanSynesthesia } from '../actions/SynesthesiaAction'
 import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
+import { cleanProgress } from '../actions/ProgressAction'
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const { width, height } = Dimensions.get('screen');
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -135,6 +137,8 @@ class LoginScreen extends Component {
     this.props.cleanSynesthesia();
     this.props.cleanMindFulness();
     this.props.cleanAwareness();
+    this.props.cleanProgress();
+    this.props.setHeaderItem('Sensorium');
   }
 
   loginSuccessBanner = () => {
@@ -229,7 +233,7 @@ class LoginScreen extends Component {
 
   loadingPage = () => {
     return (
-      <View style={{ height: 500, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View>
         <ActivityIndicator />
       </View>
     )
@@ -354,6 +358,8 @@ const mapDispatchToProps = {
   cleanSynesthesia,
   cleanMindFulness,
   cleanAwareness,
+  cleanProgress,
+  setHeaderItem,
   isLoggedInUser,
   loginUser,
   closeLoginErrorBanner,

@@ -9,7 +9,15 @@ export default CloseModal = (props) => (
     onRequestClose={() => {
       Alert.alert('Modal has been closed.');
     }}>
-    {props.children}
+    <ImageBackground source={props.bg} style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.text}>Are you sure you want to close this exercise?</Text>
+        <View style={styles.row}>
+          <TouchableHighlight style={styles.leftButton} onPress={props.leave} underlayColor={"#ffffff12"}><Text style={styles.buttonText}>Yes, close</Text></TouchableHighlight>
+          <TouchableHighlight style={styles.rightButton} onPress={props.closeModal} underlayColor={"#25b999cc"}><Text style={styles.buttonText}>No, continue</Text></TouchableHighlight>
+        </View>
+      </View>
+    </ImageBackground>
   </Modal>
 )
 

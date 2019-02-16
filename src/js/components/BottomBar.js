@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const rectangle = require('../../assets/rectangle.png')
 const leftArrow = require('../../assets/leftArrow.png')
@@ -16,30 +19,38 @@ class BottomBar extends Component {
   }
 
   moveToRootScreen = () => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Sensorium' })]
-    })
-    this.props.navigation.dispatch(resetAction);
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate({ routeName: 'Sensorium' })]
+    // })
+    // this.props.navigation.dispatch(resetAction);
+    this.props.navigation.navigate('Sensorium');
+
+    this.props.dispatch(setHeaderItem('Sensorium'))
+  }
+
+  onButtomItemClicked = (itemName) => {
+    this.props.navigation.push(itemName)
+
+    this.props.dispatch(setHeaderItem('Sensorium'))
   }
 
   render() {
     const { navigation } = this.state;
-    console.log(navigation);
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => this.moveToRootScreen()}>
           <Image style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.push('MindFulness')} style={styles.direction}>
+        <TouchableOpacity onPress={() => this.onButtomItemClicked('MindFulness')} style={styles.direction}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'mindfullness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
           {this.state.screen == 'mindfullness' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.push('BeingAware')} style={styles.direction}>
+        <TouchableOpacity onPress={() => this.onButtomItemClicked('BeingAware')} style={styles.direction}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
           {this.state.screen == 'beingaware' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.props.navigation.push('Synesthesia')}>
+        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
           {this.state.screen == 'syensthesia' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
@@ -86,5 +97,8 @@ const styles = StyleSheet.create({
   }
 });
 
+function mapStateToProps(state) {
+  return { }
+}
 
-export default BottomBar;
+export default connect(mapStateToProps)(BottomBar);

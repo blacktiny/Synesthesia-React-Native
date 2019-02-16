@@ -6,10 +6,3 @@ export function getExercises(exercises) {
     payload: exercises
   }
 }
-
-export function nextExercise() {
-  return {
-    type: ActionTypes.NEXT_EXERCISE,
-    payload: {}
-  }
-}

@@ -22,13 +22,20 @@ class MeditateHeader extends Component {
   }
 
   onChangedHeaderItem(headerItem) {    
+    const { isLoggedIn } = this.props;
     this.props.navigation.navigate(headerItem);
 
     if (headerItem == 'Sensorium') {
       this.props.dispatch(setMenuItem('Meditate in Sensorium'));
     }
 
-    this.props.dispatch(setHeaderItem(headerItem));
+    if (headerItem == 'Progress' && !isLoggedIn ) {
+      this.props.dispatch(setHeaderItem('Sensorium'));
+      this.props.navigation.navigate('Login');
+    } else {
+      this.props.dispatch(setHeaderItem(headerItem));
+    }
+
   }
 
   render() {
@@ -76,6 +83,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
+    isLoggedIn: state.loginReducer.isLoggedIn,
     curHeaderItem: state.meditateHeaderReducer.curHeaderItem
   }
 }
