@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setMenuItem } from '../../js/actions/SideMenuAction';
+import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
 
 const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
@@ -27,15 +28,19 @@ class MeditateHeader extends Component {
 
     if (headerItem == 'Sensorium') {
       this.props.dispatch(setMenuItem('Meditate in Sensorium'));
-    }
-
-    if (headerItem == 'Progress' && !isLoggedIn ) {
-      this.props.dispatch(setHeaderItem('Sensorium'));
-      this.props.navigation.navigate('Login');
-    } else {
+      // this.props.dispatch(cleanProgress());
       this.props.dispatch(setHeaderItem(headerItem));
+    } else if ( headerItem == 'Progress' ) {
+      if ( !isLoggedIn ) {
+        this.props.dispatch(setHeaderItem('Sensorium'));
+        this.props.navigation.navigate('Login');
+      } else {
+        this.props.dispatch(cleanProgress());
+        this.props.dispatch(getUserProgress());
+        this.props.dispatch(setHeaderItem(headerItem));
+      }
+      this.props.dispatch(setMenuItem(''));
     }
-
   }
 
   render() {
