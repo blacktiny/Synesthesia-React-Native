@@ -81,7 +81,7 @@ class ProgressScreen extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         <BottomBar navigation={this.props.navigation} />
-        <ScrollView style={{ flexGrow: 1, marginBottom: 110 }}>
+        <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {isFetchingData && this.loadingPage()}
           {!isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
             <View style={styles.backgroundColor}>
