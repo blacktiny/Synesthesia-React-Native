@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
@@ -13,6 +13,8 @@ const user = require('../../assets/user.png')
 const user_active = require('../../assets/user_active.png')
 const meditateLogo = require('../../assets/meditate_icon_grey.png')
 const meditateLogo_active = require('../../assets/meditateLogo.png')
+
+const { width, height } = Dimensions.get('screen');
 
 class MeditateHeader extends Component {
   constructor(props) {
@@ -47,20 +49,20 @@ class MeditateHeader extends Component {
   render() {
     const { curHeaderItem } = this.props;
     return (
-      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', }}>
-        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.mainView, { paddingLeft: 20 }]}>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.menuView]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={menu} />
           <Text style={styles.textStyle}>{'Menu'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 45 }]}>
+        <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={resume} />
           <Text style={styles.textStyle}>{'Resume'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onChangedHeaderItem('Progress')} style={[styles.mainView, { paddingLeft: 45 }]}>
+        <TouchableOpacity onPress={() => this.onChangedHeaderItem('Progress')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == 'Progress' ? user_active : user} />
           <Text style={[styles.textStyle, { color: curHeaderItem == 'Progress' ? '#ffffff' : '#777778' }]}>{'Progress'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onChangedHeaderItem('Sensorium')} style={[styles.mainView, { paddingLeft: 45 }]}>
+        <TouchableOpacity onPress={() => this.onChangedHeaderItem('Sensorium')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == 'Sensorium' ? meditateLogo_active : meditateLogo} />
           <Text style={[styles.textStyle, { color: curHeaderItem == 'Sensorium' ? '#ffffff' : '#777778' }]}>{'Meditate'}</Text>
         </TouchableOpacity>
@@ -81,10 +83,18 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20
   },
+  menuView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    paddingLeft: 0, 
+    width: 80
+  },
   mainView: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: (width - 80) / 3
   }
 });
 
