@@ -372,13 +372,15 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
-    shadowOpacity: 0.47
+    shadowOpacity: 0.47,
+    elevation: 2
   },
   subBtnSection: {
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
-    shadowOpacity: 0.47
+    shadowOpacity: 0.47,
+    elevation: 2
   },
   LinearGradient: {
     borderRadius: 12

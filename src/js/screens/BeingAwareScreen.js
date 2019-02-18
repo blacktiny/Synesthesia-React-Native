@@ -15,7 +15,7 @@ import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
 const hearing = require('../../assets/hearing.png')
 import { FILES_URL } from '../constants/constants'
-import ProgressiveImage from '../components//ProgressiveImage';
+import ProgressiveImage from '../components/ProgressiveImage';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -59,20 +59,22 @@ class BeingAware extends Component {
         const imageBanner = FILES_URL + data.image_banner;
         var number = 1;
         data.children.map((item) => {
-          property.push({
-            id: item.id,
-            number: number,
-            icon: FILES_URL + item.image_square,
-            type: item.type,
-            name: item.display_name,
-            is_done: item.is_done,
-            is_free: item.is_free,
-            is_locked: item.is_locked,
-            is_published: item.is_published,
-            activity_id: item.activity_id,
-            position_id: item.position_id
-          });
-          number++;
+          if (item.is_published == 1) {
+            property.push({
+              id: item.id,
+              number: number,
+              icon: FILES_URL + item.image_square,
+              type: item.type,
+              name: item.display_name,
+              is_done: item.is_done,
+              is_free: item.is_free,
+              is_locked: item.is_locked,
+              is_published: item.is_published,
+              activity_id: item.activity_id,
+              position_id: item.position_id
+            });
+            number++;
+          }
         })
         arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, property));
       });
@@ -85,7 +87,7 @@ class BeingAware extends Component {
     return (
       <View key={key} >
         {imageBanner.includes("null") ?
-          <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
+          <View style={{ paddingLeft: 24, paddingRight: 5, paddingTop: 20 }}>
             <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
             <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
           </View>
@@ -123,10 +125,10 @@ class BeingAware extends Component {
             }}>{subHeader}</Text>
           </View>
         }
-        <View style={{ flex: 1, paddingLeft: 2 }}>
+        <View style={{ height: 200, paddingLeft: 8, paddingTop: 20, paddingBottom: 15 }}>
           <FlatList
             data={data}
-            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row' }}
+            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item, index }) => this.renderContainerItem(item.id, item, index, data.length)}
@@ -162,12 +164,12 @@ class BeingAware extends Component {
                 onPress={() => this.onLeafClicked(item)}
               />
             :
-            <View style={{ width: 110, alignItems: 'center', marginTop: 20, marginRight: 10, marginLeft: 20, marginBottom: 20 }}>
+            <View style={{ width: 110, alignItems: 'center', marginTop: 20, marginLeft: 12, marginRight: 12, marginBottom: 20 }}>
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
                 {item.icon.includes("null") ?
                   <Image
                     source={hearing}
-                    style={{ width: 130, height: 130, resizeMode: 'contain' }}
+                    style={{ width: 120, height: 120, resizeMode: 'contain' }}
                   />
                   :
                   <ProgressiveImage
@@ -241,7 +243,7 @@ class BeingAware extends Component {
               <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -339,30 +341,34 @@ class BeingAware extends Component {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    height: height,
-    width: width,
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    flexDirection: 'row'
   },
   lockedBanner: {
-    height: height - 550,
-    width: width - 30,
     borderRadius: 12,
     paddingRight: 20,
     paddingLeft: 20,
+    paddingBottom: 40,
     backgroundColor: '#383938',
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
     shadowOpacity: 0.5,
+    elevation: 2,
     alignItems: 'center'
   },
-  activityBannerHeight: {
-    height: iPhoneX() ? height - 450 : height - 550
-  },
-  paymentBannerHeight: {
-    height: iPhoneX() ? height - 350 : height - 450
-  },
+  // activityBannerHeight: {
+  //   height: iPhoneX() ? height - 450 : height - 550
+  // },
+  // paymentBannerHeight: {
+  //   height: iPhoneX() ? height - 350 : height - 450
+  // },
   crossButton: {
     width: 20,
     height: 20,

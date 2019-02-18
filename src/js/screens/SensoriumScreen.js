@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Button, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { connect } from 'react-redux'
 
@@ -69,9 +69,9 @@ class Sensorium extends Component {
             // this.props.cleanMindFulness();
             this.props.navigation.push('MindFulness')
           }}
-          onHideUnderlay={() => this.onHideUnderlay('mindfulness')} 
-          onShowUnderlay={() => this.onShowUnderlay('mindfulness')} 
-          underlayColor={'#1F1F20'}>
+            onHideUnderlay={() => this.onHideUnderlay('mindfulness')}
+            onShowUnderlay={() => this.onShowUnderlay('mindfulness')}
+            underlayColor={'#1F1F20'}>
             <View style={{ marginTop: -10 }}>
               <ImageBackground
                 style={{
@@ -93,7 +93,7 @@ class Sensorium extends Component {
                 </View>
               </ImageBackground>
               <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Path of Mindfulness'}</Text>
+                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Path of Mindfulness'}</Text>
               </View>
             </View>
           </TouchableHighlight>
@@ -101,9 +101,9 @@ class Sensorium extends Component {
             this.props.navigation.push('BeingAware')
             // this.props.cleanAwareness();
           }}
-          onHideUnderlay={() => this.onHideUnderlay('awareness')} 
-          onShowUnderlay={() => this.onShowUnderlay('awareness')} 
-          underlayColor={'#1F1F20'}>
+            onHideUnderlay={() => this.onHideUnderlay('awareness')}
+            onShowUnderlay={() => this.onShowUnderlay('awareness')}
+            underlayColor={'#1F1F20'}>
             <View style={{ marginTop: -10 }}>
               <ImageBackground
                 style={{
@@ -126,7 +126,7 @@ class Sensorium extends Component {
                 </View>
               </ImageBackground>
               <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Life with Awareness'}</Text>
+                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Life with Awareness'}</Text>
               </View>
             </View>
           </TouchableHighlight>
@@ -134,9 +134,9 @@ class Sensorium extends Component {
             this.props.navigation.push('Synesthesia')
             // this.props.cleanSynesthesia();
           }}
-          onHideUnderlay={() => this.onHideUnderlay('synesthesia')} 
-          onShowUnderlay={() => this.onShowUnderlay('synesthesia')} 
-          underlayColor={'#1F1F20'}>
+            onHideUnderlay={() => this.onHideUnderlay('synesthesia')}
+            onShowUnderlay={() => this.onShowUnderlay('synesthesia')}
+            underlayColor={'#1F1F20'}>
             <View>
               <ImageBackground
                 style={{
@@ -158,22 +158,22 @@ class Sensorium extends Component {
                 </View>
               </ImageBackground>
               <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 17, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Garden of Synesthesia'}</Text>
+                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Garden of Synesthesia'}</Text>
               </View>
             </View>
           </TouchableHighlight>
-          { !isLoggedIn && 
-          <TouchableOpacity onPress={this.login}>
-            <View style={{ marginTop: -20 }}>
-              <Image
-                style={{
-                  width: '100%',
-                }}
-                resizeMode='contain'
-                source={saveProgressImage}
-              />
-            </View>
-          </TouchableOpacity> }
+          {!isLoggedIn &&
+            <TouchableOpacity onPress={this.login}>
+              <View style={{ marginTop: -20 }}>
+                <Image
+                  style={{
+                    width: '100%',
+                  }}
+                  resizeMode='contain'
+                  source={saveProgressImage}
+                />
+              </View>
+            </TouchableOpacity>}
         </ScrollView>
 
       </View>
