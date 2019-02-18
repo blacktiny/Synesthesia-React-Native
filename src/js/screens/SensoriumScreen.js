@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Platform, Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, TouchableHighlight } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { connect } from 'react-redux'
 
@@ -13,6 +13,7 @@ import { logoutUser } from '../actions/LoginAction'
 import { cleanSynesthesia } from '../actions/SynesthesiaAction'
 import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
+import CustomButton from '../components/CustomButton';
 
 class Sensorium extends Component {
   constructor(props) {
@@ -32,10 +33,6 @@ class Sensorium extends Component {
     const { navigation } = this.props;
 
     // if (getSynesthesiaSuccess) navigation.navigate('Synesthesia');
-  }
-
-  login = () => {
-    this.props.navigation.navigate('Register')
   }
 
   onHideUnderlay = (itemName) => {
@@ -62,7 +59,7 @@ class Sensorium extends Component {
     const { mindBtnPressStatus, awareBtnPressStatus, synesBtnPressStatus } = this.state;
     const { isLoggedIn, user } = this.props;
     return (
-      <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+      <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
         <BottomBar navigation={this.props.navigation} />
         <ScrollView>
           <TouchableHighlight onPress={() => {
@@ -163,23 +160,63 @@ class Sensorium extends Component {
             </View>
           </TouchableHighlight>
           {!isLoggedIn &&
-            <TouchableOpacity onPress={this.login}>
-              <View style={{ marginTop: -20 }}>
-                <Image
-                  style={{
-                    width: '100%',
-                  }}
-                  resizeMode='contain'
-                  source={saveProgressImage}
-                />
-              </View>
-            </TouchableOpacity>}
+            <View style={{ marginTop: 15 }}>
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  ...Platform.select({
+                    ios: {
+                      height: 250
+                    },
+                    android: {
+                      height: 273
+                    },
+                  }),
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                resizeMode='contain'
+                source={saveProgressImage}
+              >
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{
+                    fontSize: 20,
+                    color: '#FFFFFF',
+                    textAlign: 'center',
+                    position: 'absolute',
+                    top: 50,
+                    fontFamily: Theme.FONT_BOLD
+                  }}>{'Do you want to save your \n progress?'}</Text>
+
+                  <CustomButton
+                    disabled={false}
+                    style={styles.button}
+                    title="Create Free Account"
+                    onPress={() => this.props.navigation.navigate('Register')}
+                  />
+                </View>
+              </ImageBackground>
+            </View>}
         </ScrollView>
 
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    height: 50,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 55,
+    width: 220,
+    borderRadius: 45,
+    backgroundColor: '#25B999',
+    opacity: 1
+  }
+});
 
 function mapStateToProps(state) {
   return {

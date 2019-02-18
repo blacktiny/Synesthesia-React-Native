@@ -88,7 +88,7 @@ class PricingScreen extends Component {
               >
                 <TouchableOpacity style={styles.subBtnYear}>
                   <View style={styles.subBillTypeSection}>
-                    <Text style={styles.subBillType}>Yearly</Text>
+                    <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
                     <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
@@ -144,7 +144,7 @@ class PricingScreen extends Component {
               >
                 <TouchableOpacity style={styles.subBtnYear}>
                   <View style={styles.subBillTypeSection}>
-                    <Text style={styles.subBillType}>Yearly</Text>
+                    <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
                     <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
@@ -174,7 +174,6 @@ class PricingScreen extends Component {
       output = (
         <View>
           <Text style={styles.meditateFree}>Meditate 7 days for free</Text>
-          <Text style={styles.totalBill}>Total bill today: 0$</Text>
 
           <View style={styles.btnSection}>
             <LinearGradient
@@ -187,7 +186,7 @@ class PricingScreen extends Component {
                 style={[styles.btn, styles.btnMonthly]}
                 onPress={() => this.onBtnMonthlyClicked()}
               >
-                <Text style={styles.billType}>Monthly</Text>
+                <Text style={styles.billType}>MONTHLY</Text>
                 <Text style={styles.pricePerMonth}>$ {strMonthlyPrice}</Text>
                 <Text style={styles.perMonth}>per month</Text>
               </TouchableOpacity>
@@ -203,7 +202,7 @@ class PricingScreen extends Component {
                 style={[styles.btn, styles.btnYearly]}
                 onPress={() => this.onBtnYearlyClicked()}
               >
-                <Text style={styles.billType}>Yearly</Text>
+                <Text style={styles.billType}>YEARLY</Text>
                 <Text style={styles.pricePerMonth}>$ {strYearlyPrice}</Text>
                 <Text style={styles.perMonth}>per month</Text>
                 <Text style={styles.billed}>*is billed yearly</Text>
@@ -211,9 +210,8 @@ class PricingScreen extends Component {
             </LinearGradient>
           </View>
 
-          <Text style={styles.renews}>
-            Renews automatically, cancels anytime.
-          </Text>
+          <Text style={styles.totalBill}>Total bill today: 0$</Text>
+
         </View>
       );
       moreDetailsSec = (
@@ -310,8 +308,8 @@ class PricingScreen extends Component {
 
           <Text style={styles.txtUpper}>
             Access all Meditations 7 days for free. {"\n"}
-            If you do not like it, simply cancel.
-        </Text>
+            <Text style={{ fontFamily: Theme.FONT_BOLD }}>If you do not like it, simply cancel.</Text>
+          </Text>
           <Text style={styles.txtLower}>
             After 7 days your paid subscription starts automatically.
         </Text>
@@ -327,7 +325,8 @@ class PricingScreen extends Component {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: "#1F1F20"
+    backgroundColor: "#1F1F20",
+    paddingBottom: 70
   },
   backgroundImage: {
     width: width,
@@ -349,6 +348,7 @@ const styles = StyleSheet.create({
   },
   meditateFree: {
     fontSize: 20,
+    textAlign: "center",
     color: "white",
     fontFamily: Theme.FONT_BOLD
   },
@@ -362,7 +362,9 @@ const styles = StyleSheet.create({
   totalBill: {
     fontSize: 16,
     color: "white",
-    marginTop: 8
+    marginTop: 8,
+    textAlign: "center",
+    fontFamily: Theme.FONT_BOLD
   },
   btnSection: {
     display: "flex",
@@ -430,7 +432,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     display: "flex",
-    textTransform: "uppercase"
   },
   btn: {
     width: width / 2 - 25,
@@ -442,18 +443,18 @@ const styles = StyleSheet.create({
   billType: {
     fontFamily: Theme.FONT_SEMIBOLD,
     fontSize: 15,
-    textAlign: "center",
     color: "white",
     letterSpacing: 1,
-    textTransform: "uppercase",
     paddingTop: 15,
-    paddingBottom: 15
+    paddingBottom: 15,
+    textAlign: "center"
   },
   pricePerMonth: {
     fontSize: 35,
     textAlign: "center",
     color: "white",
-    paddingTop: 20
+    paddingTop: 13,
+    fontFamily: Theme.FONT_BOLD
   },
   subPrice: {
     display: "flex",
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   },
   subPerMonth: {
     display: "flex",
-    fontFamily: Theme.FONT_LIGHT,
+    fontFamily: Theme.FONT_REGULAR,
     fontSize: 14,
     textAlign: "right",
     color: "white"
@@ -514,12 +515,6 @@ const styles = StyleSheet.create({
     color: "#0080F0",
     marginLeft: 10
   },
-  renews: {
-    fontFamily: Theme.FONT_BOLD,
-    fontSize: 15,
-    color: "white",
-    paddingTop: 5
-  },
   newsCarousel: {
     backgroundColor: "#1F1F20",
     borderRadius: 12,
@@ -553,58 +548,69 @@ const styles = StyleSheet.create({
   },
   slider1TextUpper: {
     width: width - 140,
-    marginTop: 35
+    marginTop: 35,
+    fontFamily: Theme.FONT_BOLD
   },
   slider1TextLower: {
     width: width - 140,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider2TextUpper: {
     width: width - 180,
     lineHeight: 22,
-    marginTop: 30
+    marginTop: 30,
+    fontFamily: Theme.FONT_BOLD
   },
   slider2TextLower: {
     width: width - 140,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider3TextUpper: {
     width: width - 180,
     lineHeight: 22,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily: Theme.FONT_BOLD
   },
   slider3TextLower: {
     width: width - 180,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider4TextUpper: {
     width: width - 180,
     lineHeight: 22,
-    marginTop: 30
+    marginTop: 30,
+    fontFamily: Theme.FONT_BOLD
   },
   slider4TextLower: {
     width: width - 100,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider5TextUpper: {
     width: width - 100,
     lineHeight: 22,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily: Theme.FONT_BOLD
   },
   slider5TextLower: {
     width: width - 100,
     lineHeight: 22,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily: Theme.FONT_REGULAR
   },
   txtUpper: {
     fontSize: 16,
     color: "white",
     lineHeight: 25,
     marginTop: 5,
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: Theme.FONT_LIGHT
   },
   txtLower: {
     fontFamily: Theme.FONT_LIGHT,

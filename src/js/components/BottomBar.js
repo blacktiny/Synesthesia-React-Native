@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
@@ -8,6 +8,8 @@ import { setHeaderItem } from '../actions/MeditateHeaderAction'
 const rectangle = require('../../assets/rectangle.png')
 const leftArrow = require('../../assets/leftArrow.png')
 import { Theme } from '../constants/constants'
+
+const { width, height } = Dimensions.get('screen');
 
 class BottomBar extends Component {
   constructor(props) {
@@ -39,14 +41,14 @@ class BottomBar extends Component {
     const { navigation } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={() => this.moveToRootScreen()}>
+        <TouchableOpacity style={{width: 40, marginLeft: 5}} onPress={() => this.moveToRootScreen()}>
           <Image style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onButtomItemClicked('MindFulness')} style={styles.direction}>
+        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('MindFulness')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'mindfullness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
           {this.state.screen == 'mindfullness' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onButtomItemClicked('BeingAware')} style={styles.direction}>
+        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('BeingAware')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
           {this.state.screen == 'beingaware' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     position: 'absolute',
     bottom: 0,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     flexDirection: 'row',
     zIndex: 111111,
     backgroundColor: '#1F1F20',
@@ -87,7 +89,9 @@ const styles = StyleSheet.create({
   },
   direction: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: (width - 45) / 3,
+    alignItems: 'center'
   },
   textStyle: {
     fontSize: 15,
