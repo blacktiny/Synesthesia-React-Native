@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  Modal
 } from "react-native";
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
@@ -16,6 +17,8 @@ import Carousel from "../components/Carousel";
 import { Theme } from "../constants/constants";
 
 const { width, height } = Dimensions.get("screen");
+
+import BannerCloseIcon from '../icons/BannerCloseIcon';
 
 const calendarIcon = require("../../assets/calendar_icon.png");
 const cancelIcon = require("../../assets/cancel_x.png");
@@ -35,7 +38,8 @@ class PricingScreen extends Component {
       subScriptType: 1,
       monthlyPrice: 4.99,
       yearlyPrice: 2.99,
-      size: { width, height }
+      size: { width, height },
+      paymentDetailsModalVisible: false
     };
   }
 
@@ -58,6 +62,40 @@ class PricingScreen extends Component {
   onCancelSubScriptionClicked = () => {
     this.setState({ bSubScription: false });
   };
+
+  openPaymentDetailsModal = () => {
+    const { paymentDetailsModalVisible } = this.state;
+    return (
+      <Modal visible={paymentDetailsModalVisible} animationType="slide" transparent={true}
+        onRequestClose={() => console.log('closed')}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalBanner}>
+            <TouchableOpacity style={styles.crossButton} onPress={() => {
+              this.setState({ paymentDetailsModalVisible: false })
+            }}>
+              <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+            </TouchableOpacity>
+
+            <View style={{ marginTop: 20 }}>
+              <Text style={{ fontSize: 18, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_BOLD }}>{'Renews automatically, cancels anytime \n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>With your subscription for the Sensorium, you gain
+              <Text style={{ fontFamily: Theme.FONT_BOLD }}> a free 7-day trial</Text>. Today, you will not be billed anything. {'\n'} </Text>
+
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you do not cancel within this period, the 7-day free trial will
+                <Text style={{ fontFamily: Theme.FONT_BOLD }}> automatically transform into a paid subscription</Text>. {'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>Subscriptions <Text style={{ fontFamily: Theme.FONT_BOLD }}> renew automatically</Text> for your convenience. <Text style={{ fontFamily: Theme.FONT_BOLD }}> Cancel anytime</Text>.{'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you cancel your subscription <Text style={{ fontFamily: Theme.FONT_BOLD }}>continues until the end</Text> of the subscribed period.{'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>{'Yearly subscriptions are billed annualy and monthly are billed monthly.'}</Text>
+            </View>
+          </View>
+        </View>
+      </Modal >)
+  }
 
   render() {
     const {
@@ -191,7 +229,7 @@ class PricingScreen extends Component {
                 <Text style={styles.perMonth}>per month</Text>
               </TouchableOpacity>
             </LinearGradient>
-            <View style={{ width: 20 }} />
+            <View style={{ width: 15 }} />
             <LinearGradient
               start={{ x: 1, y: 0 }}
               end={{ x: 0, y: 1 }}
@@ -203,7 +241,7 @@ class PricingScreen extends Component {
                 onPress={() => this.onBtnYearlyClicked()}
               >
                 <Text style={styles.billType}>YEARLY</Text>
-                <Text style={styles.pricePerMonth}>$ {strYearlyPrice}</Text>
+                <Text style={styles.pricePerMonth}><Text style={{ opacity: 0.5 }}>$</Text> {strYearlyPrice}</Text>
                 <Text style={styles.perMonth}>per month</Text>
                 <Text style={styles.billed}>*is billed yearly</Text>
               </TouchableOpacity>
@@ -216,7 +254,14 @@ class PricingScreen extends Component {
       );
       moreDetailsSec = (
         <View>
-          <Text style={styles.moreDetails}>More Payment Details</Text>
+          <TouchableOpacity
+            onPress={
+              () => {
+                this.setState({ paymentDetailsModalVisible: true });
+              }
+            }>
+            <Text style={styles.moreDetails}>More Payment Details</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -317,6 +362,9 @@ class PricingScreen extends Component {
           {moreDetailsSec}
 
         </ImageBackground>
+
+        {this.openPaymentDetailsModal()}
+
       </ScrollView>
     );
   }
@@ -347,6 +395,8 @@ const styles = StyleSheet.create({
     height: height
   },
   meditateFree: {
+    paddingBottom: 13,
+    paddingTop: 13,
     fontSize: 20,
     textAlign: "center",
     color: "white",
@@ -362,7 +412,8 @@ const styles = StyleSheet.create({
   totalBill: {
     fontSize: 16,
     color: "white",
-    marginTop: 8,
+    marginTop: 12,
+    marginBottom: 12,
     textAlign: "center",
     fontFamily: Theme.FONT_BOLD
   },
@@ -435,7 +486,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: width / 2 - 25,
-    height: width / 2 - 25,
+    height: 160,
     color: "white",
     backgroundColor: "transparent",
     borderRadius: 12
@@ -453,10 +504,11 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: "center",
     color: "white",
-    paddingTop: 13,
+    paddingTop: 0,
     fontFamily: Theme.FONT_BOLD
   },
   subPrice: {
+    fontFamily: Theme.FONT_BOLD,
     display: "flex",
     fontSize: 23,
     color: "#0096F4",
@@ -547,59 +599,59 @@ const styles = StyleSheet.create({
     lineHeight: 25
   },
   slider1TextUpper: {
-    width: width - 140,
+    width: width - 95,
     marginTop: 35,
     fontFamily: Theme.FONT_BOLD
   },
   slider1TextLower: {
-    width: width - 140,
+    width: width - 95,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider2TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 30,
     fontFamily: Theme.FONT_BOLD
   },
   slider2TextLower: {
-    width: width - 140,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider3TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 40,
     fontFamily: Theme.FONT_BOLD
   },
   slider3TextLower: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider4TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 30,
     fontFamily: Theme.FONT_BOLD
   },
   slider4TextLower: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider5TextUpper: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 40,
     fontFamily: Theme.FONT_BOLD
   },
   slider5TextLower: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
     marginTop: 10,
     fontFamily: Theme.FONT_REGULAR
@@ -644,7 +696,44 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     marginRight: 3
+  },
+
+  modalContainer: {
+    height: '100%',
+    width: '100%',
+    paddingLeft: 15,
+    paddingRight: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    // backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalBanner: {
+    borderRadius: 12,
+    paddingRight: 38,
+    paddingLeft: 25,
+    paddingBottom: 40,
+    backgroundColor: '#383938',
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    elevation: 2,
+    alignItems: 'center'
+  },
+  crossButton: {
+    width: 20,
+    height: 20,
+    marginTop: 20,
+    alignSelf: 'flex-end',
+  },
+  crossIcon: {
+    resizeMode: 'contain'
   }
+
+
+
+
 });
 
 function mapStateToProps(state) {

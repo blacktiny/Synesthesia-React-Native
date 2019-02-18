@@ -41,7 +41,7 @@ class BottomBar extends Component {
     const { navigation } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity style={{width: 40, marginLeft: 5}} onPress={() => this.moveToRootScreen()}>
+        <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
           <Image style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('MindFulness')}>
@@ -50,7 +50,7 @@ class BottomBar extends Component {
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('BeingAware')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-          {this.state.screen == 'beingaware' && <Image style={styles.imageStyle} source={rectangle} />}
+          {this.state.screen == 'beingaware' && <Image style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
@@ -95,31 +95,15 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 15,
-    ...Platform.select({
-      ios: {
-        paddingTop: 12,
-        paddingBottom: 0,
-      },
-      android: {
-        paddingTop: 12,
-        paddingBottom: 0,
-      },
-    }),
+    paddingTop: 12,
+    paddingBottom: 0,
     fontFamily: Theme.FONT_SEMIBOLD
   },
   leftArrow: {
     height: 15,
     width: 15,
-    ...Platform.select({
-      ios: {
-        marginTop: 12,
-        marginLeft: 12,
-      },
-      android: {
-        marginTop: 12,
-        marginLeft: 12,
-      },
-    }),
+    marginTop: 12,
+    marginLeft: 12,
   },
   imageStyle: {
     height: 3,
