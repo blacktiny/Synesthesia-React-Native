@@ -103,11 +103,11 @@ class SynesthesiaItemScreen extends Component {
   renderContainers = (id, header, subHeader, itemList) => {
     return (
       <View key={id}>
-        {header && <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
+        {header && <View style={{ paddingLeft: 24, paddingRight: 5, paddingTop: 20 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, lineHeight: 19 }}>{subHeader}</Text>
         </View>}
-        <View style={{ height: 150, paddingTop: 10, paddingBottom: 0 }}>
+        <View style={{ height: 175, paddingLeft: 8, paddingTop: 10, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -246,14 +246,14 @@ class SynesthesiaItemScreen extends Component {
   }
 
   render() {
-    const { isFetchingData, nodeData } = this.props;
+    const { navigation, isFetchingData, nodeData } = this.props;
     const header = nodeData.header;
     const subHeader = nodeData.subheader;
     const imageBanner = FILES_URL + nodeData.image_banner;
-
+    const screen = navigation.state.params;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'syensthesia'} navigation={this.props.navigation} />
+        <BottomBar screen={screen} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData && <ImageBackground
@@ -292,11 +292,11 @@ class SynesthesiaItemScreen extends Component {
 const styles = StyleSheet.create({
   modalContainer: {
     height: '100%',
-    width: '100%',
+    width: '95%',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    left: 0,
+    left: '2.5%',
     top: 0,
     flexDirection: 'row'
   },

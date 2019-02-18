@@ -35,7 +35,8 @@ class Synesthesia extends Component {
 
   onItemButtonClicked = (id) => {
     AsyncStorage.setItem('nodeID', id);
-    this.props.navigation.navigate('SynesthesiaItem');
+    // this.props.navigation.navigate('SynesthesiaItem');
+    this.props.navigation.push('SynesthesiaItem', 'syensthesia')
   }
 
   loadingPage = () => {
@@ -343,11 +344,11 @@ class Synesthesia extends Component {
 const styles = StyleSheet.create({
   modalContainer: {
     height: '100%',
-    width: '100%',
+    width: '95%',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    left: 0,
+    left: '2.5%',
     top: 0,
     flexDirection: 'row'
   },
