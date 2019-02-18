@@ -70,7 +70,7 @@ class SynesthesiaItemScreen extends Component {
             number++;
           }
         })
-        arrData.push(this.renderContainers(nodeData.id, header, subHeader, itemDataList));
+        arrData.push(this.renderContainers(nodeData.id, null, null, itemDataList));
       } else {
         nodeData.children.map((data) => {
           let itemList = [];
@@ -103,10 +103,10 @@ class SynesthesiaItemScreen extends Component {
   renderContainers = (id, header, subHeader, itemList) => {
     return (
       <View key={id}>
-        <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
+        {header && <View style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}>
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, lineHeight: 19 }}>{subHeader}</Text>
-        </View>
+        </View>}
         <View style={{ height: 150, paddingTop: 10, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
@@ -192,7 +192,7 @@ class SynesthesiaItemScreen extends Component {
               <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -291,30 +291,34 @@ class SynesthesiaItemScreen extends Component {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    height: height,
-    width: width,
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    flexDirection: 'row'
   },
   lockedBanner: {
-    height: height - 550,
-    width: width - 30,
     borderRadius: 12,
     paddingRight: 20,
     paddingLeft: 20,
+    paddingBottom: 40,
     backgroundColor: '#383938',
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
     shadowOpacity: 0.5,
+    elevation: 2,
     alignItems: 'center'
   },
-  activityBannerHeight: {
-    height: iPhoneX() ? height - 450 : height - 550
-  },
-  paymentBannerHeight: {
-    height: iPhoneX() ? height - 350 : height - 450
-  },
+  // activityBannerHeight: {
+  //   height: iPhoneX() ? height - 450 : height - 550
+  // },
+  // paymentBannerHeight: {
+  //   height: iPhoneX() ? height - 350 : height - 450
+  // },
   crossButton: {
     width: 20,
     height: 20,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
@@ -38,7 +38,7 @@ class BottomBar extends Component {
   render() {
     const { navigation } = this.state;
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <TouchableOpacity onPress={() => this.moveToRootScreen()}>
           <Image style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
@@ -54,7 +54,7 @@ class BottomBar extends Component {
           <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
           {this.state.screen == 'syensthesia' && <Image style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -62,9 +62,17 @@ class BottomBar extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
     width: '100%',
+    ...Platform.select({
+      ios: {
+        height: 80
+      },
+      android: {
+        height: 60
+      },
+    }),
     paddingTop: 12,
+    paddingBottom: 0,
     paddingLeft: 10,
     paddingRight: 10,
     position: 'absolute',
@@ -78,27 +86,46 @@ const styles = StyleSheet.create({
     // flexDirection : 'row'
   },
   direction: {
+    display: 'flex',
     flexDirection: 'column'
   },
   textStyle: {
     fontSize: 15,
-    marginBottom: 10,
+    ...Platform.select({
+      ios: {
+        paddingTop: 12,
+        paddingBottom: 0,
+      },
+      android: {
+        paddingTop: 12,
+        paddingBottom: 0,
+      },
+    }),
     fontFamily: Theme.FONT_SEMIBOLD
   },
   leftArrow: {
     height: 15,
-    width: 15
+    width: 15,
+    ...Platform.select({
+      ios: {
+        marginTop: 12,
+        marginLeft: 12,
+      },
+      android: {
+        marginTop: 12,
+        marginLeft: 12,
+      },
+    }),
   },
   imageStyle: {
     height: 3,
     width: 85,
-    alignSelf: 'flex-end',
-    alignContent: 'flex-end'
+    marginTop: 'auto'
   }
 });
 
 function mapStateToProps(state) {
-  return { }
+  return {}
 }
 
 export default connect(mapStateToProps)(BottomBar);

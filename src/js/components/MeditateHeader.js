@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setMenuItem } from '../../js/actions/SideMenuAction';
 import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
+import { Theme } from "../constants/constants";
 
 const menu = require('../../assets/menu.png')
 const resume = require('../../assets/resume.png')
@@ -22,7 +23,7 @@ class MeditateHeader extends Component {
     this.props.dispatch(getHeaderItem());
   }
 
-  onChangedHeaderItem(headerItem) {    
+  onChangedHeaderItem(headerItem) {
     const { isLoggedIn } = this.props;
     this.props.navigation.navigate(headerItem);
 
@@ -30,10 +31,10 @@ class MeditateHeader extends Component {
       this.props.dispatch(setMenuItem('Meditate in Sensorium'));
       // this.props.dispatch(cleanProgress());
       this.props.dispatch(setHeaderItem(headerItem));
-    } else if ( headerItem == 'Progress' ) {
-      if ( !isLoggedIn ) {
+    } else if (headerItem == 'Progress') {
+      if (!isLoggedIn) {
         this.props.dispatch(setHeaderItem('Sensorium'));
-        this.props.navigation.navigate('Login');
+        this.props.navigation.navigate('Register');
       } else {
         this.props.dispatch(cleanProgress());
         this.props.dispatch(getUserProgress());
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#777778',
     textAlign: 'center',
+    fontFamily: Theme.FONT_SEMIBOLD,
     paddingTop: 7
   },
   imageStyle: {

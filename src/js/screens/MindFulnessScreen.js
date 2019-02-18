@@ -10,12 +10,12 @@ import { setMenuItem } from '../actions/SideMenuAction'
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
-const mindfulessImage = require('../../assets/mindfulnessheader.png')
 const banneractivitylockedImage = require('../../assets/lock3.png')
 const bannerpaymentlockedImage = require('../../assets/lock4.png')
 import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
 import { FILES_URL } from '../constants/constants'
+import ProgressiveImage from '../components/ProgressiveImage';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -47,6 +47,7 @@ class MindFulness extends Component {
         let itemList = [];
         const header = data.header;
         const subHeader = data.subheader;
+        const imageBanner = FILES_URL + data.image_banner;
         var number = 1;
         data.children.map((item) => {
           if (item.is_published == 1) {
@@ -64,20 +65,57 @@ class MindFulness extends Component {
             number++;
           }
         })
-        arrData.push(this.renderContainers(data.id, header, subHeader, itemList));
+        arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, itemList));
       });
       return arrData;
     }
   }
 
-  renderContainers = (id, header, subHeader, itemList) => {
+  renderContainers = (id, header, subHeader, imageBanner, itemList) => {
     return (
       <View key={id}>
-        <View style={{ paddingLeft: 18, paddingRight: 7, paddingTop: 20 }}>
-          <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
-          <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_LIGHT }}>{subHeader}</Text>
-        </View>
-        <View style={{ height: 163, paddingTop: 10, paddingBottom: 0 }}>
+
+        {imageBanner.includes("null") ?
+          <View style={{ paddingLeft: 24, paddingRight: 5, paddingTop: 20 }}>
+            <Text style={{ fontSize: 19, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{header}</Text>
+            <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, fontFamily: Theme.FONT_MEDIUM }}>{subHeader}</Text>
+          </View>
+          :
+          <View style={{ marginTop: -30 }}>
+            <ProgressiveImage
+              thumbnailSource={{ uri: imageBanner }}
+              source={{ uri: imageBanner }}
+              style={{ width: '100%', height: 137 }}
+              resizeMode="cover"
+              isImageBanner={true}
+            />
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 20,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 40,
+              left: 0,
+              right: 0,
+              fontFamily: Theme.FONT_BOLD
+            }}>{header}</Text>
+            <Text style={{
+              textAlign: 'center',
+              fontSize: 14,
+              paddingTop: 8,
+              color: '#FFFFFF',
+              position: 'absolute',
+              top: 60,
+              left: 0,
+              right: 0,
+              paddingLeft: 30,
+              paddingRight: 30,
+              fontFamily: Theme.FONT_MEDIUM
+            }}>{subHeader}</Text>
+          </View>
+        }
+
+        <View style={{ height: 175, paddingLeft: 8, paddingTop: 10, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -163,7 +201,7 @@ class MindFulness extends Component {
               <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
                 this.setState({ isLockedBannerVisible: false })
               }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
+                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -263,30 +301,34 @@ class MindFulness extends Component {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    height: height,
-    width: width,
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    flexDirection: 'row'
   },
   lockedBanner: {
-    height: height - 550,
-    width: width - 30,
     borderRadius: 12,
     paddingRight: 20,
     paddingLeft: 20,
+    paddingBottom: 40,
     backgroundColor: '#383938',
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
     shadowOpacity: 0.5,
+    elevation: 2,
     alignItems: 'center'
   },
-  activityBannerHeight: {
-    height: iPhoneX() ? height - 450 : height - 550
-  },
-  paymentBannerHeight: {
-    height: iPhoneX() ? height - 350 : height - 450
-  },
+  // activityBannerHeight: {
+  //   height: iPhoneX() ? height - 450 : height - 550
+  // },
+  // paymentBannerHeight: {
+  //   height: iPhoneX() ? height - 350 : height - 450
+  // },
   crossButton: {
     width: 20,
     height: 20,
