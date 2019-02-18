@@ -54,18 +54,17 @@ const styles = StyleSheet.create({
   },
   disclaimerContainer: {
     height: '100%',
-    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000000'
   },
   disclaimerContent: {
-    height: iPhoneX() ? height - 480 : height - 330,
-    width: width - 30,
+    width: '93%',
     backgroundColor: '#3D3D3E',
     borderRadius: 12,
     paddingRight: 20,
     paddingLeft: 20,
+    paddingBottom: 20,
     borderColor: '#3D3D3E',
     borderWidth: 1
   }

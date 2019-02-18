@@ -30,7 +30,7 @@ class MeditateHeader extends Component {
     this.props.navigation.navigate(headerItem);
 
     if (headerItem == 'Sensorium') {
-      this.props.dispatch(setMenuItem('Meditate in Sensorium'));
+      this.props.dispatch(setMenuItem('Meditate'));
       // this.props.dispatch(cleanProgress());
       this.props.dispatch(setHeaderItem(headerItem));
     } else if (headerItem == 'Progress') {
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   menuView: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center', 
-    paddingLeft: 0, 
+    alignItems: 'center',
+    paddingLeft: 0,
     width: 80
   },
   mainView: {

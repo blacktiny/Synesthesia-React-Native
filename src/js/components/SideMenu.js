@@ -22,19 +22,16 @@ const cross = require('../../../src/assets/cross.png');
 const gradientLine = require('../../../src/assets/gradientLine.png');
 const loginButton = require('../../../src/assets/loginButton.png');
 
-const meanuItems = [
-  { name: 'Meditate in Sensorium', route: 'Sensorium', url: '' },
+const menuItems = [
+  { name: 'Meditate', route: 'Sensorium', url: '' },
   { name: 'My account', route: 'User', url: '' },
-  { name: 'Pricing', route: 'Pricing', url: '' },
+  { name: '7 days for free', route: 'Pricing', url: '' },
   { name: 'Login', route: 'Login', url: '' },
-  { name: 'How it works', route: '', url: 'https://synesthesia.com/#/HowItWorks' },
   { name: 'Blog', route: '', url: 'https://synesthesia.com/blog/' },
   { name: 'Contact', route: '', url: 'https://synesthesia.com/#/ContactUs' },
   { name: 'About us', route: '', url: 'https://synesthesia.com/#/AboutUs' },
   { name: 'FAQ', route: '', url: 'https://synesthesia.com/#/faq' },
-  { name: 'Privacy Policy', route: '', url: 'https://synesthesia.com/#/privacy' },
-  { name: 'T&C', route: '', url: 'https://synesthesia.com/#/TermsAndConditions' },
-  { name: 'Disclaimer', route: '', url: '' },
+  { name: 'Privacy Policy, T&C, Disclaimer', route: '', url: 'https://synesthesia.com/#/privacy,https://synesthesia.com/#/TermsAndConditions,null' },
   { name: 'Rate the app', route: '', url: '' },
   { name: 'Log out', route: 'Login', url: '' }
 ]
@@ -43,9 +40,10 @@ class SideMenu extends Component {
   constructor() {
     super();
     this.state = {
-      menuData: meanuItems,
+      menuData: menuItems,
       loginBtnPressStatus: false,
-      logoutBtnPressStatus: false
+      logoutBtnPressStatus: false,
+      closeBtnPressStatus: false
     }
   }
 
@@ -63,10 +61,10 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(logoutUser());
     }
-    if (itemName == 'Meditate in Sensorium') {
+    if (itemName == 'Meditate') {
       this.props.dispatch(setHeaderItem('Sensorium'));
     }
-    if (itemName == 'Pricing' || itemName == 'Login') {
+    if (itemName == '7 days for free' || itemName == 'Login') {
       this.props.dispatch(setHeaderItem(''));
     }
     this.props.dispatch(setMenuItem(itemName));
@@ -83,20 +81,58 @@ class SideMenu extends Component {
   }
 
   renderHeader = () => {
-    const { isLoggedIn, user } = this.props;
+    const { isLoggedIn, user, navigation } = this.props;
+    const { closeBtnPressStatus } = this.state;
     let output;
     if (isLoggedIn) {
       output = (
         <View style={styles.userInfo}>
-          <Image style={{ alignSelf: 'flex-end', height: 20, width: 20, margin: 10 }} resizeMode='contain' source={cross} />
-          <Text style={styles.username}>{user.name}</Text>
-          <Text style={styles.useremail}>{user.email}</Text>
+          <TouchableHighlight
+            onPress={() => {
+              navigation.closeDrawer();
+            }}
+            onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
+            onShowUnderlay={() => this.onShowUnderlay('closeDrawer')}
+            underlayColor={'trasparent'}
+          >
+            <Image
+              style={{
+                alignSelf: 'flex-end',
+                height: 20,
+                width: 20,
+                margin: 10,
+                opacity: closeBtnPressStatus ? 0.5 : 1.0
+              }}
+              resizeMode='contain'
+              source={cross}
+            />
+          </TouchableHighlight>
+          <Text style={styles.userEmail}>{user.email}</Text>
         </View>
       );
     } else {
       output = (
         <View>
-          <Image style={{ alignSelf: 'flex-end', height: 20, width: 20, margin: 10 }} resizeMode='contain' source={cross} />
+          <TouchableHighlight
+            onPress={() => {
+              navigation.closeDrawer();
+            }}
+            onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
+            onShowUnderlay={() => this.onShowUnderlay('closeDrawer')}
+            underlayColor={'trasparent'}
+          >
+            <Image
+              style={{
+                alignSelf: 'flex-end',
+                height: 20,
+                width: 20,
+                margin: 10,
+                opacity: closeBtnPressStatus ? 0.5 : 1.0
+              }}
+              resizeMode='contain'
+              source={cross}
+            />
+          </TouchableHighlight>
           <CustomButton
             disabled={false}
             style={styles.button}
@@ -108,7 +144,7 @@ class SideMenu extends Component {
     }
     return (
       <View style={styles.blur}>
-        <ImageBackground source={blurImage} style={{ height: iPhoneX() ? height - 670 : height - 530, shadowOffset: { width: 1, height: 1, }, shadowColor: 'black', shadowOpacity: 0.75, }}>
+        <ImageBackground source={blurImage} style={{ height: 135, shadowOffset: { width: 1, height: 1, }, shadowColor: 'black', shadowOpacity: 0.75, }}>
           {output}
         </ImageBackground>
       </View>
@@ -120,6 +156,8 @@ class SideMenu extends Component {
       this.setState({ loginBtnPressStatus: false });
     } else if (itemName == 'Log out') {
       this.setState({ logoutBtnPressStatus: false });
+    } else if (itemName == 'closeDrawer') {
+      this.setState({ closeBtnPressStatus: false });
     }
   }
 
@@ -128,21 +166,26 @@ class SideMenu extends Component {
       this.setState({ loginBtnPressStatus: true });
     } else if (itemName == 'Log out') {
       this.setState({ logoutBtnPressStatus: true });
+    } else if (itemName == 'closeDrawer') {
+      this.setState({ closeBtnPressStatus: true });
     }
   }
 
-  renderData = (item, index, type) => {
+  renderData = (item, index) => {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
     const { currentItem, isLoggedIn } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
-      curItem = 'Meditate in Sensorium';
+      curItem = 'Meditate';
     } else {
       curItem = currentItem;
     }
     return (
       <View>
-        {item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Disclaimer' && item.name != 'playStoreImage' && item.name != curItem && item.name != 'Meditate in Sensorium' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name != 'Blog' && item.name != 'My account' && item.name != 'Contact' && item.name != 'About us' && item.name != 'FAQ' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Log out' && item.name != curItem && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != curItem && item.name != 'Meditate' && item.name != 'Rate the app' && item.name != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+
+
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
         {!isLoggedIn && item.name == 'Login' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -150,32 +193,34 @@ class SideMenu extends Component {
             <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
           </View>
         </TouchableHighlight>}
-        {item.name == 'Meditate in Sensorium' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+        {item.name == 'Meditate' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
         </View>}
-        {item.name == 'Meditate in Sensorium' && item.name != curItem && <View style={{ marginTop: 25 }}>
-          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
+        {item.name == 'Meditate' && item.name != curItem && <View style={{ marginTop: 25 }}>
+          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
         </View>}
-        {item.name == curItem && item.name != 'Meditate in Sensorium' && item.name != 'Login' &&<View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
+        {item.name == curItem && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Privacy Policy, T&C, Disclaimer' && <View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
         </View>}
-        {isLoggedIn && item.name == 'Log out' && <View style={{ backgroundColor: '#090909', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
+        {isLoggedIn && item.name == 'Log out' && <View style={{ backgroundColor: 'rgba(9,9,9, 0.26)', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
         {isLoggedIn && item.name == 'Log out' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
             <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Log out'}</Text>
           </View>
         </TouchableHighlight>}
-        {/* {item.name == curItem && item.name != 'Privacy Policy' && item.name != 'T&C' && item.name != 'Meditate in Sensorium' && item.name != 'Login' && <View style={{ flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
-          <Image source={gradientLine} style={{ height: 45, width: 3 }} />
-          <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
-        </View>} */}
-        {(item.name == 'Privacy Policy' || item.name == 'T&C') && <Text style={styles.textStyle2} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name == 'Privacy Policy, T&C, Disclaimer' &&
+          <Text style={styles.textStyle2}>
+            <Text style={styles.textStyle2} onPress={() => this.onMenuItemClicked(item.route, item.name.split(',')[0].trim(), item.url.split(',')[0].trim())}>{'Privacy Policy, '}</Text>
+            <Text style={styles.textStyle2} onPress={() => this.onMenuItemClicked(item.route, item.name.split(',')[1].trim(), item.url.split(',')[1].trim())}>{'T&C, '}</Text>
+            <Text style={styles.textStyle2} onPress={() => this.openDisclaimer()}>{'Disclaimer'}</Text>
+          </Text>
+        }
         {item.name == 'Login' && <View style={{ backgroundColor: 'rgba(9,9,9, 0.26)', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
         {item.name == 'FAQ' && <View style={{ backgroundColor: 'rgba(9,9,9, 0.26)', height: 1, width: 300, marginTop: 10, marginBottom: 10 }} />}
-        {item.name == 'Disclaimer' && <Text style={styles.textStyle2} onPress={() => this.openDisclaimer()}>{item.name}</Text>}
+        {/* {item.name == 'Disclaimer' && <Text style={styles.textStyle2} onPress={() => this.openDisclaimer()}>{item.name}</Text>} */}
       </View>
     )
   }
@@ -188,7 +233,7 @@ class SideMenu extends Component {
           data={this.state.menuData}
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 20, flexDirection: 'column' }}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => this.renderData(item, index, 'videos')}
+          renderItem={({ item, index }) => this.renderData(item, index)}
           extraData={this.state.menuData}
         />
       </View >
@@ -222,17 +267,11 @@ const styles = StyleSheet.create({
   userInfo: {
     paddingLeft: 30
   },
-  username: {
+  userEmail: {
     fontFamily: Theme.FONT_BOLD,
-    fontSize: 18,
+    fontSize: 17,
     color: 'white',
-    paddingTop: 10
-  },
-  useremail: {
-    fontFamily: Theme.FONT_REGULAR,
-    fontSize: 14,
-    color: 'white',
-    paddingTop: 5,
+    paddingTop: 25
   },
   button: {
     height: 50,
