@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
@@ -229,23 +230,29 @@ class BeingAware extends Component {
         <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
           onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
-            <View style={[styles.lockedBanner, styles.activityBannerHeight]}>
-              <TouchableOpacity style={styles.crossButton} onPress={() => {
-                this.setState({ isLockedBannerVisible: false })
-              }}>
-                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
-              </TouchableOpacity>
-              <View>
-                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={banneractivitylockedImage} />
-                <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
-                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
+            <LinearGradient
+              start={{ x: 0.17, y: 0.97 }} end={{ x: 0.67, y: 0.44 }}
+              locations={[0, 1]}
+              colors={['#505052', '#3D3D3E']}
+              style={styles.lockedBanner}>
+              <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity style={styles.crossButton} onPress={() => {
+                  this.setState({ isLockedBannerVisible: false })
+                }}>
+                  <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+                </TouchableOpacity>
+                <View>
+                  <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={banneractivitylockedImage} />
+                  <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
+                </View>
+                <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
+                  this.setState({ isLockedBannerVisible: false })
+                }}>
+                  <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={() => {
-                this.setState({ isLockedBannerVisible: false })
-              }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
-              </TouchableOpacity>
-            </View>
+            </LinearGradient>
           </View>
         </Modal>
       )
@@ -254,30 +261,37 @@ class BeingAware extends Component {
         <Modal visible={isLockedBannerVisible} animationType="slide" transparent={true}
           onRequestClose={() => console.log('closed')}>
           <View style={styles.modalContainer}>
-            <View style={[styles.lockedBanner, styles.paymentBannerHeight]}>
-              <TouchableOpacity style={styles.crossButton} onPress={() => {
-                this.setState({ isLockedBannerVisible: false })
-              }}>
-                <BannerCloseIcon style={styles.crossIcon} color="#777778" />
-              </TouchableOpacity>
-              <View>
-                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={bannerpaymentlockedImage} />
-                <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
-                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise checkout our attractive Price Plans</Text>
-                <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Subscribe and get 7 Days of full access</Text>
+            <LinearGradient
+              start={{ x: 0.17, y: 0.97 }} end={{ x: 0.67, y: 0.44 }}
+              locations={[0, 1]}
+              colors={['#505052', '#3D3D3E']}
+              style={styles.lockedBanner}>
+              <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity style={styles.crossButton} onPress={() => {
+                  this.setState({ isLockedBannerVisible: false })
+                }}>
+                  <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+                </TouchableOpacity>
+                <View>
+                  <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={bannerpaymentlockedImage} />
+                  <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise checkout our attractive Price Plans</Text>
+                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Subscribe and get 7 Days of full access</Text>
+                </View>
+                <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
+                  this.setState({ isLockedBannerVisible: false })
+                  this.props.dispatch(setMenuItem('Pricing'))
+                  this.props.navigation.navigate('Pricing')
+                }}>
+                  <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Subscribe here</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => {
+                  this.setState({ isLockedBannerVisible: false })
+                }}>
+                  <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>No, thanks</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => {
-                this.setState({ isLockedBannerVisible: false })
-                this.props.navigation.navigate('Pricing')
-              }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Subscribe here</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => {
-                this.setState({ isLockedBannerVisible: false })
-              }}>
-                <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>No, thanks</Text>
-              </TouchableOpacity>
-            </View>
+            </LinearGradient>
           </View>
         </Modal>
       )
@@ -355,7 +369,6 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     paddingBottom: 40,
-    backgroundColor: '#383938',
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
@@ -363,12 +376,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     alignItems: 'center'
   },
-  // activityBannerHeight: {
-  //   height: iPhoneX() ? height - 450 : height - 550
-  // },
-  // paymentBannerHeight: {
-  //   height: iPhoneX() ? height - 350 : height - 450
-  // },
   crossButton: {
     width: 20,
     height: 20,
