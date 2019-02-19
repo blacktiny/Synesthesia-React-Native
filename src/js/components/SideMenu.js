@@ -64,7 +64,7 @@ class SideMenu extends Component {
     if (itemName == 'Meditate') {
       this.props.dispatch(setHeaderItem('Sensorium'));
     }
-    if (itemName == '7 days for free' || itemName == 'Login') {
+    if (itemName == '7 days for free' || itemName == 'My account' || itemName == 'Login') {
       this.props.dispatch(setHeaderItem(''));
     }
     this.props.dispatch(setMenuItem(itemName));
@@ -93,7 +93,7 @@ class SideMenu extends Component {
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
             onShowUnderlay={() => this.onShowUnderlay('closeDrawer')}
-            underlayColor={'trasparent'}
+            underlayColor={'transparent'}
           >
             <Image
               style={{
@@ -119,7 +119,7 @@ class SideMenu extends Component {
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
             onShowUnderlay={() => this.onShowUnderlay('closeDrawer')}
-            underlayColor={'trasparent'}
+            underlayColor={'transparent'}
           >
             <Image
               style={{
