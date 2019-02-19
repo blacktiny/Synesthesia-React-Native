@@ -11,6 +11,7 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
+import LinearGradient from "react-native-linear-gradient";
 
 import BottomBar from '../components/BottomBar';
 import ProgressBar from "../components/ProgressBar";
@@ -99,46 +100,67 @@ class ProgressScreen extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.completedSession}>
-              <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
-              <Text style={styles.completedPercentText}>{Math.floor(summary.percentage)}%</Text>
-              <ProgressBar value={Math.floor(summary.percentage)} />
-              <Text style={styles.completedSessionText}>{summary.completed}/{summary.total}</Text>
-              <View style={styles.splitterHorizontal} />
-              <Text style={styles.subTitleTextRegular}>Total minutes</Text>
-              <Text style={styles.completedMinuteText}>{summary.minutes} min</Text>
+              <LinearGradient
+                start={{x: 1, y: 0}}
+                end={{x: 0, y: 1}}
+                colors={["#3D3D3E", "#505052"]}
+                style={styles.completedSessionBack}
+              >
+                <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
+                <Text style={styles.completedPercentText}>{Math.floor(summary.percentage)}%</Text>
+                <ProgressBar value={Math.floor(summary.percentage)} />
+                <Text style={styles.completedSessionText}>{summary.completed}/{summary.total}</Text>
+                <View style={styles.splitterHorizontal} />
+                <Text style={styles.subTitleTextRegular}>Total minutes</Text>
+                <Text style={styles.completedMinuteText}>{summary.minutes} min</Text>
+              </LinearGradient>
             </View>
             <View style={styles.streak}>
-              <View style={styles.currentStreak}>
-                <Text style={styles.subTitleTextRegular}>Current streak</Text>
-                <Text style={styles.streakText}>{summary.current_streak}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={styles.topStreak}>
-                <Text style={styles.subTitleTextRegular}>Top streak</Text>
-                <Text style={styles.streakText}>{summary.best_streak}</Text>
-              </View>
+              <LinearGradient
+                start={{x: 1, y: 0}}
+                end={{x: 0, y: 1}}
+                colors={["#3D3D3E", "#505052"]}
+                style={styles.streakBack}
+              >
+                <View style={styles.currentStreak}>
+                  <Text style={styles.subTitleTextRegular}>Current streak</Text>
+                  <Text style={styles.streakText}>{summary.current_streak}</Text>
+                </View>
+                <View style={styles.splitterVertical} />
+                <View style={styles.topStreak}>
+                  <Text style={styles.subTitleTextRegular}>Top streak</Text>
+                  <Text style={styles.streakText}>{summary.best_streak}</Text>
+                </View>
+              </LinearGradient>
             </View>
             <View style={styles.exercise}>
-              <View style={{ width: '28%' }}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[0].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[0].percentage)} width={'80%'} />
-                <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={{ width: '28%' }}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[1]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[1].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[1].percentage)} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
-                <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
-              </View>
-              <View style={styles.splitterVertical} />
-              <View style={{ width: '28%' }}>
-                <Text style={styles.subTitleTextRegular2}>{exercise_category[2]}</Text>
-                <Text style={styles.completedPercentText2}>{Math.floor(exercise[2].percentage)}%</Text>
-                <ProgressBar value={Math.floor(exercise[2].percentage)} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
-                <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
-              </View>
+              <LinearGradient
+                start={{x: 1, y: 0}}
+                end={{x: 0, y: 1}}
+                colors={["#3D3D3E", "#505052"]}
+                style={styles.exerciseBack}
+              >
+                <View style={{ width: '28%' }}>
+                  <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
+                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[0].percentage)}%</Text>
+                  <ProgressBar value={Math.floor(exercise[0].percentage)} width={'80%'} />
+                  <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
+                </View>
+                <View style={styles.splitterVertical} />
+                <View style={{ width: '28%' }}>
+                  <Text style={styles.subTitleTextRegular2}>{exercise_category[1]}</Text>
+                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[1].percentage)}%</Text>
+                  <ProgressBar value={Math.floor(exercise[1].percentage)} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
+                  <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
+                </View>
+                <View style={styles.splitterVertical} />
+                <View style={{ width: '28%' }}>
+                  <Text style={styles.subTitleTextRegular2}>{exercise_category[2]}</Text>
+                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[2].percentage)}%</Text>
+                  <ProgressBar value={Math.floor(exercise[2].percentage)} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
+                  <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
+                </View>
+              </LinearGradient>
             </View>
           </ImageBackground>}
         </ScrollView>
@@ -197,15 +219,19 @@ const styles = StyleSheet.create({
   completedSession: {
     width: width - 40,
     height: 300,
-    backgroundColor: '#3F3F40',
     borderRadius: 12,
-    padding: 20,
     marginBottom: 20,
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 20 },
     shadowColor: "black",
     shadowOpacity: 0.8,
     elevation: 2
+  },
+  completedSessionBack: {
+    width: width - 40,
+    height: 300,
+    borderRadius: 12,
+    padding: 20
   },
   subTitleTextMedium: {
     fontFamily: Theme.FONT_MEDIUM,
@@ -260,19 +286,21 @@ const styles = StyleSheet.create({
     color: '#ffffff'
   },
   streak: {
-    flexDirection: 'row',
     width: width - 40,
     height: 140,
-    backgroundColor: '#3F3F40',
     borderRadius: 12,
-    padding: 20,
     marginBottom: 20,
-    justifyContent: 'center',
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 20 },
     shadowColor: "black",
     shadowOpacity: 0.8,
     elevation: 2
+  },
+  streakBack: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    padding: 20,
+    justifyContent: 'center'
   },
   currentStreak: {
     width: '45%'
@@ -295,21 +323,23 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   exercise: {
-    flexDirection: 'row',
     width: width - 40,
     height: 140,
-    backgroundColor: '#3F3F40',
     borderRadius: 12,
-    paddingLeft: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
     marginBottom: 20,
-    justifyContent: 'center',
     shadowRadius: 20,
     shadowOffset: { width: 0, height: 20 },
     shadowColor: "black",
     shadowOpacity: 0.8,
     elevation: 2
+  },
+  exerciseBack: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    paddingLeft: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    justifyContent: 'center',
   }
 });
 
