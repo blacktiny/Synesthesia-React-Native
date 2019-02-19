@@ -78,6 +78,17 @@ class UserScreen extends Component {
 
   onCancelBtnClicked = () => {
     this.setState({ bEditView: false });
+
+    this.setState({firstNameSuccessBorder: false});
+    this.setState({firstNameErrorBorder: false,});
+    this.setState({lastNameSuccessBorder: false});
+    this.setState({lastNameErrorBorder: false});
+    this.setState({userNameSuccessBorder: false});
+    this.setState({userNameErrorBorder: false});
+    this.setState({emailSuccessBorder: false});
+    this.setState({emailErrorBorder: false});
+    this.setState({confirmEmailSuccessBorder: false});
+    this.setState({confirmEmailErrorBorder: false});
   }
 
   onSaveBtnClicked = () => {
@@ -280,7 +291,7 @@ class UserScreen extends Component {
               </TouchableHighlight>
             </View>
           </View> }
-          { bEditView && <View>
+          { bEditView && <View style={{height: height + 150}}>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Edit personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -407,7 +418,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   toggleButton: {
-    // width: (width - 30) / 2 - 4, 
     height: 46, 
     alignItems: 'center', 
     justifyContent: 'center',

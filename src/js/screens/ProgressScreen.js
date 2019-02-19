@@ -7,7 +7,8 @@ import {
   ImageBackground,
   ScrollView,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
 
@@ -154,7 +155,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: width,
-    height: height,
     padding: 15,
     paddingTop: 10,
     alignItems: 'center'
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   backgroundColor: {
     position: 'absolute',
     width: width,
-    height: height,
+    height: 812,
     backgroundColor: "#1F1F1F",
     opacity: 0.68
   },
@@ -179,11 +179,18 @@ const styles = StyleSheet.create({
   },
   crossButton: {
     position: 'absolute',
-    left: width - 160
+    ...Platform.select({
+      ios: {
+        left: width - 160
+      },
+      android: {
+        left: width - 120
+      },
+    })
   },
   crossIcon: {
     alignSelf: 'flex-end',
-    marginRight: -12,
+    // marginRight: -12,
     resizeMode: 'contain',
     marginTop: -10
   },
