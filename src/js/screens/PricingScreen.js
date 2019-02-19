@@ -378,21 +378,21 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: width,
-    height: height,
+    // height: height,
     padding: 15,
     paddingTop: 10
   },
   backgroundColor: {
     position: 'absolute',
     width: width,
-    height: height,
+    height: 812,
     backgroundColor: "#1F1F1F",
     opacity: 0.68
   },
   backgroundLinearGradient: {
     position: 'absolute',
     width: width,
-    height: height
+    height: 812
   },
   meditateFree: {
     paddingBottom: 13,

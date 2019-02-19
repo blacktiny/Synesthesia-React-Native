@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: width,
-    height: height,
     padding: 15,
     paddingTop: 10,
     alignItems: 'center'
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
   backgroundColor: {
     position: 'absolute',
     width: width,
-    height: height,
+    height: 812,
     backgroundColor: "#1F1F1F",
     opacity: 0.68
   },
