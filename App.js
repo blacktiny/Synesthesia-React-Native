@@ -28,6 +28,7 @@ import UserScreen from "./src/js/screens/UserScreen";
 import PricingScreen from "./src/js/screens/PricingScreen";
 import SideMenu from './src/js/components/SideMenu';
 import SensoriumScreen from './src/js/screens/SensoriumScreen';
+import ProgressScreen from './src/js/screens/ProgressScreen';
 import SynesthesiaScreen from './src/js/screens/SynesthesiaScreen';
 import MindFulnessScreen from './src/js/screens/MindFulnessScreen';
 import BeingAwareScreen from './src/js/screens/BeingAwareScreen';
@@ -110,6 +111,28 @@ const SensoriumStackNavigator = createStackNavigator({
     }
   });
 
+const UserStackNavigator = createStackNavigator({
+  User: {
+    screen: UserScreen,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
+        headerLeft: <MeditateHeader navigation={navigation} />
+      }
+    }
+  },
+}, {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: <Icon
+          style={{ paddingLeft: 10 }}
+          onPress={() => navigation.openDrawer()}
+          name="md-menu"
+          size={30} />
+      }
+    }
+  });
+
 const PricingStackNavigator = createStackNavigator({
   Pricing: {
     screen: PricingScreen,
@@ -132,9 +155,24 @@ const PricingStackNavigator = createStackNavigator({
     }
   });
 
+const ProgressStackNavigator = createStackNavigator({
+  Progress: {
+    screen: ProgressScreen,
+  }
+}, {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
+        headerLeft: <MeditateHeader navigation={navigation} />
+      }
+    }
+  });
+
 const SensoriumDrawerNavigator = createDrawerNavigator({
   Sensorium: { screen: SensoriumStackNavigator },
-  Pricing: { screen: PricingStackNavigator }
+  User: { screen: UserStackNavigator },
+  Pricing: { screen: PricingStackNavigator },
+  Progress: { screen: ProgressStackNavigator }
 }, {
     initialRouteName: 'Sensorium',
     contentComponent: (props) => <SideMenu {...props} />,
@@ -144,6 +182,7 @@ const SensoriumDrawerNavigator = createDrawerNavigator({
 const AppSwitchNavigator = createSwitchNavigator({
   Welcome: { screen: WelcomeScreen },
   Sensorium: { screen: SensoriumDrawerNavigator },
+  Progress: { screen: ProgressStackNavigator },
   Login: { screen: LoginScreen },
   Register: { screen: RegisterScreen },
   User: { screen: UserScreen },
