@@ -9,6 +9,7 @@ import MindFulnessSaga from './MindFulnessSaga'
 import BeingAwareSaga from './BeingAwareSaga'
 import NodeSaga from './NodeSaga'
 import completionSaga from './Completion'
+import ExerciseNodeSaga from './ExerciseNodeSaga'
 import ProgressSaga from './ProgressSaga'
 
 const rootSaga = function* () {
@@ -22,8 +23,9 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.GET_BEINGAWARE, BeingAwareSaga)
   yield takeLatest(ActionTypes.GET_NODE, NodeSaga)
   yield takeLatest(ActionTypes.COMPLETE_NODE, completionSaga)
+  yield takeLatest(ActionTypes.GET_EXERCISE_NODE, ExerciseNodeSaga)
   yield takeLatest(ActionTypes.GET_PROGRESS, ProgressSaga)
-
+  yield takeLatest(ActionTypes.UPDATE_USER, LoginUserSaga)
 }
 
 export default rootSaga

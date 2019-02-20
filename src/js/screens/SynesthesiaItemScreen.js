@@ -248,12 +248,12 @@ class SynesthesiaItemScreen extends Component {
   }
 
   onLeafClicked = (item) => {
-    if (item.is_locked > 0) {
-      this.setState({ isLockedBannerVisible: true });
-    } else {
-      AsyncStorage.setItem('nodeID', item.id);
-      this.props.navigation.navigate('Player')
-    }
+    // if (item.is_locked > 0) {
+    //   this.setState({ isLockedBannerVisible: true });
+    // } else {
+      AsyncStorage.setItem('exerciseNodeID', item.id);
+      this.props.navigation.navigate('Player', { backScreen: "SynesthesiaItem" })
+    // }
 
   }
 

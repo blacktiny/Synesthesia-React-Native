@@ -46,7 +46,7 @@ export const getTriggerPeriod = (item) => {
         break
       case 'end_at': endAt = parseTimeString(argument.value)
         break
-      case 'end_after': endAfter = parseInt(argument.value)
+      case 'end_after': endAt = startAt + parseInt(argument.value)
         break
       case 'fade_out': fadeOut = parseInt(argument.value)
         break
@@ -73,18 +73,18 @@ export const getVideoID = (item) => {
 } 
 
 export const getTriggerFontStyle = (item) => {
-  let color = "#ffffff", fontFamily
+  let color = "#ffffff", fontFamily = 'Raleway-Regular', fontSize = 18
 
   item.arguments.map(argument => {
     switch (argument.name) {
       case 'color': color = argument.value
         break
-      case 'font': fontFamily = argument.value
+      case 'size': fontSize = parseInt(argument.value, 10)
         break
       default: 
         break
     }
   })
 
-  return { color, fontFamily }
+  return { color, fontFamily, fontSize }
 }

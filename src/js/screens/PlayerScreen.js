@@ -3,8 +3,9 @@ import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, Style
 import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
-import { iPhoneX } from '../util'
-import { getNodeByID } from '../actions/NodeAction'
+import { iPhoneX, iPhone5 } from '../util'
+import { getExerciseNodeByID } from '../actions/NodeAction'
+import { FILES_URL } from '../constants/constants'
 const settings = require('../../assets/settings.png')
 const background = require('../../assets/bgPlayer.png')
 class Player extends Component {
@@ -13,7 +14,7 @@ class Player extends Component {
     timeParams: [10, 20]
   }
   componentDidMount() {
-    this.props.getNodeByID()
+    this.props.getExerciseNodeByID()
   }
   onPressTime = (time) => {
     this.setState({ activeTime: time })
@@ -34,21 +35,22 @@ class Player extends Component {
     })
   }
   render() {
-    const { navigation, nodeData } = this.props
+    const { navigation, nodeData, imageBackground, isLoggedIn } = this.props
+    const imageUri = FILES_URL + imageBackground
     if (this.props.isFetchingData) {
       return (
-        <ImageBackground style={[styles.container, {justifyContent: 'center'}]} source={background} resizeMode="cover">
+        <View style={[styles.container, {justifyContent: 'center'}]}>
           <ActivityIndicator />
-        </ImageBackground>
+        </View>
       )
     }
     return (
-      <ImageBackground style={styles.container} source={background} resizeMode="cover">
+      <ImageBackground style={styles.container} source={imageBackground && { uri: imageUri }} resizeMode="cover">
         <View style={styles.top}>
-          <Text style={styles.topTextTitle}>{nodeData.header}</Text>
+          <Text style={styles.topTextTitle} numberOfLines={2}>{nodeData.header}</Text>
           <Text style={styles.topText} numberOfLines={2}>{nodeData.subheader}</Text>
         </View>
-        <View style={styles.centralBar}>
+       {!isLoggedIn && <View style={styles.centralBar}>
           <Text style={styles.centralText}>Need to save your Progress?</Text>
           <View style={styles.centerRow}>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
@@ -59,12 +61,12 @@ class Player extends Component {
               <Text style={styles.linkText}>Log in</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View>}
         <View style={styles.bottom}>
-          <PlayButton onPress={() => navigation.navigate('AudioPlayer')} />
-          <TouchableOpacity onPress={() => navigation.navigate('AudioPlayer')}>
+          <PlayButton onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })} />
+          {!isLoggedIn && <TouchableOpacity onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })}>
             <Text style={styles.bottomText}>Play anyway</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <View style={styles.row}>
             {this.renderButtons()}
           </View>
@@ -87,28 +89,28 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   top: {
-    paddingVertical: 30,
+    paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
     paddingHorizontal: 10,
     marginTop: iPhoneX() ? 15 : 0
   },
   topTextTitle: {
     fontWeight: 'bold',
-    lineHeight: 35,
-    fontSize: 30,
+    lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
+    fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
     color: '#FFFFFF',
     paddingBottom: 10
   },
   topText: {
     fontWeight: '500',
-    lineHeight: 24,
-    fontSize: 18,
+    lineHeight: iPhone5() ? 18 : 24,
+    fontSize: iPhone5() ? 14 : 18,
     textAlign: 'center',
     color: '#FFFFFF',
   },
   centralBar: {
     backgroundColor: '#343230',
-    paddingVertical: 30,
+    paddingVertical: iPhone5() ? 15 : 30,
     paddingHorizontal: 50,
     alignItems: 'center'
   },
@@ -135,9 +137,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   bottom: {
-    marginTop: iPhoneX() ? '10%' : '3%',
+    // marginTop: iPhoneX() ? '10%' : '3%',
     alignItems: 'center',
-    width: '80%'
+    width: '80%',
+    position: 'absolute',
+    bottom: iPhoneX() ? 50 : 10
   },
   bottomText: {
     fontWeight: 'normal',
@@ -178,14 +182,16 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    nodeData: state.nodeReducer.nodeData,
+    nodeData: state.nodeReducer.exerciseNode,
     isFetchingData: state.nodeReducer.isFetchingData,
-    exercises: state.exerciseReducer.exercises
+    exercises: state.exerciseReducer.exercises,
+    imageBackground: state.nodeReducer.exerciseNode.image_background,
+    isLoggedIn: state.loginReducer.isLoggedIn
   }
 }
 
 const mapDispatchToProps = {
-  getNodeByID
+  getExerciseNodeByID
 }
 
 export default connect(

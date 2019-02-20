@@ -214,11 +214,13 @@ class BeingAware extends Component {
   }
 
   onLeafClicked = (item) => {
+    console.log(item)
     // debugger;
     if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
-      this.props.navigation.navigate('Player')
+      AsyncStorage.setItem('exerciseNodeID', item.id)
+      this.props.navigation.navigate('Player', { backScreen: "BeingAware"})
     }
   }
 

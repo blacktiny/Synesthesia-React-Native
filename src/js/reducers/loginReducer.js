@@ -14,7 +14,9 @@ const initialState = {
   wrongCredentials: false,
   user: {},
   token: null,
-  requestPending: false
+  requestPending: false,
+  isUpdatedUser: false,
+  requestUpdating: true,
 };
 
 export const loginReducer = (state = initialState, action) => {
@@ -100,6 +102,24 @@ export const loginReducer = (state = initialState, action) => {
       return {
         ...state,
         isCheckingLoggedIn: false
+      }
+    case ActionTypes.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        isUpdatedUser: true,
+        requestUpdating: false
+      }
+    case ActionTypes.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        isUpdatedUser: false,
+        requestUpdating: false
+      }
+    case ActionTypes.CLEAN_USER_STATUS:
+      return {
+        ...state,
+        isUpdatedUser: false,
+        requestUpdating: true
       }
     default:
       return state

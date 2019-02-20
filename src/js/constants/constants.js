@@ -56,7 +56,14 @@ export const ActionTypes = keyMirror({
   GET_NODE_SUCCESS: null,
   GET_NODE_FAIL: null,
 
+  GET_EXERCISE_NODE: null,
+  GET_EXERCISE_NODE_SUCCESS: null,
+  GET_EXERCISE_NODE_FAIL: null,
+
+  NEXT_EXERCISE: null,
+
   CLEAR_NODE: null,
+  CLEAR_EXERCISE_NODE: null,
 
   CLEAN_SYNESTHESIA: null,
   CLEAN_MINDFULNESS: null,
@@ -76,6 +83,11 @@ export const ActionTypes = keyMirror({
   GET_PROGRESS_ANONYMOUS: null,
   GET_PROGRESS_FAIL: null,
 
+  UPDATE_USER: null,
+  UPDATE_USER_SUCCESS: null,
+  UPDATE_USER_FAIL: null,
+
+  CLEAN_USER_STATUS: null,
 })
 
 export const Theme = {
@@ -89,3 +101,10 @@ export const Theme = {
 }
 
 export const FILES_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'
+
+export const ITEMS_TYPES = { 
+  text: 'text',
+  audio: 'audio',
+  picture: 'picture',
+  movie: 'movie'
+}
