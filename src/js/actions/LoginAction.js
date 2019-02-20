@@ -20,6 +20,24 @@ export function isLoggedInUser() {
   }
 }
 
+export function updateUser(
+  user
+) {
+  return {
+    type: ActionTypes.UPDATE_USER,
+    payload: {
+      user
+    }
+  }
+}
+
+export function cleanUserStatus() {
+  return {
+    type: ActionTypes.CLEAN_USER_STATUS,
+    payload: {}
+  }
+}
+
 export function closeLoginErrorBanner() {
   return {
     type: ActionTypes.CLOSE_LOGIN_BANNER_ERROR,

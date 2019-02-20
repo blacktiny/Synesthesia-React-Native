@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, TouchableHighlight, Image } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, TouchableHighlight, Image, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import LinearGradient from "react-native-linear-gradient";
 
 import { Theme } from '../constants/constants';
+import BannerCloseIcon from '../icons/BannerCloseIcon';
 import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 import InputTextField from '../components/InputTextField';
 import CustomCheckBox from '../components/CustomCheckBox';
+
+import { updateUser, cleanUserStatus } from '../actions/LoginAction';
 
 const mail_want = require('../../../src/assets/mail_want.png');
 
@@ -17,8 +20,11 @@ class UserScreen extends Component {
   constructor() {
     super();
     this.state = {
+      userId: 0,
       toggleType: true,
       bEditView: false,
+      bModalShow: false,
+      bLoadingShow: false,
       editBtnPressStatus: false,
       deleteBtnPressStatus: false,
       firstName: '',
@@ -42,6 +48,30 @@ class UserScreen extends Component {
       confirmEmailSuccessBorder: false,
       confirmEmailErrorBorder: false,
       isChecked: false
+    }
+  }
+
+  componentDidMount() {
+    this.initState();
+  }
+
+  initState() {
+    const { user } = this.props;
+    this.setState({userId: user.id});
+    this.setState({firstName: user.first_name});
+    if (user.first_name != '')
+      this.setState({firstNameSuccessBorder: true});
+    this.setState({lastName: user.last_name});
+    if (user.last_name != '')
+      this.setState({lastNameSuccessBorder: true});
+    this.setState({userName: user.name});
+    if (user.name != '')
+      this.setState({userNameSuccessBorder: true});
+    this.setState({email: user.email});
+    this.setState({confirmEmail: user.email});
+    if (user.email != '') {
+      this.setState({emailSuccessBorder: true});
+      this.setState({confirmEmailSuccessBorder: true});
     }
   }
 
@@ -89,10 +119,22 @@ class UserScreen extends Component {
     this.setState({emailErrorBorder: false});
     this.setState({confirmEmailSuccessBorder: false});
     this.setState({confirmEmailErrorBorder: false});
+
+    this.initState();
   }
 
   onSaveBtnClicked = () => {
+    const user = {
+      id: this.state.userId,
+      name: this.state.userName,
+      email: this.state.email,
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+      confirmEmail: this.state.confirmEmail
+    }
 
+    this.setState({bLoadingShow: true, bModalShow: true});
+    this.props.dispatch(updateUser(user));
   }
 
   validateFirstName = (firstName) => {
@@ -212,16 +254,46 @@ class UserScreen extends Component {
     })
   }
 
+  loadingPage = () => {
+    return (
+      <View style={{ height: height - 455, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
+  updateSuccessBanner = () => {
+    const { isUpdatedUser } = this.props;
+    return (
+      <View style={{height: height - 150, justifyContent: 'center'}}>
+      <LinearGradient
+        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+        locations={[0, 1]}
+        colors={['#7059ED', '#00C2FB']}
+        style={styles.updateBanner}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => {
+          this.setState({bModalShow: false, bEditView: false, bLoadingShow: false});
+          this.props.dispatch(cleanUserStatus());
+        }}>
+          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+        </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{isUpdatedUser ? 'Yeah! :)' : 'Ooops! :('}</Text>
+          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{isUpdatedUser ? 'Update Successful!' : 'Update failed. Please try again.'}</Text>
+        </View>
+      </LinearGradient>
+      </View>
+    )
+  }
+
   render() {
-    const {
-      user
-    } = this.props
-    const { toggleType, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
+    const { requestUpdating } = this.props;
+    const { bLoadingShow, bModalShow, firstName, lastName, userName, email, confirmEmail, toggleType, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
 
     return (
       <View style={styles.main}>
         <ScrollView style={styles.formContainer}>
-          { !bEditView && <View>
+          { !bLoadingShow && !bModalShow && !bEditView && <View>
             <View style={{ height: 50, marginBottom: 10, width: '100%', flexDirection: 'row' }}>
               <LinearGradient
                 start={{ x: 1, y: 1 }}
@@ -260,15 +332,15 @@ class UserScreen extends Component {
                         <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 16, color: '#30CA9A', opacity: editBtnPressStatus ? 0.7 : 1.0 }}>Edit</Text>
                       </TouchableHighlight>
                     </View>
-                    <Text style={styles.textEdit}>Elena</Text>
+                    <Text style={styles.textEdit}>{userName}</Text>
                   </View>
                   <View style={{marginBottom: 20}}>
                     <Text style={styles.label}>Name</Text>
-                    <Text style={styles.textEdit}>Elena Shymanchuk</Text>
+                    <Text style={styles.textEdit}>{firstName} {lastName}</Text>
                   </View>
                   <View style={{marginBottom: 20}}>
                     <Text style={styles.label}>Email</Text>
-                    <Text style={styles.textEdit}>elshymanchuk@gmail.com</Text>
+                    <Text style={styles.textEdit}>{email}</Text>
                   </View>
                   <View style={{flexDirection: 'row'}}>
                     <Image
@@ -291,7 +363,7 @@ class UserScreen extends Component {
               </TouchableHighlight>
             </View>
           </View> }
-          { bEditView && <View style={{height: height + 150}}>
+          { !bLoadingShow && !bModalShow && bEditView && <View style={{height: height + 150}}>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Edit personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -397,6 +469,8 @@ class UserScreen extends Component {
               </TouchableHighlight>
             </View>
           </View> }
+          {bLoadingShow && requestUpdating && this.loadingPage()}
+          {!requestUpdating && bModalShow && this.updateSuccessBanner()}
         </ScrollView>
       </View>
     )
@@ -477,12 +551,38 @@ const styles = StyleSheet.create({
     borderRadius: 27.5,
     marginTop: 25,
     marginLeft: 5
+  },
+  crossButton: {
+    paddingRight: 8,
+    paddingTop: 5
+  },
+  crossIcon: {
+    alignSelf: 'flex-end',
+    marginRight: -12,
+    marginTop: 10,
+    resizeMode: 'contain'
+  },
+  textContainer: {
+    paddingTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 25
+  },
+  updateBanner: {
+    height: height - 685,
+    width: width - 30,
+    borderRadius: 12,
+    paddingRight: 20,
+    paddingLeft: 20,
+    borderWidth: 1
   }
 })
 
 function mapStateToProps(state) {
   return {
-    user: state.loginReducer.user
+    user: state.loginReducer.user,
+    requestUpdating: state.loginReducer.requestUpdating,
+    isUpdatedUser: state.loginReducer.isUpdatedUser
   }
 }
 

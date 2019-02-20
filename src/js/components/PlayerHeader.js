@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { connect } from 'react-redux'
+import { clearNode } from '../actions/NodeAction'
+import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
+import { FILES_URL } from '../constants/constants'
 
 const settings = require('../../assets/settings.png')
 const playerBG = require('../../assets/bgPlayer.png')
-const audioBg = require('../../assets/audioBg.png')
 
 class PlayerHeader extends Component {
   state = {
@@ -19,7 +21,7 @@ class PlayerHeader extends Component {
 
   leave = () => {
     this.setState({ modalVisible: false })
-    this.props.navigation.navigate('MindFulness')
+    this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
   }
 
   onSettingClicked = () => {
@@ -27,11 +29,21 @@ class PlayerHeader extends Component {
   }
 
   render() {
-    const { audioPlayer } = this.props
+    const { audioPlayer, exerciseBG, nodeCompleted } = this.props
     const { onSettingClicked } = this.state
     return (
       <View style={styles.container}>
-        <CloseModal modalVisible={this.state.modalVisible} closeModal={() => this.setModalVisible(false)} bg={audioPlayer ? audioBg : playerBG} leave={this.leave} />
+        <CloseModal modalVisible={this.state.modalVisible} >
+        <ImageBackground source={audioPlayer ? { uri: FILES_URL + exerciseBG } : playerBG} style={styles.containerModal}>
+            <View style={styles.content}>
+              <Text style={styles.text}>Are you sure you want to close this exercise?</Text>
+              <View style={styles.row}>
+                <TouchableHighlight style={styles.leftButton} onPress={this.leave} underlayColor={"#ffffff12"}><Text style={styles.buttonText}>Yes, close</Text></TouchableHighlight>
+                <TouchableHighlight style={styles.rightButton} onPress={() => this.setModalVisible(false)} underlayColor={"#25b999cc"}><Text style={styles.buttonText}>No, continue</Text></TouchableHighlight>
+              </View>
+            </View>
+        </ImageBackground>
+        </CloseModal>
         {audioPlayer && <TouchableOpacity onPress={() => console.log('Settings')} style={styles.mainView}>
           <Image source={settings} style={[{ width: 20, height: 18 }, onSettingClicked ? {opacity: 0.1}: {opacity: 1.0}]} resizeMode='contain' />
         </TouchableOpacity>}
@@ -49,6 +61,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'relative'
   },
+  containerModal: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
   textStyle: {
     fontSize: 14,
     color: '#ffffff',
@@ -58,7 +80,65 @@ const styles = StyleSheet.create({
   mainView: {
     marginTop: 3,
     marginRight: 15
+  },
+  content: {
+    width: '90%',
+    height: '30%',
+    backgroundColor: '#3d3d3e',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    borderRadius: 12
+  },
+  text: {
+    fontWeight: 'bold',
+    lineHeight: 28,
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 20
+  },
+  buttonText: {
+    fontWeight: 'bold',
+    lineHeight: 19,
+    fontSize: 16,
+    textAlign: 'center',
+
+    color: '#FFFFFF'
+  },
+  leftButton: {
+    width: "45%",
+    height: 40,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#ffffff",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rightButton: {
+    width: "45%",
+    height: 40,
+    borderRadius: 18,
+    backgroundColor: '#25b999',
+    borderColor: '#25b999',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    marginVertical: 5 
   }
 });
+function mapStateToProps(state) {
+  return {
+    nodeCompleted: state.nodeReducer.nodeComplete,
+    exerciseBG: state.nodeReducer.exerciseNode.image_background
+  }
+}
 
-export default PlayerHeader;
+export default connect(mapStateToProps, { clearNode })(PlayerHeader);

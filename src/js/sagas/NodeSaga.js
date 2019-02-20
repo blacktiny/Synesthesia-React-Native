@@ -22,10 +22,12 @@ const NodeSaga = function* (action) {
           ...dataObject
         }
       })
-      // yield put({
-      //   type: ActionTypes.GET_EXERCISES,
-      //   payload: dataObject.node.itemsets
-      // })
+      if (dataObject.node.itemsets) {
+        yield put({
+          type: ActionTypes.GET_EXERCISES,
+          payload: dataObject.node.itemsets
+        })
+      }
     }
     else {
       yield put({

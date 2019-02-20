@@ -281,8 +281,8 @@ class MindFulness extends Component {
     if (item.is_locked > 0) {
       this.setState({ isLockedBannerVisible: true });
     } else {
-      AsyncStorage.setItem('nodeID', item.id);
-      this.props.navigation.navigate('Player')
+      AsyncStorage.setItem('exerciseNodeID', item.id);
+      this.props.navigation.navigate('Player', { backScreen: 'MindFulness' })
     }
   }
 

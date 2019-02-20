@@ -29,19 +29,19 @@ class ProgressPlayButton extends Component {
   }
 
   render() {
-    const { play, progress } = this.props;
+    const { play, progress, disabled } = this.props;
     const { btnPressStatus } = this.state;
     return (
-      <TouchableHighlight style={styles.container} onPress={() => this.onClicked()} onHideUnderlay={() => this.onHideUnderlay()} onShowUnderlay={() => this.onShowUnderlay()}>
+      <TouchableHighlight disabled={disabled} style={styles.container} onPress={() => this.onClicked()} onHideUnderlay={() => this.onHideUnderlay()} onShowUnderlay={() => this.onShowUnderlay()}>
         <ProgressCircle
           percent={progress}
           radius={44}
           borderWidth={8}
-          color={ btnPressStatus ? "#ffffffb3" : "#595959" }
+          color={ "#595959" }
           shadowColor="#454545"
-          bgColor={ btnPressStatus ? "#0000004c" : "#383938" }
+          bgColor={ "#383938" }
         >
-          {play ? <PauseIcon fill={ btnPressStatus ? "#ffffffb3" : "white" } /> : <PlayIcon fill={ btnPressStatus ? "#ffffffb3" : "white" } small />}
+          {play ? <PauseIcon fill={  "white" } /> : <PlayIcon fill={ "white" } small />}
         </ProgressCircle>
       </TouchableHighlight>
     )
