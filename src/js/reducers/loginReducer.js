@@ -87,6 +87,7 @@ export const loginReducer = (state = initialState, action) => {
         isCheckingLoggedIn: false,
         isLoggedIn: false,
         wrongCredentials: false,
+        user: {},
         token: null,
         requestPending: false
       }

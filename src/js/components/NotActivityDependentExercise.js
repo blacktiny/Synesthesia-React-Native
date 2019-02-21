@@ -14,6 +14,7 @@ import { Theme } from "../constants/constants";
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
 const lock2 = require("../../assets/lock2.png");
+const redLock = require("../../assets/red_lock.png");
 const greenPlayIconNotCompleted = require("../../assets/greenPlayIconNotCompleted.png");
 const greyPlayIconNotCompleted = require("../../assets/greyPlayIconNotCompleted.png");
 const purplePlayIconNotCompleted = require("../../assets/purplePlayIconNotCompleted.png");
@@ -27,6 +28,7 @@ class NotActivityDependentExercise extends Component {
       index: this.props.index,
       numberCount: this.props.numberCount,
       item: this.props.item,
+      userType: this.props.userType,
       onLeafClicked: this.props.onPress,
       onClickedFlg: false
     };
@@ -38,7 +40,7 @@ class NotActivityDependentExercise extends Component {
   };
 
   render() {
-    const { id, index, numberCount, item, onClickedFlg } = this.state;
+    const { id, index, numberCount, item, userType, onClickedFlg } = this.state;
     let icon = item.is_done == "1" ? purplePlayIconNotCompleted : item.is_locked != "0" ? greyPlayIconNotCompleted : greenPlayIconNotCompleted;
     return (
       <View key={id} style={{ width: 117, alignItems: "flex-start", marginTop: 10, marginLeft: 0, marginBottom: 10, marginRight: 0 }}>
@@ -105,20 +107,8 @@ class NotActivityDependentExercise extends Component {
 
           </TouchableHighlight>
 
-          {item.is_done == "1" && (
-            <Image
-              style={{
-                height: 33,
-                width: 33,
-                alignSelf: "flex-end",
-                position: "absolute",
-                top: 53,
-                left: 56
-              }}
-              source={tick}
-            />
-          )}
-          {item.is_locked != "0" && (
+
+          {item.is_locked != '0' &&
             <ImageBackground
               style={{
                 height: 33,
@@ -133,15 +123,27 @@ class NotActivityDependentExercise extends Component {
               <Image
                 style={{
                   alignSelf: "center",
-                  height: 41,
-                  width: 41,
-                  marginTop: 3
+                  height: 14,
+                  width: 14,
+                  marginTop: 9
                 }}
                 resizeMode="contain"
-                source={lock2}
+                source={redLock}
               />
-            </ImageBackground>
-          )}
+            </ImageBackground>}
+
+          {item.is_done == '1' &&
+            <Image
+              style={{
+                height: 33,
+                width: 33,
+                alignSelf: "flex-end",
+                position: "absolute",
+                top: 53,
+                left: 56
+              }}
+              source={tick}
+            />}
 
 
         </View>
@@ -158,7 +160,7 @@ class NotActivityDependentExercise extends Component {
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
-              color: (item.is_locked != "0" || item.is_done == "1") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
+              color: (item.is_locked != "0") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
             }}
           >
             {item.name}

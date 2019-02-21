@@ -12,6 +12,7 @@ import { Theme } from "../constants/constants";
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
 const lock2 = require("../../assets/lock2.png");
+const redLock = require("../../assets/red_lock.png");
 
 class ActivityDependentExercise extends Component {
   constructor(props) {
@@ -23,7 +24,6 @@ class ActivityDependentExercise extends Component {
       numberCount: this.props.numberCount,
       item: this.props.item,
       userType: this.props.userType,
-      isPreviousNodeDone: this.props.isPreviousNodeDone,
       onLeafClicked: this.props.onPress,
       onClickedFlg: false
     };
@@ -35,8 +35,7 @@ class ActivityDependentExercise extends Component {
   };
 
   render() {
-    const { id, index, numberCount, item, userType, isPreviousNodeDone, onClickedFlg } = this.state;
-    console.log("asasd?? " + isPreviousNodeDone);
+    const { id, index, numberCount, item, userType, onClickedFlg } = this.state;
     return (
       <View key={id} style={{ width: 117, alignItems: "flex-start", marginTop: 10, marginLeft: 0, marginRight: 0 }}>
 
@@ -55,14 +54,10 @@ class ActivityDependentExercise extends Component {
           }}
         >
 
-          {/* || item.is_free == "0" && userType > 0 */}
-          {/* || isPreviousNodeDone */}
-
           {
-            (item.is_free == "1" &&
+            ((item.is_free == "1" || userType > '0') &&
               item.is_locked == "0"
               && item.is_done == "0")
-
 
               ?
               <TouchableHighlight
@@ -94,15 +89,10 @@ class ActivityDependentExercise extends Component {
                     <Text style={{
                       fontSize: 27,
                       position: "absolute",
-                      top: 21,
-                      left: 28,
+                      top: 18,
+                      left: 29,
                       fontFamily: Theme.FONT_BOLD,
-                      color:
-                        item.is_free == "1" &&
-                          item.is_locked == "0" &&
-                          item.is_done == "0"
-                          ? "#ffffff"
-                          : "#5F605F"
+                      color: "#ffffff"
                     }}>
                       {item.number}
                     </Text>
@@ -147,11 +137,10 @@ class ActivityDependentExercise extends Component {
                         fontSize: 27,
                         fontFamily: Theme.FONT_BOLD,
                         color:
-                          item.is_free == "0" &&
-                            item.is_locked == "0" &&
-                            item.is_done != "1"
-                            ? "#ffffff"
-                            : "#5F605F"
+
+                          item.is_locked > "0"
+                            ? "#5F605F"
+                            : "#ffffff"
                       }}>
                         {item.number}
                       </Text>
@@ -160,22 +149,7 @@ class ActivityDependentExercise extends Component {
                   </LinearGradient>
                 </TouchableHighlight>
 
-
-
-                {item.is_done == "1" && (
-                  <Image
-                    style={{
-                      height: 33,
-                      width: 33,
-                      alignSelf: "flex-end",
-                      position: "absolute",
-                      top: 53,
-                      left: 56
-                    }}
-                    source={tick}
-                  />
-                )}
-                {item.is_locked != "0" && (
+                {(item.is_locked != '0' && item.is_free == '1') || (userType > '0' && item.is_done != "1") ?
                   <ImageBackground
                     style={{
                       height: 33,
@@ -198,7 +172,43 @@ class ActivityDependentExercise extends Component {
                       source={lock2}
                     />
                   </ImageBackground>
-                )}
+                  :
+                  item.is_done == "1" ?
+                    <Image
+                      style={{
+                        height: 33,
+                        width: 33,
+                        alignSelf: "flex-end",
+                        position: "absolute",
+                        top: 53,
+                        left: 56
+                      }}
+                      source={tick}
+                    />
+                    :
+                    <ImageBackground
+                      style={{
+                        height: 33,
+                        width: 33,
+                        alignSelf: "flex-end",
+                        position: "absolute",
+                        top: 53,
+                        left: 56
+                      }}
+                      source={lock1}
+                    >
+                      <Image
+                        style={{
+                          alignSelf: "center",
+                          height: 14,
+                          width: 14,
+                          marginTop: 9
+                        }}
+                        resizeMode="contain"
+                        source={redLock}
+                      />
+                    </ImageBackground>
+                }
 
               </View>
 
@@ -228,7 +238,7 @@ class ActivityDependentExercise extends Component {
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
-              color: (item.is_locked != "0" || item.is_done == "1") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
+              color: (item.is_locked != "0") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
             }}
           >
             {item.name}

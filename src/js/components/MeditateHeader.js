@@ -56,7 +56,7 @@ class MeditateHeader extends Component {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={resume} />
-          <Text style={styles.textStyle}>{'Resume'}</Text>
+          <Text style={styles.textStyle}>{'Next'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.onChangedHeaderItem('Progress')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == 'Progress' ? user_active : user} />

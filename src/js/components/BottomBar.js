@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   direction: {
     display: 'flex',
     flexDirection: 'column',
-    width: (width - 45) / 3,
+    width: (width - 55) / 3,
     alignItems: 'center'
   },
   textStyle: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   leftArrow: {
     height: 15,
     width: 15,
-    marginTop: 12,
+    marginTop: 15,
     marginLeft: 12,
   },
   imageStyle: {
