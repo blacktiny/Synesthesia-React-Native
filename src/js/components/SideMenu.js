@@ -107,6 +107,7 @@ class SideMenu extends Component {
               source={cross}
             />
           </TouchableHighlight>
+          <Text style={styles.userName}>{user.name}</Text>
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
       );
@@ -267,11 +268,17 @@ const styles = StyleSheet.create({
   userInfo: {
     paddingLeft: 30
   },
-  userEmail: {
+  userName: {
     fontFamily: Theme.FONT_BOLD,
-    fontSize: 17,
+    fontSize: 18,
     color: 'white',
-    paddingTop: 25
+    paddingTop: 10
+  },
+  userEmail: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 14,
+    color: 'white',
+    paddingTop: 5,
   },
   button: {
     height: 50,

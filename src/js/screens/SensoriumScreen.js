@@ -9,10 +9,6 @@ const mindfulessImage = require('../../assets/mindfulness.png')
 const awarenessImage = require('../../assets/awareness.png')
 const saveProgressImage = require('../../assets/saveProgressImage.png')
 import { Theme } from '../constants/constants'
-import { logoutUser } from '../actions/LoginAction'
-import { cleanSynesthesia } from '../actions/SynesthesiaAction'
-import { cleanMindFulness } from '../actions/MindFulnessAction'
-import { cleanAwareness } from '../actions/BeingAwareAction'
 import CustomButton from '../components/CustomButton';
 
 class Sensorium extends Component {
@@ -63,7 +59,6 @@ class Sensorium extends Component {
         <BottomBar navigation={this.props.navigation} />
         <ScrollView>
           <TouchableHighlight onPress={() => {
-            // this.props.cleanMindFulness();
             this.props.navigation.push('MindFulness')
           }}
             onHideUnderlay={() => this.onHideUnderlay('mindfulness')}
@@ -96,7 +91,6 @@ class Sensorium extends Component {
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
             this.props.navigation.push('BeingAware')
-            // this.props.cleanAwareness();
           }}
             onHideUnderlay={() => this.onHideUnderlay('awareness')}
             onShowUnderlay={() => this.onShowUnderlay('awareness')}
@@ -129,7 +123,6 @@ class Sensorium extends Component {
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
             this.props.navigation.push('Synesthesia')
-            // this.props.cleanSynesthesia();
           }}
             onHideUnderlay={() => this.onHideUnderlay('synesthesia')}
             onShowUnderlay={() => this.onShowUnderlay('synesthesia')}
@@ -226,14 +219,7 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = {
-  logoutUser,
-  cleanMindFulness,
-  cleanSynesthesia,
-  cleanAwareness
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(Sensorium)

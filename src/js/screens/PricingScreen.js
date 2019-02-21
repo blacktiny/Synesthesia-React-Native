@@ -8,7 +8,9 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  Modal
+  Modal,
+  Linking,
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
@@ -27,6 +29,8 @@ const slider2 = require("../../assets/Slider/slider_2.png");
 const slider3 = require("../../assets/Slider/slider_3.png");
 const slider4 = require("../../assets/Slider/slider_4.png");
 const slider5 = require("../../assets/Slider/slider_5.png");
+import DollarSign from '../icons/DollarSign';
+import BottomBar from '../components/BottomBar';
 
 class PricingScreen extends Component {
   constructor() {
@@ -76,7 +80,8 @@ class PricingScreen extends Component {
               <BannerCloseIcon style={styles.crossIcon} color="#777778" />
             </TouchableOpacity>
 
-            <View style={{ marginTop: 20 }}>
+            <ScrollView
+              style={{ marginTop: 20, }}>
               <Text style={{ fontSize: 18, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_BOLD }}>{'Renews automatically, cancels anytime \n'}</Text>
 
               <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>With your subscription for the Sensorium, you gain
@@ -91,7 +96,7 @@ class PricingScreen extends Component {
               <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you cancel your subscription <Text style={{ fontFamily: Theme.FONT_BOLD }}>continues until the end</Text> of the subscribed period.{'\n'}</Text>
 
               <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>{'Yearly subscriptions are billed annualy and monthly are billed monthly.'}</Text>
-            </View>
+            </ScrollView>
           </View>
         </View>
       </Modal >)
@@ -129,7 +134,11 @@ class PricingScreen extends Component {
                     <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
-                    <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
+                    }}>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                    </View>
                     <Text style={styles.subPerMonth}>per month</Text>
                     <Text style={styles.subBilled}>*Billed Annually</Text>
                   </View>
@@ -185,7 +194,11 @@ class PricingScreen extends Component {
                     <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
-                    <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
+                    }}>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                    </View>
                     <Text style={styles.subPerMonth}>per month</Text>
                     <Text style={styles.subBilled}>*Billed Annually</Text>
                   </View>
@@ -221,11 +234,15 @@ class PricingScreen extends Component {
               style={styles.LinearGradient}
             >
               <TouchableOpacity
-                style={[styles.btn, styles.btnMonthly]}
+                style={[styles.btn, styles.btnMonthly, { alignItems: "center", }]}
                 onPress={() => this.onBtnMonthlyClicked()}
               >
                 <Text style={styles.billType}>MONTHLY</Text>
-                <Text style={styles.pricePerMonth}>$ {strMonthlyPrice}</Text>
+                <View style={{
+                  flexDirection: 'row', flexWrap: 'wrap'
+                }}>
+                  <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.pricePerMonth}>{strMonthlyPrice}</Text>
+                </View>
                 <Text style={styles.perMonth}>per month</Text>
               </TouchableOpacity>
             </LinearGradient>
@@ -237,135 +254,140 @@ class PricingScreen extends Component {
               style={styles.LinearGradient}
             >
               <TouchableOpacity
-                style={[styles.btn, styles.btnYearly]}
+                style={[styles.btn, styles.btnYearly, { alignItems: "center" }]}
                 onPress={() => this.onBtnYearlyClicked()}
               >
                 <Text style={styles.billType}>YEARLY</Text>
-                <Text style={styles.pricePerMonth}><Text style={{ opacity: 0.5 }}>$</Text> {strYearlyPrice}</Text>
+                <View style={{
+                  flexDirection: 'row', flexWrap: 'wrap'
+                }}>
+                  <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.5} /><Text style={styles.pricePerMonth}>{strYearlyPrice}</Text>
+                </View>
                 <Text style={styles.perMonth}>per month</Text>
                 <Text style={styles.billed}>*is billed yearly</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
 
-          <Text style={styles.totalBill}>Total bill today: 0$</Text>
-
-        </View>
+          <View style={{
+            flexDirection: 'row', flexWrap: 'wrap', alignItems: "center", justifyContent: "center"
+          }}>
+            <Text style={styles.totalBill}>Total bill today: 0</Text><DollarSign style={styles.dollarSign} width={9} height={15} viewBox={'0 0 20 34'} opacity={1} />
+          </View>
+        </View >
       );
       moreDetailsSec = (
-        <View>
-          <TouchableOpacity
-            onPress={
-              () => {
-                this.setState({ paymentDetailsModalVisible: true });
-              }
-            }>
-            <Text style={styles.moreDetails}>More Payment Details</Text>
-          </TouchableOpacity>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
+          <Text onPress={() => { this.setState({ paymentDetailsModalVisible: true }) }} style={styles.moreDetails}>More Payment Details </Text>
+          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>and FAQ</Text>
         </View>
       );
     }
 
     return (
-      <ScrollView
-        style={styles.main}
-        scrollEnabled={true}
-      >
-        <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
-          <View style={styles.backgroundColor}>
-          </View>
-          <LinearGradient
-            colors={["rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E"]}
-            style={styles.backgroundLinearGradient}
-          >
-          </LinearGradient>
+      <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+        <BottomBar navigation={this.props.navigation} />
 
-          {output}
-
-          <View style={styles.newsCarousel}>
-            <Carousel
-              delay={2000}
-              style={styles.carousel_section}
-              autoplay={false}
-              bullets
-              bulletsContainerStyle={styles.carousel_bulletsContainer}
-              currentPage={0}
-              onAnimateNextPage={p => console.log(p)}
-            >
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider1} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider1TextUpper]}>
-                    Over 200 original Synesthesia Meditations
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider1TextLower]}>
-                    Increase your sensory awareness in daily life.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider2} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider2TextUpper]}>
-                    Synesthesia Meditation: a unique fusion
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider2TextLower]}>
-                    A mix between traditional meditation, sensory nature awareness
-                    techniques and synesthetic exploration.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider3} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider3TextUpper]}>
-                    Re-activate, tune and blend your senses
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider3TextLower]}>
-                    Increase your awareness with mindful synesthetic exercises
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider4TextUpper]}>
-                    Enjoy little more Life Quality
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider4TextLower]}>
-                    Experience your surrounding more aware, less stress, more
-                    focus, more happiness, better sleep. Be more present in daily
-                    life.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider5TextUpper]}>
-                    Sensorium – not just another meditation app.
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider5TextLower]}>
-                    Many hours of interactive, multisensory and multimedia
-                    activities, exercises and tests.
-                </Text>
-                </ImageBackground>
-              </View>
-            </Carousel>
-            <View style={styles.carousel_pagination}>
+        <ScrollView
+          style={styles.main}
+          scrollEnabled={true}
+        >
+          <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
+            <View style={styles.backgroundColor}>
             </View>
-          </View>
+            <LinearGradient
+              colors={["rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E"]}
+              style={styles.backgroundLinearGradient}
+            >
+            </LinearGradient>
 
-          <Text style={styles.txtUpper}>
-            Access all Meditations 7 days for free. {"\n"}
-            <Text style={{ fontFamily: Theme.FONT_BOLD }}>If you do not like it, simply cancel.</Text>
-          </Text>
-          <Text style={styles.txtLower}>
-            After 7 days your paid subscription starts automatically.
+            {output}
+
+            <View style={styles.newsCarousel}>
+              <Carousel
+                delay={2000}
+                style={styles.carousel_section}
+                autoplay={false}
+                bullets
+                bulletsContainerStyle={styles.carousel_bulletsContainer}
+                currentPage={0}
+                onAnimateNextPage={p => console.log(p)}
+              >
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider1} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider1TextUpper]}>
+                      Over 200 original Synesthesia Meditations
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider1TextLower]}>
+                      Increase your sensory awareness in daily life.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider2} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider2TextUpper]}>
+                      Synesthesia Meditation: a unique fusion
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider2TextLower]}>
+                      A mix between traditional meditation, sensory nature awareness
+                      techniques and synesthetic exploration.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider3} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider3TextUpper]}>
+                      Re-activate, tune and blend your senses
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider3TextLower]}>
+                      Increase your awareness with mindful synesthetic exercises
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider4TextUpper]}>
+                      Enjoy little more Life Quality
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider4TextLower]}>
+                      Experience your surrounding more aware, less stress, more
+                      focus, more happiness, better sleep. Be more present in daily
+                      life.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider5TextUpper]}>
+                      Sensorium – not just another meditation app.
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider5TextLower]}>
+                      Many hours of interactive, multisensory and multimedia
+                      activities, exercises and tests.
+                </Text>
+                  </ImageBackground>
+                </View>
+              </Carousel>
+              <View style={styles.carousel_pagination}>
+              </View>
+            </View>
+
+            <Text style={styles.txtUpper}>
+              Access all Meditations 7 days for free. {"\n"}
+              <Text style={{ fontFamily: Theme.FONT_BOLD }}>If you do not like it, simply cancel.</Text>
+            </Text>
+            <Text style={styles.txtLower}>
+              After 7 days your paid subscription starts automatically.
         </Text>
 
-          {moreDetailsSec}
+            {moreDetailsSec}
 
-        </ImageBackground>
+          </ImageBackground>
 
-        {this.openPaymentDetailsModal()}
+          {this.openPaymentDetailsModal()}
 
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -385,14 +407,14 @@ const styles = StyleSheet.create({
   backgroundColor: {
     position: 'absolute',
     width: width,
-    height: 812,
+    height: 920,
     backgroundColor: "#1F1F1F",
     opacity: 0.68
   },
   backgroundLinearGradient: {
     position: 'absolute',
     width: width,
-    height: 812
+    height: 920
   },
   meditateFree: {
     paddingBottom: 13,
@@ -489,7 +511,7 @@ const styles = StyleSheet.create({
     height: 160,
     color: "white",
     backgroundColor: "transparent",
-    borderRadius: 12
+    borderRadius: 12,
   },
   billType: {
     fontFamily: Theme.FONT_SEMIBOLD,
@@ -510,6 +532,7 @@ const styles = StyleSheet.create({
   subPrice: {
     fontFamily: Theme.FONT_BOLD,
     display: "flex",
+    alignSelf: "flex-end",
     fontSize: 23,
     color: "#0096F4",
     textAlign: "right"
@@ -538,7 +561,7 @@ const styles = StyleSheet.create({
   subBilled: {
     fontFamily: Theme.FONT_SEMIBOLD,
     fontSize: 13,
-    textAlign: "center",
+    textAlign: "right",
     color: "#0096F4",
     paddingTop: 3
   },
@@ -699,13 +722,31 @@ const styles = StyleSheet.create({
   },
 
   modalContainer: {
-    height: '100%',
+    ...Platform.select({
+      ios: {
+        height: height - 280,
+      },
+      android: {
+        height: height - 140
+      },
+    }),
     width: '100%',
     paddingLeft: 15,
     paddingRight: 15,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+
+    position: 'absolute',
+    ...Platform.select({
+      ios: {
+        top: '20%',
+      },
+      android: {
+        top: '12%',
+      },
+    }),
+
     // backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalBanner: {
@@ -729,11 +770,13 @@ const styles = StyleSheet.create({
   },
   crossIcon: {
     resizeMode: 'contain'
-  }
-
-
-
-
+  },
+  dollarSign: {
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    marginRight: 3,
+    marginLeft: 3
+  },
 });
 
 function mapStateToProps(state) {
