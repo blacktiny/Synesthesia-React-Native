@@ -125,12 +125,12 @@ class UserScreen extends Component {
 
   onSaveBtnClicked = () => {
     const user = {
-      id: this.state.userId,
-      name: this.state.userName,
-      email: this.state.email,
-      first_name: this.state.firstName,
-      last_name: this.state.lastName,
-      confirmEmail: this.state.confirmEmail
+      "id": this.state.userId,
+      "name": this.state.userName,
+      "email": this.state.email,
+      "first_name": this.state.firstName,
+      "last_name": this.state.lastName,
+      "confirmEmail": this.state.confirmEmail
     }
 
     this.setState({bLoadingShow: true, bModalShow: true});

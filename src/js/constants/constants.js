@@ -77,7 +77,7 @@ export const ActionTypes = keyMirror({
 
   GET_HEADERITEM: null,
   SET_HEADERITEM: null,
-  
+
   GET_PROGRESS: null,
   GET_PROGRESS_SUCCESS: null,
   GET_PROGRESS_ANONYMOUS: null,
@@ -93,10 +93,15 @@ export const ActionTypes = keyMirror({
 export const Theme = {
   COLOR_1: '#DA152C',
   COLOR_2: '#f2f2f2',
-  FONT_LIGHT: 'Raleway-Light',
+  // FONT_LIGHT: 'RawlineLight-Regular',
+  // FONT_REGULAR: 'Rawline-Regular',
+  // FONT_MEDIUM: 'RawlineMedium-Regular',
+  // FONT_SEMIBOLD: 'RawlineSemiBold-Regular',
+  // FONT_BOLD: 'Rawline-Bold'
+  FONT_LIGHT: 'Raleway-Regular',
   FONT_REGULAR: 'Raleway-Regular',
-  FONT_MEDIUM: 'Raleway-Medium',
-  FONT_SEMIBOLD: 'Raleway-SemiBold',
+  FONT_MEDIUM: 'Raleway-Regular',
+  FONT_SEMIBOLD: 'Raleway-Regular',
   FONT_BOLD: 'Raleway-Bold'
 }
 
