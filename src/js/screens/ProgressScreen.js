@@ -101,12 +101,12 @@ class ProgressScreen extends Component {
             </View>
             <View style={styles.completedSession}>
               <LinearGradient
-                start={{x: 1, y: 0}}
-                end={{x: 0, y: 1}}
+                start={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 1 }}
                 colors={["#3D3D3E", "#505052"]}
                 style={styles.completedSessionBack}
               >
-                <Text style={styles.subTitleTextMedium}>Completed sessoins</Text>
+                <Text style={styles.subTitleTextMedium}>Completed sessions</Text>
                 <Text style={styles.completedPercentText}>{Math.floor(summary.percentage)}%</Text>
                 <ProgressBar value={Math.floor(summary.percentage)} />
                 <Text style={styles.completedSessionText}>{summary.completed}/{summary.total}</Text>
@@ -117,8 +117,8 @@ class ProgressScreen extends Component {
             </View>
             <View style={styles.streak}>
               <LinearGradient
-                start={{x: 1, y: 0}}
-                end={{x: 0, y: 1}}
+                start={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 1 }}
                 colors={["#3D3D3E", "#505052"]}
                 style={styles.streakBack}
               >
@@ -135,8 +135,8 @@ class ProgressScreen extends Component {
             </View>
             <View style={styles.exercise}>
               <LinearGradient
-                start={{x: 1, y: 0}}
-                end={{x: 0, y: 1}}
+                start={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 1 }}
                 colors={["#3D3D3E", "#505052"]}
                 style={styles.exerciseBack}
               >

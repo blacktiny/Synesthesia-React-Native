@@ -57,21 +57,21 @@ class UserScreen extends Component {
 
   initState() {
     const { user } = this.props;
-    this.setState({userId: user.id});
-    this.setState({firstName: user.first_name});
+    this.setState({ userId: user.id });
+    this.setState({ firstName: user.first_name });
     if (user.first_name != '')
-      this.setState({firstNameSuccessBorder: true});
-    this.setState({lastName: user.last_name});
+      this.setState({ firstNameSuccessBorder: true });
+    this.setState({ lastName: user.last_name });
     if (user.last_name != '')
-      this.setState({lastNameSuccessBorder: true});
-    this.setState({userName: user.name});
+      this.setState({ lastNameSuccessBorder: true });
+    this.setState({ userName: user.name });
     if (user.name != '')
-      this.setState({userNameSuccessBorder: true});
-    this.setState({email: user.email});
-    this.setState({confirmEmail: user.email});
+      this.setState({ userNameSuccessBorder: true });
+    this.setState({ email: user.email });
+    this.setState({ confirmEmail: user.email });
     if (user.email != '') {
-      this.setState({emailSuccessBorder: true});
-      this.setState({confirmEmailSuccessBorder: true});
+      this.setState({ emailSuccessBorder: true });
+      this.setState({ confirmEmailSuccessBorder: true });
     }
   }
 
@@ -92,9 +92,9 @@ class UserScreen extends Component {
   }
 
   onToggleBtnClicked = (bToggle) => {
-    const {toggleType} = this.state;
+    const { toggleType } = this.state;
     if (toggleType != bToggle) {
-      this.setState({toggleType: bToggle});
+      this.setState({ toggleType: bToggle });
     }
   }
 
@@ -109,16 +109,16 @@ class UserScreen extends Component {
   onCancelBtnClicked = () => {
     this.setState({ bEditView: false });
 
-    this.setState({firstNameSuccessBorder: false});
-    this.setState({firstNameErrorBorder: false,});
-    this.setState({lastNameSuccessBorder: false});
-    this.setState({lastNameErrorBorder: false});
-    this.setState({userNameSuccessBorder: false});
-    this.setState({userNameErrorBorder: false});
-    this.setState({emailSuccessBorder: false});
-    this.setState({emailErrorBorder: false});
-    this.setState({confirmEmailSuccessBorder: false});
-    this.setState({confirmEmailErrorBorder: false});
+    this.setState({ firstNameSuccessBorder: false });
+    this.setState({ firstNameErrorBorder: false, });
+    this.setState({ lastNameSuccessBorder: false });
+    this.setState({ lastNameErrorBorder: false });
+    this.setState({ userNameSuccessBorder: false });
+    this.setState({ userNameErrorBorder: false });
+    this.setState({ emailSuccessBorder: false });
+    this.setState({ emailErrorBorder: false });
+    this.setState({ confirmEmailSuccessBorder: false });
+    this.setState({ confirmEmailErrorBorder: false });
 
     this.initState();
   }
@@ -133,7 +133,7 @@ class UserScreen extends Component {
       "confirmEmail": this.state.confirmEmail
     }
 
-    this.setState({bLoadingShow: true, bModalShow: true});
+    this.setState({ bLoadingShow: true, bModalShow: true });
     this.props.dispatch(updateUser(user));
   }
 
@@ -221,6 +221,15 @@ class UserScreen extends Component {
         })
       }
     }
+
+    if (this.state.confirmEmail !== email) {
+      error = "Emails don't match!";
+      this.setState({
+        emailErrorBorder: true,
+        emailSuccessBorder: false
+      })
+    }
+
     this.setState({
       emailError: error
     })
@@ -265,23 +274,23 @@ class UserScreen extends Component {
   updateSuccessBanner = () => {
     const { isUpdatedUser } = this.props;
     return (
-      <View style={{height: height - 150, justifyContent: 'center'}}>
-      <LinearGradient
-        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
-        locations={[0, 1]}
-        colors={['#7059ED', '#00C2FB']}
-        style={styles.updateBanner}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => {
-          this.setState({bModalShow: false, bEditView: false, bLoadingShow: false});
-          this.props.dispatch(cleanUserStatus());
-        }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{isUpdatedUser ? 'Yeah! :)' : 'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{isUpdatedUser ? 'Update Successful!' : 'Update failed. Please try again.'}</Text>
-        </View>
-      </LinearGradient>
+      <View style={{ height: height - 150, justifyContent: 'center' }}>
+        <LinearGradient
+          start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+          locations={[0, 1]}
+          colors={['#7059ED', '#00C2FB']}
+          style={styles.updateBanner}>
+          <TouchableOpacity style={styles.crossButton} onPress={() => {
+            this.setState({ bModalShow: false, bEditView: false, bLoadingShow: false });
+            this.props.dispatch(cleanUserStatus());
+          }}>
+            <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+          </TouchableOpacity>
+          <View style={styles.textContainer}>
+            <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{isUpdatedUser ? 'Yeah! :)' : 'Ooops! :('}</Text>
+            <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{isUpdatedUser ? 'Update Successful!' : 'Update failed. Please try again.'}</Text>
+          </View>
+        </LinearGradient>
       </View>
     )
   }
@@ -289,11 +298,11 @@ class UserScreen extends Component {
   render() {
     const { requestUpdating } = this.props;
     const { bLoadingShow, bModalShow, firstName, lastName, userName, email, confirmEmail, toggleType, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
-
+    const saveInfoDisabled = this.state.emailSuccessBorder && this.state.confirmEmailSuccessBorder;
     return (
       <View style={styles.main}>
         <ScrollView style={styles.formContainer}>
-          { !bLoadingShow && !bModalShow && !bEditView && <View>
+          {!bLoadingShow && !bModalShow && !bEditView && <View>
             <View style={{ height: 50, marginBottom: 10, width: '100%', flexDirection: 'row' }}>
               <LinearGradient
                 start={{ x: 1, y: 1 }}
@@ -302,7 +311,7 @@ class UserScreen extends Component {
                 style={[styles.toggleBtnBack, { borderTopLeftRadius: 27.5, borderBottomLeftRadius: 27.5 }]}
               >
                 <TouchableHighlight style={[styles.toggleButton, { width: toggleType ? (width - 30) / 2 - 4 : (width - 30) / 2, borderTopLeftRadius: 27.5, borderBottomLeftRadius: 27.5, marginRight: toggleType ? 2 : 0 }]} onPress={() => this.onToggleBtnClicked(true)} underlayColor={"#2e2e2f"}>
-                  <Text style={{fontFamily: Theme.FONT_SEMIBOLD, fontSize: 15, color: 'white'}}>Personal Settings</Text>
+                  <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 15, color: 'white' }}>Personal Settings</Text>
                 </TouchableHighlight>
               </LinearGradient>
               <LinearGradient
@@ -311,8 +320,8 @@ class UserScreen extends Component {
                 colors={toggleType ? ["#ffffff", "#ffffff"] : ["#AEA2F2", "#6F58ED"]}
                 style={[styles.toggleBtnBack, { borderTopRightRadius: 27.5, borderBottomRightRadius: 27.5 }]}
               >
-                <TouchableHighlight style={[styles.toggleButton, { width: toggleType ? (width - 30) / 2 : (width - 30) / 2 - 4, borderTopRightRadius: 27.5, borderBottomRightRadius: 27.5, marginLeft: toggleType ? 0 : 2}]} onPress={() => this.onToggleBtnClicked(false)} underlayColor={"#2e2e2f"}>
-                  <Text style={{fontFamily: Theme.FONT_SEMIBOLD, fontSize: 15, color: 'white'}}>Subscription</Text>
+                <TouchableHighlight style={[styles.toggleButton, { width: toggleType ? (width - 30) / 2 : (width - 30) / 2 - 4, borderTopRightRadius: 27.5, borderBottomRightRadius: 27.5, marginLeft: toggleType ? 0 : 2 }]} onPress={() => this.onToggleBtnClicked(false)} underlayColor={"#2e2e2f"}>
+                  <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 15, color: 'white' }}>Subscription</Text>
                 </TouchableHighlight>
               </LinearGradient>
             </View>
@@ -325,7 +334,7 @@ class UserScreen extends Component {
                   colors={["#3D3D3E", "#505052"]}
                   style={styles.personalInfoBack}
                 >
-                  <View style={{marginBottom: 20}}>
+                  <View style={{ marginBottom: 20 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <Text style={styles.label}>Username</Text>
                       <TouchableHighlight onPress={() => this.onEditBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('edit')} onShowUnderlay={() => this.onShowUnderlay('edit')} underlayColor={'transparent'}>
@@ -334,15 +343,15 @@ class UserScreen extends Component {
                     </View>
                     <Text style={styles.textEdit}>{userName}</Text>
                   </View>
-                  <View style={{marginBottom: 20}}>
+                  <View style={{ marginBottom: 20 }}>
                     <Text style={styles.label}>Name</Text>
                     <Text style={styles.textEdit}>{firstName} {lastName}</Text>
                   </View>
-                  <View style={{marginBottom: 20}}>
+                  <View style={{ marginBottom: 20 }}>
                     <Text style={styles.label}>Email</Text>
                     <Text style={styles.textEdit}>{email}</Text>
                   </View>
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <Image
                       style={{
                         height: 20,
@@ -351,24 +360,24 @@ class UserScreen extends Component {
                       resizeMode='contain'
                       source={mail_want}
                     />
-                    <Text style={{fontFamily: Theme.FONT_MEDIUM, fontSize: 16, color: 'white', marginLeft: 15}}>I  want  to  receive  emails</Text>
+                    <Text style={{ fontFamily: Theme.FONT_MEDIUM, fontSize: 16, color: 'white', marginLeft: 15 }}>I  want  to  receive  emails</Text>
                   </View>
                 </LinearGradient>
               </View>
-              <TouchableHighlight style={{flexDirection: 'row', marginTop: 25, marginBottom: 10}} onPress={() => this.onDeleteBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('delete')} onShowUnderlay={() => this.onShowUnderlay('delete')} underlayColor={'transparent'}>
-                <View style={{display: 'flex', flexDirection: 'row'}}>
-                  <ModalCloseIcon style={{opacity: deleteBtnPressStatus ? 0.7 : 1.0}} color="#30CA9A" />
-                  <Text style={{fontFamily: Theme.FONT_BOLD, fontSize: 16, color: '#30CA9A', opacity: deleteBtnPressStatus ? 0.7 : 1.0, marginLeft: 15 }}>{'Delete account'}</Text>
+              <TouchableHighlight style={{ flexDirection: 'row', marginTop: 25, marginBottom: 10 }} onPress={() => this.onDeleteBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('delete')} onShowUnderlay={() => this.onShowUnderlay('delete')} underlayColor={'transparent'}>
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <ModalCloseIcon style={{ opacity: deleteBtnPressStatus ? 0.7 : 1.0 }} color="#30CA9A" />
+                  <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: '#30CA9A', opacity: deleteBtnPressStatus ? 0.7 : 1.0, marginLeft: 15 }}>{'Delete account'}</Text>
                 </View>
               </TouchableHighlight>
             </View>
-          </View> }
-          { !bLoadingShow && !bModalShow && bEditView && <View style={{height: height + 150}}>
+          </View>}
+          {!bLoadingShow && !bModalShow && bEditView && <View style={{ height: height + 150 }}>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Edit personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
-                start={{x: 1, y: 1}}
-                end={{x: 0, y: 0}}
+                start={{ x: 1, y: 1 }}
+                end={{ x: 0, y: 0 }}
                 colors={["#3D3D3E", "#505052"]}
                 style={styles.personalInfoBack}
               >
@@ -385,7 +394,7 @@ class UserScreen extends Component {
                   showSuccessBorder={this.state.firstNameSuccessBorder}
                   showErrorBorder={this.state.firstNameErrorBorder}
                 />
-                <View style={{paddingTop: 10}} />
+                <View style={{ paddingTop: 10 }} />
                 <Text style={styles.label}>{'Last Name'}</Text>
                 <InputTextField
                   onChange={(value) => {
@@ -399,7 +408,7 @@ class UserScreen extends Component {
                   showSuccessBorder={this.state.lastNameSuccessBorder}
                   showErrorBorder={this.state.lastNameErrorBorder}
                 />
-                <View style={{paddingTop: 10}} />
+                <View style={{ paddingTop: 10 }} />
                 <Text style={styles.label}>{'Username'}</Text>
                 <InputTextField
                   onChange={(value) => {
@@ -413,13 +422,14 @@ class UserScreen extends Component {
                   showSuccessBorder={this.state.userNameSuccessBorder}
                   showErrorBorder={this.state.userNameErrorBorder}
                 />
-                <View style={{paddingTop: 10}} />
+                <View style={{ paddingTop: 10 }} />
                 <Text style={styles.label}>{'Email'}</Text>
                 <InputTextField
                   onChange={(value) => {
                     this.setState({
                       email: value.trim()
                     })
+                    this.validateEmail(value)
                   }}
                   value={this.state.email}
                   onBlur={() => this.validateEmail(this.state.email)}
@@ -427,13 +437,14 @@ class UserScreen extends Component {
                   showSuccessBorder={this.state.emailSuccessBorder}
                   showErrorBorder={this.state.emailErrorBorder}
                 />
-                <View style={{paddingTop: 10}} />
+                <View style={{ paddingTop: 10 }} />
                 <Text style={styles.label}>{'Confirm Email'}</Text>
                 <InputTextField
                   onChange={(value) => {
                     this.setState({
                       confirmEmail: value.trim()
                     })
+                    this.validateConfirmEmail(value)
                   }}
                   value={this.state.confirmEmail}
                   onBlur={() => this.validateConfirmEmail(this.state.confirmEmail)}
@@ -441,7 +452,7 @@ class UserScreen extends Component {
                   showSuccessBorder={this.state.confirmEmailSuccessBorder}
                   showErrorBorder={this.state.confirmEmailErrorBorder}
                 />
-                <View style={{paddingTop: 10}} />
+                <View style={{ paddingTop: 10 }} />
                 <CustomCheckBox
                   size={24}
                   checked={this.state.isChecked}
@@ -457,18 +468,18 @@ class UserScreen extends Component {
                 />
               </LinearGradient>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <TouchableHighlight style={styles.editViewCancelBtn} onPress={() => this.onCancelBtnClicked()} underlayColor={"#ffffff12"}>
-                <View style={{display: 'flex', flexDirection: 'row'}}>
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <ModalCloseIcon color="white" />
-                  <Text style={{fontFamily: Theme.FONT_BOLD, fontSize: 16, color: 'white', marginLeft: 15 }}>{'Cancel'}</Text>
+                  <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: 'white', marginLeft: 15 }}>{'Cancel'}</Text>
                 </View>
               </TouchableHighlight>
-              <TouchableHighlight style={styles.editViewSaveBtn} onPress={() => this.onSaveBtnClicked()} underlayColor={"#25b999cc"}>
-                <Text style={{fontFamily: Theme.FONT_BOLD, fontSize: 16, color: 'white'}}>{'Save Info'}</Text>
+              <TouchableHighlight disabled={!saveInfoDisabled} style={styles.editViewSaveBtn} onPress={() => this.onSaveBtnClicked()} underlayColor={"#25b999cc"}>
+                <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: 'white' }}>{'Save Info'}</Text>
               </TouchableHighlight>
             </View>
-          </View> }
+          </View>}
           {bLoadingShow && requestUpdating && this.loadingPage()}
           {!requestUpdating && bModalShow && this.updateSuccessBanner()}
         </ScrollView>
@@ -486,14 +497,14 @@ const styles = StyleSheet.create({
     padding: 15
   },
   toggleBtnBack: {
-    width: '50%', 
-    height: 50, 
-    alignItems: 'center', 
+    width: '50%',
+    height: 50,
+    alignItems: 'center',
     justifyContent: 'center'
   },
   toggleButton: {
-    height: 46, 
-    alignItems: 'center', 
+    height: 46,
+    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1F1F20',
     margin: 2
