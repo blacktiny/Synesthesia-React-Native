@@ -107,7 +107,7 @@ export const Theme = {
 
 export const FILES_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'
 
-export const ITEMS_TYPES = { 
+export const ITEMS_TYPES = {
   text: 'text',
   audio: 'audio',
   picture: 'picture',
