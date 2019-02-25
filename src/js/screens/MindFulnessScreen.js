@@ -285,7 +285,7 @@ class MindFulness extends Component {
     const { userType } = this.props;
     if (userType == '3') {
       AsyncStorage.setItem('nodeID', item.id);
-      this.props.navigation.navigate('Player')
+      this.props.navigation.navigate('Player', { backScreen: 'MindFulness' })
       return true;
     }
 

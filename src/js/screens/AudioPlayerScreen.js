@@ -1,9 +1,22 @@
 import React, { Component } from 'react'
-import { Text, View, ImageBackground, TouchableHighlight, StyleSheet, ActivityIndicator, Animated, Image, Linking, Platform, LinkingIOS } from 'react-native';
+import {
+  Text,
+  View,
+  ImageBackground,
+  TouchableHighlight,
+  StyleSheet,
+  ActivityIndicator,
+  Animated,
+  Image,
+  Linking,
+  WebView,
+  Platform,
+  Dimensions
+} from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
 import ProgressPlayButton from '../components/ProgressPlayButton'
-import { iPhoneX } from '../util'
+import { iPhoneX, iPhone5 } from '../util'
 import CloseModal from '../components/CloseModal'
 import { completeNode, clearNode } from '../actions/NodeAction'
 import Sound from 'react-native-sound'
@@ -11,7 +24,17 @@ import { nextExercise } from '../actions/ExerciseAction'
 import { FILES_URL, ITEMS_TYPES } from '../constants/constants'
 import { getFileUrl } from '../helpers/getUrl'
 import { getCompletionPeriod } from '../helpers/getCompletionPeriod'
-import { getTriggerPeriod, getShowButton, getLoop, isYoutube, getVideoID, getTriggerStopMain, getTriggerFontStyle } from '../helpers/triggerHelpers'
+import {
+  getTriggerPeriod,
+  getShowButton,
+  getLoop,
+  isYoutube,
+  getVideoID,
+  getTriggerStopMain,
+  getTriggerFontStyle,
+  getTriggersNextTrigger,
+  getNextTrigger
+} from '../helpers/triggerHelpers'
 import getItems from '../helpers/itemsHelper'
 import { checkSkipable } from '../helpers/checkSkipable'
 import Button from '../components/Button'
@@ -155,6 +178,13 @@ class AudioPlayer extends Component {
       if (play) {
       this.player.getCurrentTime((seconds) => {
           this.setState({ currentTime: seconds })
+          if (trigger && Math.floor(seconds) === triggerTime.startAt) {
+            if (stopMain) {
+              this.setState({ play: false })
+              this.player.pause()
+            }
+            this.startTrigger()
+          }
           if ((seconds >= completion.startAt 
             && (seconds <= completion.endAt) ) 
               || (prevTriggerTime 
@@ -172,13 +202,7 @@ class AudioPlayer extends Component {
           } else if (disableMoveForeward) {
             this.setState({ disableMoveForeward: false })
           }
-          if (trigger && Math.floor(seconds) === triggerTime.startAt) {
-            if (stopMain) {
-              this.setState({ play: false })
-              this.player.pause()
-            }
-            this.startTrigger()
-          }
+          
           if (trigger && triggerTime.endAt && Math.floor(seconds) === triggerTime.endAt) {
             this.nextTrigger()
           }
@@ -217,7 +241,7 @@ class AudioPlayer extends Component {
           }
         });
       }
-    }, 1000);
+    }, 500);
   }
 
   setTrigger = (items) => {
@@ -254,12 +278,14 @@ class AudioPlayer extends Component {
       this.initAudioPlayer()
     }
   }
-
+  videoPlayer = null
   nextTrigger = () => {
-    const { triggers } = this.state.items
-    const { triggerIndex, triggerTime } = this.state
+    const { triggers, play } = this.state.items
+    const { triggerIndex, triggerTime, trigger } = this.state
     const newIndex = triggerIndex + 1
-    this.play()
+    if (!play) {
+      this.play()
+    }
     if (this.triggerPlayer) {
       this.triggerPlayer.stop()
       this.triggerPlayer.release()
@@ -277,18 +303,33 @@ class AudioPlayer extends Component {
         triggerType: null
       })
     } else {
-      this.setTriggerContent(triggers[newIndex])
-      this.setState({
-        trigger: triggers[newIndex],
-        triggerIndex: newIndex,
-        prevTriggerTime: triggerTime,
-        triggerTime: getTriggerPeriod(triggers[newIndex]),
-        showButton: getShowButton(triggers[newIndex]),
-        triggerEngaged: false,
-        play: true,
-        stopMain: getTriggerStopMain(triggers[newIndex]),
-        triggerType: triggers[newIndex].item.type
-      })
+      if (getTriggersNextTrigger(trigger)) {
+        let nextTrigger = getNextTrigger(trigger, triggers)
+        this.setTriggerContent(nextTrigger)
+        this.setState({
+          trigger: nextTrigger,
+          triggerIndex: newIndex,
+          prevTriggerTime: triggerTime,
+          triggerTime: getTriggerPeriod(nextTrigger, true, triggerTime.endAt),
+          showButton: getShowButton(nextTrigger),
+          play: true,
+          stopMain: getTriggerStopMain(nextTrigger),
+          triggerType: nextTrigger.item.type
+        })
+      } else {
+        this.setTriggerContent(triggers[newIndex])
+        this.setState({
+          trigger: triggers[newIndex],
+          triggerIndex: newIndex,
+          prevTriggerTime: triggerTime,
+          triggerTime: getTriggerPeriod(triggers[newIndex]),
+          showButton: getShowButton(triggers[newIndex]),
+          triggerEngaged: false,
+          play: true,
+          stopMain: getTriggerStopMain(triggers[newIndex]),
+          triggerType: triggers[newIndex].item.type
+        })
+      }
     }
   }
 
@@ -375,12 +416,20 @@ class AudioPlayer extends Component {
         if (this.props.exercisesLength > 1 && this.props.currentExerciseIndex + 1 <= this.props.exercisesLength - 1) {
           this.nextExercise()
         } else {
-          this.setState({modalVisible: true})
+          this.endExercise()
         }
       } else {
         this.player.reset();
       }
     });
+  }
+
+  endExercise = () => {
+    const { completeNode, nodeCompleted } = this.props
+    if (this.state.completion && !nodeCompleted) {
+      completeNode()
+    }
+    this.setState({modalVisible: true})
   }
   secondsToMinutes = (time) => {
     const minutes = Math.floor(time / 60)
@@ -428,7 +477,13 @@ class AudioPlayer extends Component {
     } else {
       newTime = duration
       mainType === ITEMS_TYPES.audio ? this.player.stop() : this.player.paused = true
+
       this.setState({ currentTime: 0, play: false })
+      if (this.props.exercisesLength > 1 && this.props.currentExerciseIndex + 1 <= this.props.exercisesLength - 1) {
+        this.nextExercise()
+      } else {
+        this.endExercise()
+      }
     }
   }
 
@@ -485,7 +540,7 @@ class AudioPlayer extends Component {
     if (this.props.exercisesLength > 1 && this.props.currentExerciseIndex + 1 <= this.props.exercisesLength - 1) {
       this.nextExercise()
     } else {
-      this.setState({modalVisible: true})
+      this.endExercise()
     }
   }
 
@@ -493,7 +548,15 @@ class AudioPlayer extends Component {
     this.setState({ modalVisible: false })
     this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
   }
-
+  onShouldStartLoadWithRequest = (navigator) => {
+    if (navigator.url.indexOf('embed') !== -1
+    ) {
+        return true;
+    } else {
+        this.videoPlayer.stopLoading(); //Some reference to your WebView to make it stop loading that URL
+        return false;
+    }    
+  }
   render() {
     const {
       duration,
@@ -569,18 +632,27 @@ class AudioPlayer extends Component {
               </Animated.View>}
               {triggerType === ITEMS_TYPES.movie && isYoutube(trigger) && triggerEngaged && (
                 <View style={styles.animatedViewPicture}>
-                  <YouTube
+                 {Platform.OS === 'ios' ? <YouTube
                     ref={component => {
                       this._youTubeRef = component;
                     }}
                     apiKey="AIzaSyDbNjPBzRia3bFQCX3XKIVn61L8OM2PmXc"
                     play={false}
                     videoId={getVideoID(trigger)}
-                    controls={2}
-                    style={[{ height: "90%", width: '90%' }]}
+                    controls={1}
+                    style={[{ height: 150, width: Dimensions.get('window').width }]}
                     onError={e => console.warn(e.error)}
                     onChangeState={this.onEnd}
-                  />
+                  /> : 
+                  [<WebView
+                    style={{ width: Dimensions.get('window').width, height: 150 }}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) }}
+                  />,
+                  <Button onPress={this.onVideoEnd} style={styles.button}>
+                  <Text style={styles.topText}>Skip</Text>
+                </Button>]}
                 </View>
               )}
               {mainType === ITEMS_TYPES.movie && (
@@ -646,15 +718,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   top: {
-    paddingVertical: 30,
-    paddingHorizontal: 20,
-    marginTop: 15,
+    paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
+    paddingHorizontal: 10,
+    marginTop: iPhoneX() ? 15 : 0,
     alignItems: 'center'
   },
   topTextTitle: {
     fontWeight: 'bold',
-    lineHeight: 35,
-    fontSize: 30,
+    lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
+    fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
     color: '#FFFFFF',
     paddingBottom: 10
@@ -711,7 +783,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     top: 0,
-    height: '40%',
+    height: '50%',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
