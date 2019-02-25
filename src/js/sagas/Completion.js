@@ -6,7 +6,7 @@ import { doCompletion } from '../api/api'
 
 const completionSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
-  const nodeID = yield AsyncStorage.getItem('nodeID');
+  const nodeID = yield AsyncStorage.getItem('exerciseNodeID');
   const userId = yield AsyncStorage.getItem('userId');
   if (token !== null && nodeID !== null) {
     const dataObject = yield call(doCompletion, nodeID, userId, token);
