@@ -242,7 +242,7 @@ class MindFulness extends Component {
   onLeafClicked = (item) => {
     const { userType } = this.props;
     if (userType == '3') {
-      AsyncStorage.setItem('nodeID', item.id);
+      AsyncStorage.setItem('exerciseNodeID', item.id);
       this.props.navigation.navigate('Player', { backScreen: 'MindFulness' })
       return true;
     }

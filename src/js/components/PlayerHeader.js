@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { clearNode } from '../actions/NodeAction'
-import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text } from 'react-native';
+import { clearNode, setVolume } from '../actions/NodeAction'
+import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text, Dimensions } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
 import { FILES_URL } from '../constants/constants'
+import Slider from "react-native-slider";
 
 const settings = require('../../assets/settings.png')
 const playerBG = require('../../assets/bgPlayer.png')
@@ -12,13 +13,25 @@ const playerBG = require('../../assets/bgPlayer.png')
 class PlayerHeader extends Component {
   state = {
     modalVisible: false,
-    onSettingClicked: false
+    onSettingClicked: false,
+    settingsModal: false
   };
 
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible })
   }
 
+  settingsModalVisible = (visible) => {
+    this.setState({ settingsModal: !this.state.settingsModal })
+  }
+
+  onPressLeave = () => {
+    if (this.props.noBanner) {
+      this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
+    } else {
+      this.setModalVisible(true)
+    }
+  }
   leave = () => {
     this.setState({ modalVisible: false })
     this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
@@ -43,11 +56,34 @@ class PlayerHeader extends Component {
               </View>
             </View>
         </ImageBackground>
+       
         </CloseModal>
-        {audioPlayer && <TouchableOpacity onPress={() => console.log('Settings')} style={styles.mainView}>
-          <Image source={settings} style={[{ width: 20, height: 18 }, onSettingClicked ? {opacity: 0.1}: {opacity: 1.0}]} resizeMode='contain' />
+        <CloseModal modalVisible={this.state.settingsModal} >
+          <ImageBackground source={audioPlayer ? { uri: FILES_URL + exerciseBG } : playerBG} style={styles.containerModal}>
+              <View style={[styles.content, { height: "20%"}]}>
+              <TouchableOpacity onPress={this.settingsModalVisible} style={styles.close}>
+                <CloseIcon color="#575759" strokeWidth={2} />
+              </TouchableOpacity>
+              <Text style={[styles.text, { alignSelf: 'flex-start' }]}>Exercise Sound</Text>
+              <Slider
+                minimumValue={0}
+                maximumValue={1}
+                style={{width:  Dimensions.get('window').width * 0.75, marginVertical: 15 }}
+                minimumTrackTintColor="#27C7A3"
+                maximumTrackTintColor="#5D5D5D"
+                thumbTintColor="#2BBF9E"
+                step={0.01}
+                value={this.props.volume}
+                onValueChange={value => this.props.setVolume(value)}
+              />
+              </View>
+          </ImageBackground>
+        </CloseModal>
+
+        {audioPlayer && <TouchableOpacity onPress={this.settingsModalVisible} style={styles.mainView}>
+          <Image source={settings} style={[{ width: 20, height: 18 }, onSettingClicked ? {opacity: 0.1} : {opacity: 1.0}]} resizeMode='contain' />
         </TouchableOpacity>}
-        <TouchableOpacity onPress={() => this.setModalVisible(true)} style={styles.mainView}>
+        <TouchableOpacity onPress={this.onPressLeave} style={styles.mainView}>
           <CloseIcon color="#ffffff" strokeWidth={2} />
         </TouchableOpacity>
       </View>
@@ -69,7 +105,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor: '#000000'
   },
   textStyle: {
     fontSize: 14,
@@ -78,8 +115,14 @@ const styles = StyleSheet.create({
     paddingTop: 7
   },
   mainView: {
+    padding: 5,
     marginTop: 3,
     marginRight: 15
+  },
+  close: {
+    position: 'absolute',
+    top: 20,
+    right: 20
   },
   content: {
     width: '90%',
@@ -91,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 12
   },
   text: {
-    fontWeight: 'bold',
+    fontFamily: 'Raleway-Bold',
     lineHeight: 28,
     fontSize: 20,
     textAlign: 'center',
@@ -137,8 +180,9 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     nodeCompleted: state.nodeReducer.nodeComplete,
+    volume: state.nodeReducer.volume,
     exerciseBG: state.nodeReducer.exerciseNode.image_background
   }
 }
 
-export default connect(mapStateToProps, { clearNode })(PlayerHeader);
+export default connect(mapStateToProps, { clearNode, setVolume })(PlayerHeader);

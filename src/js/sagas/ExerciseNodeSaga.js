@@ -1,14 +1,15 @@
 import { AsyncStorage } from 'react-native';
 
-import { put, call } from 'redux-saga/effects'
+import { put, call, select } from 'redux-saga/effects'
 import { ActionTypes } from '../constants/constants'
 import { getNodeByID, getNodeByIDAnonymous } from '../api/api'
+
+export const getUserId = (state) => state.loginReducer.user.id
 
 const ExerciseNodeSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
   const nodeID = yield AsyncStorage.getItem('exerciseNodeID');
   // debugger;
-
   if (nodeID !== null) {
     var dataObject;
     if (token !== null)

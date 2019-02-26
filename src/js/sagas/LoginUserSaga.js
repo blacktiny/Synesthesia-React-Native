@@ -6,7 +6,6 @@ import { doLogin, getUser, updateUser } from '../api/api'
 
 const LoginUserSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
-
   if (action.type == ActionTypes.IS_LOGGEDIN) {
     if (token !== null) {
       const user = yield call(getUser, action.payload, token);
