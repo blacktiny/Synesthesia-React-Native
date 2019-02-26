@@ -23,11 +23,9 @@ class SynesthesiaItemScreen extends Component {
       completeOtherExercise: false
     }
   }
-
   componentDidMount() {
     this.props.dispatch(getNodeByID());
   }
-
   componentWillUnmount() {
     this.props.dispatch(clearNode());
   }

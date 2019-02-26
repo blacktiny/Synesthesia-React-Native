@@ -27,3 +27,10 @@ export function clearNode() {
     payload: {}
   }
 }
+
+export function setVolume(volume) {
+  return {
+    type: ActionTypes.SET_VOLUME,
+    payload: { volume }
+  }
+}

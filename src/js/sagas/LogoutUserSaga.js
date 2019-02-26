@@ -6,6 +6,7 @@ import { ActionTypes } from '../constants/constants'
 const LogoutUserSaga = function* (action) {
   try {
     AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('userId');
     yield put({
       type: ActionTypes.LOGOUT_USER_SUCCESS,
       // payload: {

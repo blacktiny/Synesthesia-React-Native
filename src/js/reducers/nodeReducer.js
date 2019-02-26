@@ -5,11 +5,21 @@ const initialState = {
   isFetchingData: true,
   nodeData: [],
   exerciseNode: [],
-  nodeComplete: false
+  nodeComplete: false,
+  volume: 0.75
 };
 
 export const nodeReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.GET_NODE:
+      return {
+        ...state,
+        isFetchingData: true
+      }
+    case ActionTypes.SET_VOLUME: return {
+      ...state,
+      volume: action.payload.volume
+    }
     case ActionTypes.GET_NODE_SUCCESS:
       return {
         ...state,
@@ -26,7 +36,6 @@ export const nodeReducer = (state = initialState, action) => {
     case ActionTypes.CLEAR_NODE:
       return {
         ...state,
-        isFetchingData: true,
         nodeComplete: false,
         exerciseNode: {}
       }

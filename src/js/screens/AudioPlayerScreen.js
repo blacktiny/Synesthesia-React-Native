@@ -52,6 +52,12 @@ const stars = require('../../assets/stars.png')
 
 class AudioPlayer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.volume !== prevState.volume) {
+      prevState.setVolume(nextProps.volume * 1.33)
+      return {
+        volume: nextProps.volume
+      }
+    }
     if (nextProps.exercise !== prevState.exercise) {
       setTimeout(() => {
         prevState.setNextExercise()
@@ -98,7 +104,6 @@ class AudioPlayer extends Component {
   triggerPlayer
   constructor(props) {
     super(props);
-  
     this.state = {
       exercise: props.exercise,
       play: true,
@@ -133,10 +138,12 @@ class AudioPlayer extends Component {
       stopMain: false,
       mainType: getItems(props.exercise.item_itemsets).main.item.type,
       triggerFontStyle: {},
-      modalVisible: false
+      modalVisible: false,
+      volume: props.volume,
+      setVolume: (value) => this.setVolume(value)
     }
   }
-
+  
   componentDidMount() {
     const { items, mainType } = this.state
     this.setTrigger(items)
@@ -185,6 +192,28 @@ class AudioPlayer extends Component {
             }
             this.startTrigger()
           }
+          
+          if (trigger && Math.floor(seconds) >= triggerTime.startAt && ((Math.floor(seconds) <= triggerTime.endAt) || (Math.floor(seconds) <= triggerTime.endAt)) && !triggerPictureShowed ) {
+            this.setState({ triggerPictureShowed: true})
+            Animated.timing(
+              triggerFadeAnim,
+              {
+                toValue: 1,
+                duration: (triggerTime.fadeIn ? triggerTime.fadeIn : 0) * 1000,
+              }
+            ).start();
+          }
+          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - triggerTime.fadeOut : triggerTime.endAt)) && triggerPictureShowed ) {
+            this.setState({ triggerPictureShowed: false})
+
+            Animated.timing(
+              triggerFadeAnim,
+              {
+                toValue: 0,
+                duration: (triggerTime.fadeOut ? triggerTime.fadeOut : 0) * 1000,
+              }
+            ).start();
+          }
           if ((seconds >= completion.startAt 
             && (seconds <= completion.endAt) ) 
               || (prevTriggerTime 
@@ -213,27 +242,6 @@ class AudioPlayer extends Component {
             }
             this.startTrigger()
           }
-          if (trigger && Math.floor(seconds) >= triggerTime.startAt && ((Math.floor(seconds) <= triggerTime.endAt) || (Math.floor(seconds) <= triggerTime.endAt)) && !triggerPictureShowed ) {
-            this.setState({ triggerPictureShowed: true})
-            Animated.timing(
-              triggerFadeAnim,
-              {
-                toValue: 1,
-                duration: (triggerTime.fadeIn ? triggerTime.fadeIn : 0) * 1000,
-              }
-            ).start();
-          }
-          if (trigger && (Math.floor(seconds) >= triggerTime.endAt || (Math.floor(seconds) >= triggerTime.endAt)) && triggerPictureShowed ) {
-            this.setState({ triggerPictureShowed: false})
-
-            Animated.timing(
-              triggerFadeAnim,
-              {
-                toValue: 0,
-                duration: (triggerTime.fadeOut ? triggerTime.fadeOut : 0) * 1000,
-              }
-            ).start();
-          }
           if ((seconds >= completion.startAt) && (seconds <= completion.startAt + completion.endAfter)) {
             if (!nodeCompleted) {
               completeNode()
@@ -242,6 +250,10 @@ class AudioPlayer extends Component {
         });
       }
     }, 500);
+  }
+
+  setVolume = (value) => {
+    this.player.setVolume(value)
   }
 
   setTrigger = (items) => {
@@ -281,7 +293,7 @@ class AudioPlayer extends Component {
   videoPlayer = null
   nextTrigger = () => {
     const { triggers, play } = this.state.items
-    const { triggerIndex, triggerTime, trigger } = this.state
+    const { triggerIndex, triggerTime, trigger, triggerFadeAnim } = this.state
     const newIndex = triggerIndex + 1
     if (!play) {
       this.play()
@@ -305,6 +317,7 @@ class AudioPlayer extends Component {
     } else {
       if (getTriggersNextTrigger(trigger)) {
         let nextTrigger = getNextTrigger(trigger, triggers)
+        console.log(nextTrigger, getTriggerPeriod(nextTrigger, true, triggerTime.endAt))
         this.setTriggerContent(nextTrigger)
         this.setState({
           trigger: nextTrigger,
@@ -316,6 +329,14 @@ class AudioPlayer extends Component {
           stopMain: getTriggerStopMain(nextTrigger),
           triggerType: nextTrigger.item.type
         })
+        this.setState({ triggerPictureShowed: true})
+            Animated.timing(
+              triggerFadeAnim,
+              {
+                toValue: 1,
+                duration: (getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn ? getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn : 0) * 1000,
+              }
+            ).start();
       } else {
         this.setTriggerContent(triggers[newIndex])
         this.setState({
@@ -392,7 +413,6 @@ class AudioPlayer extends Component {
       this.setState({ loaded: true, duration: this.player.getDuration() })
 
       this.trackTime()
-
       this.play()
     })
   }
@@ -548,15 +568,7 @@ class AudioPlayer extends Component {
     this.setState({ modalVisible: false })
     this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
   }
-  onShouldStartLoadWithRequest = (navigator) => {
-    if (navigator.url.indexOf('embed') !== -1
-    ) {
-        return true;
-    } else {
-        this.videoPlayer.stopLoading(); //Some reference to your WebView to make it stop loading that URL
-        return false;
-    }    
-  }
+ 
   render() {
     const {
       duration,
@@ -640,12 +652,12 @@ class AudioPlayer extends Component {
                     play={false}
                     videoId={getVideoID(trigger)}
                     controls={1}
-                    style={[{ height: 150, width: Dimensions.get('window').width }]}
+                    style={[{ height: Dimensions.get('window').height * 0.25, width: Dimensions.get('window').width }]}
                     onError={e => console.warn(e.error)}
                     onChangeState={this.onEnd}
                   /> : 
                   [<WebView
-                    style={{ width: Dimensions.get('window').width, height: 150 }}
+                    style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height * 0.25 }}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) }}
@@ -679,7 +691,7 @@ class AudioPlayer extends Component {
                   <Text style={styles.topText}>Skip</Text>
                 </Button>
             </View>}
-            {this.state.items.main.item.credit === '1' && <View style={styles.modalRow}>
+            {this.state.items.main.item.credit === '1' && <View style={[styles.modalRow, { marginTop: 15 }]}>
                 <TouchableHighlight onPress={() => Linking.openURL(this.state.items.main.item.credit_link) }>
                   <Text style={styles.textLink}>
                     {this.state.items.main.item.credit_text}
@@ -689,17 +701,17 @@ class AudioPlayer extends Component {
             <View style={styles.row}>
               <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
                 <ImageBackground source={(disableMoveBack || triggerEngaged) ? prevDisable : prev} style={styles.controlButton}>
-                  <Text style={[styles.textStyle, (disableMoveBack || triggerEngaged)  && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
+                  <Text style={[styles.forwardStyle, (disableMoveBack || triggerEngaged)  && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
               </TouchableHighlight>
               <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / duration) * 100} disabled={(stopMain && triggerEngaged)} />
               <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
                 <ImageBackground source={(disableMoveForeward || triggerEngaged) ? nextDisable : next} style={styles.controlButton}>
-                  <Text style={[styles.textStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
+                  <Text style={[styles.forwardStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
               </TouchableHighlight>
             </View>
-            <Text style={[styles.textStyle, { marginVertical: iPhoneX() ? 50 : 30 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
+            <Text style={[styles.timeStyle, { marginVertical: iPhoneX() ? 50 : 30 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
           </View>
         </ImageBackground>
       )
@@ -724,7 +736,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   topTextTitle: {
-    fontWeight: 'bold',
+    fontFamily: 'Raleway-Bold',
     lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
     fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
@@ -732,7 +744,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   topText: {
-    fontWeight: '500',
+    fontFamily: 'Raleway-Regular',
     lineHeight: 25,
     fontSize: 16,
     textAlign: 'center',
@@ -747,7 +759,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    width: '85%',
+    width: '75%',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
@@ -772,6 +784,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF'
   },
+  timeStyle: {
+    fontFamily: 'Raleway-Semibold',
+    lineHeight: 21,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  forwardStyle: {
+    fontFamily: 'Raleway-Semibold',
+    lineHeight: 19,
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
   animatedView: {
     position: 'absolute',
     width: '85%',
@@ -783,7 +809,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     top: 0,
-    height: '50%',
+    height: Platform.OS === "ios" ? "50%" : Dimensions.get("window").height * 0.4,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
@@ -798,6 +824,7 @@ const styles = StyleSheet.create({
     height: 56
   },
   buttonText: {
+    fontFamily: 'Raleway-Medium',
     fontSize: 17,
     color: '#FFFFFF',
     letterSpacing: 0,
@@ -881,7 +908,8 @@ function mapStateToProps(state) {
     nodeCompleted: state.nodeReducer.nodeComplete,
     exerciseBG: state.nodeReducer.exerciseNode.image_background,
     exercisesLength: state.exerciseReducer.exercisesLength,
-    currentExerciseIndex: state.exerciseReducer.currentExerciseIndex
+    currentExerciseIndex: state.exerciseReducer.currentExerciseIndex,
+    volume: state.nodeReducer.volume,
   }
 }
 const mapDispatchToProps = {

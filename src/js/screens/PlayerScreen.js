@@ -70,10 +70,10 @@ class Player extends Component {
           <View style={styles.row}>
             {this.renderButtons()}
           </View>
-          <Button onPress={() => console.log('To settings')}>
+          {this.props.showSettings && <Button onPress={() => console.log('To settings')}>
             <Image source={settings} style={styles.icon} resizeMode='contain' />
             <Text style={[styles.buttonText, styles.additionalMargin]}>Sound settings</Text>
-          </Button>
+          </Button>}
         </View>
       </ImageBackground>
     )
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
     marginTop: iPhoneX() ? 15 : 0
   },
   topTextTitle: {
-    fontWeight: 'bold',
+    fontFamily: 'Raleway-Bold',
+    // fontWeight: 'bold',
     lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
     fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   topText: {
+    fontFamily: 'Raleway-Medium',
     fontWeight: '500',
     lineHeight: iPhone5() ? 18 : 24,
     fontSize: iPhone5() ? 14 : 18,
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   buttonText: {
-    fontWeight: '600',
+    fontFamily: 'Raleway-SemiBold',
     lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
@@ -186,7 +188,8 @@ function mapStateToProps(state) {
     isFetchingData: state.nodeReducer.isFetchingData,
     exercises: state.exerciseReducer.exercises,
     imageBackground: state.nodeReducer.exerciseNode.image_background,
-    isLoggedIn: state.loginReducer.isLoggedIn
+    isLoggedIn: state.loginReducer.isLoggedIn,
+    showSettings: state.nodeReducer.exerciseNode.has_background_sound
   }
 }
 
