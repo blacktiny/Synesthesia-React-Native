@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, ImageBackground } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
@@ -14,6 +14,10 @@ import { Theme } from '../constants/constants'
 import { FILES_URL } from '../constants/constants'
 import ProgressiveImage from '../components/ProgressiveImage';
 import ExerciseModal from '../components/ExerciseModal';
+import CustomButton from '../components/CustomButton';
+
+import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
+import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -47,10 +51,10 @@ class Synesthesia extends Component {
   }
 
   renderData = (synesthesiaDatas) => {
-    const { isFetchingData } = this.props;
+    const { isFetchingData, isLoggedIn, userType } = this.props;
     if (synesthesiaDatas && !isFetchingData) {
       let arrData = [];
-      synesthesiaDatas.map((data) => {
+      synesthesiaDatas.map((data, i) => {
         let property = [];
         if (data.type != "leaf") {
           const header = data.header;
@@ -76,7 +80,59 @@ class Synesthesia extends Component {
               number++;
             }
           })
-          arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, property));
+          arrData.push(this.renderContainers(data.id, header, subHeader, imageBanner, property, i));
+          if (i == 0 && (!isLoggedIn || userType == -1)) {
+            let loginBanner = (
+              <View key={synesthesiaDatas.length + 1} style={{
+                width: width,
+                height: 258,
+                marginBottom: 30,
+                borderRadius: 12,
+                shadowRadius: 16,
+                shadowOffset: { width: 0, height: 8 },
+                shadowColor: "black",
+                shadowOpacity: 0.47,
+                elevation: 2
+              }}
+              >
+                <ImageBackground style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
+                  <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{
+                      fontSize: 20,
+                      color: '#FFFFFF',
+                      textAlign: 'center',
+                      position: 'absolute',
+                      top: 40,
+                      fontFamily: Theme.FONT_BOLD
+                    }}>{'Do you want to save your \n progress?'}</Text>
+
+                    <CustomButton
+                      disabled={false}
+                      style={{
+                        height: 50,
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: 65,
+                        width: 220,
+                        borderRadius: 45,
+                        backgroundColor: '#25B999',
+                        opacity: 1
+                      }}
+                      title="Create Free Account"
+                      onPress={() => this.props.navigation.navigate('Register')}
+                    />
+
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.navigation.navigate('Login')}>
+                      <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
+                    </TouchableOpacity>
+
+                  </View>
+                </ImageBackground>
+              </View>
+            )
+            arrData.push(loginBanner);
+          }
         }
       });
       return arrData;
@@ -241,7 +297,7 @@ class Synesthesia extends Component {
   }
 
   render() {
-    const { isFetchingData, synesthesiaData } = this.props;
+    const { isFetchingData, synesthesiaData, isLoggedIn, userType } = this.props;
     const header = synesthesiaData.header;
     const subHeader = synesthesiaData.subheader;
     const imageBanner = FILES_URL + synesthesiaData.image_banner;
@@ -287,6 +343,49 @@ class Synesthesia extends Component {
 
           {isFetchingData && this.loadingPage()}
           {this.renderData(synesthesiaDatas)}
+
+          {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
+            width: width,
+            height: 200,
+            marginBottom: 30,
+            borderRadius: 12,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            shadowColor: "black",
+            shadowOpacity: 0.47,
+            elevation: 2
+          }}
+          >
+            <ImageBackground style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                  textAlign: 'center',
+                  position: 'absolute',
+                  top: 40,
+                  fontFamily: Theme.FONT_BOLD
+                }}>{'Meditate 7 days for free'}</Text>
+
+                <CustomButton
+                  disabled={false}
+                  style={{
+                    height: 50,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 45,
+                    width: 220,
+                    borderRadius: 45,
+                    backgroundColor: '#25B999',
+                    opacity: 1
+                  }}
+                  title="Free Trial"
+                  onPress={() => { }}
+                />
+              </View>
+            </ImageBackground>
+          </View>}
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}

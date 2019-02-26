@@ -57,23 +57,27 @@ class Sensorium extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
         <BottomBar navigation={this.props.navigation} />
-        <ScrollView>
+        <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
+
+          <Text style={{ fontSize: 22, textAlign: 'center', color: '#fff', fontFamily: Theme.FONT_BOLD, marginTop: 15 }}>{'Meditate in the Sensorium'}</Text>
+          <Text style={{ fontSize: 18, textAlign: 'center', color: '#fff', fontFamily: Theme.FONT_REGULAR, marginTop: 10, marginBottom: 18 }}>{'What would you like to do?'}</Text>
+
           <TouchableHighlight onPress={() => {
             this.props.navigation.push('MindFulness')
           }}
             onHideUnderlay={() => this.onHideUnderlay('mindfulness')}
             onShowUnderlay={() => this.onShowUnderlay('mindfulness')}
             underlayColor={'#1F1F20'}>
-            <View style={{ marginTop: -10 }}>
+            <View style={{ height: 190 }}>
               <ImageBackground
                 style={{
                   width: '100%',
-                  height: 235,
+                  height: '100%',
                   display: "flex",
                   alignItems: "center",
                   opacity: mindBtnPressStatus ? 0.5 : 1.0
                 }}
-                resizeMode='contain'
+                resizeMode='cover'
                 source={mindfulessImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -82,11 +86,14 @@ class Sensorium extends Component {
                     color: '#FFFFFF',
                     fontFamily: Theme.FONT_BOLD
                   }}>{'Practice Mindfulness'}</Text>
+                  <Text style={{
+                    fontSize: 16,
+                    marginTop: 10,
+                    color: '#FFFFFF',
+                    fontFamily: Theme.FONT_REGULAR
+                  }}>{'For less stress & more balance'}</Text>
                 </View>
               </ImageBackground>
-              <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Path of Mindfulness'}</Text>
-              </View>
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
@@ -95,16 +102,16 @@ class Sensorium extends Component {
             onHideUnderlay={() => this.onHideUnderlay('awareness')}
             onShowUnderlay={() => this.onShowUnderlay('awareness')}
             underlayColor={'#1F1F20'}>
-            <View style={{ marginTop: -10 }}>
+            <View style={{ height: 190, marginTop: -32 }}>
               <ImageBackground
                 style={{
                   width: '100%',
-                  height: 235,
+                  height: '100%',
                   display: "flex",
                   alignItems: "center",
                   opacity: awareBtnPressStatus ? 0.5 : 1.0
                 }}
-                resizeMode='contain'
+                resizeMode='cover'
                 source={awarenessImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -113,12 +120,15 @@ class Sensorium extends Component {
                     color: '#FFFFFF',
                     textAlign: 'center',
                     fontFamily: Theme.FONT_BOLD
-                  }}>{'Integrate Awareness \n into life'}</Text>
+                  }}>{'Awareness of your Senses'}</Text>
+                  <Text style={{
+                    fontSize: 16,
+                    marginTop: 10,
+                    color: '#FFFFFF',
+                    fontFamily: Theme.FONT_REGULAR
+                  }}>{'Mindful presence in your surrounding'}</Text>
                 </View>
               </ImageBackground>
-              <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Life with Awareness'}</Text>
-              </View>
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
@@ -127,16 +137,16 @@ class Sensorium extends Component {
             onHideUnderlay={() => this.onHideUnderlay('synesthesia')}
             onShowUnderlay={() => this.onShowUnderlay('synesthesia')}
             underlayColor={'#1F1F20'}>
-            <View>
+            <View style={{ height: 190, marginTop: -32 }}>
               <ImageBackground
                 style={{
                   width: '100%',
-                  height: 235,
+                  height: '100%',
                   display: "flex",
                   alignItems: "center",
                   opacity: synesBtnPressStatus ? 0.5 : 1.0
                 }}
-                resizeMode='contain'
+                resizeMode='cover'
                 source={synesthesiaImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -145,30 +155,27 @@ class Sensorium extends Component {
                     color: '#FFFFFF',
                     fontFamily: Theme.FONT_BOLD
                   }}>{'Discover Synesthesia'}</Text>
+                  <Text style={{
+                    fontSize: 16,
+                    marginTop: 10,
+                    color: '#FFFFFF',
+                    fontFamily: Theme.FONT_REGULAR
+                  }}>{'Blend your senses'}</Text>
                 </View>
               </ImageBackground>
-              <View style={{ paddingLeft: 15, marginTop: -60 }}>
-                <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_REGULAR }}>{'Garden of Synesthesia'}</Text>
-              </View>
             </View>
           </TouchableHighlight>
-          {!isLoggedIn &&
-            <View style={{ marginTop: 15 }}>
+          {
+            !isLoggedIn &&
+            <View style={{ marginTop: -32 }}>
               <ImageBackground
                 style={{
                   width: '100%',
-                  ...Platform.select({
-                    ios: {
-                      height: 250
-                    },
-                    android: {
-                      height: 273
-                    },
-                  }),
+                  height: 248,
                   display: "flex",
                   alignItems: "center",
                 }}
-                resizeMode='contain'
+                resizeMode='cover'
                 source={saveProgressImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
@@ -189,10 +196,11 @@ class Sensorium extends Component {
                   />
                 </View>
               </ImageBackground>
-            </View>}
-        </ScrollView>
+            </View>
+          }
+        </ScrollView >
 
-      </View>
+      </View >
     )
   }
 }

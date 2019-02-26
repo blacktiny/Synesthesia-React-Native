@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions, StyleSheet, Modal } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
@@ -25,8 +25,7 @@ class MindFulness extends Component {
     super(props);
     this.state = {
       isLockedBannerVisible: false,
-      completeOtherExercise: false,
-      counter: 0
+      completeOtherExercise: false
     }
   }
 
@@ -80,9 +79,10 @@ class MindFulness extends Component {
               shadowOffset: { width: 0, height: 8 },
               shadowColor: "black",
               shadowOpacity: 0.47,
-              elevation: 2}}
+              elevation: 2
+            }}
             >
-              <ImageBackground style={{width: '100%', height: '100%'}} source={loginAndCreateAccountBannerImage}>
+              <ImageBackground style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                   <Text style={{
                     fontSize: 20,
@@ -110,8 +110,8 @@ class MindFulness extends Component {
                     onPress={() => this.props.navigation.navigate('Register')}
                   />
 
-                  <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30}} onPress={() => this.props.navigation.navigate('Login')}>
-                    <Text style={{color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD}}>Log in here</Text>
+                  <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.navigation.navigate('Login')}>
+                    <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
                   </TouchableOpacity>
 
                 </View>
@@ -125,8 +125,7 @@ class MindFulness extends Component {
     }
   }
 
-  renderContainers = (id, header, subHeader, imageBanner, itemList, index) => {
-    const { isLoggedIn, userType } = this.props;
+  renderContainers = (id, header, subHeader, imageBanner, itemList) => {
     return (
       <View key={id}>
 
@@ -182,47 +181,6 @@ class MindFulness extends Component {
         </View>
         <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, marginTop: 15, marginBottom: 15 }} />
 
-        {index > 0 && isLoggedIn && userType == 0 && <View style={{
-          width: width,
-          height: 200,
-          marginBottom: 30,
-          borderRadius: 12,
-          shadowRadius: 16,
-          shadowOffset: { width: 0, height: 8 },
-          shadowColor: "black",
-          shadowOpacity: 0.47,
-          elevation: 2}}
-        >
-          <ImageBackground style={{width: '100%', height: '100%'}} source={unlockActivitiesBannerImage}>
-            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{
-                fontSize: 20,
-                color: '#FFFFFF',
-                textAlign: 'center',
-                position: 'absolute',
-                top: 40,
-                fontFamily: Theme.FONT_BOLD
-              }}>{'Meditate 7 days for free'}</Text>
-
-              <CustomButton
-                disabled={false}
-                style={{
-                  height: 50,
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: 45,
-                  width: 220,
-                  borderRadius: 45,
-                  backgroundColor: '#25B999',
-                  opacity: 1
-                }}
-                title="Free Trial"
-                onPress={() => {}}
-              />
-            </View>
-          </ImageBackground>
-        </View>}
       </View>
     )
   }
@@ -302,7 +260,7 @@ class MindFulness extends Component {
   }
 
   render() {
-    const { isFetchingData, mindfulnessData } = this.props;
+    const { isFetchingData, mindfulnessData, isLoggedIn, userType } = this.props;
     const header = mindfulnessData.header;
     const subHeader = mindfulnessData.subheader;
     const imageBanner = FILES_URL + mindfulnessData.image_banner;
@@ -340,6 +298,49 @@ class MindFulness extends Component {
           </ImageBackground>
           {isFetchingData && this.loadingPage()}
           {this.renderData(mindFulnessDatas)}
+
+          {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
+            width: width,
+            height: 200,
+            marginBottom: 30,
+            borderRadius: 12,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            shadowColor: "black",
+            shadowOpacity: 0.47,
+            elevation: 2
+          }}
+          >
+            <ImageBackground style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                  textAlign: 'center',
+                  position: 'absolute',
+                  top: 40,
+                  fontFamily: Theme.FONT_BOLD
+                }}>{'Meditate 7 days for free'}</Text>
+
+                <CustomButton
+                  disabled={false}
+                  style={{
+                    height: 50,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 45,
+                    width: 220,
+                    borderRadius: 45,
+                    backgroundColor: '#25B999',
+                    opacity: 1
+                  }}
+                  title="Free Trial"
+                  onPress={() => { }}
+                />
+              </View>
+            </ImageBackground>
+          </View>}
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}
