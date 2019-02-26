@@ -8,7 +8,8 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
-  Platform
+  Platform,
+  Image
 } from "react-native";
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
@@ -20,10 +21,10 @@ import { getUserProgress } from '../actions/ProgressAction'
 
 import { Theme } from "../constants/constants";
 
-import BannerCloseIcon from '../icons/BannerCloseIcon';
 import { setHeaderItem } from '../actions/MeditateHeaderAction';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
+const closeX = require("../../assets/x.png");
 
 const { width, height } = Dimensions.get("screen");
 
@@ -74,9 +75,13 @@ class ProgressScreen extends Component {
     if (progressData && !isFetchingData) {
       if (progressData != null) {
         summary = progressData.summary;
+        summary.percentage = (progressData.summary.percentage * 100).toFixed(1)
         exercise[0] = progressData['Garden of Synesthesia'];
+        exercise[0].percentage = exercise[0].percentage.toFixed(1);
         exercise[1] = progressData['Path of Mindfulness'];
+        exercise[1].percentage = exercise[1].percentage.toFixed(1);
         exercise[2] = progressData['Sensory Awareness'];
+        exercise[2].percentage = exercise[2].percentage.toFixed(1);
       }
     }
 
@@ -96,7 +101,7 @@ class ProgressScreen extends Component {
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
               }}>
-                <BannerCloseIcon style={styles.crossIcon} color="#ffffff" />
+                <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end', }} />
               </TouchableOpacity>
             </View>
             <View style={styles.completedSession}>
@@ -107,8 +112,8 @@ class ProgressScreen extends Component {
                 style={styles.completedSessionBack}
               >
                 <Text style={styles.subTitleTextMedium}>Completed sessions</Text>
-                <Text style={styles.completedPercentText}>{Math.floor(summary.percentage)}%</Text>
-                <ProgressBar value={Math.floor(summary.percentage)} />
+                <Text style={styles.completedPercentText}>{summary.percentage}%</Text>
+                <ProgressBar value={summary.percentage} />
                 <Text style={styles.completedSessionText}>{summary.completed}/{summary.total}</Text>
                 <View style={styles.splitterHorizontal} />
                 <Text style={styles.subTitleTextRegular}>Total minutes</Text>
@@ -142,22 +147,22 @@ class ProgressScreen extends Component {
               >
                 <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
-                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[0].percentage)}%</Text>
-                  <ProgressBar value={Math.floor(exercise[0].percentage)} width={'80%'} />
+                  <Text style={styles.completedPercentText2}>{exercise[0].percentage}%</Text>
+                  <ProgressBar value={exercise[0].percentage} width={'80%'} />
                   <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
                 </View>
                 <View style={styles.splitterVertical} />
                 <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[1]}</Text>
-                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[1].percentage)}%</Text>
-                  <ProgressBar value={Math.floor(exercise[1].percentage)} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
+                  <Text style={styles.completedPercentText2}>{exercise[1].percentage}%</Text>
+                  <ProgressBar value={exercise[1].percentage} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
                   <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
                 </View>
                 <View style={styles.splitterVertical} />
                 <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[2]}</Text>
-                  <Text style={styles.completedPercentText2}>{Math.floor(exercise[2].percentage)}%</Text>
-                  <ProgressBar value={Math.floor(exercise[2].percentage)} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
+                  <Text style={styles.completedPercentText2}>{exercise[2].percentage}%</Text>
+                  <ProgressBar value={exercise[2].percentage} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
                   <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
                 </View>
               </LinearGradient>
@@ -189,36 +194,26 @@ const styles = StyleSheet.create({
     opacity: 0.68
   },
   title: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 15,
-    paddingBottom: 15
+    position: 'relative',
+    width: width - 40,
   },
   titleText: {
     fontFamily: Theme.FONT_BOLD,
     fontSize: 26,
-    color: '#ffffff'
+    color: '#ffffff',
   },
   crossButton: {
     position: 'absolute',
-    ...Platform.select({
-      ios: {
-        left: width - 160
-      },
-      android: {
-        left: width - 120
-      },
-    })
-  },
-  crossIcon: {
-    alignSelf: 'flex-end',
-    // marginRight: -12,
-    resizeMode: 'contain',
-    marginTop: -10
+    right: 0
   },
   completedSession: {
     width: width - 40,
-    height: 300,
     borderRadius: 12,
     marginBottom: 20,
     shadowRadius: 20,
@@ -229,28 +224,26 @@ const styles = StyleSheet.create({
   },
   completedSessionBack: {
     width: width - 40,
-    height: 300,
     borderRadius: 12,
-    padding: 20
+    padding: 17
   },
   subTitleTextMedium: {
     fontFamily: Theme.FONT_MEDIUM,
     fontSize: 18,
     color: '#ffffff',
-    paddingTop: 10
   },
   subTitleTextRegular: {
     fontFamily: Theme.FONT_REGULAR,
     fontSize: 18,
     color: '#ffffff',
-    paddingTop: 10,
+    paddingTop: 0,
     paddingBottom: 10
   },
   subTitleTextRegular2: {
     fontFamily: Theme.FONT_REGULAR,
     fontSize: 14,
     color: '#ffffff',
-    paddingTop: 10,
+    paddingTop: 0,
     paddingBottom: 5
   },
   completedPercentText: {
@@ -282,12 +275,11 @@ const styles = StyleSheet.create({
   },
   completedMinuteText: {
     fontFamily: Theme.FONT_BOLD,
-    fontSize: 36,
+    fontSize: 32,
     color: '#ffffff'
   },
   streak: {
     width: width - 40,
-    height: 140,
     borderRadius: 12,
     marginBottom: 20,
     shadowRadius: 20,
@@ -299,7 +291,7 @@ const styles = StyleSheet.create({
   streakBack: {
     flexDirection: 'row',
     borderRadius: 12,
-    padding: 20,
+    padding: 17,
     justifyContent: 'center'
   },
   currentStreak: {
@@ -324,7 +316,6 @@ const styles = StyleSheet.create({
   },
   exercise: {
     width: width - 40,
-    height: 140,
     borderRadius: 12,
     marginBottom: 20,
     shadowRadius: 20,
@@ -336,9 +327,9 @@ const styles = StyleSheet.create({
   exerciseBack: {
     flexDirection: 'row',
     borderRadius: 12,
-    paddingLeft: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingLeft: 17,
+    paddingTop: 17,
+    paddingBottom: 17,
     justifyContent: 'center',
   }
 });

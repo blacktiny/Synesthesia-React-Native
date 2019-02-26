@@ -8,6 +8,7 @@ import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
 import { Theme } from "../constants/constants";
 
 const menu = require('../../assets/menu.png')
+const menu_active = require('../../assets/menu_active.png')
 const resume = require('../../assets/resume.png')
 const user = require('../../assets/user.png')
 const user_active = require('../../assets/user_active.png')
@@ -51,8 +52,8 @@ class MeditateHeader extends Component {
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.menuView]}>
-          <Image resizeMode='contain' style={styles.imageStyle} source={menu} />
-          <Text style={styles.textStyle}>{'Menu'}</Text>
+          <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? menu_active : menu} />
+          <Text style={[styles.textStyle, { color: curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? '#ffffff' : '#777778' }]}>{'Menu'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={resume} />

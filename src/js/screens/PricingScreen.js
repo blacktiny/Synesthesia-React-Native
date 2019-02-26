@@ -279,7 +279,8 @@ class PricingScreen extends Component {
       moreDetailsSec = (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
           <Text onPress={() => { this.setState({ paymentDetailsModalVisible: true }) }} style={styles.moreDetails}>More Payment Details </Text>
-          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>and FAQ</Text>
+          <Text style={styles.moreDetailsAndWord}>and </Text>
+          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>FAQ</Text>
         </View>
       );
     }
@@ -699,6 +700,12 @@ const styles = StyleSheet.create({
     fontFamily: Theme.FONT_BOLD,
     fontSize: 16,
     color: "#25B999",
+    lineHeight: 24
+  },
+  moreDetailsAndWord: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 16,
+    color: "#fff",
     lineHeight: 24
   },
   moreAndCancelSection: {
