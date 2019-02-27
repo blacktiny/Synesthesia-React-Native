@@ -52,8 +52,8 @@ class MeditateHeader extends Component {
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.menuView]}>
-          <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? menu_active : menu} />
-          <Text style={[styles.textStyle, { color: curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? '#ffffff' : '#777778' }]}>{'Menu'}</Text>
+          <Image resizeMode='contain' style={styles.imageStyle} source={curHeaderItem == '7 days for free' || curHeaderItem == 'Pricing' || curHeaderItem == 'My account' ? menu_active : menu} />
+          <Text style={[styles.textStyle, { color: curHeaderItem == '7 days for free' || curHeaderItem == 'Pricing' || curHeaderItem == 'My account' ? '#ffffff' : '#777778' }]}>{'Menu'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <Image resizeMode='contain' style={styles.imageStyle} source={resume} />

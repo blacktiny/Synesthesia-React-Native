@@ -26,6 +26,7 @@ const menuItems = [
   { name: 'Meditate', route: 'Sensorium', url: '' },
   { name: 'My account', route: 'User', url: '' },
   { name: '7 days for free', route: 'Pricing', url: '' },
+  { name: 'Pricing', route: 'Pricing', url: '' },
   { name: 'Login', route: 'Login', url: '' },
   { name: 'Blog', route: '', url: 'https://synesthesia.com/blog/' },
   { name: 'Contact', route: '', url: 'https://synesthesia.com/#/ContactUs' },
@@ -67,6 +68,9 @@ class SideMenu extends Component {
     if (itemName == '7 days for free') {
       this.props.dispatch(setHeaderItem('7 days for free'));
     }
+    if (itemName == 'Pricing') {
+      this.props.dispatch(setHeaderItem('Pricing'));
+    }
     if (itemName == 'My account') {
       this.props.dispatch(setHeaderItem('My account'));
     }
@@ -76,8 +80,6 @@ class SideMenu extends Component {
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
       Linking.openURL(url);
-    } else {
-      console.log("Don't know how to open URI: " + url);
     }
   }
 
@@ -180,7 +182,7 @@ class SideMenu extends Component {
 
   renderData = (item, index) => {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
-    const { currentItem, isLoggedIn } = this.props;
+    const { currentItem, isLoggedIn, userType } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
       curItem = 'Meditate';
@@ -189,9 +191,10 @@ class SideMenu extends Component {
     }
     return (
       <View>
-        {item.name != 'Blog' && item.name != 'My account' && item.name != 'Contact' && item.name != 'About us' && item.name != 'FAQ' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Log out' && item.name != curItem && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
-        {item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != curItem && item.name != 'Meditate' && item.name != 'Rate the app' && item.name != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name != '7 days for free' && item.name != 'Pricing' && item.name != 'Blog' && item.name != 'My account' && item.name != 'Contact' && item.name != 'About us' && item.name != 'FAQ' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Log out' && item.name != curItem && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {item.name != '7 days for free' && item.name != 'Pricing' && item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != curItem && item.name != 'Meditate' && item.name != 'Rate the app' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
+        {(parseInt(userType) <= 0 ? item.name == '7 days for free' && curItem != '7 days for free' : item.name == 'Pricing' && curItem != 'Pricing') && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
         {!isLoggedIn && item.name == 'Login' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
@@ -302,6 +305,7 @@ function mapStateToProps(state) {
   return {
     isLoggedIn: state.loginReducer.isLoggedIn,
     user: state.loginReducer.user,
+    userType: state.loginReducer.user.user_type || '-1',
     currentItem: state.sidemenuReducer.currentItem
   }
 }

@@ -12,6 +12,7 @@ import { Theme } from '../constants/constants'
 import { registerUser } from '../actions/RegisterAction'
 import { closeRegisterErrorBanner } from '../actions/RegisterAction'
 import { closeRegisterSuccessBanner } from '../actions/RegisterAction'
+import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 const { width, height } = Dimensions.get('window');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
@@ -206,6 +207,7 @@ class RegisterScreen extends Component {
         <TouchableOpacity style={styles.crossButton} onPress={() => {
           this.props.closeRegisterSuccessBanner();
           this.props.navigation.navigate('Sensorium');
+          this.props.setHeaderItem('Sensorium');
           this.setState({
             isChecked1: false,
             isChecked2: false,
@@ -471,7 +473,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   registerUser,
   closeRegisterErrorBanner,
-  closeRegisterSuccessBanner
+  closeRegisterSuccessBanner,
+  setHeaderItem
 }
 
 export default connect(

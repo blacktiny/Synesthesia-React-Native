@@ -14,6 +14,9 @@ import { iPhoneX } from '../../js/util';
 const { width, height } = Dimensions.get('screen');
 import { FILES_URL } from '../constants/constants'
 import ExerciseModal from '../components/ExerciseModal';
+import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
+import { Theme } from '../constants/constants'
+import CustomButton from '../components/CustomButton';
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -191,7 +194,7 @@ class SynesthesiaItemScreen extends Component {
   }
 
   render() {
-    const { navigation, isFetchingData, nodeData } = this.props;
+    const { navigation, isFetchingData, nodeData, isLoggedIn, userType } = this.props;
     const header = nodeData.header;
     const subHeader = nodeData.subheader;
     const imageBanner = FILES_URL + nodeData.image_banner;
@@ -227,6 +230,49 @@ class SynesthesiaItemScreen extends Component {
           </ImageBackground>}
           {isFetchingData && this.loadingPage()}
           {this.renderData()}
+
+          {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
+            width: width,
+            height: 200,
+            marginBottom: 30,
+            borderRadius: 12,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            shadowColor: "black",
+            shadowOpacity: 0.47,
+            elevation: 2
+          }}
+          >
+            <ImageBackground style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{
+                  fontSize: 20,
+                  color: '#FFFFFF',
+                  textAlign: 'center',
+                  position: 'absolute',
+                  top: 40,
+                  fontFamily: Theme.FONT_BOLD
+                }}>{'Meditate 7 days for free'}</Text>
+
+                <CustomButton
+                  disabled={false}
+                  style={{
+                    height: 50,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 45,
+                    width: 220,
+                    borderRadius: 45,
+                    backgroundColor: '#25B999',
+                    opacity: 1
+                  }}
+                  title="Free Trial"
+                  onPress={() => { }}
+                />
+              </View>
+            </ImageBackground>
+          </View>}
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}
