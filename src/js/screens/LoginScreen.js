@@ -173,7 +173,7 @@ class LoginScreen extends Component {
     let { requestPending } = this.props;
     return (
       <View style={styles.loginContent}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => alert('close')}>
+        <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Sensorium')}>
           <ModalCloseIcon style={styles.crossIcon} color="#777778" />
         </TouchableOpacity>
         <View style={styles.textContainer}>
@@ -219,8 +219,6 @@ class LoginScreen extends Component {
             <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
           </TouchableOpacity>
         </View>
-
-        <Button title='Go to Sensorium' onPress={() => this.props.navigation.navigate('Sensorium')} />
 
       </View>
 
@@ -315,7 +313,7 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   loginContent: {
-    height: iPhoneX() ? height - 400 : height - 230,
+    height: iPhoneX() ? height - 420 : height - 250,
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,
