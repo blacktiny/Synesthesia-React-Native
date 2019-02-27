@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity, Platform } from 'react-native';
 import InputTextField from '../components/InputTextField';
 import PasswordTextField from '../components/PasswordTextField';
 import CustomButton from '../components/CustomButton';
@@ -36,11 +36,7 @@ class RegisterScreen extends Component {
       password: '',
       passwordError: '',
       passwordSuccessBorder: false,
-      passwordErrorBorder: false,
-      confirmPassword: '',
-      confirmPasswordError: '',
-      confirmPasswordSuccessBorder: false,
-      confirmPasswordErrorBorder: false
+      passwordErrorBorder: false
     }
   }
 
@@ -120,44 +116,8 @@ class RegisterScreen extends Component {
       })
     }
 
-    if (this.state.confirmPassword !== '' && this.state.confirmPassword !== password) {
-      error = "Passwords don't match!";
-      this.setState({
-        passwordErrorBorder: true,
-        passwordSuccessBorder: false
-      })
-    }
-
     this.setState({
       passwordError: error
-    })
-  }
-
-  validateConfirmPassword = (confirmPassword) => {
-    let error = '';
-    if (confirmPassword.trim() === '') {
-      error = 'Must not be blank';
-      this.setState({
-        confirmPasswordErrorBorder: true,
-        confirmPasswordSuccessBorder: false
-      })
-    } else {
-      this.setState({
-        confirmPasswordErrorBorder: false,
-        confirmPasswordSuccessBorder: true
-      })
-    }
-
-    if (this.state.password !== confirmPassword) {
-      error = "Passwords don't match!";
-      this.setState({
-        confirmPasswordErrorBorder: true,
-        confirmPasswordSuccessBorder: false
-      })
-    }
-
-    this.setState({
-      confirmPasswordError: error
     })
   }
 
@@ -182,9 +142,7 @@ class RegisterScreen extends Component {
             email: '',
             emailSuccessBorder: false,
             password: '',
-            passwordSuccessBorder: false,
-            confirmPassword: '',
-            confirmPasswordSuccessBorder: false
+            passwordSuccessBorder: false
           })
         }}>
           <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
@@ -216,9 +174,7 @@ class RegisterScreen extends Component {
             email: '',
             emailSuccessBorder: false,
             password: '',
-            passwordSuccessBorder: false,
-            confirmPassword: '',
-            confirmPasswordSuccessBorder: false
+            passwordSuccessBorder: false
           })
         }}>
           <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
@@ -234,8 +190,7 @@ class RegisterScreen extends Component {
   createAccount = () => {
     // const scrollEnabled = this.state.screenHeight > height;
     const registerButtonDisabled = this.state.userNameSuccessBorder && this.state.emailSuccessBorder &&
-      this.state.passwordSuccessBorder && this.state.confirmPasswordSuccessBorder &&
-      this.state.isChecked1;
+      this.state.passwordSuccessBorder && this.state.isChecked1;
     let { requestPending } = this.props;
     return (
       <View style={styles.createContent}>
@@ -285,17 +240,6 @@ class RegisterScreen extends Component {
               error={this.state.passwordError}
               showSuccessBorder={this.state.passwordSuccessBorder}
               showErrorBorder={this.state.passwordErrorBorder}
-            />
-            <View style={{ paddingTop: 10 }} />
-            <Text style={styles.emailText}>{'Confirm Password'}</Text>
-            <PasswordTextField
-              onChange={(value) => {
-                this.setState({ confirmPassword: value.trim() })
-              }}
-              onBlur={() => this.validateConfirmPassword(this.state.confirmPassword)}
-              error={this.state.confirmPasswordError}
-              showSuccessBorder={this.state.confirmPasswordSuccessBorder}
-              showErrorBorder={this.state.confirmPasswordErrorBorder}
             />
             <View style={{ paddingTop: 10 }} />
             <CustomCheckBox
@@ -435,7 +379,14 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   createContent: {
-    height: height - 130,
+    ...Platform.select({
+      ios: {
+        height: height - 250,
+      },
+      android: {
+        height: height - 190
+      },
+    }),
     width: width - 30,
     backgroundColor: '#3D3D3E',
     borderRadius: 12,

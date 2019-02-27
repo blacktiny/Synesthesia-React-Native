@@ -12,9 +12,9 @@ const CustomButton = ({
 
   return (
     <TouchableHighlight
-      onPress = {onPress}
-      disabled = {disabled}
-      style = {style ? style : [
+      onPress={onPress}
+      disabled={disabled}
+      style={style ? style : [
         styles.button,
         disabled && { opacity: 0.7 }
       ]}
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 300,
+    width: '100%',
     borderRadius: 45,
     backgroundColor: '#25B999',
   },

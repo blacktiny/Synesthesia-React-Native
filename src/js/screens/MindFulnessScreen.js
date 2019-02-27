@@ -349,7 +349,7 @@ class MindFulness extends Component {
             subscribeButton={
               () => {
                 this.setModalVisible(false)
-                this.props.dispatch(setMenuItem('Pricing'))
+                this.props.dispatch(setMenuItem('7 days for free'))
                 this.props.navigation.navigate('Pricing')
               }
             } />
