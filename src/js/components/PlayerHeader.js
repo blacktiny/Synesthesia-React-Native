@@ -2,18 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { clearNode, setVolume } from '../actions/NodeAction'
 import { setBackgroundSound, setBackgroundSoundVolume, stopBackgroundSoundVolume, startBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
-import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text, Dimensions, FlatList } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, TouchableHighlight, Text } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { FILES_URL, Theme, BACKGROUND_SOUNDS } from '../constants/constants'
-import Slider from "react-native-slider-custom";
-import LinearGradient from 'react-native-linear-gradient'
+import { Theme } from '../constants/constants'
+
 import SettingsModal from './SoundSettingsModal'
 
 const settings = require('../../assets/settings.png')
-const playerBG = require('../../assets/bgPlayer.png')
-const volume = require('../../assets/volume.png')
 
 class PlayerHeader extends Component {
 
@@ -22,14 +18,11 @@ class PlayerHeader extends Component {
     onSettingClicked: false,
     settingsModal: false,
   };
-  componentDidMount() {
-    if (this.props.backgroundSound && this.props.backgroundSound.name !== "None" && this.props.showSettings && !this.props.isPlaying) {
-      this.props.startBackgroundSoundVolume()
-    }
-  }
+  
   componentWillUnmount() {
     this.props.stopBackgroundSoundVolume()
   }
+
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible })
   }
@@ -185,12 +178,7 @@ const styles = StyleSheet.create({
 });
 function mapStateToProps(state) {
   return {
-    volume: state.nodeReducer.volume,
-    exerciseBG: state.nodeReducer.exerciseNode.image_background,
-    backgroundSound: state.backgroundSoundReducer.sound,
-    backgroundSoundVolume: state.backgroundSoundReducer.volume,
-    showSettings: state.nodeReducer.exerciseNode.has_background_sound,
-    isPlaying: state.backgroundSoundReducer.play
+    isFetchingData: state.nodeReducer.isFetchingData
   }
 }
 const mapDispatchToProps = {

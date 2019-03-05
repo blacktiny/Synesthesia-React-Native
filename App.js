@@ -7,22 +7,17 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Image, ImageBackground, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
   createSwitchNavigator,
   createAppContainer,
   createDrawerNavigator,
-  createBottomTabNavigator,
   createStackNavigator
 } from 'react-navigation';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import store, { persistor } from './src/js/store';
-
-import LoginScreen from "./src/js/screens/LoginScreen";
-import RegisterScreen from "./src/js/screens/RegisterScreen";
-import ForgotPasswordScreen from "./src/js/screens/ForgotPasswordScreen";
+import { iPhone5 } from './src/js/util'
 import DisclaimerScreen from "./src/js/screens/DisclaimerScreen";
 import UserScreen from "./src/js/screens/UserScreen";
 import PricingScreen from "./src/js/screens/PricingScreen";
@@ -56,15 +51,7 @@ global.fetch = function (uri, options, ...args) {
   });
 };
 
-class WelcomeScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <LoginScreen {...this.props} />
-      </View>
-    )
-  }
-}
+
 
 const SensoriumStackNavigator = createStackNavigator({
   Sensorium: {
@@ -86,14 +73,18 @@ const SensoriumStackNavigator = createStackNavigator({
     screen: PlayerScreen,
     navigationOptions: ({ navigation }) => ({
       headerLeft: null,
-      headerRight: <PlayerHeader navigation={navigation} />
+      headerRight: <PlayerHeader navigation={navigation} noBanner />,
+      headerTransparent: true,
+      headerStyle: { height: iPhone5() ? 20 : 40, borderBottomWidth: 1, borderBottomColor: 'transparent' },
     }),
   },
   AudioPlayer: {
     screen: AudioPlayerScreen,
     navigationOptions: ({ navigation }) => ({
       headerLeft: null,
-      headerRight: <PlayerHeader audioPlayer navigation={navigation} />
+      headerRight: <PlayerHeader audioPlayer navigation={navigation} />,
+      headerTransparent: true,
+      headerStyle: { height: iPhone5() ? 20 : 40, borderBottomWidth: 1, borderBottomColor: 'transparent' },
     }),
   }
 },
@@ -105,7 +96,7 @@ const SensoriumStackNavigator = createStackNavigator({
     }),
     defaultNavigationOptions: ({ navigation }) => {
       return {
-        headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
+        headerStyle: { backgroundColor: '#1F1F20', height: iPhone5() ? 30 : 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
         headerLeft: <MeditateHeader navigation={navigation} />
       }
     }
@@ -180,14 +171,10 @@ const SensoriumDrawerNavigator = createDrawerNavigator({
   });
 
 const AppSwitchNavigator = createSwitchNavigator({
-  Welcome: { screen: WelcomeScreen },
   Sensorium: { screen: SensoriumDrawerNavigator },
   Progress: { screen: ProgressStackNavigator },
-  Login: { screen: LoginScreen },
-  Register: { screen: RegisterScreen },
   User: { screen: UserScreen },
   Pricing: { screen: PricingScreen },
-  ForgotPassword: { screen: ForgotPasswordScreen },
   Disclaimer: { screen: DisclaimerScreen }
 });
 

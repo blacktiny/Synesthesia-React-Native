@@ -712,7 +712,7 @@ class AudioPlayer extends Component {
                 </ImageBackground>
               </TouchableHighlight>
             </View>
-            <Text style={[styles.timeStyle, { marginVertical: iPhoneX() ? 50 : 30 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
+            <Text style={[styles.timeStyle, { marginVertical: iPhoneX() ? 30 : 10 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
           </View>
         </ImageBackground>
       )
