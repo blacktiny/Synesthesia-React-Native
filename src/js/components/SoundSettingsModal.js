@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import debounce from 'lodash/debounce'
 import { clearNode, setVolume } from '../actions/NodeAction'
 import { setBackgroundSound, setBackgroundSoundVolume, stopBackgroundSoundVolume, startBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
-import { View, Image, TouchableOpacity, StyleSheet, Modal, TouchableHighlight, Text, Dimensions, FlatList } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Modal, Text, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -32,15 +33,19 @@ class SettingsModal extends Component {
     this.props.setBackgroundSound(sound)
   }
 
-  onBackgroundSoundVolumeChange = (value) => {
+  onBackgroundSoundVolumeChange = debounce((value) => {
     this.props.setBackgroundSoundVolume(value)
-  }
+  }, 200)
+
+  onSoundVolumeChange = debounce((value) => {
+    this.props.setVolume(value)
+  }, 200)
 
   renderList = ({item}) => {
     const selected = item.name === this.state.sound.name
     return (
       <TouchableOpacity onPress={() => this.onBackgroundSoundChoosed(item)} style={{ marginVertical: 5 }}>
-        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: selected ? 'space-between' : "flex-start" }}>
+        <View style={[styles.itemContainer, { justifyContent: selected ? 'space-between' : "flex-start" }]}>
           <Text style={[styles.listText, selected && { color: "#8D7BF0", fontFamily: Theme.FONT_BOLD }]}>{item.name}</Text>
           {selected && <Icon name="check" size={14} color="#8D7BF0"/>}
         </View>
@@ -63,7 +68,7 @@ class SettingsModal extends Component {
                   <CloseIcon color="#777778" strokeWidth={3.8} />
                 </TouchableOpacity>
                 <Text style={[styles.text, { alignSelf: 'flex-start' }]}>Exercise Sound</Text>
-                <View style={[styles.row, { marginBottom: 40 }]}>
+                <View style={[styles.row, { marginBottom: this.props.showSettings ? 40 : 0 }]}>
                   <Image source={volume} style={{width: 16, height: 19, marginRight: 10}}/>
                   <Slider
                     minimumValue={0}
@@ -84,10 +89,13 @@ class SettingsModal extends Component {
                     thumbTintColor="#27BF9E"
                     step={0.01}
                     value={this.props.volume}
-                    onValueChange={value => this.props.setVolume(value)}
+                    onValueChange={this.onSoundVolumeChange}
                   />
                 </View>
-               {this.props.showSettings && <View style={{ flexDirection: 'column', height: "45%", borderTopWidth: 1, borderTopColor: '#2E2E2F' }}>
+               {this.props.showSettings && <View style={styles.backgroundSoundContainer}>
+               {this.props.isLoading && <View style={styles.activityContainer}>
+                 <ActivityIndicator />
+               </View>}
                   <Text style={[styles.text, { alignSelf: 'flex-start', marginTop: 40, marginBottom: 10 }]}>Background Sound</Text>
                   <FlatList
                     data={BACKGROUND_SOUNDS}
@@ -205,6 +213,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  activityContainer: {
+    position: 'absolute',
+    height: "60%",
+    width: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 100,
+    top: 80
+  },
   rightButton: {
     width: "45%",
     height: 40,
@@ -216,8 +234,20 @@ const styles = StyleSheet.create({
   },
   image: {
     marginVertical: 5 
+  },
+  backgroundSoundContainer: {
+    flexDirection: 'column',
+    height: "45%",
+    borderTopWidth: 1,
+    borderTopColor: '#2E2E2F'
+  },
+  itemContainer: {
+    width: '95%',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
+
 function mapStateToProps(state) {
   return {
     volume: state.nodeReducer.volume,
@@ -225,7 +255,8 @@ function mapStateToProps(state) {
     backgroundSound: state.backgroundSoundReducer.sound,
     backgroundSoundVolume: state.backgroundSoundReducer.volume,
     showSettings: state.nodeReducer.exerciseNode.has_background_sound,
-    isPlaying: state.backgroundSoundReducer.play
+    isPlaying: state.backgroundSoundReducer.play,
+    isLoading: state.backgroundSoundReducer.loading
   }
 }
 const mapDispatchToProps = {

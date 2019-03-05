@@ -1,6 +1,9 @@
 import { ActionTypes, BACKGROUND_SOUNDS, FILES_URL } from '../constants/constants'
 import store from '../store'
 import Sound from 'react-native-sound'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
 Sound.setCategory('Playback');
 
 let player = null
@@ -8,7 +11,8 @@ let player = null
 const initialState = {
   sound: BACKGROUND_SOUNDS[0],
   volume: 0.5,
-  play: false
+  play: false,
+  loading: false
 };
 
 const initAudioPlayer = (file, volume) => {
@@ -39,7 +43,7 @@ const play = () => {
     }
   });
 } 
-export const backgroundSoundReducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.SET_BACKGROUND_SOUND:
       if (action.payload.sound.name !== 'None') {
@@ -86,7 +90,17 @@ export const backgroundSoundReducer = (state = initialState, action) => {
     }
     case ActionTypes.STOP_BACKGROUND_SOUND: {
       if (player) {
-        player.release()
+        var volume = 0.2
+        var id = setInterval(() => {
+          if (volume >= 0) {
+            player.setVolume(volume)
+            volume -= 0.01
+          } 
+        }, 200);
+        setTimeout(() => {
+          player.release()
+          clearInterval(id)
+        }, 6000);
       }
       return {
         ...state,
@@ -96,5 +110,11 @@ export const backgroundSoundReducer = (state = initialState, action) => {
     default:
       return state
   }
-
 }
+
+const PersistConfig = {
+  key: 'backgroundSoundReducer',
+  storage: storage,
+  blacklist: ['play', 'loading']
+}
+export const backgroundSoundReducer = persistReducer(PersistConfig, reducer)

@@ -27,6 +27,12 @@ const ExerciseNodeSaga = function* (action) {
         type: ActionTypes.GET_EXERCISES,
         payload: dataObject.node.itemsets
       })
+      if (dataObject.node.has_background_sound) {
+        yield put({
+          type: ActionTypes.START_BACKGROUND_SOUND,
+          payload: {}
+        })
+      }
       
     }
     else {

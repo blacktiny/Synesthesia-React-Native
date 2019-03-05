@@ -55,6 +55,11 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Raleway-Bold.ttf</string>
+		<string>Raleway-Light.ttf</string>
+		<string>Raleway-Medium.ttf</string>
+		<string>Raleway-Regular.ttf</string>
+		<string>Raleway-SemiBold.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -70,11 +75,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
-		<string>Raleway-Bold.ttf</string>
-		<string>Raleway-Medium.ttf</string>
-		<string>Raleway-Regular.ttf</string>
-		<string>Raleway-Light.ttf</string>
-		<string>Raleway-SemiBold.ttf</string>
+		<string>Rawline-Bold.ttf</string>
+		<string>Rawline-Light.ttf</string>
+		<string>Rawline-Medium.ttf</string>
+		<string>Rawline-Regular.ttf</string>
+		<string>Rawline-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>
