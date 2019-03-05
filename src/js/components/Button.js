@@ -8,7 +8,7 @@ export default Button = props => (
 )
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 20,
+    borderRadius: 27.5,
     borderColor: '#FFFFFF',
     borderWidth: 2,
     height: 45,

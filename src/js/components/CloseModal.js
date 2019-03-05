@@ -3,7 +3,7 @@ import { Modal, View, ImageBackground, StyleSheet, Text, TouchableHighlight } fr
 import Button from './Button'
 export default CloseModal = (props) => (
   <Modal
-    animationType="slide"
+    animationType="fade"
     transparent={false}
     visible={props.modalVisible}
     onRequestClose={() => {

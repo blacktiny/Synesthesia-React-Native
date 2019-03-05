@@ -3,15 +3,18 @@ import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, Style
 import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
+import SettingsModal from '../components/SoundSettingsModal'
 import { iPhoneX, iPhone5 } from '../util'
 import { getExerciseNodeByID } from '../actions/NodeAction'
-import { FILES_URL } from '../constants/constants'
+import { FILES_URL, Theme } from '../constants/constants'
 const settings = require('../../assets/settings.png')
-const background = require('../../assets/bgPlayer.png')
+
+import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 class Player extends Component {
   state = {
     activeTime: 10,
-    timeParams: [10, 20]
+    timeParams: [10, 20],
+    settingsModal: false,
   }
   componentDidMount() {
     this.props.getExerciseNodeByID()
@@ -19,7 +22,9 @@ class Player extends Component {
   onPressTime = (time) => {
     this.setState({ activeTime: time })
   }
-
+  settingsModalVisible = (visible) => {
+    this.setState({ settingsModal: !this.state.settingsModal })
+  }
   renderButtons = () => {
     const { activeTime } = this.state
     return this.state.timeParams.map((time, index) => {
@@ -39,38 +44,44 @@ class Player extends Component {
     const imageUri = FILES_URL + imageBackground
     if (this.props.isFetchingData) {
       return (
-        <View style={[styles.container, {justifyContent: 'center'}]}>
+        <View style={[styles.container, { justifyContent: 'center' }]}>
           <ActivityIndicator />
         </View>
       )
     }
     return (
       <ImageBackground style={styles.container} source={imageBackground && { uri: imageUri }} resizeMode="cover">
+        <SettingsModal visible={this.state.settingsModal} onClose={this.settingsModalVisible}/>
         <View style={styles.top}>
-          <Text style={styles.topTextTitle} numberOfLines={2}>{nodeData.header}</Text>
-          <Text style={styles.topText} numberOfLines={2}>{nodeData.subheader}</Text>
+          <Text style={styles.topTextTitle}>{nodeData.header}</Text>
+          <Text style={styles.topText}>{nodeData.subheader}</Text>
         </View>
-       {!isLoggedIn && <View style={styles.centralBar}>
+        {!isLoggedIn && <View style={styles.centralBar}>
           <Text style={styles.centralText}>Need to save your Progress?</Text>
           <View style={styles.centerRow}>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <TouchableOpacity onPress={() => this.props.openRegisterModal()}>
               <Text style={styles.linkText}>Create free account</Text>
             </TouchableOpacity>
             <Text style={styles.orText}>or</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <TouchableOpacity onPress={() => this.props.openLoginModal()}>
               <Text style={styles.linkText}>Log in</Text>
             </TouchableOpacity>
           </View>
         </View>}
-        <View style={styles.bottom}>
+        {isLoggedIn && <View style={[styles.centralBar, { backgroundColor: 'transparent' }]}>
           <PlayButton onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })} />
-          {!isLoggedIn && <TouchableOpacity onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })}>
-            <Text style={styles.bottomText}>Play anyway</Text>
-          </TouchableOpacity>}
+        </View>}
+        <View style={styles.bottom}>
+          {!isLoggedIn && [
+            <PlayButton onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })} />,
+            <TouchableOpacity onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })}>
+              <Text style={styles.bottomText}>Play anyway</Text>
+            </TouchableOpacity>]
+          }
           <View style={styles.row}>
             {this.renderButtons()}
           </View>
-          {this.props.showSettings && <Button onPress={() => console.log('To settings')}>
+          {this.props.showSettings && <Button onPress={this.settingsModalVisible}>
             <Image source={settings} style={styles.icon} resizeMode='contain' />
             <Text style={[styles.buttonText, styles.additionalMargin]}>Sound settings</Text>
           </Button>}
@@ -86,16 +97,16 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: '#000',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   top: {
     paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
     paddingHorizontal: 10,
-    marginTop: iPhoneX() ? 15 : 0
+    marginTop: iPhoneX() ? 60 : 45,
   },
   topTextTitle: {
-    fontFamily: 'Raleway-Bold',
-    // fontWeight: 'bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
     fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
@@ -103,8 +114,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   topText: {
-    fontFamily: 'Raleway-Medium',
-    fontWeight: '500',
+    fontFamily: Theme.FONT_MEDIUM,
     lineHeight: iPhone5() ? 18 : 24,
     fontSize: iPhone5() ? 14 : 18,
     textAlign: 'center',
@@ -117,21 +127,21 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   centralText: {
-    fontWeight: 'bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: 23,
     fontSize: 20,
     textAlign: 'center',
     color: '#FFFFFF',
   },
   linkText: {
-    fontWeight: 'bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
     color: '#25B999'
   },
   orText: {
-    fontWeight: 'normal',
+    fontFamily: Theme.FONT_REGULAR,
     lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
@@ -139,10 +149,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   bottom: {
-    // marginTop: iPhoneX() ? '10%' : '3%',
     alignItems: 'center',
     width: '80%',
-    position: 'absolute',
+    // position: 'absolute',
     bottom: iPhoneX() ? 50 : 10
   },
   bottomText: {
@@ -154,7 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   buttonText: {
-    fontFamily: 'Raleway-SemiBold',
+    fontFamily: Theme.FONT_SEMIBOLD,
     lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
@@ -194,7 +203,9 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  getExerciseNodeByID
+  getExerciseNodeByID,
+  openLoginModal,
+  openRegisterModal
 }
 
 export default connect(

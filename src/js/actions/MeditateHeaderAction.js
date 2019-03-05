@@ -15,3 +15,17 @@ export function setHeaderItem(headerItem) {
     }
   }
 }
+
+export function blurHeader() {
+  return {
+    type: ActionTypes.BLUR_HEADER,
+    payload: {}
+  }
+}
+
+export function unBlurHeader() {
+  return {
+    type: ActionTypes.UNBLUR_HEADER,
+    payload: {}
+  }
+}

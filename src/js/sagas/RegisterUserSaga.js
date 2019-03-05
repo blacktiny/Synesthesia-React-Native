@@ -17,7 +17,9 @@ const RegisterUserSaga = function* (action) {
         ...registeredObject
       }
     })
-
+    yield put({
+      type: ActionTypes.OPEN_SUCCESS_MODAL
+    })
     yield put({
       type: ActionTypes.LOGIN_USER,
       payload: {
@@ -25,10 +27,12 @@ const RegisterUserSaga = function* (action) {
         password
       }
     });
-
   } else {
     yield put({
       type: ActionTypes.REGISTER_USER_FAIL
+    })
+    yield put({
+      type: ActionTypes.OPEN_ERROR_MODAL
     })
   }
 

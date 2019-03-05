@@ -10,6 +10,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 import { Theme } from "../constants/constants";
+import FastImage from "react-native-fast-image";
 
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
@@ -88,15 +89,15 @@ class NotActivityDependentExercise extends Component {
                   height: 80,
                   borderRadius: 50
                 }}>
-                <Image
+                <FastImage
                   style={{
                     height: 30,
                     width: 30,
                     position: "absolute",
                     top: 25,
                     left: 28,
-                    resizeMode: 'contain'
                   }}
+                  resizeMode={FastImage.resizeMode.contain}
                   source={icon}
                 />
 
@@ -109,7 +110,7 @@ class NotActivityDependentExercise extends Component {
 
 
           {item.is_locked != '0' &&
-            <ImageBackground
+            <FastImage
               style={{
                 height: 33,
                 width: 33,
@@ -120,20 +121,20 @@ class NotActivityDependentExercise extends Component {
               }}
               source={lock1}
             >
-              <Image
+              <FastImage
                 style={{
                   alignSelf: "center",
                   height: 14,
                   width: 14,
                   marginTop: 9
                 }}
-                resizeMode="contain"
+                resizeMode={FastImage.resizeMode.contain}
                 source={redLock}
               />
-            </ImageBackground>}
+            </FastImage>}
 
           {item.is_done == '1' &&
-            <Image
+            <FastImage
               style={{
                 height: 33,
                 width: 33,
@@ -142,6 +143,7 @@ class NotActivityDependentExercise extends Component {
                 top: 53,
                 left: 56
               }}
+              resizeMode={FastImage.resizeMode.contain}
               source={tick}
             />}
 

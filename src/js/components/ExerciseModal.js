@@ -5,10 +5,11 @@ import BannerCloseIcon from '../icons/BannerCloseIcon';
 const banneractivitylockedImage = require('../../assets/lock3.png');
 const bannerpaymentlockedImage = require('../../assets/lock4.png');
 import { Theme } from '../constants/constants';
+import FastImage from 'react-native-fast-image';
 const { width, height } = Dimensions.get('screen');
 
 export default ExerciseModal = (props) => (
-  <Modal visible={props.modalVisible} animationType="slide" transparent={true}
+  <Modal visible={props.modalVisible} animationType="fade" transparent={true}
     onRequestClose={() => console.log('closed')}>
     <View style={styles.modalContainer}>
       <LinearGradient
@@ -24,7 +25,7 @@ export default ExerciseModal = (props) => (
           {props.completeOtherExercise ?
             <View style={{ alignItems: 'center' }}>
               <View>
-                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={banneractivitylockedImage} />
+                <FastImage style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode={FastImage.resizeMode.contain} source={banneractivitylockedImage} />
                 <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
                 <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
               </View>
@@ -35,7 +36,7 @@ export default ExerciseModal = (props) => (
             :
             <View style={{ alignItems: 'center' }}>
               <View>
-                <Image style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode='contain' source={bannerpaymentlockedImage} />
+                <FastImage style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode={FastImage.resizeMode.contain} source={bannerpaymentlockedImage} />
                 <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
                 <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise checkout our attractive Price Plans</Text>
                 <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Subscribe and get 7 Days of full access</Text>

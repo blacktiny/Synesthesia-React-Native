@@ -6,27 +6,7 @@ import { doLogin, getUser, updateUser } from '../api/api'
 
 const LoginUserSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
-  if (action.type == ActionTypes.IS_LOGGEDIN) {
-    if (token !== null) {
-      const user = yield call(getUser, action.payload, token);
-      if (user.status.success) {
-        yield put({
-          type: ActionTypes.IS_LOGGEDIN_SUCCESS,
-          payload: {
-            ...user
-          }
-        })
-      } else {
-        yield put({
-          type: ActionTypes.IS_LOGGEDIN_FAIL
-        })
-      }
-    } else {
-      yield put({
-        type: ActionTypes.IS_LOGGEDIN_NOT
-      })
-    }
-  } else if (action.type == ActionTypes.LOGIN_USER) {
+  if (action.type == ActionTypes.LOGIN_USER) {
     const authObject = yield call(doLogin, action.payload);
 
     if (authObject.status.success) {
@@ -49,15 +29,24 @@ const LoginUserSaga = function* (action) {
             ...user
           }
         })
+        yield put({
+          type: ActionTypes.OPEN_SUCCESS_MODAL
+        })
       } else {
         yield put({
           type: ActionTypes.LOGIN_USER_FAIL
+        })
+        yield put({
+          type: ActionTypes.OPEN_ERROR_MODAL
         })
       }
 
     } else {
       yield put({
         type: ActionTypes.AUTH_FAIL
+      })
+      yield put({
+        type: ActionTypes.OPEN_ERROR_MODAL
       })
     }
   } else if (action.type == ActionTypes.UPDATE_USER) {

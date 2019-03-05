@@ -8,6 +8,7 @@ import { setHeaderItem } from '../actions/MeditateHeaderAction'
 const rectangle = require('../../assets/rectangle.png')
 const leftArrow = require('../../assets/leftArrow.png')
 import { Theme } from '../constants/constants'
+import FastImage from 'react-native-fast-image';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -42,19 +43,19 @@ class BottomBar extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
-          <Image style={styles.leftArrow} source={leftArrow} />
+          <FastImage style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('MindFulness')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'mindfullness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-          {this.state.screen == 'mindfullness' && <Image style={styles.imageStyle} source={rectangle} />}
+          {this.state.screen == 'mindfullness' && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('BeingAware')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-          {this.state.screen == 'beingaware' && <Image style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+          {this.state.screen == 'beingaware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
           <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-          {this.state.screen == 'syensthesia' && <Image style={styles.imageStyle} source={rectangle} />}
+          {this.state.screen == 'syensthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
       </SafeAreaView>
     );

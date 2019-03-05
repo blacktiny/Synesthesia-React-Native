@@ -1,10 +1,14 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Text, TouchableHighlight, View, Image, StyleSheet, Dimensions, ImageBackground, FlatList, Linking } from 'react-native';
+import { Text, TouchableHighlight, View, Image, StyleSheet, ImageBackground, FlatList, Linking } from 'react-native';
 import CustomButton from '../components/CustomButton';
+import LoginModal from '../components/LoginModal';
+import RegisterModal from '../components/RegisterModal';
+import ForgotPasswordModal from '../components/ForgotPasswordModal';
+import SuccessModal from '../components/SuccessModal';
+import ErrorModal from '../components/ErrorModal';
 import { iPhoneX } from '../../js/util';
-import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 import { logoutUser } from '../../js/actions/LogoutAction';
 import { setMenuItem, getCurMenuItem } from '../../js/actions/SideMenuAction';
@@ -13,10 +17,18 @@ import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
+import {
+  openLoginModal,
+  closeLoginModal,
+  closeRegisterModal,
+  closeForgotPasswordModal,
+  closeSuccessModal,
+  closeErrorModal,
+  openRegisterModal
+} from '../actions/ToggleFormModalAction'
 
 import { Theme } from '../constants/constants'
 
-const { height, width } = Dimensions.get('screen');
 const blurImage = require('../../../src/assets/blurImage.png');
 const cross = require('../../../src/assets/cross.png');
 const gradientLine = require('../../../src/assets/gradientLine.png');
@@ -52,15 +64,24 @@ class SideMenu extends Component {
   }
 
   onMenuItemClicked = (routeName, itemName, url) => {
-    this.props.navigation.navigate(routeName);
+    if (itemName == 'Login') {
+      this.props.dispatch(setHeaderItem(''));
+      this.props.navigation.closeDrawer();
+      this.props.dispatch(openLoginModal());
+    }
     if (itemName == 'Log out') {
+      this.props.navigation.closeDrawer();
       this.props.dispatch(cleanSynesthesia());
       this.props.dispatch(cleanMindFulness());
       this.props.dispatch(cleanAwareness());
       this.props.dispatch(cleanProgress());
-      this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(logoutUser());
+      this.props.dispatch(setHeaderItem('Sensorium'));
+      this.props.navigation.navigate('Sensorium');
     }
+
+    this.props.navigation.navigate(routeName);
+
     if (itemName == 'Meditate') {
       this.props.dispatch(setHeaderItem('Sensorium'));
     }
@@ -69,9 +90,6 @@ class SideMenu extends Component {
     }
     if (itemName == 'My account') {
       this.props.dispatch(setHeaderItem('My account'));
-    }
-    if (itemName == 'Login') {
-      this.props.dispatch(setHeaderItem(''));
     }
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
@@ -142,7 +160,10 @@ class SideMenu extends Component {
             disabled={false}
             style={styles.button}
             title="Create Free Account"
-            onPress={() => this.props.navigation.navigate('Register')}
+            onPress={() => {
+              this.props.navigation.closeDrawer();
+              this.props.dispatch(openRegisterModal());
+            }}
           />
         </View>
       );
@@ -178,7 +199,9 @@ class SideMenu extends Component {
 
   renderData = (item, index) => {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
-    const { currentItem, isLoggedIn, userType } = this.props;
+    const { currentItem, isLoggedIn, userType,
+      isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible,
+      isSuccessModalVisible, isErrorModalVisible, modalType } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
       curItem = 'Meditate';
@@ -193,12 +216,43 @@ class SideMenu extends Component {
         {parseInt(userType) <= 0 && item.name == '7 days for free' && curItem != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
-        {!isLoggedIn && item.name == 'Login' && <TouchableHighlight style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }} onPress={() => this.onMenuItemClicked(item.route, item.name)} onHideUnderlay={() => this.onHideUnderlay(item.name)} onShowUnderlay={() => this.onShowUnderlay(item.name)} underlayColor={'#1F1F20'}>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
-            <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
-          </View>
-        </TouchableHighlight>}
+
+        {!isLoggedIn && item.name == 'Login' &&
+          <TouchableHighlight
+            style={{ flexDirection: 'row', marginLeft: 15, marginTop: 8, marginBottom: 10 }}
+            onPress={() => this.onMenuItemClicked(item.route, item.name)}
+            onHideUnderlay={() => this.onHideUnderlay(item.name)}
+            onShowUnderlay={() => this.onShowUnderlay(item.name)}
+            underlayColor={'#1F1F20'}>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <Image source={loginButton} style={{ height: 20, width: 20, opacity: loginBtnPressStatus ? 0.7 : 1.0 }} />
+              <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
+            </View>
+          </TouchableHighlight>}
+
+        <LoginModal
+          modalVisible={isLoginModalVisible}
+          closeModal={() => this.props.dispatch(closeLoginModal())}
+        />
+        <RegisterModal
+          modalVisible={isRegisterModalVisible}
+          closeModal={() => this.props.dispatch(closeRegisterModal())}
+        />
+        <ForgotPasswordModal
+          modalVisible={isForgotPasswordModalVisible}
+          closeModal={() => this.props.dispatch(closeForgotPasswordModal())}
+        />
+        <SuccessModal
+          modalVisible={isSuccessModalVisible}
+          modalType={modalType}
+          closeModal={() => { this.props.dispatch(closeSuccessModal()) }}
+        />
+        <ErrorModal
+          modalVisible={isErrorModalVisible}
+          modalType={modalType}
+          closeModal={() => { this.props.dispatch(closeErrorModal()) }}
+        />
+
         {item.name == 'Meditate' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
           <Text style={[styles.textStyle, { fontFamily: Theme.FONT_SEMIBOLD }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>
@@ -302,7 +356,13 @@ function mapStateToProps(state) {
     isLoggedIn: state.loginReducer.isLoggedIn,
     user: state.loginReducer.user,
     userType: state.loginReducer.user.user_type || '-1',
-    currentItem: state.sidemenuReducer.currentItem
+    currentItem: state.sidemenuReducer.currentItem,
+    isLoginModalVisible: state.toggleFormModalReducer.isLoginModalVisible,
+    isRegisterModalVisible: state.toggleFormModalReducer.isRegisterModalVisible,
+    isForgotPasswordModalVisible: state.toggleFormModalReducer.isForgotPasswordModalVisible,
+    isSuccessModalVisible: state.toggleFormModalReducer.isSuccessModalVisible,
+    isErrorModalVisible: state.toggleFormModalReducer.isErrorModalVisible,
+    modalType: state.toggleFormModalReducer.modalType
   }
 }
 

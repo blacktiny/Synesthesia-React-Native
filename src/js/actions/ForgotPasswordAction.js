@@ -11,17 +11,4 @@ export function sendResetLink({
   }
 }
 
-export function closeSendResetLinkSuccessBanner() {
-  return {
-    type: ActionTypes.CLOSE_SEND_RESET_LINK_BANNER_SUCCESS,
-    payload: {}
-  }
-}
-
-export function closeSendResetLinkErrorBanner() {
-  return {
-    type: ActionTypes.CLOSE_SEND_RESET_LINK_BANNER_ERROR,
-    payload: {}
-  }
-}
 

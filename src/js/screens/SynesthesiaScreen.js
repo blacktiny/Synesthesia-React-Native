@@ -15,9 +15,11 @@ import { FILES_URL } from '../constants/constants'
 import ProgressiveImage from '../components/ProgressiveImage';
 import ExerciseModal from '../components/ExerciseModal';
 import CustomButton from '../components/CustomButton';
+import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
+import FastImage from 'react-native-fast-image';
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -95,7 +97,7 @@ class Synesthesia extends Component {
                 elevation: 2
               }}
               >
-                <ImageBackground style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
+                <FastImage style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
                   <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{
                       fontSize: 20,
@@ -120,15 +122,15 @@ class Synesthesia extends Component {
                         opacity: 1
                       }}
                       title="Create Free Account"
-                      onPress={() => this.props.navigation.navigate('Register')}
+                      onPress={() => this.props.dispatch(openRegisterModal())}
                     />
 
-                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.navigation.navigate('Login')}>
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.dispatch(openLoginModal())}>
                       <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
                     </TouchableOpacity>
 
                   </View>
-                </ImageBackground>
+                </FastImage>
               </View>
             )
             arrData.push(loginBanner);
@@ -227,9 +229,10 @@ class Synesthesia extends Component {
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
                 <View>
                   {item.icon.includes("null") ?
-                    <Image
+                    <FastImage
                       source={hearing}
-                      style={{ width: 120, height: 120, resizeMode: 'contain' }}
+                      style={{ width: 120, height: 120 }}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                     :
                     <ProgressiveImage
@@ -356,7 +359,7 @@ class Synesthesia extends Component {
             elevation: 2
           }}
           >
-            <ImageBackground style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+            <FastImage style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
               <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{
                   fontSize: 20,
@@ -384,7 +387,7 @@ class Synesthesia extends Component {
                   onPress={() => { }}
                 />
               </View>
-            </ImageBackground>
+            </FastImage>
           </View>}
 
           <ExerciseModal

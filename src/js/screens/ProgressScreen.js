@@ -146,13 +146,6 @@ class ProgressScreen extends Component {
                 style={styles.exerciseBack}
               >
                 <View style={{ width: '28%' }}>
-                  <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
-                  <Text style={styles.completedPercentText2}>{exercise[0].percentage}%</Text>
-                  <ProgressBar value={exercise[0].percentage} width={'80%'} />
-                  <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
-                </View>
-                <View style={styles.splitterVertical} />
-                <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[1]}</Text>
                   <Text style={styles.completedPercentText2}>{exercise[1].percentage}%</Text>
                   <ProgressBar value={exercise[1].percentage} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
@@ -164,6 +157,13 @@ class ProgressScreen extends Component {
                   <Text style={styles.completedPercentText2}>{exercise[2].percentage}%</Text>
                   <ProgressBar value={exercise[2].percentage} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
                   <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
+                </View>
+                <View style={styles.splitterVertical} />
+                <View style={{ width: '28%' }}>
+                  <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
+                  <Text style={styles.completedPercentText2}>{exercise[0].percentage}%</Text>
+                  <ProgressBar value={exercise[0].percentage} width={'80%'} />
+                  <Text style={styles.completedSessionText}>{exercise[0].completed}/{exercise[0].total}</Text>
                 </View>
               </LinearGradient>
             </View>
