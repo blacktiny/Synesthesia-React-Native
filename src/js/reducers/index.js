@@ -9,8 +9,9 @@ import { beingawareReducer } from './beingawareReducer'
 import { nodeReducer } from './nodeReducer'
 import { exerciseReducer } from './exerciseReducer'
 import { meditateHeaderReducer } from './meditateHeaderReducer'
+import { toggleFormModalReducer } from './toggleFormModalReducer'
 import { progressReducer } from './progressReducer'
-
+import { backgroundSoundReducer } from './backgroundSoundReducer'
 export default combineReducers({
   registerReducer,
   loginReducer,
@@ -22,5 +23,7 @@ export default combineReducers({
   nodeReducer,
   exerciseReducer,
   meditateHeaderReducer,
+  toggleFormModalReducer,
   progressReducer,
+  backgroundSoundReducer
 })

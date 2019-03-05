@@ -70,7 +70,7 @@ class PricingScreen extends Component {
   openPaymentDetailsModal = () => {
     const { paymentDetailsModalVisible } = this.state;
     return (
-      <Modal visible={paymentDetailsModalVisible} animationType="slide" transparent={true}
+      <Modal visible={paymentDetailsModalVisible} animationType="fade" transparent={true}
         onRequestClose={() => console.log('closed')}>
         <View style={styles.modalContainer}>
           <View style={styles.modalBanner}>

@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { clearNode, setVolume } from '../actions/NodeAction'
-import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text, Dimensions } from 'react-native';
+import { setBackgroundSound, setBackgroundSoundVolume, stopBackgroundSoundVolume, startBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
+import { View, Image, TouchableOpacity, StyleSheet, ImageBackground, TouchableHighlight, Text, Dimensions, FlatList } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
-import { FILES_URL } from '../constants/constants'
-import Slider from "react-native-slider";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { FILES_URL, Theme, BACKGROUND_SOUNDS } from '../constants/constants'
+import Slider from "react-native-slider-custom";
+import LinearGradient from 'react-native-linear-gradient'
+import SettingsModal from './SoundSettingsModal'
 
 const settings = require('../../assets/settings.png')
 const playerBG = require('../../assets/bgPlayer.png')
+const volume = require('../../assets/volume.png')
 
 class PlayerHeader extends Component {
+
   state = {
     modalVisible: false,
     onSettingClicked: false,
-    settingsModal: false
+    settingsModal: false,
   };
-
+  componentDidMount() {
+    if (this.props.backgroundSound && this.props.backgroundSound.name !== "None" && this.props.showSettings && !this.props.isPlaying) {
+      this.props.startBackgroundSoundVolume()
+    }
+  }
+  componentWillUnmount() {
+    this.props.stopBackgroundSoundVolume()
+  }
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible })
   }
@@ -41,13 +54,21 @@ class PlayerHeader extends Component {
     this.setState({ onSettingClicked: true });
   }
 
+  onBackgroundSoundChoosed = (sound) => {
+    this.props.setBackgroundSound(sound)
+  }
+
+  onBackgroundSoundVolumeChange = (value) => {
+    this.props.setBackgroundSoundVolume(value)
+  }
+
   render() {
-    const { audioPlayer, exerciseBG, nodeCompleted } = this.props
+    const { audioPlayer } = this.props
     const { onSettingClicked } = this.state
     return (
       <View style={styles.container}>
         <CloseModal modalVisible={this.state.modalVisible} >
-        <ImageBackground source={audioPlayer ? { uri: FILES_URL + exerciseBG } : playerBG} style={styles.containerModal}>
+        <View style={styles.containerModal}>
             <View style={styles.content}>
               <Text style={styles.text}>Are you sure you want to close this exercise?</Text>
               <View style={styles.row}>
@@ -55,30 +76,10 @@ class PlayerHeader extends Component {
                 <TouchableHighlight style={styles.rightButton} onPress={() => this.setModalVisible(false)} underlayColor={"#25b999cc"}><Text style={styles.buttonText}>No, continue</Text></TouchableHighlight>
               </View>
             </View>
-        </ImageBackground>
+        </View>
        
         </CloseModal>
-        <CloseModal modalVisible={this.state.settingsModal} >
-          <ImageBackground source={audioPlayer ? { uri: FILES_URL + exerciseBG } : playerBG} style={styles.containerModal}>
-              <View style={[styles.content, { height: "20%"}]}>
-              <TouchableOpacity onPress={this.settingsModalVisible} style={styles.close}>
-                <CloseIcon color="#575759" strokeWidth={2} />
-              </TouchableOpacity>
-              <Text style={[styles.text, { alignSelf: 'flex-start' }]}>Exercise Sound</Text>
-              <Slider
-                minimumValue={0}
-                maximumValue={1}
-                style={{width:  Dimensions.get('window').width * 0.75, marginVertical: 15 }}
-                minimumTrackTintColor="#27C7A3"
-                maximumTrackTintColor="#5D5D5D"
-                thumbTintColor="#2BBF9E"
-                step={0.01}
-                value={this.props.volume}
-                onValueChange={value => this.props.setVolume(value)}
-              />
-              </View>
-          </ImageBackground>
-        </CloseModal>
+        <SettingsModal visible={this.state.settingsModal} onClose={this.settingsModalVisible}/>
 
         {audioPlayer && <TouchableOpacity onPress={this.settingsModalVisible} style={styles.mainView}>
           <Image source={settings} style={[{ width: 20, height: 18 }, onSettingClicked ? {opacity: 0.1} : {opacity: 1.0}]} resizeMode='contain' />
@@ -105,8 +106,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: '#000000'
+    flexDirection: 'row'
   },
   textStyle: {
     fontSize: 14,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   mainView: {
     padding: 5,
     marginTop: 3,
-    marginRight: 15
+    marginRight: 10
   },
   close: {
     position: 'absolute',
@@ -126,19 +126,25 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '90%',
-    height: '30%',
     backgroundColor: '#3d3d3e',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
+    paddingVertical: 30,
     borderRadius: 12
   },
   text: {
-    fontFamily: 'Raleway-Bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: 28,
     fontSize: 20,
     textAlign: 'center',
     color: '#FFFFFF'
+  },
+  listText: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 18,
+    lineHeight: 22,
+    color: "#fff"
   },
   row: {
     flexDirection: 'row',
@@ -179,10 +185,21 @@ const styles = StyleSheet.create({
 });
 function mapStateToProps(state) {
   return {
-    nodeCompleted: state.nodeReducer.nodeComplete,
     volume: state.nodeReducer.volume,
-    exerciseBG: state.nodeReducer.exerciseNode.image_background
+    exerciseBG: state.nodeReducer.exerciseNode.image_background,
+    backgroundSound: state.backgroundSoundReducer.sound,
+    backgroundSoundVolume: state.backgroundSoundReducer.volume,
+    showSettings: state.nodeReducer.exerciseNode.has_background_sound,
+    isPlaying: state.backgroundSoundReducer.play
   }
 }
+const mapDispatchToProps = {
+  clearNode,
+  setVolume,
+  setBackgroundSound,
+  setBackgroundSoundVolume,
+  stopBackgroundSoundVolume,
+  startBackgroundSoundVolume
+}
 
-export default connect(mapStateToProps, { clearNode, setVolume })(PlayerHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerHeader);

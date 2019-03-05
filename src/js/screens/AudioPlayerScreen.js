@@ -21,7 +21,7 @@ import CloseModal from '../components/CloseModal'
 import { completeNode, clearNode } from '../actions/NodeAction'
 import Sound from 'react-native-sound'
 import { nextExercise } from '../actions/ExerciseAction'
-import { FILES_URL, ITEMS_TYPES } from '../constants/constants'
+import { FILES_URL, ITEMS_TYPES, Theme } from '../constants/constants'
 import { getFileUrl } from '../helpers/getUrl'
 import { getCompletionPeriod } from '../helpers/getCompletionPeriod'
 import {
@@ -68,7 +68,7 @@ class AudioPlayer extends Component {
         currentTime: 0,
         duration: 0,
         progress: 0,
-        loaded: true,
+        loaded: false,
         disableMoveBack: false,
         disableMoveForeward: false,
         showNotification: false,
@@ -545,7 +545,7 @@ class AudioPlayer extends Component {
   }
 
   onLoad = ({duration}) => {
-    this.setState({ duration })
+    this.setState({ duration, loaded: true })
   }
 
   onProgress = ({ currentTime }) => {
@@ -595,12 +595,11 @@ class AudioPlayer extends Component {
       showButton
     } = this.state
     const { exercise } = this.props
-    return !loaded ? (
-      <ImageBackground source={{uri: backgroundImage}} style={[styles.container, styles.indicatorStyle]}>
-        <ActivityIndicator />
-      </ImageBackground>
-    ) : (
+    return (
         <ImageBackground source={{uri: backgroundImage}} style={styles.container}>
+        {!loaded && <ImageBackground source={{uri: backgroundImage}} style={[styles.container, styles.indicatorStyle]}>
+        <ActivityIndicator />
+      </ImageBackground>}
         <CloseModal modalVisible={this.state.modalVisible} >
         <ImageBackground source={{ uri: backgroundImage }} style={styles.containerModal}>
             <View style={[styles.content, { height: '50%' }]}>
@@ -626,21 +625,21 @@ class AudioPlayer extends Component {
               <View style={styles.column}>
                 <Image source={musicKey}/>
                 <Button onPress={this.nextTrigger} style={styles.button}>
-                  <Text style={styles.topText}>Resume</Text>
+                  <Text style={styles.semiboldText}>Resume</Text>
                 </Button>
               </View>
             )}
             {triggerEngaged && triggerType === ITEMS_TYPES.text && (
               <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
               <View style={styles.column}>
-                <Text style={[styles.topText, triggerFontStyle]}>{additionalText}</Text>
+                <Text style={[styles.additionalText, triggerFontStyle]}>{additionalText}</Text>
                 {showButton && <Button onPress={this.nextTrigger} style={styles.button}>
-                  <Text style={styles.topText}>Resume</Text>
+                  <Text style={styles.semiboldText}>Resume</Text>
                 </Button>}
               </View>
               </Animated.View>)}
              {triggerType === ITEMS_TYPES.picture && <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
-                <Image source={{uri: triggerPicture }} style={{width: "100%", height: '100%' }} resizeMode='contain' />
+                <Image source={{uri: triggerPicture }} style={{width: "100%", height: '90%' }} resizeMode='contain' />
               </Animated.View>}
               {triggerType === ITEMS_TYPES.movie && isYoutube(trigger) && triggerEngaged && (
                 <View style={styles.animatedViewPicture}>
@@ -649,7 +648,7 @@ class AudioPlayer extends Component {
                       this._youTubeRef = component;
                     }}
                     apiKey="AIzaSyDbNjPBzRia3bFQCX3XKIVn61L8OM2PmXc"
-                    play={false}
+                    play={true}
                     videoId={getVideoID(trigger)}
                     controls={1}
                     style={[{ height: Dimensions.get('window').height * 0.25, width: Dimensions.get('window').width }]}
@@ -660,10 +659,12 @@ class AudioPlayer extends Component {
                     style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height * 0.25 }}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
-                    source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) }}
+                    allowsInlineMediaPlayback={true}
+                    mediaPlaybackRequiresUserAction={false}
+                    source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) + "?autoplay=1" }}
                   />,
                   <Button onPress={this.onVideoEnd} style={styles.button}>
-                  <Text style={styles.topText}>Skip</Text>
+                  <Text style={styles.semiboldText}>Skip</Text>
                 </Button>]}
                 </View>
               )}
@@ -688,10 +689,10 @@ class AudioPlayer extends Component {
             </Animated.View>
             {skipable && <View style={styles.animatedView}>
               <Button onPress={this.onVideoEnd} style={styles.button}>
-                  <Text style={styles.topText}>Skip</Text>
+                  <Text style={styles.semiboldText}>Skip</Text>
                 </Button>
             </View>}
-            {this.state.items.main.item.credit === '1' && <View style={[styles.modalRow, { marginTop: 15 }]}>
+            {this.state.items.main.item.credit === '1' && <View style={[styles.modalRow, { marginBottom: 15 }]}>
                 <TouchableHighlight onPress={() => Linking.openURL(this.state.items.main.item.credit_link) }>
                   <Text style={styles.textLink}>
                     {this.state.items.main.item.credit_text}
@@ -699,13 +700,13 @@ class AudioPlayer extends Component {
                 </TouchableHighlight>
             </View>}
             <View style={styles.row}>
-              <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
+              <TouchableHighlight style={styles.forwardButton} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
                 <ImageBackground source={(disableMoveBack || triggerEngaged) ? prevDisable : prev} style={styles.controlButton}>
                   <Text style={[styles.forwardStyle, (disableMoveBack || triggerEngaged)  && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
               </TouchableHighlight>
               <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / duration) * 100} disabled={(stopMain && triggerEngaged)} />
-              <TouchableHighlight style={{borderRadius: 30}} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
+              <TouchableHighlight style={styles.forwardButton} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
                 <ImageBackground source={(disableMoveForeward || triggerEngaged) ? nextDisable : next} style={styles.controlButton}>
                   <Text style={[styles.forwardStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
                 </ImageBackground>
@@ -724,19 +725,23 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: '#000',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   indicatorStyle: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 2000,
+    position: 'absolute',
+    top: 0,
+    left: 0
   },
   top: {
     paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
     paddingHorizontal: 10,
-    marginTop: iPhoneX() ? 15 : 0,
+    marginTop: iPhoneX() ? 50 : 35,
     alignItems: 'center'
   },
   topTextTitle: {
-    fontFamily: 'Raleway-Bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: iPhoneX() ? 35 : iPhone5() ? 25 : 31,
     fontSize: iPhoneX() ? 30 : iPhone5() ? 20 : 26,
     textAlign: 'center',
@@ -744,8 +749,22 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   topText: {
-    fontFamily: 'Raleway-Regular',
+    fontFamily: Theme.FONT_MEDIUM,
+    lineHeight: 24,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
+  additionalText: {
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: 25,
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
+  semiboldText: {
+    fontFamily: Theme.FONT_SEMIBOLD,
+    lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
     color: '#FFFFFF',
@@ -777,22 +796,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  textStyle: {
-    fontWeight: '600',
-    lineHeight: 19,
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#FFFFFF'
-  },
   timeStyle: {
-    fontFamily: 'Raleway-Semibold',
+    fontFamily: Theme.FONT_SEMIBOLD,
     lineHeight: 21,
     fontSize: 18,
     textAlign: 'center',
     color: '#FFFFFF'
   },
   forwardStyle: {
-    fontFamily: 'Raleway-Semibold',
+    fontFamily: Theme.FONT_SEMIBOLD,
     lineHeight: 19,
     fontSize: 16,
     textAlign: 'center',
@@ -800,6 +812,7 @@ const styles = StyleSheet.create({
   },
   animatedView: {
     position: 'absolute',
+    top: 30,
     width: '85%',
     height: 56,
     alignItems: 'center',
@@ -824,7 +837,7 @@ const styles = StyleSheet.create({
     height: 56
   },
   buttonText: {
-    fontFamily: 'Raleway-Medium',
+    fontFamily: Theme.FONT_MEDIUM,
     fontSize: 17,
     color: '#FFFFFF',
     letterSpacing: 0,
@@ -867,7 +880,7 @@ const styles = StyleSheet.create({
     borderRadius: 12
   },
   text: {
-    fontWeight: 'bold',
+    fontFamily: Theme.FONT_BOLD,
     lineHeight: 28,
     fontSize: 20,
     textAlign: 'center',
@@ -894,10 +907,18 @@ const styles = StyleSheet.create({
   },
   textLink: {
     fontSize: 18,
-    fontFamily: 'Raleway-Regular',
+    fontFamily: Theme.FONT_REGULAR,
     color: 'white',
     textDecorationLine: 'underline',
     margin: 5
+  },
+  forwardButton: {
+    borderRadius: 30,
+    shadowColor: 'rgb(14,13,13)',
+    shadowOpacity: 0.7,
+    shadowRadius: 10,
+    shadowOffset: { height: 1, width: 1},
+    elevation: 10
   }
 });
 

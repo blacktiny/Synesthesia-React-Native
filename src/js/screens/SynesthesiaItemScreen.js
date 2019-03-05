@@ -17,6 +17,7 @@ import ExerciseModal from '../components/ExerciseModal';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
+import FastImage from 'react-native-fast-image';
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -204,14 +205,14 @@ class SynesthesiaItemScreen extends Component {
         <BottomBar screen={screen} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
-          {!isFetchingData && <ImageBackground
+          {!isFetchingData && <FastImage
             style={{
               width: '100%',
               height: 137,
               display: "flex",
               alignItems: "center",
             }}
-            resizeMode='cover'
+            resizeMode={FastImage.resizeMode.cover}
             source={{ uri: imageBanner }}
           >
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
@@ -227,7 +228,7 @@ class SynesthesiaItemScreen extends Component {
                 color: '#FFFFFF'
               }}>{subHeader}</Text>
             </View>
-          </ImageBackground>}
+          </FastImage>}
           {isFetchingData && this.loadingPage()}
           {this.renderData()}
 
@@ -243,7 +244,7 @@ class SynesthesiaItemScreen extends Component {
             elevation: 2
           }}
           >
-            <ImageBackground style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+            <FastImage style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
               <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{
                   fontSize: 20,
@@ -271,7 +272,7 @@ class SynesthesiaItemScreen extends Component {
                   onPress={() => { }}
                 />
               </View>
-            </ImageBackground>
+            </FastImage>
           </View>}
 
           <ExerciseModal

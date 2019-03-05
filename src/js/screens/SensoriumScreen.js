@@ -10,6 +10,8 @@ const awarenessImage = require('../../assets/awareness.png')
 const saveProgressImage = require('../../assets/saveProgressImage.png')
 import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
+import { openRegisterModal } from '../actions/ToggleFormModalAction'
+import FastImage from 'react-native-fast-image';
 
 class Sensorium extends Component {
   constructor(props) {
@@ -103,7 +105,7 @@ class Sensorium extends Component {
             onShowUnderlay={() => this.onShowUnderlay('awareness')}
             underlayColor={'#1F1F20'}>
             <View style={{ height: 190, marginTop: -32 }}>
-              <ImageBackground
+              <FastImage
                 style={{
                   width: '100%',
                   height: '100%',
@@ -111,7 +113,7 @@ class Sensorium extends Component {
                   alignItems: "center",
                   opacity: awareBtnPressStatus ? 0.5 : 1.0
                 }}
-                resizeMode='cover'
+                resizeMode={FastImage.resizeMode.cover}
                 source={awarenessImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -128,7 +130,7 @@ class Sensorium extends Component {
                     fontFamily: Theme.FONT_REGULAR
                   }}>{'Mindful presence in your surrounding'}</Text>
                 </View>
-              </ImageBackground>
+              </FastImage>
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
@@ -138,7 +140,7 @@ class Sensorium extends Component {
             onShowUnderlay={() => this.onShowUnderlay('synesthesia')}
             underlayColor={'#1F1F20'}>
             <View style={{ height: 190, marginTop: -32 }}>
-              <ImageBackground
+              <FastImage
                 style={{
                   width: '100%',
                   height: '100%',
@@ -146,7 +148,7 @@ class Sensorium extends Component {
                   alignItems: "center",
                   opacity: synesBtnPressStatus ? 0.5 : 1.0
                 }}
-                resizeMode='cover'
+                resizeMode={FastImage.resizeMode.cover}
                 source={synesthesiaImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -162,20 +164,20 @@ class Sensorium extends Component {
                     fontFamily: Theme.FONT_REGULAR
                   }}>{'Blend your senses'}</Text>
                 </View>
-              </ImageBackground>
+              </FastImage>
             </View>
           </TouchableHighlight>
           {
             !isLoggedIn &&
             <View style={{ marginTop: -32 }}>
-              <ImageBackground
+              <FastImage
                 style={{
                   width: '100%',
                   height: 248,
                   display: "flex",
                   alignItems: "center",
                 }}
-                resizeMode='cover'
+                resizeMode={FastImage.resizeMode.cover}
                 source={saveProgressImage}
               >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
@@ -192,10 +194,10 @@ class Sensorium extends Component {
                     disabled={false}
                     style={styles.button}
                     title="Create Free Account"
-                    onPress={() => this.props.navigation.navigate('Register')}
+                    onPress={() => this.props.dispatch(openRegisterModal())}
                   />
                 </View>
-              </ImageBackground>
+              </FastImage>
             </View>
           }
         </ScrollView >

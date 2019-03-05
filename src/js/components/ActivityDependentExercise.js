@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { Theme } from "../constants/constants";
+import FastImage from "react-native-fast-image";
 
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
@@ -150,7 +151,7 @@ class ActivityDependentExercise extends Component {
                 </TouchableHighlight>
 
                 {(item.is_locked != '0' && item.is_free == '1') || (userType > '0' && item.is_done != "1") ?
-                  <ImageBackground
+                  <FastImage
                     style={{
                       height: 33,
                       width: 33,
@@ -161,20 +162,20 @@ class ActivityDependentExercise extends Component {
                     }}
                     source={lock1}
                   >
-                    <Image
+                    <FastImage
                       style={{
                         alignSelf: "center",
                         height: 41,
                         width: 41,
                         marginTop: 3
                       }}
-                      resizeMode="contain"
+                      resizeMode={FastImage.resizeMode.contain}
                       source={lock2}
                     />
-                  </ImageBackground>
+                  </FastImage>
                   :
                   item.is_done == "1" ?
-                    <Image
+                    <FastImage
                       style={{
                         height: 33,
                         width: 33,
@@ -184,9 +185,10 @@ class ActivityDependentExercise extends Component {
                         left: 56
                       }}
                       source={tick}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                     :
-                    <ImageBackground
+                    <FastImage
                       style={{
                         height: 33,
                         width: 33,
@@ -197,17 +199,17 @@ class ActivityDependentExercise extends Component {
                       }}
                       source={lock1}
                     >
-                      <Image
+                      <FastImage
                         style={{
                           alignSelf: "center",
                           height: 14,
                           width: 14,
                           marginTop: 9
                         }}
-                        resizeMode="contain"
+                        resizeMode={FastImage.resizeMode.contain}
                         source={redLock}
                       />
-                    </ImageBackground>
+                    </FastImage>
                 }
 
               </View>
