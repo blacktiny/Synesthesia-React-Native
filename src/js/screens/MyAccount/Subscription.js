@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from "prop-types";
 import {
   View,
   Text,
@@ -15,15 +16,15 @@ import {
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
 
-import { Theme } from "../constants/constants";
+import { Theme } from "../../constants/constants";
 
 const { width, height } = Dimensions.get("screen");
 
-import BannerCloseIcon from '../icons/BannerCloseIcon';
+import BannerCloseIcon from '../../icons/BannerCloseIcon';
 
-const calendarIcon = require("../../assets/calendar_icon.png");
-const cancelIcon = require("../../assets/cancel_x.png");
-import DollarSign from '../icons/DollarSign';
+const calendarIcon = require("../../../assets/calendar_icon.png");
+const cancelIcon = require("../../../assets/cancel_x.png");
+import DollarSign from '../../icons/DollarSign';
 
 class Subscription extends Component {
   constructor() {
@@ -71,16 +72,18 @@ class Subscription extends Component {
     this.setState({ subScriptType: 2 });
   };
 
+  onPaymentDetailsClicked = () => {
+    
+  }
+
   onCancelSubScriptionClicked = () => {
     this.setState({ subScriptType: 0 });
   };
 
   onEditBtnClicked = () => {
-
   }
 
   onAddBtnClicked = () => {
-
   }
 
   render() {
@@ -190,7 +193,7 @@ class Subscription extends Component {
         </View>
 
         <View style={styles.moreAndCancelSection}>
-          <Text style={styles.subMoreDetails}>Payment Details</Text>
+          <Text style={styles.subMoreDetails} onPress={() => this.onPaymentDetailsClicked()}>Payment Details</Text>
           <Text
             style={styles.subCancelScription}
             onPress={() => this.onCancelSubScriptionClicked()}
@@ -634,6 +637,10 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
 });
+
+Subscription.propTypes = {
+  onUnsubscribeClicked: PropTypes.func
+};
 
 function mapStateToProps(state) {
   return {};
