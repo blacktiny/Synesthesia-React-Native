@@ -12,6 +12,7 @@ import { meditateHeaderReducer } from './meditateHeaderReducer'
 import { toggleFormModalReducer } from './toggleFormModalReducer'
 import { progressReducer } from './progressReducer'
 import { backgroundSoundReducer } from './backgroundSoundReducer'
+import { blurReducer } from './blurReducer'
 export default combineReducers({
   registerReducer,
   loginReducer,
@@ -25,5 +26,6 @@ export default combineReducers({
   meditateHeaderReducer,
   toggleFormModalReducer,
   progressReducer,
-  backgroundSoundReducer
+  backgroundSoundReducer,
+  blurReducer
 })

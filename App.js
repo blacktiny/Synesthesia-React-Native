@@ -14,6 +14,8 @@ import {
   createDrawerNavigator,
   createStackNavigator
 } from 'react-navigation';
+import { findNodeHandle } from 'react-native';
+import BlurBackground from './src/js/components/BlurBackground';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import store, { persistor } from './src/js/store';
@@ -173,11 +175,25 @@ const AppSwitchNavigator = createSwitchNavigator({
 });
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewRef: null
+    }
+  }
+
+  onViewLoaded() {
+    this.setState({ viewRef: findNodeHandle(this.viewRef) });
+  }
+
   render() {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppContainer />
+          <AppContainer style={{}} ref={(viewRef) => { this.viewRef = viewRef; }}
+            onLayout={() => { this.onViewLoaded(); }} />
+          <BlurBackground viewRef={this.state.viewRef} {...this.props} />
         </PersistGate>
       </Provider>
     )

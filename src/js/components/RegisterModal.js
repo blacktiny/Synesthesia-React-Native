@@ -17,6 +17,7 @@ const { width, height } = Dimensions.get('window');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 import { openLoginModal, closeRegisterModal } from '../actions/ToggleFormModalAction'
+import { addBlur } from '../actions/BlurAction'
 
 const initialState = {
   screenHeight: 0,
@@ -167,7 +168,7 @@ class RegisterScreen extends Component {
                 >
                   <View style={styles.textContainer}>
                     <Text style={styles.loginText}>{'Create a free account'}</Text>
-                    <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.openLoginModal(); }}>
+                    <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.addBlur(); this.props.openLoginModal(); }}>
                       <Text style={styles.noAccountYet}>{'Already have an account?'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
                     </TouchableOpacity>
                   </View>
@@ -367,7 +368,8 @@ const mapDispatchToProps = {
   closeRegisterSuccessBanner,
   setHeaderItem,
   closeRegisterModal,
-  openLoginModal
+  openLoginModal,
+  addBlur
 }
 
 export default connect(

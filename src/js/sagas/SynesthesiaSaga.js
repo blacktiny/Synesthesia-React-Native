@@ -24,7 +24,7 @@ const SynesthesiaSaga = function* (action) {
     }
   }
   else {
-    const dataObject = yield call(getSynesthesiaAnonymous);;
+    const dataObject = yield call(getSynesthesiaAnonymous);
     yield put({
       type: ActionTypes.GET_SYNESTHESIA_SUCCESS,
       payload: {

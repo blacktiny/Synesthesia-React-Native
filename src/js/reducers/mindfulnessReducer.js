@@ -2,12 +2,17 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   error: false,
-  isFetchingData: true,
+  isFetchingData: false,
   mindfulnessData: [],
 };
 
 export const mindfulnessReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.GET_MINDFULNESS:
+      return {
+        ...state,
+        isFetchingData: true
+      }
     case ActionTypes.GET_MINDFULNESS_SUCCESS:
       return {
         ...state,

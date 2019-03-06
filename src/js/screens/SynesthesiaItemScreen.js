@@ -7,7 +7,6 @@ import NotActivityDependentExercise from '../components/NotActivityDependentExer
 
 import { getNodeByID, clearNode } from '../actions/NodeAction'
 import { setMenuItem } from '../actions/SideMenuAction'
-import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
 import { iPhoneX } from '../../js/util';
 
