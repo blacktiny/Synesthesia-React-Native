@@ -3,8 +3,8 @@ import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, Touch
 import LinearGradient from "react-native-linear-gradient";
 
 import { Theme } from '../constants/constants';
-import PersonalSettings from './PersonalSettings';
-import Subscription from './Subscription';
+import PersonalSettings from './MyAccount/PersonalSettings';
+import Subscription from './MyAccount/Subscription';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -13,7 +13,8 @@ export default class UserScreen extends Component {
     super();
     this.state = {
       toggleType: true,
-      isToggleBtnShow: true
+      isToggleBtnShow: true,
+      isConfirmUnsubscribeShowed: false
     }
   }
 
@@ -26,6 +27,10 @@ export default class UserScreen extends Component {
 
   onHideAndShowToggleBtn = (isShow) => {
     this.setState({isToggleBtnShow: isShow});
+  }
+
+  onUnsubscribeClicked = () => {
+    this.props.navigation.navigate('ConfirmUnsubscribe');
   }
 
   render() {
@@ -56,7 +61,7 @@ export default class UserScreen extends Component {
             </LinearGradient>
           </View>}
           {toggleType && <PersonalSettings onHideAndShowToggleBtn={(isShow) => this.onHideAndShowToggleBtn(isShow)} />}
-          {!toggleType && <Subscription /> }
+          {!toggleType && <Subscription onUnsubscribeClicked={() => this.onUnsubscribeClicked()} /> }
         </ScrollView>
       </View>
     )

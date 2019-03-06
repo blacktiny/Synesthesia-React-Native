@@ -4,16 +4,16 @@ import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, Touch
 import { connect } from 'react-redux'
 import LinearGradient from "react-native-linear-gradient";
 
-import { Theme } from '../constants/constants';
-import BannerCloseIcon from '../icons/BannerCloseIcon';
-import ModalCloseIcon from '../icons/ModalCloseIcon';
+import { Theme } from '../../constants/constants';
+import BannerCloseIcon from '../../icons/BannerCloseIcon';
+import ModalCloseIcon from '../../icons/ModalCloseIcon';
 
-import InputTextField from '../components/InputTextField';
-import CustomCheckBox from '../components/CustomCheckBox';
+import InputTextField from '../../components/InputTextField';
+import CustomCheckBox from '../../components/CustomCheckBox';
 
-import { updateUser, cleanUserStatus } from '../actions/LoginAction';
+import { updateUser, cleanUserStatus } from '../../actions/LoginAction';
 
-const mail_want = require('../../../src/assets/mail_want.png');
+const mail_want = require('../../../assets/mail_want.png');
 
 const { width, height } = Dimensions.get('screen');
 

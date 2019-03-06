@@ -32,6 +32,7 @@ import SynesthesiaItemScreen from './src/js/screens/SynesthesiaItemScreen';
 import PlayerScreen from './src/js/screens/PlayerScreen';
 import AudioPlayerScreen from './src/js/screens/AudioPlayerScreen';
 import PlayerHeader from './src/js/components/PlayerHeader';
+import ConfirmUnsubscribeScreen from './src/js/screens/ConfirmUnsubscribeScreen';
 
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
@@ -104,22 +105,16 @@ const SensoriumStackNavigator = createStackNavigator({
 
 const UserStackNavigator = createStackNavigator({
   User: {
-    screen: UserScreen,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
-        headerLeft: <MeditateHeader navigation={navigation} />
-      }
-    }
+    screen: UserScreen
   },
+  ConfirmUnsubscribe: {
+    screen: ConfirmUnsubscribeScreen
+  }
 }, {
     defaultNavigationOptions: ({ navigation }) => {
       return {
-        headerLeft: <Icon
-          style={{ paddingLeft: 10 }}
-          onPress={() => navigation.openDrawer()}
-          name="md-menu"
-          size={30} />
+        headerStyle: { backgroundColor: '#1F1F20', height: 60, borderBottomWidth: 1, borderBottomColor: 'transparent' },
+        headerLeft: <MeditateHeader navigation={navigation} />
       }
     }
   });
@@ -173,7 +168,6 @@ const SensoriumDrawerNavigator = createDrawerNavigator({
 const AppSwitchNavigator = createSwitchNavigator({
   Sensorium: { screen: SensoriumDrawerNavigator },
   Progress: { screen: ProgressStackNavigator },
-  User: { screen: UserScreen },
   Pricing: { screen: PricingScreen },
   Disclaimer: { screen: DisclaimerScreen }
 });
