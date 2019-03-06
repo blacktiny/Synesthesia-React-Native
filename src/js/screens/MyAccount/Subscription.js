@@ -86,6 +86,41 @@ class Subscription extends Component {
   onAddBtnClicked = () => {
   }
 
+  openPaymentDetailsModal = () => {
+    const { paymentDetailsModalVisible } = this.state;
+    return (
+      <Modal visible={paymentDetailsModalVisible} animationType="fade" transparent={true}
+        onRequestClose={() => console.log('closed')}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalBanner}>
+            <TouchableOpacity style={styles.crossButton} onPress={() => {
+              this.setState({ paymentDetailsModalVisible: false })
+            }}>
+              <BannerCloseIcon style={styles.crossIcon} color="#777778" />
+            </TouchableOpacity>
+
+            <ScrollView
+              style={{ marginTop: 20, }}>
+              <Text style={{ fontSize: 18, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_BOLD }}>{'Renews automatically, cancels anytime \n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>With your subscription for the Sensorium, you gain
+              <Text style={{ fontFamily: Theme.FONT_BOLD }}> a free 7-day trial</Text>. Today, you will not be billed anything. {'\n'} </Text>
+
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you do not cancel within this period, the 7-day free trial will
+                <Text style={{ fontFamily: Theme.FONT_BOLD }}> automatically transform into a paid subscription</Text>. {'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>Subscriptions <Text style={{ fontFamily: Theme.FONT_BOLD }}> renew automatically</Text> for your convenience. <Text style={{ fontFamily: Theme.FONT_BOLD }}> Cancel anytime</Text>.{'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you cancel your subscription <Text style={{ fontFamily: Theme.FONT_BOLD }}>continues until the end</Text> of the subscribed period.{'\n'}</Text>
+
+              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>{'Yearly subscriptions are billed annualy and monthly are billed monthly.'}</Text>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal >)
+  }
+
   render() {
     const {
       subScriptDate,
@@ -145,11 +180,17 @@ class Subscription extends Component {
             </TouchableOpacity>
           </LinearGradient>
         </View>
-        <Text style={styles.description}>
-          Try it 7 days for free. Simply cancel it if you do not like it. After 7-day trial you will be automatically billed.
+        <Text style={styles.txtUpper}>
+          Access all Meditations 7 days for free. {"\n"}
+          <Text style={{ fontFamily: Theme.FONT_BOLD }}>If you do not like it, simply cancel.</Text>
+        </Text>
+        <Text style={styles.txtLower}>
+          After 7 days your paid subscription starts automatically.
         </Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
-          <Text onPress={() => { console.log("T&C for subscriptions clicked") }}  style={styles.moreDetails}>T&C for subscriptions</Text>
+          <Text onPress={() => { this.setState({ paymentDetailsModalVisible: true }) }} style={styles.moreDetails}>More Payment Details </Text>
+          <Text style={styles.moreDetailsAndWord}>and </Text>
+          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>FAQ</Text>
         </View>
       </View >
     );
@@ -173,10 +214,10 @@ class Subscription extends Component {
                 <View style={{
                   flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
                 }}>
-                  <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                  <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{subScriptType === 1 ? strMonthlyPrice : strYearlyPrice}</Text>
                 </View>
                 <Text style={styles.subPerMonth}>per month</Text>
-                <Text style={styles.subBilled}>*Billed Annually</Text>
+                {subScriptType === 2 && <Text style={styles.subBilled}>*Billed Annually</Text>}
               </View>
             </TouchableOpacity>
           </LinearGradient>
@@ -251,13 +292,15 @@ class Subscription extends Component {
         >
           {!subScriptType && chooseSubscription}
           {subScriptType > 0 && currentSubscription}
-          {subScriptType > 0 && cardPanel}
+          {/* {subScriptType > 0 && cardPanel}
           {subScriptType > 0 && <TouchableHighlight style={{marginTop: 5}} onPress={() => this.onAddBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('addCard')} onShowUnderlay={() => this.onShowUnderlay('addCard')} underlayColor={'transparent'}>
             <View style={{flexDirection: 'row', alignItems: 'center', display: 'flex'}} >
               <Text style={styles.plusSymbol}>+ </Text>
               <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 16, color: '#30CA9A', opacity: addBtnPressStatus ? 0.7 : 1.0 }}>Add another card</Text>
             </View>
-          </TouchableHighlight>}
+          </TouchableHighlight>} */}
+
+          {this.openPaymentDetailsModal()}
 
         </ScrollView>
       </View>
@@ -466,6 +509,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#0080F0",
     marginLeft: 10
+  },
+  txtUpper: {
+    fontSize: 16,
+    color: "white",
+    lineHeight: 25,
+    marginTop: 5,
+    marginBottom: 10,
+    fontFamily: Theme.FONT_LIGHT
+  },
+  txtLower: {
+    fontFamily: Theme.FONT_LIGHT,
+    fontSize: 16,
+    color: "white",
+    lineHeight: 25,
+    marginTop: 5,
+    marginBottom: 10
   },
   cardPanel: {
     borderRadius: 12,

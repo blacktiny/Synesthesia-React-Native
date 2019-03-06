@@ -247,8 +247,10 @@ class MindFulness extends Component {
 
   onLeafClicked = (item) => {
     const { userType } = this.props;
+    const isDone = item.is_done.toString()
     if (userType == '3') {
       AsyncStorage.setItem('exerciseNodeID', item.id);
+      AsyncStorage.setItem('isDone', isDone);
       this.props.navigation.navigate('Player', { backScreen: 'MindFulness' })
       return true;
     }
@@ -261,6 +263,7 @@ class MindFulness extends Component {
       }
     } else {
       AsyncStorage.setItem('exerciseNodeID', item.id);
+      AsyncStorage.setItem('isDone', isDone);
       this.props.navigation.navigate('Player', { backScreen: 'MindFulness' })
     }
   }
