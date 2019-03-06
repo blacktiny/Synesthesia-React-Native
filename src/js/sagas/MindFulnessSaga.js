@@ -1,12 +1,16 @@
 import { AsyncStorage } from 'react-native';
 
-import { put, call } from 'redux-saga/effects'
+import { put, call, select } from 'redux-saga/effects'
 import { ActionTypes } from '../constants/constants'
 import { getMindFulness, getMindFulnessAnonymous } from '../api/api'
 
+export const getMindfulnessData = (state) => state.mindfulnessReducer.mindfulnessData;
+
 const MindFulnessSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
+  const mindfulnessData = yield select(getMindfulnessData);
 
+  // if (mindfulnessData.length == 0) {
   if (token !== null) {
     const dataObject = yield call(getMindFulness, token);
     if (dataObject.status.success) {
@@ -32,6 +36,7 @@ const MindFulnessSaga = function* (action) {
       }
     })
   }
+  // }
 }
 
 export default MindFulnessSaga

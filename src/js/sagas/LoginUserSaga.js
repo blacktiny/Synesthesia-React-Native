@@ -17,11 +17,9 @@ const LoginUserSaga = function* (action) {
         }
       })
 
-      // AsyncStorage.setItem('token', userObject.token); // example
       AsyncStorage.setItem('token', authObject.token);
       const user = yield call(getUser, action.payload, authObject.token);
 
-      // AsyncStorage.setItem('userId', user.user.id);
       if (user.status.success) {
         yield put({
           type: ActionTypes.LOGIN_USER_SUCCESS,
@@ -31,6 +29,15 @@ const LoginUserSaga = function* (action) {
         })
         yield put({
           type: ActionTypes.OPEN_SUCCESS_MODAL
+        })
+        yield put({
+          type: ActionTypes.GET_MINDFULNESS
+        })
+        yield put({
+          type: ActionTypes.GET_SYNESTHESIA
+        })
+        yield put({
+          type: ActionTypes.GET_BEINGAWARE
         })
       } else {
         yield put({

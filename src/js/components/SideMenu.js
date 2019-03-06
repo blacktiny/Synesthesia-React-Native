@@ -26,6 +26,7 @@ import {
   closeErrorModal,
   openRegisterModal
 } from '../actions/ToggleFormModalAction'
+import { addBlur, removeBlur } from '../actions/BlurAction'
 
 import { Theme } from '../constants/constants'
 
@@ -68,6 +69,7 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem(''));
       this.props.navigation.closeDrawer();
       this.props.dispatch(openLoginModal());
+      this.props.dispatch(addBlur());
     }
     if (itemName == 'Log out') {
       this.props.navigation.closeDrawer();
@@ -232,25 +234,25 @@ class SideMenu extends Component {
 
         <LoginModal
           modalVisible={isLoginModalVisible}
-          closeModal={() => this.props.dispatch(closeLoginModal())}
+          closeModal={() => { this.props.dispatch(closeLoginModal()); this.props.dispatch(removeBlur()) }}
         />
         <RegisterModal
           modalVisible={isRegisterModalVisible}
-          closeModal={() => this.props.dispatch(closeRegisterModal())}
+          closeModal={() => { this.props.dispatch(closeRegisterModal()); this.props.dispatch(removeBlur()) }}
         />
         <ForgotPasswordModal
           modalVisible={isForgotPasswordModalVisible}
-          closeModal={() => this.props.dispatch(closeForgotPasswordModal())}
+          closeModal={() => { this.props.dispatch(closeForgotPasswordModal()); this.props.dispatch(removeBlur()) }}
         />
         <SuccessModal
           modalVisible={isSuccessModalVisible}
           modalType={modalType}
-          closeModal={() => { this.props.dispatch(closeSuccessModal()) }}
+          closeModal={() => { this.props.dispatch(closeSuccessModal()); this.props.dispatch(removeBlur()) }}
         />
         <ErrorModal
           modalVisible={isErrorModalVisible}
           modalType={modalType}
-          closeModal={() => { this.props.dispatch(closeErrorModal()) }}
+          closeModal={() => { this.props.dispatch(closeErrorModal()); this.props.dispatch(removeBlur()) }}
         />
 
         {item.name == 'Meditate' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>

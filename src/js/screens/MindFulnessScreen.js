@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, findNodeHandle, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
 
 import { getMindFulness } from '../actions/MindFulnessAction'
 import { setMenuItem } from '../actions/SideMenuAction'
-import { blurHeader, unBlurHeader } from '../actions/MeditateHeaderAction'
 
 import { Theme } from '../constants/constants'
 import { iPhoneX } from '../../js/util';
@@ -20,7 +19,6 @@ import loginAndCreateAccountBannerImage from '../../assets/login_create_account_
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 import FastImage from 'react-native-fast-image';
-import { BlurView } from 'react-native-blur';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -29,8 +27,7 @@ class MindFulness extends Component {
     super(props);
     this.state = {
       isLockedBannerVisible: false,
-      completeOtherExercise: false,
-      viewRef: null
+      completeOtherExercise: false
     }
   }
 
@@ -44,7 +41,7 @@ class MindFulness extends Component {
 
   loadingPage = () => {
     return (
-      <View style={{ height: height - 455, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <View style={{ height: height - 320, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator />
       </View>
     )
@@ -259,10 +256,8 @@ class MindFulness extends Component {
     if (item.is_locked != '0') {
       if (item.is_free == "1" || userType > '0') {
         this.setState({ isLockedBannerVisible: true, completeOtherExercise: true });
-        this.props.dispatch(blurHeader());
       } else {
         this.setState({ isLockedBannerVisible: true, completeOtherExercise: false });
-        this.props.dispatch(blurHeader());
       }
     } else {
       AsyncStorage.setItem('exerciseNodeID', item.id);
@@ -278,123 +273,99 @@ class MindFulness extends Component {
     const mindFulnessDatas = mindfulnessData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <View
-          ref={(viewRef) => { this.viewRef = viewRef; }}
-          onLayout={() => { this.onViewLoaded(); }}
-        >
-          <BottomBar screen={'mindfullness'} navigation={this.props.navigation} />
-          <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-            <FastImage
-              style={{
-                width: '100%',
-                height: 137,
-                display: "flex",
-                alignItems: "center",
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              source={{ uri: imageBanner }}
-            >
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
+        <BottomBar screen={'mindfullness'} navigation={this.props.navigation} />
+        <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
+          {!isFetchingData && <FastImage
+            style={{
+              width: '100%',
+              height: 137,
+              display: "flex",
+              alignItems: "center",
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+            source={{ uri: imageBanner }}
+          >
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', paddingLeft: 30, paddingRight: 30 }}>
+              <Text style={{
+                textAlign: 'center',
+                fontSize: 20,
+                color: '#FFFFFF',
+                fontFamily: Theme.FONT_BOLD
+              }}>{header}</Text>
+              <Text style={{
+                textAlign: 'center',
+                fontSize: 14,
+                paddingTop: 8,
+                color: '#FFFFFF',
+                fontFamily: Theme.FONT_MEDIUM
+              }}>{subHeader}</Text>
+            </View>
+          </FastImage>}
+          {isFetchingData && this.loadingPage()}
+          {this.renderData(mindFulnessDatas)}
+
+          {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
+            width: width,
+            height: 200,
+            marginBottom: 30,
+            borderRadius: 12,
+            shadowRadius: 16,
+            shadowOffset: { width: 0, height: 8 },
+            shadowColor: "black",
+            shadowOpacity: 0.47,
+            elevation: 2
+          }}
+          >
+            <FastImage style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{
-                  textAlign: 'center',
                   fontSize: 20,
                   color: '#FFFFFF',
-                  fontFamily: Theme.FONT_BOLD
-                }}>{header}</Text>
-                <Text style={{
                   textAlign: 'center',
-                  fontSize: 14,
-                  paddingTop: 8,
-                  color: '#FFFFFF',
-                  fontFamily: Theme.FONT_MEDIUM
-                }}>{subHeader}</Text>
+                  position: 'absolute',
+                  top: 40,
+                  fontFamily: Theme.FONT_BOLD
+                }}>{'Meditate 7 days for free'}</Text>
+
+                <CustomButton
+                  disabled={false}
+                  style={{
+                    height: 50,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 45,
+                    width: 220,
+                    borderRadius: 45,
+                    backgroundColor: '#25B999',
+                    opacity: 1
+                  }}
+                  title="Free Trial"
+                  onPress={() => { }}
+                />
               </View>
             </FastImage>
-            {isFetchingData && this.loadingPage()}
-            {this.renderData(mindFulnessDatas)}
+          </View>}
 
-            {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
-              width: width,
-              height: 200,
-              marginBottom: 30,
-              borderRadius: 12,
-              shadowRadius: 16,
-              shadowOffset: { width: 0, height: 8 },
-              shadowColor: "black",
-              shadowOpacity: 0.47,
-              elevation: 2
+          <ExerciseModal
+            modalVisible={this.state.isLockedBannerVisible}
+            closeModal={() => {
+              this.setModalVisible(false)
             }}
-            >
-              <FastImage style={{ width: '100%', height: '100%' }} source={unlockActivitiesBannerImage}>
-                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{
-                    fontSize: 20,
-                    color: '#FFFFFF',
-                    textAlign: 'center',
-                    position: 'absolute',
-                    top: 40,
-                    fontFamily: Theme.FONT_BOLD
-                  }}>{'Meditate 7 days for free'}</Text>
-
-                  <CustomButton
-                    disabled={false}
-                    style={{
-                      height: 50,
-                      alignSelf: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginTop: 45,
-                      width: 220,
-                      borderRadius: 45,
-                      backgroundColor: '#25B999',
-                      opacity: 1
-                    }}
-                    title="Free Trial"
-                    onPress={() => { }}
-                  />
-                </View>
-              </FastImage>
-            </View>}
-
-            <ExerciseModal
-              modalVisible={this.state.isLockedBannerVisible}
-              closeModal={() => {
+            completeOtherExercise={this.state.completeOtherExercise}
+            subscribeButton={
+              () => {
                 this.setModalVisible(false)
-                this.props.dispatch(unBlurHeader())
-              }}
-              completeOtherExercise={this.state.completeOtherExercise}
-              subscribeButton={
-                () => {
-                  this.setModalVisible(false)
-                  this.props.dispatch(setMenuItem('7 days for free'))
-                  this.props.navigation.navigate('Pricing')
-                }
-              } />
+                this.props.dispatch(setMenuItem('7 days for free'))
+                this.props.navigation.navigate('Pricing')
+              }
+            } />
 
-          </ScrollView>
-        </View>
-
-        {this.state.isLockedBannerVisible && <BlurView
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0
-          }}
-          viewRef={this.state.viewRef}
-          blurType="dark"
-          blurAmount={10}
-        />}
-
+        </ScrollView>
       </View>
-
-
     )
   }
 }
-
-
 
 function mapStateToProps(state) {
   return {

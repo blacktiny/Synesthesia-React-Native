@@ -36,7 +36,7 @@ sagaMiddleware.run(rootSaga)
 export default store
 
 // redux persist. If the below line is open then redux state will not be stored
-// window.persistor = persistor.purge() 
+// window.persistor = persistor.purge()
 
 window.store = store
 

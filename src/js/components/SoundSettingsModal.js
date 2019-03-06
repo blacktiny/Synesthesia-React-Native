@@ -41,13 +41,13 @@ class SettingsModal extends Component {
     this.props.setVolume(value)
   }, 200)
 
-  renderList = ({item}) => {
+  renderList = ({ item }) => {
     const selected = item.name === this.state.sound.name
     return (
       <TouchableOpacity onPress={() => this.onBackgroundSoundChoosed(item)} style={{ marginVertical: 5 }}>
         <View style={[styles.itemContainer, { justifyContent: selected ? 'space-between' : "flex-start" }]}>
           <Text style={[styles.listText, selected && { color: "#8D7BF0", fontFamily: Theme.FONT_BOLD }]}>{item.name}</Text>
-          {selected && <Icon name="check" size={14} color="#8D7BF0"/>}
+          {selected && <Icon name="check" size={14} color="#8D7BF0" />}
         </View>
       </TouchableOpacity>
     )
@@ -56,81 +56,81 @@ class SettingsModal extends Component {
   render() {
     const { onClose, visible } = this.props
     return (
-        <Modal  animationType="slide"
+      <Modal animationType="fade"
         transparent={true}
         visible={visible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
         }}>
-          <View style={styles.containerModal}>
-              <View style={[styles.content]}>
-                <TouchableOpacity onPress={onClose} style={styles.close}>
-                  <CloseIcon color="#777778" strokeWidth={3.8} />
-                </TouchableOpacity>
-                <Text style={[styles.text, { alignSelf: 'flex-start' }]}>Exercise Sound</Text>
-                <View style={[styles.row, { marginBottom: this.props.showSettings ? 40 : 0 }]}>
-                  <Image source={volume} style={{width: 16, height: 19, marginRight: 10}}/>
-                  <Slider
-                    minimumValue={0}
-                    maximumValue={1}
-                    style={{width:  Dimensions.get('window').width * 0.7 }}
-                    customMinimumTrack={(
-                      <LinearGradient
-                        start={{x: .74, y: .26}}
-                        end={{x: 0, y: .77}}
-                        colors={['#27BF9E', '#84FAB0']}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    )}
-                    maximumTrackTintColor="#D8D8D8"
-                    thumbTintColor="#27BF9E"
-                    step={0.01}
-                    value={this.props.volume}
-                    onValueChange={this.onSoundVolumeChange}
+        <View style={styles.containerModal}>
+          <View style={[styles.content]}>
+            <TouchableOpacity onPress={onClose} style={styles.close}>
+              <CloseIcon color="#777778" strokeWidth={3.8} />
+            </TouchableOpacity>
+            <Text style={[styles.text, { alignSelf: 'flex-start' }]}>Exercise Sound</Text>
+            <View style={[styles.row, { marginBottom: this.props.showSettings ? 40 : 0 }]}>
+              <Image source={volume} style={{ width: 16, height: 19, marginRight: 10 }} />
+              <Slider
+                minimumValue={0}
+                maximumValue={1}
+                style={{ width: Dimensions.get('window').width * 0.7 }}
+                customMinimumTrack={(
+                  <LinearGradient
+                    start={{ x: .74, y: .26 }}
+                    end={{ x: 0, y: .77 }}
+                    colors={['#27BF9E', '#84FAB0']}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
                   />
-                </View>
-               {this.props.showSettings && <View style={styles.backgroundSoundContainer}>
-               {this.props.isLoading && <View style={styles.activityContainer}>
-                 <ActivityIndicator />
-               </View>}
-                  <Text style={[styles.text, { alignSelf: 'flex-start', marginTop: 40, marginBottom: 10 }]}>Background Sound</Text>
-                  <FlatList
-                    data={BACKGROUND_SOUNDS}
-                    extraData={this.state.sound}
-                    renderItem={this.renderList}
-                    keyExtractor={(item, index) => item.name}
-                  />
-                  <View style={styles.row}>
-                    <Image source={volume} style={{width: 16, height: 19, marginRight: 10}}/>
-                    <Slider
-                      minimumValue={0}
-                      maximumValue={1}
-                      style={{width:  Dimensions.get('window').width * 0.7 }}
-                      customMinimumTrack={(
-                        <LinearGradient
-                          start={{x: .74, y: .26}}
-                          end={{x: 0, y: .77}}
-                          colors={['#27BF9E', '#84FAB0']}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      )}
-                      maximumTrackTintColor="#D8D8D8"
-                      thumbTintColor="#27BF9E"
-                      step={0.01}
-                      value={this.props.backgroundSoundVolume}
-                      onValueChange={this.onBackgroundSoundVolumeChange}
-                    />
-                  </View>
-                </View>}
-              </View>
+                )}
+                maximumTrackTintColor="#D8D8D8"
+                thumbTintColor="#27BF9E"
+                step={0.01}
+                value={this.props.volume}
+                onValueChange={this.onSoundVolumeChange}
+              />
             </View>
-        </Modal>
+            {this.props.showSettings && <View style={styles.backgroundSoundContainer}>
+              {this.props.isLoading && <View style={styles.activityContainer}>
+                <ActivityIndicator />
+              </View>}
+              <Text style={[styles.text, { alignSelf: 'flex-start', marginTop: 40, marginBottom: 10 }]}>Background Sound</Text>
+              <FlatList
+                data={BACKGROUND_SOUNDS}
+                extraData={this.state.sound}
+                renderItem={this.renderList}
+                keyExtractor={(item, index) => item.name}
+              />
+              <View style={styles.row}>
+                <Image source={volume} style={{ width: 16, height: 19, marginRight: 10 }} />
+                <Slider
+                  minimumValue={0}
+                  maximumValue={1}
+                  style={{ width: Dimensions.get('window').width * 0.7 }}
+                  customMinimumTrack={(
+                    <LinearGradient
+                      start={{ x: .74, y: .26 }}
+                      end={{ x: 0, y: .77 }}
+                      colors={['#27BF9E', '#84FAB0']}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  )}
+                  maximumTrackTintColor="#D8D8D8"
+                  thumbTintColor="#27BF9E"
+                  step={0.01}
+                  value={this.props.backgroundSoundVolume}
+                  onValueChange={this.onBackgroundSoundVolumeChange}
+                />
+              </View>
+            </View>}
+          </View>
+        </View>
+      </Modal>
     );
   }
 }
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    marginVertical: 5 
+    marginVertical: 5
   },
   backgroundSoundContainer: {
     flexDirection: 'column',
