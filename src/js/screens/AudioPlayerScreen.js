@@ -11,7 +11,8 @@ import {
   Linking,
   WebView,
   Platform,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from 'react-native';
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
@@ -162,9 +163,12 @@ class AudioPlayer extends Component {
     }
     clearInterval(this.tracker)
     this.props.clearNode()
+    AsyncStorage.removeItem('isDone')
   }
 
-  trackTime = () => {
+  trackTime = async () => {
+    const isDoneNumber = await AsyncStorage.getItem('isDone')
+    const isDone = isDoneNumber === '1'
     this.tracker = setInterval(() => {
       const {
         completion,
@@ -182,6 +186,7 @@ class AudioPlayer extends Component {
         stopMain
       } = this.state
       const { completeNode, nodeCompleted } = this.props
+
       if (play) {
       this.player.getCurrentTime((seconds) => {
           this.setState({ currentTime: seconds })
@@ -242,9 +247,11 @@ class AudioPlayer extends Component {
             }
             this.startTrigger()
           }
-          if ((seconds >= completion.startAt) && (seconds <= completion.startAt + completion.endAfter)) {
-            if (!nodeCompleted) {
-              completeNode()
+          if ((seconds >= completion.startAt)) {
+            if (!isDone) {
+              if (!nodeCompleted) {
+                completeNode()
+              }
             }
           }
         });

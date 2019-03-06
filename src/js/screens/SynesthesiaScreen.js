@@ -282,8 +282,10 @@ class Synesthesia extends Component {
 
   onLeafClicked = (item) => {
     const { userType } = this.props;
+    const isDone = item.is_done.toString()
     if (userType == '3') {
       AsyncStorage.setItem('nodeID', item.id);
+      AsyncStorage.setItem('isDone', isDone);
       this.props.navigation.navigate('Player')
       return true;
     }
@@ -295,6 +297,7 @@ class Synesthesia extends Component {
       }
     } else {
       AsyncStorage.setItem('nodeID', item.id);
+      AsyncStorage.setItem('isDone', isDone);
       this.props.navigation.navigate('Player')
     }
   }
