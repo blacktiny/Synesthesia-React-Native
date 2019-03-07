@@ -18,6 +18,7 @@ import CustomButton from '../components/CustomButton';
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
+import { addBlur, removeBlur } from '../actions/BlurAction'
 import FastImage from 'react-native-fast-image';
 
 const { width, height } = Dimensions.get('screen');
@@ -33,10 +34,6 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
-  }
-
-  onViewLoaded() {
-    this.setState({ viewRef: findNodeHandle(this.viewRef) });
   }
 
   loadingPage = () => {
@@ -113,10 +110,10 @@ class MindFulness extends Component {
                       opacity: 1
                     }}
                     title="Create Free Account"
-                    onPress={() => this.props.dispatch(openRegisterModal())}
+                    onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
 
-                  <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.dispatch(openLoginModal())}>
+                  <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openLoginModal()) }}>
                     <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
                   </TouchableOpacity>
 
@@ -352,9 +349,7 @@ class MindFulness extends Component {
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}
-            closeModal={() => {
-              this.setModalVisible(false)
-            }}
+            closeModal={() => { this.props.dispatch(removeBlur()); this.setModalVisible(false) }}
             completeOtherExercise={this.state.completeOtherExercise}
             subscribeButton={
               () => {

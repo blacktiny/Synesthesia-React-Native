@@ -16,6 +16,7 @@ import ProgressiveImage from '../components/ProgressiveImage';
 import ExerciseModal from '../components/ExerciseModal';
 import CustomButton from '../components/CustomButton';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
+import { addBlur, removeBlur } from '../actions/BlurAction'
 
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
@@ -41,7 +42,7 @@ class Synesthesia extends Component {
   onItemButtonClicked = (id) => {
     AsyncStorage.setItem('nodeID', id);
     // this.props.navigation.navigate('SynesthesiaItem');
-    this.props.navigation.push('SynesthesiaItem', 'syensthesia')
+    this.props.navigation.push('SynesthesiaItem', 'synesthesia')
   }
 
   loadingPage = () => {
@@ -122,10 +123,10 @@ class Synesthesia extends Component {
                         opacity: 1
                       }}
                       title="Create Free Account"
-                      onPress={() => this.props.dispatch(openRegisterModal())}
+                      onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                     />
 
-                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => this.props.dispatch(openLoginModal())}>
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openLoginModal()) }}>
                       <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
                     </TouchableOpacity>
 
@@ -310,7 +311,7 @@ class Synesthesia extends Component {
     const synesthesiaDatas = synesthesiaData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'syensthesia'} navigation={this.props.navigation} />
+        <BottomBar screen={'synesthesia'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData &&
             <View>
@@ -395,7 +396,7 @@ class Synesthesia extends Component {
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}
-            closeModal={() => this.setModalVisible(false)}
+            closeModal={() => { this.props.dispatch(removeBlur()); this.setModalVisible(false) }}
             completeOtherExercise={this.state.completeOtherExercise}
             subscribeButton={
               () => {

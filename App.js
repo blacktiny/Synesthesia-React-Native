@@ -14,7 +14,7 @@ import {
   createDrawerNavigator,
   createStackNavigator
 } from 'react-navigation';
-import { findNodeHandle } from 'react-native';
+import { findNodeHandle, View } from 'react-native';
 import BlurBackground from './src/js/components/BlurBackground';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -191,8 +191,10 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppContainer style={{}} ref={(viewRef) => { this.viewRef = viewRef; }}
-            onLayout={() => { this.onViewLoaded(); }} />
+          <View style={{ height: '100%', width: '100%', flex: 1 }} ref={(viewRef) => { this.viewRef = viewRef; }}
+            onLayout={() => { this.onViewLoaded(); }} >
+            <AppContainer />
+          </View>
           <BlurBackground viewRef={this.state.viewRef} {...this.props} />
         </PersistGate>
       </Provider>

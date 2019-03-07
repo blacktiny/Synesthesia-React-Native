@@ -25,6 +25,9 @@ import { nextExercise } from '../actions/ExerciseAction'
 import { FILES_URL, ITEMS_TYPES, Theme } from '../constants/constants'
 import { getFileUrl } from '../helpers/getUrl'
 import { getCompletionPeriod } from '../helpers/getCompletionPeriod'
+import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
+import { setHeaderItem } from '../actions/MeditateHeaderAction';
+import { setBottomBarItem } from '../actions/BottomBarAction';
 import {
   getTriggerPeriod,
   getShowButton,
@@ -41,6 +44,8 @@ import { checkSkipable } from '../helpers/checkSkipable'
 import Button from '../components/Button'
 import Video from 'react-native-video'
 import YouTube from 'react-native-youtube';
+import { addBlur, removeBlur } from '../actions/BlurAction'
+
 
 Sound.setCategory('Playback');
 const prev = require('../../assets/prev.png')
@@ -141,17 +146,18 @@ class AudioPlayer extends Component {
       triggerFontStyle: {},
       modalVisible: false,
       volume: props.volume,
-      setVolume: (value) => this.setVolume(value)
+      setVolume: (value) => this.setVolume(value),
+      fadeButtons: new Animated.Value(0)
     }
   }
-  
+
   componentDidMount() {
     const { items, mainType } = this.state
     this.setTrigger(items)
     if (this.props.exercisesLength > 1) {
       this.setState({ skipable: checkSkipable(items.main) })
     }
-    if (mainType  === ITEMS_TYPES.audio) {
+    if (mainType === ITEMS_TYPES.audio) {
       this.initAudioPlayer()
     }
   }
@@ -188,7 +194,7 @@ class AudioPlayer extends Component {
       const { completeNode, nodeCompleted } = this.props
 
       if (play) {
-      this.player.getCurrentTime((seconds) => {
+        this.player.getCurrentTime((seconds) => {
           this.setState({ currentTime: seconds })
           if (trigger && Math.floor(seconds) === triggerTime.startAt) {
             if (stopMain) {
@@ -197,9 +203,9 @@ class AudioPlayer extends Component {
             }
             this.startTrigger()
           }
-          
-          if (trigger && Math.floor(seconds) >= triggerTime.startAt && ((Math.floor(seconds) <= triggerTime.endAt) || (Math.floor(seconds) <= triggerTime.endAt)) && !triggerPictureShowed ) {
-            this.setState({ triggerPictureShowed: true})
+
+          if (trigger && Math.floor(seconds) >= triggerTime.startAt && ((Math.floor(seconds) <= triggerTime.endAt) || (Math.floor(seconds) <= triggerTime.endAt)) && !triggerPictureShowed) {
+            this.setState({ triggerPictureShowed: true })
             Animated.timing(
               triggerFadeAnim,
               {
@@ -208,8 +214,8 @@ class AudioPlayer extends Component {
               }
             ).start();
           }
-          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - triggerTime.fadeOut : triggerTime.endAt)) && triggerPictureShowed ) {
-            this.setState({ triggerPictureShowed: false})
+          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - triggerTime.fadeOut : triggerTime.endAt)) && triggerPictureShowed) {
+            this.setState({ triggerPictureShowed: false })
 
             Animated.timing(
               triggerFadeAnim,
@@ -219,24 +225,24 @@ class AudioPlayer extends Component {
               }
             ).start();
           }
-          if ((seconds >= completion.startAt 
-            && (seconds <= completion.endAt) ) 
-              || (prevTriggerTime 
-                && (Math.floor(seconds) > prevTriggerTime.startAt) 
-                && (Math.floor(seconds) < prevTriggerTime.startAt))) {
-                  this.setState({ disableMoveBack: true })
+          if ((seconds >= completion.startAt
+            && (seconds <= completion.endAt))
+            || (prevTriggerTime
+              && (Math.floor(seconds) > prevTriggerTime.startAt)
+              && (Math.floor(seconds) < prevTriggerTime.startAt))) {
+            this.setState({ disableMoveBack: true })
           } else if (disableMoveBack) {
             this.setState({ disableMoveBack: false })
           }
-          if ((seconds >= completion.startAt 
+          if ((seconds >= completion.startAt
             && (seconds <= completion.endAt))
-              || (trigger && (Math.floor(seconds) > triggerTime.startAt)
-                && (Math.floor(seconds) < triggerTime.startAt))) {
-                  this.setState({ disableMoveForeward: true })
+            || (trigger && (Math.floor(seconds) > triggerTime.startAt)
+              && (Math.floor(seconds) < triggerTime.startAt))) {
+            this.setState({ disableMoveForeward: true })
           } else if (disableMoveForeward) {
             this.setState({ disableMoveForeward: false })
           }
-          
+
           if (trigger && triggerTime.endAt && Math.floor(seconds) === triggerTime.endAt) {
             this.nextTrigger()
           }
@@ -336,14 +342,14 @@ class AudioPlayer extends Component {
           stopMain: getTriggerStopMain(nextTrigger),
           triggerType: nextTrigger.item.type
         })
-        this.setState({ triggerPictureShowed: true})
-            Animated.timing(
-              triggerFadeAnim,
-              {
-                toValue: 1,
-                duration: (getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn ? getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn : 0) * 1000,
-              }
-            ).start();
+        this.setState({ triggerPictureShowed: true })
+        Animated.timing(
+          triggerFadeAnim,
+          {
+            toValue: 1,
+            duration: (getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn ? getTriggerPeriod(nextTrigger, true, triggerTime.endAt).fadeIn : 0) * 1000,
+          }
+        ).start();
       } else {
         this.setTriggerContent(triggers[newIndex])
         this.setState({
@@ -366,7 +372,7 @@ class AudioPlayer extends Component {
     this.triggerPlayer.play((success) => {
       if (success) {
         this.triggerPlayer.pause()
-        if (loop){
+        if (loop) {
           this.triggerPlayer.setCurrentTime(0)
           setTimeout(() => {
             this.setLoop()
@@ -382,28 +388,28 @@ class AudioPlayer extends Component {
     const { trigger } = this.state
     switch (trigger.item.type) {
       case ITEMS_TYPES.text:
-          this.setState({ additionalText: trigger.item.file })
+        this.setState({ additionalText: trigger.item.file })
         break;
       case ITEMS_TYPES.audio:
-          this.setLoop()
+        this.setLoop()
         break;
       default:
         break;
     }
-    this.setState({triggerEngaged: true})
+    this.setState({ triggerEngaged: true })
   }
 
   setTriggerContent = (trigger) => {
     switch (trigger.item.type) {
       case ITEMS_TYPES.text:
-          this.setState({ additionalText: trigger.item.file, triggerFontStyle: getTriggerFontStyle(trigger) })
+        this.setState({ additionalText: trigger.item.file, triggerFontStyle: getTriggerFontStyle(trigger) })
         break;
       case ITEMS_TYPES.audio:
-          this.triggerPlayer = new Sound(FILES_URL + getFileUrl(trigger), null, (error) => {
-            if (error) {
-              return;
-            }      
-          });
+        this.triggerPlayer = new Sound(FILES_URL + getFileUrl(trigger), null, (error) => {
+          if (error) {
+            return;
+          }
+        });
       case ITEMS_TYPES.picture:
         this.setState({ triggerPicture: FILES_URL + trigger.item.file })
         break;
@@ -411,14 +417,20 @@ class AudioPlayer extends Component {
         break;
     }
   }
-  
+
   initAudioPlayer = () => {
     this.player = new Sound(FILES_URL + getFileUrl(this.state.items.main), null, (error) => {
       if (error) {
         return;
       }
       this.setState({ loaded: true, duration: this.player.getDuration() })
-
+      Animated.timing(
+        this.state.fadeButtons,
+        {
+          toValue: 1,
+          duration: 1500,
+        }
+      ).start();
       this.trackTime()
       this.play()
     })
@@ -451,12 +463,15 @@ class AudioPlayer extends Component {
     });
   }
 
-  endExercise = () => {
+  endExercise = async () => {
     const { completeNode, nodeCompleted } = this.props
-    if (this.state.completion && !nodeCompleted) {
+    const isDoneNumber = await AsyncStorage.getItem('isDone')
+    const isDone = isDoneNumber === '1'
+    if (this.state.completion && !nodeCompleted && !isDone) {
       completeNode()
     }
-    this.setState({modalVisible: true})
+    this.props.addBlur()
+    this.setState({ modalVisible: true })
   }
   secondsToMinutes = (time) => {
     const minutes = Math.floor(time / 60)
@@ -492,7 +507,7 @@ class AudioPlayer extends Component {
       return
     }
     let newTime = currentTime + 15
-    
+
     if (newTime < duration) {
       if (triggerTime && (newTime > triggerTime.startAt)) {
         mainType === ITEMS_TYPES.audio ? this.player.setCurrentTime(triggerTime.startAt - 1) : this.player.seek(triggerTime.startAt - 1)
@@ -551,8 +566,15 @@ class AudioPlayer extends Component {
     }
   }
 
-  onLoad = ({duration}) => {
+  onLoad = ({ duration }) => {
     this.setState({ duration, loaded: true })
+    Animated.timing(
+      this.state.fadeButtons,
+      {
+        toValue: 1,
+        duration: 1500,
+      }
+    ).start();
   }
 
   onProgress = ({ currentTime }) => {
@@ -572,10 +594,21 @@ class AudioPlayer extends Component {
   }
 
   onLeave = () => {
+    this.props.removeBlur()
+    const { isLoggedIn, navigation } = this.props;
+    const screen = navigation.state.params.backScreen;
     this.setState({ modalVisible: false })
-    this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
+    if (isLoggedIn) {
+      this.props.navigation.navigate('Progress')
+      this.props.cleanProgress();
+      this.props.getUserProgress();
+      this.props.setHeaderItem('Progress');
+      this.props.setBottomBarItem(screen);
+    } else {
+      this.props.navigation.navigate('Sensorium')
+    }
   }
- 
+
   render() {
     const {
       duration,
@@ -583,7 +616,7 @@ class AudioPlayer extends Component {
       loaded,
       play,
       disableMoveForeward,
-      disableMoveBack, 
+      disableMoveBack,
       fadeAnim,
       prevBtnPressStatus,
       nextBtnPressStatus,
@@ -603,126 +636,126 @@ class AudioPlayer extends Component {
     } = this.state
     const { exercise } = this.props
     return (
-        <ImageBackground source={{uri: backgroundImage}} style={styles.container}>
-        {!loaded && <ImageBackground source={{uri: backgroundImage}} style={[styles.container, styles.indicatorStyle]}>
-        <ActivityIndicator />
-      </ImageBackground>}
+      <ImageBackground source={{ uri: backgroundImage }} style={styles.container}>
+        {!loaded && <ImageBackground source={{ uri: backgroundImage }} style={[styles.container, styles.indicatorStyle]}>
+          <ActivityIndicator />
+        </ImageBackground>}
         <CloseModal modalVisible={this.state.modalVisible} >
-        <ImageBackground source={{ uri: backgroundImage }} style={styles.containerModal}>
+          <ImageBackground source={{ uri: backgroundImage }} style={styles.containerModal}>
             <View style={[styles.content, { height: '50%' }]}>
               <Image source={stars} style={styles.image} />
               <Text style={[styles.text, { marginVertical: 5 }]}>Well done!</Text>
               <Text style={styles.text}>Keep up your practice.{'\n'}
-                  Hope to see you soon back for{'\n'}
-                  Another session.
+                Hope to see you soon back for{'\n'}
+                Another session.
               </Text>
               <View style={styles.modalRow}>
                 <TouchableHighlight style={styles.leftButton} onPress={this.onLeave} underlayColor={"#ffffff12"}><Text style={styles.buttonText}>Continue</Text></TouchableHighlight>
               </View>
             </View>
-      
-        </ImageBackground>
+
+          </ImageBackground>
         </CloseModal>
-          <View style={styles.top}>
-            <Text style={styles.topTextTitle}>{exercise.header}</Text>
-            {exercise.subheader !== '' && <Text style={styles.topText}>{exercise.subheader}</Text>}
-          </View>
-          <View style={styles.centralBar}>
+        <View style={styles.top}>
+          <Text style={styles.topTextTitle}>{exercise.header}</Text>
+          {exercise.subheader !== '' && <Text style={styles.topText}>{exercise.subheader}</Text>}
+        </View>
+        <View style={styles.centralBar}>
           {triggerEngaged && triggerType === ITEMS_TYPES.audio && (
-              <View style={styles.column}>
-                <Image source={musicKey}/>
-                <Button onPress={this.nextTrigger} style={styles.button}>
-                  <Text style={styles.semiboldText}>Resume</Text>
-                </Button>
-              </View>
-            )}
-            {triggerEngaged && triggerType === ITEMS_TYPES.text && (
-              <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
+            <View style={styles.column}>
+              <Image source={musicKey} />
+              <Button onPress={this.nextTrigger} style={styles.button}>
+                <Text style={styles.semiboldText}>Resume</Text>
+              </Button>
+            </View>
+          )}
+          {triggerEngaged && triggerType === ITEMS_TYPES.text && (
+            <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
               <View style={styles.column}>
                 <Text style={[styles.additionalText, triggerFontStyle]}>{additionalText}</Text>
                 {showButton && <Button onPress={this.nextTrigger} style={styles.button}>
                   <Text style={styles.semiboldText}>Resume</Text>
                 </Button>}
               </View>
-              </Animated.View>)}
-             {triggerType === ITEMS_TYPES.picture && <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
-                <Image source={{uri: triggerPicture }} style={{width: "100%", height: '90%' }} resizeMode='contain' />
-              </Animated.View>}
-              {triggerType === ITEMS_TYPES.movie && isYoutube(trigger) && triggerEngaged && (
-                <View style={styles.animatedViewPicture}>
-                 {Platform.OS === 'ios' ? <YouTube
-                    ref={component => {
-                      this._youTubeRef = component;
-                    }}
-                    apiKey="AIzaSyDbNjPBzRia3bFQCX3XKIVn61L8OM2PmXc"
-                    play={true}
-                    videoId={getVideoID(trigger)}
-                    controls={1}
-                    style={[{ height: Dimensions.get('window').height * 0.25, width: Dimensions.get('window').width }]}
-                    onError={e => console.warn(e.error)}
-                    onChangeState={this.onEnd}
-                  /> : 
-                  [<WebView
-                    style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height * 0.25 }}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    allowsInlineMediaPlayback={true}
-                    mediaPlaybackRequiresUserAction={false}
-                    source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) + "?autoplay=1" }}
-                  />,
-                  <Button onPress={this.onVideoEnd} style={styles.button}>
+            </Animated.View>)}
+          {triggerType === ITEMS_TYPES.picture && <Animated.View style={[styles.animatedViewPicture, { opacity: triggerTime.fadeIn ? triggerFadeAnim : 1 }]}>
+            <Image source={{ uri: triggerPicture }} style={{ width: "100%", height: '90%' }} resizeMode='contain' />
+          </Animated.View>}
+          {triggerType === ITEMS_TYPES.movie && isYoutube(trigger) && triggerEngaged && (
+            <View style={styles.animatedViewPicture}>
+              {Platform.OS === 'ios' ? <YouTube
+                ref={component => {
+                  this._youTubeRef = component;
+                }}
+                apiKey="AIzaSyDbNjPBzRia3bFQCX3XKIVn61L8OM2PmXc"
+                play={true}
+                videoId={getVideoID(trigger)}
+                controls={1}
+                style={[{ height: Dimensions.get('window').height * 0.25, width: Dimensions.get('window').width }]}
+                onError={e => console.warn(e.error)}
+                onChangeState={this.onEnd}
+              /> :
+                [<WebView
+                  style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height * 0.25 }}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                  allowsInlineMediaPlayback={true}
+                  mediaPlaybackRequiresUserAction={false}
+                  source={{ uri: "https://www.youtube.com/embed/" + getVideoID(trigger) + "?autoplay=1" }}
+                />,
+                <Button onPress={this.onVideoEnd} style={styles.button}>
                   <Text style={styles.semiboldText}>Skip</Text>
                 </Button>]}
-                </View>
-              )}
-              {mainType === ITEMS_TYPES.movie && (
-                <View style={styles.animatedViewPicture}>
-                  <Video ref={(ref) => { this.player = ref }} source={{uri:  FILES_URL + getFileUrl(this.state.items.main) }} onEnd={this.onVideoEnd} paused={!play} onProgress={this.onProgress} onLoad={this.onLoad} style={styles.video} />
-                </View>
-              )}
-          </View>
-          <View style={styles.bottomBar}>
-            <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
-              <LinearGradient
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                colors={['#505052', '#3D3D3E']}
-                style={styles.linearGradient}>
-                <Image source={warning} style={{ marginRight: 20, marginLeft: 10 }} />
-                <Text style={styles.buttonText}>
-                  You can’t move at the moment!
-              </Text>
-              </LinearGradient>
-            </Animated.View>
-            {skipable && <View style={styles.animatedView}>
-              <Button onPress={this.onVideoEnd} style={styles.button}>
-                  <Text style={styles.semiboldText}>Skip</Text>
-                </Button>
-            </View>}
-            {this.state.items.main.item.credit === '1' && <View style={[styles.modalRow, { marginBottom: 15 }]}>
-                <TouchableHighlight onPress={() => Linking.openURL(this.state.items.main.item.credit_link) }>
-                  <Text style={styles.textLink}>
-                    {this.state.items.main.item.credit_text}
-                  </Text>
-                </TouchableHighlight>
-            </View>}
-            <View style={styles.row}>
-              <TouchableHighlight style={styles.forwardButton} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
-                <ImageBackground source={(disableMoveBack || triggerEngaged) ? prevDisable : prev} style={styles.controlButton}>
-                  <Text style={[styles.forwardStyle, (disableMoveBack || triggerEngaged)  && { color: '#313331' }, {opacity: prevBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
-                </ImageBackground>
-              </TouchableHighlight>
-              <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / duration) * 100} disabled={(stopMain && triggerEngaged)} />
-              <TouchableHighlight style={styles.forwardButton} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
-                <ImageBackground source={(disableMoveForeward || triggerEngaged) ? nextDisable : next} style={styles.controlButton}>
-                  <Text style={[styles.forwardStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, {opacity: nextBtnPressStatus ? 0.7 : 1.0}]}>15</Text>
-                </ImageBackground>
-              </TouchableHighlight>
             </View>
-            <Text style={[styles.timeStyle, { marginVertical: iPhoneX() ? 30 : 10 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
+          )}
+          {mainType === ITEMS_TYPES.movie && (
+            <View style={styles.animatedViewPicture}>
+              <Video ref={(ref) => { this.player = ref }} source={{ uri: FILES_URL + getFileUrl(this.state.items.main) }} onEnd={this.onVideoEnd} paused={!play} onProgress={this.onProgress} onLoad={this.onLoad} style={styles.video} />
+            </View>
+          )}
+        </View>
+        <Animated.View style={[styles.bottomBar, { opacity: this.state.fadeButtons }]}>
+          <Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
+            <LinearGradient
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 0 }}
+              colors={['#505052', '#3D3D3E']}
+              style={styles.linearGradient}>
+              <Image source={warning} style={{ marginRight: 20, marginLeft: 10 }} />
+              <Text style={styles.buttonText}>
+                You can’t move at the moment!
+              </Text>
+            </LinearGradient>
+          </Animated.View>
+          {skipable && <View style={styles.animatedView}>
+            <Button onPress={this.onVideoEnd} style={styles.button}>
+              <Text style={styles.semiboldText}>Skip</Text>
+            </Button>
+          </View>}
+          {this.state.items.main.item.credit === '1' && <View style={[styles.modalRow, { marginBottom: 15 }]}>
+            <TouchableHighlight onPress={() => Linking.openURL(this.state.items.main.item.credit_link)}>
+              <Text style={styles.textLink}>
+                {this.state.items.main.item.credit_text}
+              </Text>
+            </TouchableHighlight>
+          </View>}
+          <View style={styles.row}>
+            <TouchableHighlight style={styles.forwardButton} onPress={this.pressPrev} onHideUnderlay={() => this.onHideUnderlay('prev')} onShowUnderlay={() => this.onShowUnderlay('prev')} underlayColor={'#0000004c'}>
+              <ImageBackground source={(disableMoveBack || triggerEngaged) ? prevDisable : prev} style={styles.controlButton}>
+                <Text style={[styles.forwardStyle, (disableMoveBack || triggerEngaged) && { color: '#313331' }, { opacity: prevBtnPressStatus ? 0.7 : 1.0 }]}>15</Text>
+              </ImageBackground>
+            </TouchableHighlight>
+            <ProgressPlayButton onPress={() => this.pressPlayButton()} play={play} progress={(currentTime / duration) * 100} disabled={(stopMain && triggerEngaged)} />
+            <TouchableHighlight style={styles.forwardButton} onPress={this.pressNext} onHideUnderlay={() => this.onHideUnderlay('next')} onShowUnderlay={() => this.onShowUnderlay('next')} underlayColor={'#0000004c'}>
+              <ImageBackground source={(disableMoveForeward || triggerEngaged) ? nextDisable : next} style={styles.controlButton}>
+                <Text style={[styles.forwardStyle, (disableMoveForeward || triggerEngaged) && { color: '#313331' }, { opacity: nextBtnPressStatus ? 0.7 : 1.0 }]}>15</Text>
+              </ImageBackground>
+            </TouchableHighlight>
           </View>
-        </ImageBackground>
-      )
+          <Text style={[styles.timeStyle, { marginVertical: iPhoneX() ? 30 : 10 }]}>{this.secondsToMinutes(duration - currentTime)}</Text>
+        </Animated.View>
+      </ImageBackground >
+    )
   }
 }
 
@@ -910,7 +943,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    marginVertical: 5 
+    marginVertical: 5
   },
   textLink: {
     fontSize: 18,
@@ -924,7 +957,7 @@ const styles = StyleSheet.create({
     shadowColor: 'rgb(14,13,13)',
     shadowOpacity: 0.7,
     shadowRadius: 10,
-    shadowOffset: { height: 1, width: 1},
+    shadowOffset: { height: 1, width: 1 },
     elevation: 10
   }
 });
@@ -932,6 +965,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
+    isLoggedIn: state.loginReducer.isLoggedIn,
     exercise: state.exerciseReducer.currentExercise,
     nodeCompleted: state.nodeReducer.nodeComplete,
     exerciseBG: state.nodeReducer.exerciseNode.image_background,
@@ -943,7 +977,13 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   completeNode,
   nextExercise,
-  clearNode
+  clearNode,
+  addBlur,
+  removeBlur,
+  cleanProgress,
+  getUserProgress,
+  setHeaderItem,
+  setBottomBarItem
 }
 export default connect(
   mapStateToProps,

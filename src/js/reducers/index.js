@@ -13,6 +13,7 @@ import { toggleFormModalReducer } from './toggleFormModalReducer'
 import { progressReducer } from './progressReducer'
 import { backgroundSoundReducer } from './backgroundSoundReducer'
 import { blurReducer } from './blurReducer'
+import { bottomBarReducer } from './bottomBarReducer'
 export default combineReducers({
   registerReducer,
   loginReducer,
@@ -27,5 +28,6 @@ export default combineReducers({
   toggleFormModalReducer,
   progressReducer,
   backgroundSoundReducer,
-  blurReducer
+  blurReducer,
+  bottomBarReducer
 })

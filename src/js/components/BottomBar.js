@@ -9,6 +9,7 @@ const rectangle = require('../../assets/rectangle.png')
 const leftArrow = require('../../assets/leftArrow.png')
 import { Theme } from '../constants/constants'
 import FastImage from 'react-native-fast-image';
+import { getBottomBarItem, setBottomBarItem } from '../actions/BottomBarAction'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -19,6 +20,10 @@ class BottomBar extends Component {
       screen: this.props.screen,
       navigation: this.props.navigation
     }
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getBottomBarItem());
   }
 
   moveToRootScreen = () => {
@@ -39,23 +44,23 @@ class BottomBar extends Component {
   }
 
   render() {
-    const { navigation } = this.state;
+    const { curBottomBarItem } = this.props;
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
           <FastImage style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('MindFulness')}>
-          <Text style={[styles.textStyle, { color: this.state.screen == 'mindfullness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-          {this.state.screen == 'mindfullness' && <FastImage style={styles.imageStyle} source={rectangle} />}
+          <Text style={[styles.textStyle, { color: (this.state.screen == 'mindfullness' || curBottomBarItem == 'MindFulness') ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+          {(this.state.screen == 'mindfullness' || curBottomBarItem == 'MindFulness') && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('BeingAware')}>
-          <Text style={[styles.textStyle, { color: this.state.screen == 'beingaware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-          {this.state.screen == 'beingaware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+          <Text style={[styles.textStyle, { color: (this.state.screen == 'beingaware' || curBottomBarItem == 'BeingAware') ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+          {(this.state.screen == 'beingaware' || curBottomBarItem == 'BeingAware') && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
-          <Text style={[styles.textStyle, { color: this.state.screen == 'syensthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-          {this.state.screen == 'syensthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
+          <Text style={[styles.textStyle, { color: (this.state.screen == 'synesthesia' || curBottomBarItem == 'Synesthesia') ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+          {(this.state.screen == 'synesthesia' || curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -114,7 +119,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return {}
+  return {
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem
+  }
 }
 
 export default connect(mapStateToProps)(BottomBar);

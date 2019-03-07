@@ -2,7 +2,7 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   error: false,
-  isFetchingData: true,
+  isFetchingData: false,
   nodeData: [],
   exerciseNode: [],
   nodeComplete: false,
@@ -16,10 +16,11 @@ export const nodeReducer = (state = initialState, action) => {
         ...state,
         isFetchingData: true
       }
-    case ActionTypes.SET_VOLUME: return {
-      ...state,
-      volume: action.payload.volume
-    }
+    case ActionTypes.SET_VOLUME:
+      return {
+        ...state,
+        volume: action.payload.volume
+      }
     case ActionTypes.GET_NODE_SUCCESS:
       return {
         ...state,
@@ -39,12 +40,12 @@ export const nodeReducer = (state = initialState, action) => {
         nodeComplete: false,
         exerciseNode: {}
       }
-      case ActionTypes.GET_EXERCISE_NODE:
+    case ActionTypes.GET_EXERCISE_NODE:
       return {
         ...state,
         isFetchingData: true,
       }
-     case ActionTypes.GET_EXERCISE_NODE_SUCCESS:
+    case ActionTypes.GET_EXERCISE_NODE_SUCCESS:
       return {
         ...state,
         isFetchingData: false,

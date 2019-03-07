@@ -6,6 +6,7 @@ import { View, Image, TouchableOpacity, StyleSheet, TouchableHighlight, Text } f
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
 import { Theme } from '../constants/constants'
+import { addBlur, removeBlur } from '../actions/BlurAction'
 
 import SettingsModal from './SoundSettingsModal'
 
@@ -24,10 +25,20 @@ class PlayerHeader extends Component {
   }
 
   setModalVisible = (visible) => {
+    if (visible) {
+      this.props.addBlur()
+    } else {
+      this.props.removeBlur()
+    }
     this.setState({ modalVisible: visible })
   }
 
-  settingsModalVisible = (visible) => {
+  settingsModalVisible = () => {
+    if (!this.state.settingsModal) {
+      this.props.addBlur()
+    } else {
+      this.props.removeBlur()
+    }
     this.setState({ settingsModal: !this.state.settingsModal })
   }
 
@@ -40,6 +51,7 @@ class PlayerHeader extends Component {
   }
   leave = () => {
     this.setState({ modalVisible: false })
+    this.props.removeBlur()
     this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
   }
 
@@ -187,7 +199,9 @@ const mapDispatchToProps = {
   setBackgroundSound,
   setBackgroundSoundVolume,
   stopBackgroundSoundVolume,
-  startBackgroundSoundVolume
+  startBackgroundSoundVolume,
+  addBlur,
+  removeBlur
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerHeader);

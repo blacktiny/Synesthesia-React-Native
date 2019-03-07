@@ -7,7 +7,6 @@ import { getNodeByID, getNodeByIDAnonymous } from '../api/api'
 const NodeSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
   const nodeID = yield AsyncStorage.getItem('nodeID');
-  // debugger;
 
   if (nodeID !== null) {
     var dataObject;
