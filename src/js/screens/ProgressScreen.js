@@ -46,7 +46,7 @@ class ProgressScreen extends Component {
   }
 
   render() {
-    const { isFetchingData, progressData } = this.props;
+    const { isFetchingData, progressData, curBottomBarItem } = this.props;
     let summary = {
       minutes: 0,
       total: 0,
@@ -87,7 +87,7 @@ class ProgressScreen extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar navigation={this.props.navigation} />
+        <BottomBar screen={curBottomBarItem} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {isFetchingData && this.loadingPage()}
           {!isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
@@ -151,14 +151,14 @@ class ProgressScreen extends Component {
                   <ProgressBar value={exercise[1].percentage} width={'80%'} color1={'#6F58ED'} color2={'#AEA2F2'} />
                   <Text style={styles.completedSessionText}>{exercise[1].completed}/{exercise[1].total}</Text>
                 </View>
-                <View style={styles.splitterVertical} />
+                <View style={[styles.splitterVertical, { marginRight: 15, marginLeft: 5 }]} />
                 <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[2]}</Text>
                   <Text style={styles.completedPercentText2}>{exercise[2].percentage}%</Text>
                   <ProgressBar value={exercise[2].percentage} width={'80%'} color1={'#0060EB'} color2={'#00C2FB'} />
                   <Text style={styles.completedSessionText}>{exercise[2].completed}/{exercise[2].total}</Text>
                 </View>
-                <View style={styles.splitterVertical} />
+                <View style={[styles.splitterVertical, { marginRight: 15, marginLeft: 5 }]} />
                 <View style={{ width: '28%' }}>
                   <Text style={styles.subTitleTextRegular2}>{exercise_category[0]}</Text>
                   <Text style={styles.completedPercentText2}>{exercise[0].percentage}%</Text>

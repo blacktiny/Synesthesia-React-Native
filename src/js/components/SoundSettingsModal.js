@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { FILES_URL, Theme, BACKGROUND_SOUNDS } from '../constants/constants'
 import Slider from "react-native-slider-custom";
 import LinearGradient from 'react-native-linear-gradient'
+import { removeBlur } from '../actions/BlurAction'
 
 
 const settings = require('../../assets/settings.png')
@@ -52,7 +53,6 @@ class SettingsModal extends Component {
       </TouchableOpacity>
     )
   }
-
   render() {
     const { onClose, visible } = this.props
     return (
@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
   close: {
     position: 'absolute',
     top: 20,
-    right: 20
+    right: 20,
+    padding: 5
   },
   content: {
     width: '90%',
@@ -264,7 +265,8 @@ const mapDispatchToProps = {
   setBackgroundSound,
   setBackgroundSoundVolume,
   stopBackgroundSoundVolume,
-  startBackgroundSoundVolume
+  startBackgroundSoundVolume,
+  removeBlur
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsModal);

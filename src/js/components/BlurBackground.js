@@ -17,8 +17,8 @@ class BlurBackground extends Component {
         }}
         viewRef={this.props.viewRef}
         blurType="dark"
-        blurAmount={10}
-        blurRadius={10}
+        blurAmount={7}
+        blurRadius={7}
       /> : null
     )
   }

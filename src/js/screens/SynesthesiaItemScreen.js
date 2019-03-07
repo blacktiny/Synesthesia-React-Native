@@ -17,6 +17,7 @@ import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.p
 import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
 import FastImage from 'react-native-fast-image';
+import { removeBlur } from '../actions/BlurAction'
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -42,9 +43,8 @@ class SynesthesiaItemScreen extends Component {
   }
 
   renderData = () => {
-
-    const { isFetchingData, nodeData } = this.props;
-    if (nodeData && !isFetchingData) {
+    const { nodeData } = this.props;
+    if (nodeData.length !== 0) {
       let arrData = [];
       if (nodeData.children[0] && nodeData.children[0].type == 'leaf') {
         let itemDataList = [];
@@ -232,7 +232,7 @@ class SynesthesiaItemScreen extends Component {
             </View>
           </FastImage>}
           {isFetchingData && this.loadingPage()}
-          {this.renderData()}
+          {!isFetchingData && this.renderData()}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{
             width: width,
@@ -279,7 +279,7 @@ class SynesthesiaItemScreen extends Component {
 
           <ExerciseModal
             modalVisible={this.state.isLockedBannerVisible}
-            closeModal={() => this.setModalVisible(false)}
+            closeModal={() => { this.props.dispatch(removeBlur()); this.setModalVisible(false) }}
             completeOtherExercise={this.state.completeOtherExercise}
             subscribeButton={
               () => {

@@ -97,7 +97,10 @@ export const ActionTypes = keyMirror({
   CLOSE_ERROR_MODAL: null,
 
   ADD_BLUR: null,
-  REMOVE_BLUR: null
+  REMOVE_BLUR: null,
+
+  GET_BOTTOM_BAR_ITEM: null,
+  SET_BOTTOM_BAR_ITEM: null,
 })
 
 export const Theme = {

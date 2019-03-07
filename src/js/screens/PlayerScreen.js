@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Animated } from 'react-native';
 import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
@@ -7,22 +7,54 @@ import SettingsModal from '../components/SoundSettingsModal'
 import { iPhoneX, iPhone5 } from '../util'
 import { getExerciseNodeByID } from '../actions/NodeAction'
 import { FILES_URL, Theme } from '../constants/constants'
+import { addBlur, removeBlur } from '../actions/BlurAction'
+
 const settings = require('../../assets/settings.png')
 
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
+
 class Player extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.isFetchingData !== prevState.loading) {
+      if (!nextProps.isFetchingData && prevState.loading) {
+        prevState.triggerFadeAnim()
+      }
+      return {
+        loading: nextProps.isFetchingData
+      }
+    } 
+    return null
+  }
   state = {
     activeTime: 10,
     timeParams: [10, 20],
     settingsModal: false,
+    triggerFadeAnim: () => setTimeout(() => this.triggerFadeAnim(), 500),
+    fadeAnim: new Animated.Value(0),
+    loading: this.props.isFetchingData
   }
   componentDidMount() {
     this.props.getExerciseNodeByID()
   }
+
+  triggerFadeAnim = () => {
+    Animated.timing(
+      this.state.fadeAnim,
+      {
+        toValue: 1,
+        duration: 1500,
+      }
+    ).start();
+  }
   onPressTime = (time) => {
     this.setState({ activeTime: time })
   }
-  settingsModalVisible = (visible) => {
+  settingsModalVisible = () => {
+    if (!this.state.settingsModal) {
+      this.props.addBlur()
+    } else {
+      this.props.removeBlur()
+    }
     this.setState({ settingsModal: !this.state.settingsModal })
   }
   renderButtons = () => {
@@ -39,10 +71,22 @@ class Player extends Component {
       )
     })
   }
+  onPressClick = () => {
+    Animated.timing(
+      this.state.fadeAnim,
+      {
+        toValue: 0,
+        duration: 500,
+      }
+    ).start();
+    setTimeout(() => {
+      this.props.navigation.navigate('AudioPlayer', { backScreen: this.props.navigation.state.params.backScreen })
+    }, 600);
+  }
   render() {
     const { navigation, nodeData, imageBackground, isLoggedIn } = this.props
     const imageUri = FILES_URL + imageBackground
-    if (this.props.isFetchingData) {
+    if (this.state.loading) {
       return (
         <View style={[styles.container, { justifyContent: 'center' }]}>
           <ActivityIndicator />
@@ -51,7 +95,7 @@ class Player extends Component {
     }
     return (
       <ImageBackground style={styles.container} source={imageBackground && { uri: imageUri }} resizeMode="cover">
-        <SettingsModal visible={this.state.settingsModal} onClose={this.settingsModalVisible}/>
+        <SettingsModal visible={this.state.settingsModal} onClose={this.settingsModalVisible} />
         <View style={styles.top}>
           <Text style={styles.topTextTitle}>{nodeData.header}</Text>
           <Text style={styles.topText}>{nodeData.subheader}</Text>
@@ -68,13 +112,13 @@ class Player extends Component {
             </TouchableOpacity>
           </View>
         </View>}
-        {isLoggedIn && <View style={[styles.centralBar, { backgroundColor: 'transparent' }]}>
-          <PlayButton onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })} />
-        </View>}
-        <View style={styles.bottom}>
+        {isLoggedIn && <Animated.View style={[styles.centralBar, { backgroundColor: 'transparent', opacity: this.state.fadeAnim }]}>
+          <PlayButton onPress={this.onPressClick} />
+        </Animated.View>}
+        <Animated.View style={[styles.bottom, { opacity: this.state.fadeAnim}]}>
           {!isLoggedIn && [
-            <PlayButton onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })} />,
-            <TouchableOpacity onPress={() => navigation.navigate('AudioPlayer', { backScreen: navigation.state.params.backScreen })}>
+            <PlayButton onPress={this.onPressClick} />,
+            <TouchableOpacity onPress={this.onPressClick}>
               <Text style={styles.bottomText}>Play anyway</Text>
             </TouchableOpacity>]
           }
@@ -85,7 +129,7 @@ class Player extends Component {
             <Image source={settings} style={styles.icon} resizeMode='contain' />
             <Text style={[styles.buttonText, styles.additionalMargin]}>Sound settings</Text>
           </Button>}
-        </View>
+        </Animated.View>
       </ImageBackground>
     )
   }
@@ -205,7 +249,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   getExerciseNodeByID,
   openLoginModal,
-  openRegisterModal
+  openRegisterModal,
+  addBlur,
+  removeBlur
 }
 
 export default connect(

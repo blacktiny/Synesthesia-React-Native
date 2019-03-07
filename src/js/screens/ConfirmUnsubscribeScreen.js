@@ -55,19 +55,19 @@ class ConfirmUnsubscribeScreen extends Component {
           <Text style={styles.desciption}>
             {"If you unsubscribe, you still have access to all the Synesthesia Meditation activities until your paid period ends"}
           </Text>
-          <View>
+          <View style={styles.ImageSection}>
             <Image source={unsubscribe_1} />
             <Text style={styles.imageDesciption}>
               {"Over 30 hours of mindful Synesthetic activities."}
             </Text>
           </View>
-          <View>
+          <View style={styles.ImageSection}>
             <Image source={unsubscribe_2} />
             <Text style={styles.imageDesciption}>
               {"Sharpen your synesthetic senses"}
             </Text>
           </View>
-          <View>
+          <View style={styles.ImageSection}>
             <Image source={unsubscribe_3} />
             <Text style={styles.imageDesciption}>
               {"A break for your body and mind in your busy life"}
@@ -113,6 +113,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 10,
     paddingBottom: 10
+  },
+  ImageSection: {
+    alignSelf: "center"
   },
   imageDesciption: {
     width: width - 30,

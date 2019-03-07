@@ -77,7 +77,10 @@ class Subscription extends Component {
   }
 
   onCancelSubScriptionClicked = () => {
-    this.setState({ subScriptType: 0 });
+    const { onUnsubscribeClicked } = this.props;
+
+    // this.setState({ subScriptType: 0 });
+    onUnsubscribeClicked();
   };
 
   onEditBtnClicked = () => {
