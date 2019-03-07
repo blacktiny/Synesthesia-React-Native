@@ -20,6 +20,7 @@
     "react-native-slider-custom": "git+https://github.com/emmanuellmota/react-native-slider.git",
     "react-native-sound": "^0.10.9",
     "react-native-svg": "^8.0.10",
+    "react-native-text-gradient": "0.0.16",
     "react-native-vector-icons": "^6.1.0",
     "react-native-video": "^4.3.1",
     "react-native-youtube": "^1.1.0",

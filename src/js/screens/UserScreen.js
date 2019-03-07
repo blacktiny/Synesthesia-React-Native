@@ -33,6 +33,11 @@ export default class UserScreen extends Component {
     this.props.navigation.navigate('ConfirmUnsubscribe');
   }
 
+  onSubscribeClicked = (subscribeType) => {
+    if (subscribeType === 1)
+      this.props.navigation.navigate('ConfirmMonthySubscribe');
+  }
+
   render() {
     const { toggleType, isToggleBtnShow } = this.state;
     return (
@@ -61,7 +66,11 @@ export default class UserScreen extends Component {
             </LinearGradient>
           </View>}
           {toggleType && <PersonalSettings onHideAndShowToggleBtn={(isShow) => this.onHideAndShowToggleBtn(isShow)} />}
-          {!toggleType && <Subscription onUnsubscribeClicked={() => this.onUnsubscribeClicked()} /> }
+          {!toggleType && 
+            <Subscription
+              onUnsubscribeClicked={() => this.onUnsubscribeClicked()} 
+              onSubscribeClicked={(subscribeType) => this.onSubscribeClicked(subscribeType)}
+            /> }
         </ScrollView>
       </View>
     )

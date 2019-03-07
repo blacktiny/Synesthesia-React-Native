@@ -3,6 +3,7 @@ package com.synesthesia;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import iyegoroff.RNTextGradient.RNTextGradientPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.inprogress.reactnativeyoutube.ReactNativeYouTube;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNTextGradientPackage(),
             new BlurViewPackage(),
             new FastImageViewPackage(),
             new ReactNativeYouTube(),

@@ -76,6 +76,13 @@ class Subscription extends Component {
     
   }
 
+  onSubscribeBtnClicked = () => {
+    const { subScriptType } = this.state;
+    const { onSubscribeClicked } = this.props;
+
+    onSubscribeClicked(subScriptType);
+  }
+
   onCancelSubScriptionClicked = () => {
     const { onUnsubscribeClicked } = this.props;
 
@@ -209,7 +216,7 @@ class Subscription extends Component {
             end={{ x: 1.0, y: 1.0 }}
             style={styles.subGradient}
           >
-            <TouchableOpacity style={styles.subBtnYear}>
+            <TouchableOpacity style={styles.subBtnYear} onPress={() => this.onSubscribeBtnClicked()}>
               <View style={styles.subBillTypeSection}>
                 <Text style={styles.subBillType}>{subScriptType === 1 ? 'MONTHLY' : 'YEARLY'}</Text>
               </View>
@@ -701,7 +708,8 @@ const styles = StyleSheet.create({
 });
 
 Subscription.propTypes = {
-  onUnsubscribeClicked: PropTypes.func
+  onUnsubscribeClicked: PropTypes.func,
+  onSubscribeClicked: PropTypes.func
 };
 
 function mapStateToProps(state) {

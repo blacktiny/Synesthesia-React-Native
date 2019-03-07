@@ -35,6 +35,7 @@ import PlayerScreen from './src/js/screens/PlayerScreen';
 import AudioPlayerScreen from './src/js/screens/AudioPlayerScreen';
 import PlayerHeader from './src/js/components/PlayerHeader';
 import ConfirmUnsubscribeScreen from './src/js/screens/ConfirmUnsubscribeScreen';
+import ConfirmMonthlySubscribeScreen from './src/js/screens/ConfirmMonthlySubscribeScreen';
 
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
@@ -111,6 +112,9 @@ const UserStackNavigator = createStackNavigator({
   },
   ConfirmUnsubscribe: {
     screen: ConfirmUnsubscribeScreen
+  },
+  ConfirmMonthySubscribe: {
+    screen: ConfirmMonthlySubscribeScreen
   }
 }, {
     defaultNavigationOptions: ({ navigation }) => {
@@ -191,7 +195,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <View style={{ height: '100%', width: '100%', flex: 1 }} ref={(viewRef) => { this.viewRef = viewRef; }}
+        <View style={{ height: '100%', width: '100%', flex: 1 }} ref={(viewRef) => { this.viewRef = viewRef; }}
             onLayout={() => { this.onViewLoaded(); }} >
             <AppContainer />
           </View>
