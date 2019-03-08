@@ -642,15 +642,17 @@ class AudioPlayer extends Component {
         </ImageBackground>}
         <CloseModal modalVisible={this.state.modalVisible} >
           <ImageBackground source={{ uri: backgroundImage }} style={styles.containerModal}>
-            <View style={[styles.content, { height: '50%' }]}>
+            <View style={styles.content}>
               <Image source={stars} style={styles.image} />
               <Text style={[styles.text, { marginVertical: 5 }]}>Well done!</Text>
-              <Text style={styles.text}>Keep up your practice.{'\n'}
+              <Text style={[styles.text, { fontSize: 16, fontFamily: Theme.FONT_REGULAR }]}>Keep up your practice.{'\n'}
                 Hope to see you soon back for{'\n'}
                 Another session.
               </Text>
               <View style={styles.modalRow}>
-                <TouchableHighlight style={styles.leftButton} onPress={this.onLeave} underlayColor={"#ffffff12"}><Text style={styles.buttonText}>Continue</Text></TouchableHighlight>
+                <TouchableHighlight style={styles.leftButton} onPress={this.onLeave} underlayColor={"#ffffff12"}>
+                  <Text style={{ fontSize: 16, fontFamily: Theme.FONT_BOLD, color: '#FFFFFF' }}>{'Continue'}</Text>
+                </TouchableHighlight>
               </View>
             </View>
 
@@ -912,7 +914,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '90%',
-    height: '30%',
+    height: 350,
     backgroundColor: '#3d3d3e',
     alignItems: 'center',
     justifyContent: 'center',
@@ -934,9 +936,9 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   leftButton: {
-    width: "45%",
-    height: 40,
-    borderRadius: 18,
+    width: "100%",
+    height: 45,
+    borderRadius: 45,
     borderWidth: 1,
     borderColor: "#ffffff",
     alignItems: 'center',

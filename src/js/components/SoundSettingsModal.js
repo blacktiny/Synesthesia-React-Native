@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   backgroundSoundContainer: {
     flexDirection: 'column',
-    height: "45%",
+    height: "55%",
     borderTopWidth: 1,
     borderTopColor: '#2E2E2F'
   },

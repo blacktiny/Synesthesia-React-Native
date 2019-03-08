@@ -169,7 +169,7 @@ class RegisterScreen extends Component {
                   <View style={styles.textContainer}>
                     <Text style={styles.loginText}>{'Create a free account'}</Text>
                     <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.addBlur(); this.props.openLoginModal(); }}>
-                      <Text style={styles.noAccountYet}>{'Already have an account?'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
+                      <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
                     </TouchableOpacity>
                   </View>
                   <View>
@@ -216,7 +216,7 @@ class RegisterScreen extends Component {
                       }}
                       label={
                         <Text>
-                          <Text style={styles.checkBoxText}>{'By signing up you agree on the'}</Text>
+                          <Text style={styles.checkBoxText}>{'By creating an account, you agree on the'}</Text>
                           <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/TermsAndConditions') }}>
                             <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
                               {' Terms & Conditions'}
@@ -228,7 +228,7 @@ class RegisterScreen extends Component {
                               {' Privacy Policy'}
                             </Text>
                           </Text>
-                          <Text style={styles.checkBoxText}>{' of synesthesia.com'}</Text>
+                          <Text style={styles.checkBoxText}>{'.'}</Text>
                         </Text>
                       }
                     />
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
         height: height - 250,
       },
       android: {
-        height: height - 190
+        height: height - 100
       },
     }),
     width: width - 30,

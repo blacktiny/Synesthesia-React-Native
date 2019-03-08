@@ -104,7 +104,7 @@ class SynesthesiaItemScreen extends Component {
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, lineHeight: 19 }}>{subHeader}</Text>
         </View>}
-        <View style={{ height: 175, paddingLeft: 8, paddingTop: 10, paddingBottom: 0 }}>
+        <View style={{ height: 175, paddingLeft: 8, paddingTop: 0, paddingBottom: 0, marginTop: 20 }}>
           <FlatList
             data={itemList}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -265,7 +265,7 @@ class SynesthesiaItemScreen extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 45,
-                    width: 220,
+                    width: 230,
                     borderRadius: 45,
                     backgroundColor: '#25B999',
                     opacity: 1

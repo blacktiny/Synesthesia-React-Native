@@ -112,12 +112,12 @@ class BeingAware extends Component {
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginTop: 65,
-                      width: 220,
+                      width: 230,
                       borderRadius: 45,
                       backgroundColor: '#25B999',
                       opacity: 1
                     }}
-                    title="Create Free Account"
+                    title="Create a Free Account"
                     onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
 
@@ -179,7 +179,7 @@ class BeingAware extends Component {
             }}>{subHeader}</Text>
           </View>
         }
-        <View style={{ height: 200, paddingLeft: 8, paddingTop: 20, paddingBottom: 15 }}>
+        <View style={{ paddingLeft: 8, paddingTop: 20, paddingBottom: 15 }}>
           <FlatList
             data={data}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -203,22 +203,25 @@ class BeingAware extends Component {
         {
           item.type == "leaf" ?
             this.checkIfExerciseIsActivityDependentOrNot(nodes, item) ?
-              <ActivityDependentExercise
-                id={id}
-                index={index}
-                numberCount={itemList}
-                item={item}
-                userType={userType}
-                onPress={() => this.onLeafClicked(item)}
-              /> :
-              <NotActivityDependentExercise
-                id={id}
-                index={index}
-                numberCount={itemList}
-                item={item}
-                userType={userType}
-                onPress={() => this.onLeafClicked(item)}
-              />
+              <View style={{ height: 170 }}>
+                <ActivityDependentExercise
+                  id={id}
+                  index={index}
+                  numberCount={itemList}
+                  item={item}
+                  userType={userType}
+                  onPress={() => this.onLeafClicked(item)}
+                /></View> :
+              <View style={{ height: 170 }}>
+                <NotActivityDependentExercise
+                  id={id}
+                  index={index}
+                  numberCount={itemList}
+                  item={item}
+                  userType={userType}
+                  onPress={() => this.onLeafClicked(item)}
+                />
+              </View>
             :
             <View style={{ width: 110, alignItems: 'center', marginTop: 20, marginLeft: 12, marginRight: 12, marginBottom: 20 }}>
               <TouchableOpacity onPress={() => { this.onItemButtonClicked(id) }}>
@@ -375,7 +378,7 @@ class BeingAware extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 45,
-                    width: 220,
+                    width: 230,
                     borderRadius: 45,
                     backgroundColor: '#25B999',
                     opacity: 1

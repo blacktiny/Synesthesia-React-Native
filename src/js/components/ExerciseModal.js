@@ -33,7 +33,7 @@ const ExerciseModal = (props) => {
                 <View>
                   <FastImage style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode={FastImage.resizeMode.contain} source={banneractivitylockedImage} />
                   <Text style={{ fontSize: 20, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
-                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Complete the order exercise first</Text>
+                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 0, paddingRight: 0, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>You need to complete another one first.</Text>
                 </View>
                 <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={props.closeModal}>
                   <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Continue</Text>
@@ -43,12 +43,11 @@ const ExerciseModal = (props) => {
               <View style={{ alignItems: 'center' }}>
                 <View>
                   <FastImage style={{ alignSelf: 'center', height: 78, width: 84, marginTop: 1 }} resizeMode={FastImage.resizeMode.contain} source={bannerpaymentlockedImage} />
-                  <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
-                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 40, paddingRight: 40, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise checkout our attractive Price Plans</Text>
-                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 20, paddingRight: 20, color: '#FFFFFF', marginTop: 20, fontFamily: Theme.FONT_REGULAR }}>Subscribe and get 7 Days of full access</Text>
+                  <Text style={{ fontSize: 18, textAlign: 'center', paddingLeft: 25, paddingRight: 25, color: '#FFFFFF', marginTop: 18, fontFamily: Theme.FONT_BOLD }}>This exercise is still locked!</Text>
+                  <Text style={{ fontSize: 15, textAlign: 'center', paddingLeft: 25, paddingRight: 25, color: '#FFFFFF', marginTop: 20, lineHeight: 22, fontFamily: Theme.FONT_REGULAR }}>To unlock this exercise, subscribe and get a 7-day free trial.</Text>
                 </View>
                 <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={props.subscribeButton}>
-                  <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Subscribe here</Text>
+                  <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>7 days for free</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={props.closeModal}>
                   <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>No, thanks</Text>

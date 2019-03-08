@@ -117,12 +117,12 @@ class Synesthesia extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginTop: 65,
-                        width: 220,
+                        width: 230,
                         borderRadius: 45,
                         backgroundColor: '#25B999',
                         opacity: 1
                       }}
-                      title="Create Free Account"
+                      title="Create a Free Account"
                       onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                     />
 
@@ -186,7 +186,7 @@ class Synesthesia extends Component {
           </View>
         }
 
-        <View style={{ paddingLeft: 8, paddingTop: 20, paddingBottom: 15 }}>
+        <View style={{ paddingLeft: 8, paddingTop: imageBanner.includes("null") ? 20 : 0, paddingBottom: 15, marginTop: imageBanner.includes("null") ? 0 : 20, marginBottom: imageBanner.includes("null") ? 0 : 5 }}>
           <FlatList
             data={data}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -382,7 +382,7 @@ class Synesthesia extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 45,
-                    width: 220,
+                    width: 230,
                     borderRadius: 45,
                     backgroundColor: '#25B999',
                     opacity: 1

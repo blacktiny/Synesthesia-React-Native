@@ -65,6 +65,10 @@ const LoginUserSaga = function* (action) {
           type: ActionTypes.UPDATE_USER_SUCCESS
         })
 
+        yield put({
+          type: ActionTypes.OPEN_SUCCESS_MODAL
+        })
+
         const user = yield call(getUser, action.payload, token);
         if (user.status.success) {
           yield put({
@@ -86,6 +90,9 @@ const LoginUserSaga = function* (action) {
     } else {
       yield put({
         type: ActionTypes.UPDATE_USER_FAIL
+      })
+      yield put({
+        type: ActionTypes.OPEN_ERROR_MODAL
       })
     }
   }

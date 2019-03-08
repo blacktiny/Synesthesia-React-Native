@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
@@ -89,9 +89,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     zIndex: 111111,
     backgroundColor: '#1F1F20',
-    // #777778
-    // justifyContent: 'space-between',
-    // flexDirection : 'row'
+
+    shadowColor: 'rgb(14,13,13)',
+    shadowOpacity: 0.7,
+    shadowRadius: 10,
+    shadowOffset: { height: 1, width: 1 },
+    elevation: 10
   },
   direction: {
     display: 'flex',

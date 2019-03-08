@@ -5,8 +5,6 @@ const initialState = {
   user: {},
   token: null,
   requestPending: false,
-  isUpdatedUser: false,
-  requestUpdating: true,
 };
 
 export const loginReducer = (state = initialState, action) => {
@@ -52,17 +50,20 @@ export const loginReducer = (state = initialState, action) => {
         token: null,
         requestPending: false
       }
+    case ActionTypes.UPDATE_USER:
+      return {
+        ...state,
+        requestPending: true
+      }
     case ActionTypes.UPDATE_USER_SUCCESS:
       return {
         ...state,
-        isUpdatedUser: true,
-        requestUpdating: false
+        requestPending: false
       }
-    case ActionTypes.CLEAN_USER_STATUS:
+    case ActionTypes.UPDATE_USER_FAIL:
       return {
         ...state,
-        isUpdatedUser: false,
-        requestUpdating: true
+        requestPending: false
       }
     default:
       return state

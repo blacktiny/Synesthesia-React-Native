@@ -128,7 +128,7 @@ class LoginModal extends Component {
                       this.props.closeLoginModal();
                       this.props.openRegisterModal();
                     }}>
-                    <Text style={styles.noAccountYet}>{'No account yet?'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
+                    <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
                   </TouchableOpacity>
                 </View>
                 <View>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     paddingTop: 15,
-    fontFamily: Theme.FONT_MEDIUM
+    fontFamily: Theme.FONT_BOLD
   },
   loginText: {
     color: '#FFFFFF',
