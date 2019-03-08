@@ -104,12 +104,12 @@ class MindFulness extends Component {
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginTop: 65,
-                      width: 220,
+                      width: 230,
                       borderRadius: 45,
                       backgroundColor: '#25B999',
                       opacity: 1
                     }}
-                    title="Create Free Account"
+                    title="Create a Free Account"
                     onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
 
@@ -172,7 +172,7 @@ class MindFulness extends Component {
           </View>
         }
 
-        <View style={{ height: 175, paddingLeft: 8, paddingTop: 10, paddingBottom: 0 }}>
+        <View style={{ height: 175, paddingLeft: 8, paddingTop: imageBanner.includes("null") ? 10 : 0, paddingBottom: 0, marginTop: imageBanner.includes("null") ? 0 : 32, marginBottom: imageBanner.includes("null") ? 0 : 13 }}>
           <FlatList
             data={itemList}
             contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
@@ -335,7 +335,7 @@ class MindFulness extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginTop: 45,
-                    width: 220,
+                    width: 230,
                     borderRadius: 45,
                     backgroundColor: '#25B999',
                     opacity: 1

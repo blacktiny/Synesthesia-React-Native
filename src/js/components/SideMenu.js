@@ -161,9 +161,10 @@ class SideMenu extends Component {
           <CustomButton
             disabled={false}
             style={styles.button}
-            title="Create Free Account"
+            title="Create a Free Account"
             onPress={() => {
               this.props.navigation.closeDrawer();
+              this.props.dispatch(addBlur());
               this.props.dispatch(openRegisterModal());
             }}
           />

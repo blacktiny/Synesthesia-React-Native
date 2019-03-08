@@ -5,13 +5,12 @@ import { connect } from 'react-redux'
 import LinearGradient from "react-native-linear-gradient";
 
 import { Theme } from '../../constants/constants';
-import BannerCloseIcon from '../../icons/BannerCloseIcon';
 import ModalCloseIcon from '../../icons/ModalCloseIcon';
 
 import InputTextField from '../../components/InputTextField';
 import CustomCheckBox from '../../components/CustomCheckBox';
 
-import { updateUser, cleanUserStatus } from '../../actions/LoginAction';
+import { updateUser, updateUserForm } from '../../actions/LoginAction';
 
 const mail_want = require('../../../assets/mail_want.png');
 
@@ -23,18 +22,9 @@ class PersonalSettings extends Component {
     this.state = {
       userId: 0,
       bEditView: false,
-      bModalShow: false,
       bLoadingShow: false,
       editBtnPressStatus: false,
       deleteBtnPressStatus: false,
-      firstName: '',
-      firstNameError: '',
-      firstNameSuccessBorder: false,
-      firstNameErrorBorder: false,
-      lastName: '',
-      lastNameError: '',
-      lastNameSuccessBorder: false,
-      lastNameErrorBorder: false,
       userName: '',
       userNameError: '',
       userNameSuccessBorder: false,
@@ -58,12 +48,6 @@ class PersonalSettings extends Component {
   initState() {
     const { user } = this.props;
     this.setState({ userId: user.id });
-    this.setState({ firstName: user.first_name });
-    if (user.first_name != '')
-      this.setState({ firstNameSuccessBorder: true });
-    this.setState({ lastName: user.last_name });
-    if (user.last_name != '')
-      this.setState({ lastNameSuccessBorder: true });
     this.setState({ userName: user.name });
     if (user.name != '')
       this.setState({ userNameSuccessBorder: true });
@@ -107,10 +91,6 @@ class PersonalSettings extends Component {
 
     this.setState({ bEditView: false });
 
-    this.setState({ firstNameSuccessBorder: false });
-    this.setState({ firstNameErrorBorder: false, });
-    this.setState({ lastNameSuccessBorder: false });
-    this.setState({ lastNameErrorBorder: false });
     this.setState({ userNameSuccessBorder: false });
     this.setState({ userNameErrorBorder: false });
     this.setState({ emailSuccessBorder: false });
@@ -128,51 +108,14 @@ class PersonalSettings extends Component {
       "id": this.state.userId,
       "name": this.state.userName,
       "email": this.state.email,
-      "first_name": this.state.firstName,
-      "last_name": this.state.lastName,
+      "first_name": "",
+      "last_name": "",
       "confirmEmail": this.state.confirmEmail
     }
-
-    this.setState({ bLoadingShow: true, bModalShow: true });
+    this.setState({ bLoadingShow: true });
     this.props.dispatch(updateUser(user));
-  }
-
-  validateFirstName = (firstName) => {
-    let error = '';
-    if (firstName.trim() === '') {
-      error = 'Must not be blank';
-      this.setState({
-        firstNameErrorBorder: true,
-        firstNameSuccessBorder: false
-      })
-    } else {
-      this.setState({
-        firstNameErrorBorder: false,
-        firstNameSuccessBorder: true
-      })
-    }
-    this.setState({
-      firstNameError: error
-    })
-  }
-
-  validateLastName = (lastName) => {
-    let error = '';
-    if (lastName.trim() === '') {
-      error = 'Must not be blank';
-      this.setState({
-        lastNameErrorBorder: true,
-        lastNameSuccessBorder: false
-      })
-    } else {
-      this.setState({
-        lastNameErrorBorder: false,
-        lastNameSuccessBorder: true
-      })
-    }
-    this.setState({
-      lastNameError: error
-    })
+    this.props.dispatch(updateUserForm());
+    this.setState({ bEditView: false, bLoadingShow: false });
   }
 
   validateUserName = (userName) => {
@@ -271,42 +214,14 @@ class PersonalSettings extends Component {
     )
   }
 
-  updateSuccessBanner = () => {
-    const { isUpdatedUser } = this.props;
-    return (
-      <View style={{ height: height - 150, justifyContent: 'center' }}>
-        <LinearGradient
-          start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
-          locations={[0, 1]}
-          colors={['#7059ED', '#00C2FB']}
-          style={styles.updateBanner}>
-          <TouchableOpacity style={styles.crossButton} onPress={() => {
-            const { onHideAndShowToggleBtn } = this.props;
-
-            this.setState({ bModalShow: false, bEditView: false, bLoadingShow: false });
-            this.props.dispatch(cleanUserStatus());
-
-            onHideAndShowToggleBtn(true);
-          }}>
-            <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-          </TouchableOpacity>
-          <View style={styles.textContainer}>
-            <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{isUpdatedUser ? 'Yeah! :)' : 'Ooops! :('}</Text>
-            <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{isUpdatedUser ? 'Update Successful!' : 'Update failed. Please try again.'}</Text>
-          </View>
-        </LinearGradient>
-      </View>
-    )
-  }
-
   render() {
-    const { requestUpdating } = this.props;
-    const { bLoadingShow, bModalShow, firstName, lastName, userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
+    const { requestPending, modalType } = this.props;
+    const { bLoadingShow, userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
     const saveInfoDisabled = this.state.emailSuccessBorder && this.state.confirmEmailSuccessBorder;
     return (
       <View style={styles.main}>
         <ScrollView style={styles.formContainer}>
-          {!bLoadingShow && !bModalShow && !bEditView && <View>
+          {!bLoadingShow && !requestPending && !bEditView && <View>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -323,10 +238,6 @@ class PersonalSettings extends Component {
                     </TouchableHighlight>
                   </View>
                   <Text style={styles.textEdit}>{userName}</Text>
-                </View>
-                <View style={{ marginBottom: 20 }}>
-                  <Text style={styles.label}>Name</Text>
-                  <Text style={styles.textEdit}>{firstName} {lastName}</Text>
                 </View>
                 <View style={{ marginBottom: 20 }}>
                   <Text style={styles.label}>Email</Text>
@@ -352,7 +263,7 @@ class PersonalSettings extends Component {
               </View>
             </TouchableHighlight>
           </View>}
-          {!bLoadingShow && !bModalShow && bEditView && <View style={{ height: height + 150 }}>
+          {!bLoadingShow && !requestPending && bEditView && <View style={{ height: height + 150 }}>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Edit personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -361,34 +272,6 @@ class PersonalSettings extends Component {
                 colors={["#3D3D3E", "#505052"]}
                 style={styles.personalInfoBack}
               >
-                <Text style={styles.label}>{'First Name'}</Text>
-                <InputTextField
-                  onChange={(value) => {
-                    this.setState({
-                      firstName: value.trim()
-                    })
-                  }}
-                  value={this.state.firstName}
-                  onBlur={() => this.validateFirstName(this.state.firstName)}
-                  error={this.state.firstNameError}
-                  showSuccessBorder={this.state.firstNameSuccessBorder}
-                  showErrorBorder={this.state.firstNameErrorBorder}
-                />
-                <View style={{ paddingTop: 10 }} />
-                <Text style={styles.label}>{'Last Name'}</Text>
-                <InputTextField
-                  onChange={(value) => {
-                    this.setState({
-                      lastName: value.trim()
-                    })
-                  }}
-                  value={this.state.lastName}
-                  onBlur={() => this.validateLastName(this.state.lastName)}
-                  error={this.state.lastNameError}
-                  showSuccessBorder={this.state.lastNameSuccessBorder}
-                  showErrorBorder={this.state.lastNameErrorBorder}
-                />
-                <View style={{ paddingTop: 10 }} />
                 <Text style={styles.label}>{'Username'}</Text>
                 <InputTextField
                   onChange={(value) => {
@@ -460,8 +343,7 @@ class PersonalSettings extends Component {
               </TouchableHighlight>
             </View>
           </View>}
-          {bLoadingShow && requestUpdating && this.loadingPage()}
-          {!requestUpdating && bModalShow && this.updateSuccessBanner()}
+          {requestPending && this.loadingPage()}
         </ScrollView>
       </View>
     )
@@ -572,8 +454,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     user: state.loginReducer.user,
-    requestUpdating: state.loginReducer.requestUpdating,
-    isUpdatedUser: state.loginReducer.isUpdatedUser
+    requestPending: state.loginReducer.requestPending,
+    modalType: state.toggleFormModalReducer.modalType
   }
 }
 

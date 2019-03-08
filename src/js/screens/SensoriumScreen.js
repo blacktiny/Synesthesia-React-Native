@@ -12,6 +12,7 @@ import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
 import { openRegisterModal } from '../actions/ToggleFormModalAction'
 import FastImage from 'react-native-fast-image';
+import { addBlur, removeBlur } from '../actions/BlurAction'
 
 class Sensorium extends Component {
   constructor(props) {
@@ -23,14 +24,8 @@ class Sensorium extends Component {
     }
   }
 
-  openSensoriumById = (id) => {
-    console.log("enter synesthesia")
-  }
-
-  componentDidUpdate() {
-    const { navigation } = this.props;
-
-    // if (getSynesthesiaSuccess) navigation.navigate('Synesthesia');
+  componentDidMount() {
+    this.props.dispatch(removeBlur());
   }
 
   onHideUnderlay = (itemName) => {
@@ -193,8 +188,8 @@ class Sensorium extends Component {
                   <CustomButton
                     disabled={false}
                     style={styles.button}
-                    title="Create Free Account"
-                    onPress={() => this.props.dispatch(openRegisterModal())}
+                    title="Create a Free Account"
+                    onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
                 </View>
               </FastImage>
@@ -214,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 55,
-    width: 220,
+    width: 230,
     borderRadius: 45,
     backgroundColor: '#25B999',
     opacity: 1
@@ -229,7 +224,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Sensorium)
+export default connect(mapStateToProps)(Sensorium)

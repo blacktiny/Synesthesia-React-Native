@@ -33,8 +33,8 @@ class MeditateHeader extends Component {
     if (headerItem == 'Progress') {
       if (!isLoggedIn) {
         this.props.dispatch(setHeaderItem('Sensorium'));
-        this.props.dispatch(openRegisterModal());
         this.props.dispatch(addBlur());
+        this.props.dispatch(openRegisterModal());
       } else {
         this.props.navigation.navigate(headerItem);
 

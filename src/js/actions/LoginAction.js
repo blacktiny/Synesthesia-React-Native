@@ -24,11 +24,9 @@ export function updateUser(
   }
 }
 
-export function cleanUserStatus() {
+export function updateUserForm() {
   return {
-    type: ActionTypes.CLEAN_USER_STATUS,
+    type: ActionTypes.UPDATE_USER_FORM,
     payload: {}
   }
 }
-
-

@@ -72,6 +72,11 @@ export const toggleFormModalReducer = (state = initialState, action) => {
         ...state,
         isForgotPasswordModalVisible: false
       }
+    case ActionTypes.UPDATE_USER_FORM:
+      return {
+        ...state,
+        modalType: 'UpdateUser'
+      }
     default:
       return state
   }

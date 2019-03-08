@@ -22,7 +22,7 @@ class Player extends Component {
       return {
         loading: nextProps.isFetchingData
       }
-    } 
+    }
     return null
   }
   state = {
@@ -103,11 +103,11 @@ class Player extends Component {
         {!isLoggedIn && <View style={styles.centralBar}>
           <Text style={styles.centralText}>Need to save your Progress?</Text>
           <View style={styles.centerRow}>
-            <TouchableOpacity onPress={() => this.props.openRegisterModal()}>
+            <TouchableOpacity onPress={() => { this.props.addBlur(); this.props.openRegisterModal() }}>
               <Text style={styles.linkText}>Create free account</Text>
             </TouchableOpacity>
             <Text style={styles.orText}>or</Text>
-            <TouchableOpacity onPress={() => this.props.openLoginModal()}>
+            <TouchableOpacity onPress={() => { this.props.addBlur(); this.props.openLoginModal() }}>
               <Text style={styles.linkText}>Log in</Text>
             </TouchableOpacity>
           </View>
@@ -115,7 +115,7 @@ class Player extends Component {
         {isLoggedIn && <Animated.View style={[styles.centralBar, { backgroundColor: 'transparent', opacity: this.state.fadeAnim }]}>
           <PlayButton onPress={this.onPressClick} />
         </Animated.View>}
-        <Animated.View style={[styles.bottom, { opacity: this.state.fadeAnim}]}>
+        <Animated.View style={[styles.bottom, { opacity: this.state.fadeAnim }]}>
           {!isLoggedIn && [
             <PlayButton onPress={this.onPressClick} />,
             <TouchableOpacity onPress={this.onPressClick}>

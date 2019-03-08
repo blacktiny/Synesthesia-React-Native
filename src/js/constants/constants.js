@@ -79,7 +79,7 @@ export const ActionTypes = keyMirror({
   UPDATE_USER_SUCCESS: null,
   UPDATE_USER_FAIL: null,
   SET_VOLUME: null,
-  CLEAN_USER_STATUS: null,
+  UPDATE_USER_FORM: null,
 
   OPEN_LOGIN_MODAL: null,
   CLOSE_LOGIN_MODAL: null,
