@@ -22,7 +22,7 @@ const { width, height } = Dimensions.get("screen");
 
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 
-const calendarIcon = require("../../assets/calendar_icon.png");
+const calendarIcon = require("../../assets/blue_calendar_icon.png");
 const cancelIcon = require("../../assets/cancel_x.png");
 const slider1 = require("../../assets/Slider/slider_1.png");
 const slider2 = require("../../assets/Slider/slider_2.png");
@@ -31,6 +31,8 @@ const slider4 = require("../../assets/Slider/slider_4.png");
 const slider5 = require("../../assets/Slider/slider_5.png");
 import DollarSign from '../icons/DollarSign';
 import BottomBar from '../components/BottomBar';
+
+import { openPaymentDetailsModal } from '../actions/ToggleFormModalAction';
 
 class PricingScreen extends Component {
   constructor() {
@@ -43,7 +45,6 @@ class PricingScreen extends Component {
       monthlyPrice: 4.99,
       yearlyPrice: 2.99,
       size: { width, height },
-      paymentDetailsModalVisible: false
     };
   }
 
@@ -66,41 +67,6 @@ class PricingScreen extends Component {
   onCancelSubScriptionClicked = () => {
     this.setState({ bSubScription: false });
   };
-
-  openPaymentDetailsModal = () => {
-    const { paymentDetailsModalVisible } = this.state;
-    return (
-      <Modal visible={paymentDetailsModalVisible} animationType="fade" transparent={true}
-        onRequestClose={() => console.log('closed')}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalBanner}>
-            <TouchableOpacity style={styles.crossButton} onPress={() => {
-              this.setState({ paymentDetailsModalVisible: false })
-            }}>
-              <BannerCloseIcon style={styles.crossIcon} color="#777778" />
-            </TouchableOpacity>
-
-            <ScrollView
-              style={{ marginTop: 20, }}>
-              <Text style={{ fontSize: 18, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_BOLD }}>{'Renews automatically, cancels anytime \n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>With your subscription for the Sensorium, you gain
-              <Text style={{ fontFamily: Theme.FONT_BOLD }}> a free 7-day trial</Text>. Today, you will not be billed anything. {'\n'} </Text>
-
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you do not cancel within this period, the 7-day free trial will
-                <Text style={{ fontFamily: Theme.FONT_BOLD }}> automatically transform into a paid subscription</Text>. {'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>Subscriptions <Text style={{ fontFamily: Theme.FONT_BOLD }}> renew automatically</Text> for your convenience. <Text style={{ fontFamily: Theme.FONT_BOLD }}> Cancel anytime</Text>.{'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you cancel your subscription <Text style={{ fontFamily: Theme.FONT_BOLD }}>continues until the end</Text> of the subscribed period.{'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>{'Yearly subscriptions are billed annualy and monthly are billed monthly.'}</Text>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal >)
-  }
 
   render() {
     const {
@@ -157,7 +123,7 @@ class PricingScreen extends Component {
             </View>
 
             <View style={styles.moreAndCancelSection}>
-              <Text style={styles.subMoreDetails}>Payment Details</Text>
+              <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.subMoreDetails}>Payment Details</Text>
               <Text
                 style={styles.subCancelScription}
                 onPress={() => this.onCancelSubScriptionClicked()}
@@ -207,7 +173,7 @@ class PricingScreen extends Component {
             </View>
 
             <View style={styles.moreAndCancelSection}>
-              <Text style={styles.subMoreDetails}>Payment Details</Text>
+              <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.subMoreDetails}>Payment Details</Text>
               <Text
                 style={styles.subCancelScription}
                 onPress={() => this.onCancelSubScriptionClicked()}
@@ -278,7 +244,7 @@ class PricingScreen extends Component {
       );
       moreDetailsSec = (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
-          <Text onPress={() => { this.setState({ paymentDetailsModalVisible: true }) }} style={styles.moreDetails}>More Payment Details </Text>
+          <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.moreDetails}>More Payment Details </Text>
           <Text style={styles.moreDetailsAndWord}>and </Text>
           <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>FAQ</Text>
         </View>
@@ -384,8 +350,6 @@ class PricingScreen extends Component {
             {moreDetailsSec}
 
           </ImageBackground>
-
-          {this.openPaymentDetailsModal()}
 
         </ScrollView>
       </View>
@@ -726,57 +690,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     marginRight: 3
-  },
-
-  modalContainer: {
-    ...Platform.select({
-      ios: {
-        height: height - 280,
-      },
-      android: {
-        height: height - 140
-      },
-    }),
-    width: '100%',
-    paddingLeft: 15,
-    paddingRight: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-
-    position: 'absolute',
-    ...Platform.select({
-      ios: {
-        top: '20%',
-      },
-      android: {
-        top: '12%',
-      },
-    }),
-
-    // backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  modalBanner: {
-    borderRadius: 12,
-    paddingRight: 38,
-    paddingLeft: 25,
-    paddingBottom: 40,
-    backgroundColor: '#383938',
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    elevation: 2,
-    alignItems: 'center'
-  },
-  crossButton: {
-    width: 20,
-    height: 20,
-    marginTop: 20,
-    alignSelf: 'flex-end',
-  },
-  crossIcon: {
-    resizeMode: 'contain'
   },
   dollarSign: {
     resizeMode: 'cover',

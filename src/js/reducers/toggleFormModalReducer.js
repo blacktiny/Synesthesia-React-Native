@@ -6,6 +6,7 @@ const initialState = {
   isForgotPasswordModalVisible: false,
   isSuccessModalVisible: false,
   isErrorModalVisible: false,
+  isPaymentDetailsModalVisible: false,
   modalType: ''
 };
 
@@ -71,6 +72,16 @@ export const toggleFormModalReducer = (state = initialState, action) => {
       return {
         ...state,
         isForgotPasswordModalVisible: false
+      }
+    case ActionTypes.OPEN_PAYMENT_DETAILS_MODAL:
+      return {
+        ...state,
+        isPaymentDetailsModalVisible: true
+      }
+    case ActionTypes.CLOSE_PAYMENT_DETAILS_MODAL:
+      return {
+        ...state,
+        isPaymentDetailsModalVisible: false
       }
     case ActionTypes.UPDATE_USER_FORM:
       return {

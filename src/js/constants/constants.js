@@ -101,6 +101,11 @@ export const ActionTypes = keyMirror({
 
   GET_BOTTOM_BAR_ITEM: null,
   SET_BOTTOM_BAR_ITEM: null,
+
+  OPEN_PAYMENT_DETAILS_MODAL: null,
+  CLOSE_PAYMENT_DETAILS_MODAL: null,
+
+  SET_SUBSCRIPTION_TYPE: null
 })
 
 export const Theme = {
@@ -109,10 +114,10 @@ export const Theme = {
   // FONT_MEDIUM: 'RawlineMedium-Regular',
   // FONT_SEMIBOLD: 'RawlineSemiBold-Regular',
   // FONT_BOLD: 'Rawline-Bold'
-  FONT_LIGHT: 'Raleway-Regular',
+  FONT_LIGHT: 'Raleway-Light',
   FONT_REGULAR: 'Raleway-Regular',
-  FONT_MEDIUM: 'Raleway-Regular',
-  FONT_SEMIBOLD: 'Raleway-Regular',
+  FONT_MEDIUM: 'Raleway-Medium',
+  FONT_SEMIBOLD: 'Raleway-SemiBold',
   FONT_BOLD: 'Raleway-Bold'
 }
 
