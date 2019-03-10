@@ -21,6 +21,8 @@ import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 const credit_card_icon = require("../../assets/credit-card.png");
 const paypal_mark = require("../../assets/paypal_mark.png");
+import { openPaymentDetailsModal } from '../actions/ToggleFormModalAction';
+import { setSubscriptionType } from '../actions/SubscriptionAction';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -53,14 +55,14 @@ class ConfirmMonthlySubscribeScreen extends Component {
   convertPrice2String = (price) => {
     let diviVal = 100;
     let strPrice = '';
-    
+
     while (price > 0) {
       if (strPrice === '') {
         strPrice += (price % diviVal).toString();
       } else {
         strPrice = (price % diviVal).toString().concat(",", strPrice);
       }
-      price = parseInt(price/diviVal);
+      price = parseInt(price / diviVal);
     }
 
     return strPrice;
@@ -149,13 +151,15 @@ class ConfirmMonthlySubscribeScreen extends Component {
     }
   }
 
-  onCancelBtnClicked = () => {};
+  onCancelBtnClicked = () => { };
 
-  onYesBtnClicked = () => {};
+  onYesBtnClicked = () => { };
 
   render() {
     const { yearlyPrice, toggleType } = this.state;
+    const { navigation } = this.props;
     const strYearlyPrice = this.convertPrice2String(yearlyPrice);
+    const tier = navigation.getParam('tier');
 
     return (
       <View style={{ flex: 1, backgroundColor: "#1F1F20" }}>
@@ -163,25 +167,38 @@ class ConfirmMonthlySubscribeScreen extends Component {
           <Text style={styles.trial}>
             {"7-day trial"}
           </Text>
-          <LinearTextGradient
-            style={styles.subscription}
-            locations={[0, 1]}
-            colors={['#AEA2F2', '#725BEE']}
-            start={{x:0, y:0}}
-            end={{x:1, y:0}}
-          >
-            <Text style={{color: '#917FF0'}}>{'Monthly subscription'}</Text>
-          </LinearTextGradient>
+          {tier == "monthly" &&
+            <LinearTextGradient
+              style={styles.subscription}
+              locations={[0, 1]}
+              colors={['#AEA2F2', '#725BEE']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <Text style={{ color: '#917FF0' }}>{'Monthly subscription'}</Text>
+            </LinearTextGradient>
+          }
+          {tier == "yearly" &&
+            <LinearTextGradient
+              style={styles.subscription}
+              locations={[0, 1]}
+              colors={['#0060EB', '#006CED']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <Text style={{ color: '#006CED' }}>{'Yearly subscription'}</Text>
+            </LinearTextGradient>
+          }
           <Text style={styles.billToday}>
-            {"Total bill today "} <Text style={{fontSize: 22}}>{'0$'}</Text>
+            {"Total bill today "} <Text style={{ fontSize: 22 }}>{'0$'}</Text>
           </Text>
-          <Text style={{fontFamily: Theme.FONT_REGULAR, color: '#717171', fontSize: 16, lineHeight: 24}}>
+          <Text style={{ fontFamily: Theme.FONT_REGULAR, color: '#717171', fontSize: 16, lineHeight: 24 }}>
             {"If you do not cancel within 7 days, you will be charged yearly "}
-            <Text style={{color: 'white'}}>{strYearlyPrice}$</Text>{". You can cancel anytime."}
-            <Text style={{color: '#25B999'}}>{" More Payment Details"}</Text>
+            <Text style={{ color: 'white' }}>{strYearlyPrice}$</Text>{". You can cancel anytime."}
+            <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={{ color: '#25B999' }}>{" More Payment Details"}</Text>
           </Text>
 
-          <Text style={styles.paySecurely}>
+          {/* <Text style={styles.paySecurely}>
             {"Pay securely"}
           </Text>
           <View style={{ height: 50, marginTop: 5, marginBottom: 10, width: '100%', flexDirection: 'row' }}>
@@ -192,7 +209,7 @@ class ConfirmMonthlySubscribeScreen extends Component {
               style={[styles.toggleBtnBack, { borderTopLeftRadius: 27.5, borderBottomLeftRadius: 27.5 }]}
             >
               <TouchableHighlight style={[styles.toggleButton, { width: toggleType ? (width - 30) / 2 - 4 : (width - 30) / 2, borderTopLeftRadius: 27.5, borderBottomLeftRadius: 27.5, marginRight: toggleType ? 2 : 0 }]} onPress={() => this.onToggleBtnClicked(true)} underlayColor={"#2e2e2f"}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Image source={credit_card_icon} />
                   <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 15, color: 'white' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Credit card</Text>
                 </View>
@@ -208,9 +225,9 @@ class ConfirmMonthlySubscribeScreen extends Component {
                 <Image source={paypal_mark} />
               </TouchableHighlight>
             </LinearGradient>
-          </View>
+          </View> */}
 
-          <View style={styles.cardSection}>
+          {/* <View style={styles.cardSection}>
             <LinearGradient
               start={{ x: 1, y: 1 }}
               end={{ x: 0, y: 0 }}
@@ -279,20 +296,25 @@ class ConfirmMonthlySubscribeScreen extends Component {
                 </View>
               </View>
             </LinearGradient>
-          </View>
+          </View> */}
 
           <View style={styles.buttonSection}>
+            {tier == "monthly" && <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => { this.props.dispatch(setSubscriptionType("monthly")); this.props.navigation.navigate('User') }}>
+              <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Get 7 days free'}</Text>
+            </TouchableOpacity>}
+
+            {tier == "yearly" && <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => { this.props.dispatch(setSubscriptionType("monthly")); this.props.navigation.navigate('User') }}>
+              <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Get 7 days free'}</Text>
+            </TouchableOpacity>}
+
             <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => this.props.navigation.navigate('User')}>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <ModalCloseIcon color="white" strokeWidth={1} />
                 <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>&nbsp;&nbsp;&nbsp;{'Cancel'}</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.modalButton, styles.subscribeButton]} onPress={() => console.log('Unsubscribe')}>
-              <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'7-day trial'}</Text>
+              </View>
             </TouchableOpacity>
           </View>
-          <View style={{width: '100%', height: 150}} />
+          <View style={{ width: '100%', height: 150 }} />
         </ScrollView>
       </View>
     );

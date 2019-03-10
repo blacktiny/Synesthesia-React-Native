@@ -24,7 +24,7 @@ const ErrorModal = (props) => {
           start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
           locations={[0, 1]}
           colors={['#7059ED', '#DA152C']}
-          style={styles.loginBanner}>
+          style={[styles.banner, { height: props.modalType == "Register" ? height - 650 : height - 685 }]}>
           <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
             <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
           </TouchableOpacity>
@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
     top: 0,
     flexDirection: 'row'
   },
-  loginBanner: {
-    height: height - 685,
+  banner: {
     width: width - 30,
     borderRadius: 12,
     paddingRight: 20,

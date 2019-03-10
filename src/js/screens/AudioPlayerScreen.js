@@ -646,8 +646,7 @@ class AudioPlayer extends Component {
               <Image source={stars} style={styles.image} />
               <Text style={[styles.text, { marginVertical: 5 }]}>Well done!</Text>
               <Text style={[styles.text, { fontSize: 16, fontFamily: Theme.FONT_REGULAR }]}>Keep up your practice.{'\n'}
-                Hope to see you soon back for{'\n'}
-                Another session.
+                See you soon.
               </Text>
               <View style={styles.modalRow}>
                 <TouchableHighlight style={styles.leftButton} onPress={this.onLeave} underlayColor={"#ffffff12"}>
@@ -914,7 +913,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '90%',
-    height: 350,
+    height: 315,
     backgroundColor: '#3d3d3e',
     alignItems: 'center',
     justifyContent: 'center',

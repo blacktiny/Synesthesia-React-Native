@@ -109,7 +109,7 @@ class MindFulness extends Component {
                       backgroundColor: '#25B999',
                       opacity: 1
                     }}
-                    title="Create a Free Account"
+                    title="Create a free account"
                     onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
 

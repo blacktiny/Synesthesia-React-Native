@@ -22,21 +22,21 @@ const { width, height } = Dimensions.get("screen");
 
 import BannerCloseIcon from '../../icons/BannerCloseIcon';
 
-const calendarIcon = require("../../../assets/calendar_icon.png");
+const blueCalendarIcon = require("../../../assets/blue_calendar_icon.png");
+const lilaCalendarIcon = require("../../../assets/lila_calendar_icon.png");
 const cancelIcon = require("../../../assets/cancel_x.png");
 import DollarSign from '../../icons/DollarSign';
+import { openPaymentDetailsModal } from '../../actions/ToggleFormModalAction';
 
 class Subscription extends Component {
   constructor() {
     super();
 
     this.state = {
-      subScriptDate: "06/12/2018",
-      subScriptType: 0,
+      subscriptionDate: "06/12/2018",
       monthlyPrice: 4.99,
       yearlyPrice: 2.99,
       size: { width, height },
-      paymentDetailsModalVisible: false,
       addBtnPressStatus: false,
       editBtnPressStatus: false
     };
@@ -64,29 +64,17 @@ class Subscription extends Component {
     }
   }
 
-  onBtnMonthlyClicked = () => {
-    this.setState({ subScriptType: 1 });
-  };
-
-  onBtnYearlyClicked = () => {
-    this.setState({ subScriptType: 2 });
-  };
-
-  onPaymentDetailsClicked = () => {
-    
-  }
-
   onSubscribeBtnClicked = () => {
-    const { subScriptType } = this.state;
+    const { subscriptionType } = this.state;
     const { onSubscribeClicked } = this.props;
 
-    onSubscribeClicked(subScriptType);
+    onSubscribeClicked(subscriptionType);
   }
 
   onCancelSubScriptionClicked = () => {
     const { onUnsubscribeClicked } = this.props;
 
-    // this.setState({ subScriptType: 0 });
+    // this.setState({ subscriptionType: 0 });
     onUnsubscribeClicked();
   };
 
@@ -96,45 +84,10 @@ class Subscription extends Component {
   onAddBtnClicked = () => {
   }
 
-  openPaymentDetailsModal = () => {
-    const { paymentDetailsModalVisible } = this.state;
-    return (
-      <Modal visible={paymentDetailsModalVisible} animationType="fade" transparent={true}
-        onRequestClose={() => console.log('closed')}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalBanner}>
-            <TouchableOpacity style={styles.crossButton} onPress={() => {
-              this.setState({ paymentDetailsModalVisible: false })
-            }}>
-              <BannerCloseIcon style={styles.crossIcon} color="#777778" />
-            </TouchableOpacity>
-
-            <ScrollView
-              style={{ marginTop: 20, }}>
-              <Text style={{ fontSize: 18, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_BOLD }}>{'Renews automatically, cancels anytime \n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>With your subscription for the Sensorium, you gain
-              <Text style={{ fontFamily: Theme.FONT_BOLD }}> a free 7-day trial</Text>. Today, you will not be billed anything. {'\n'} </Text>
-
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you do not cancel within this period, the 7-day free trial will
-                <Text style={{ fontFamily: Theme.FONT_BOLD }}> automatically transform into a paid subscription</Text>. {'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>Subscriptions <Text style={{ fontFamily: Theme.FONT_BOLD }}> renew automatically</Text> for your convenience. <Text style={{ fontFamily: Theme.FONT_BOLD }}> Cancel anytime</Text>.{'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>If you cancel your subscription <Text style={{ fontFamily: Theme.FONT_BOLD }}>continues until the end</Text> of the subscribed period.{'\n'}</Text>
-
-              <Text style={{ fontSize: 16, color: '#FFFFFF', textAlign: 'left', fontFamily: Theme.FONT_REGULAR }}>{'Yearly subscriptions are billed annualy and monthly are billed monthly.'}</Text>
-            </ScrollView>
-          </View>
-        </View>
-      </Modal >)
-  }
-
   render() {
     const {
-      subScriptDate,
-      subScriptType,
+      subscriptionDate,
+      // subscriptionType,
       monthlyPrice,
       yearlyPrice,
       addBtnPressStatus,
@@ -142,6 +95,17 @@ class Subscription extends Component {
     } = this.state;
     const strMonthlyPrice = this.getFloat2String(monthlyPrice);
     const strYearlyPrice = this.getFloat2String(yearlyPrice);
+
+    const navigation = this.props.navigation;
+
+    const { chosenSubscription } = this.props;
+    // if (chosenSubscription == "monthly") {
+    //   this.setState({ subscriptionType: 1 });
+    // } else if (chosenSubscription == "yearly") {
+    //   this.setState({ subscriptionType: 2 });
+    // }
+
+    const calendarIcon = chosenSubscription == "monthly" ? lilaCalendarIcon : blueCalendarIcon;
 
     let chooseSubscription = (
       <View>
@@ -157,13 +121,13 @@ class Subscription extends Component {
           >
             <TouchableOpacity
               style={[styles.btn, styles.btnMonthly, { alignItems: "center", }]}
-              onPress={() => this.onBtnMonthlyClicked()}
+              onPress={() => navigation.navigate('ConfirmMonthlySubscribe', { tier: 'monthly' })}
             >
               <Text style={styles.billType}>MONTHLY</Text>
               <View style={{
                 flexDirection: 'row', flexWrap: 'wrap'
               }}>
-                <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.pricePerMonth}>{strMonthlyPrice}</Text>
+                <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.price}>{strMonthlyPrice}</Text>
               </View>
               <Text style={styles.perMonth}>per month</Text>
             </TouchableOpacity>
@@ -177,13 +141,13 @@ class Subscription extends Component {
           >
             <TouchableOpacity
               style={[styles.btn, styles.btnYearly, { alignItems: "center" }]}
-              onPress={() => this.onBtnYearlyClicked()}
+              onPress={() => navigation.navigate('ConfirmMonthlySubscribe', { tier: 'yearly' })}
             >
               <Text style={styles.billType}>YEARLY</Text>
               <View style={{
                 flexDirection: 'row', flexWrap: 'wrap'
               }}>
-                <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.5} /><Text style={styles.pricePerMonth}>{strYearlyPrice}</Text>
+                <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.5} /><Text style={styles.price}>{strYearlyPrice}</Text>
               </View>
               <Text style={styles.perMonth}>per month</Text>
               <Text style={styles.billed}>*is billed yearly</Text>
@@ -198,7 +162,7 @@ class Subscription extends Component {
           After 7 days your paid subscription starts automatically.
         </Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
-          <Text onPress={() => { this.setState({ paymentDetailsModalVisible: true }) }} style={styles.moreDetails}>More Payment Details </Text>
+          <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.moreDetails}>More Payment Details </Text>
           <Text style={styles.moreDetailsAndWord}>and </Text>
           <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>FAQ</Text>
         </View>
@@ -207,27 +171,27 @@ class Subscription extends Component {
 
     let currentSubscription = (
       <View>
-        <Text style={styles.currentSubScpt}>Your current subScription</Text>
+        <Text style={styles.currentSubScpt}>Your current subscription</Text>
 
         <View style={styles.subBtnSection}>
           <LinearGradient
-            colors={subScriptType === 1 ? ["#AEA2F2", "#9F90F1", "#907FF0", "#8370EF", "#725BEE"] : ["#00C2FB", "#00AAF7", "#0092F3", "#0078EF", "#0060EB"]}
+            colors={chosenSubscription == "monthly" ? ["#AEA2F2", "#9F90F1", "#907FF0", "#8370EF", "#725BEE"] : ["#00C2FB", "#00AAF7", "#0092F3", "#0078EF", "#0060EB"]}
             start={{ x: 0.0, y: 1.0 }}
             end={{ x: 1.0, y: 1.0 }}
             style={styles.subGradient}
           >
             <TouchableOpacity style={styles.subBtnYear} onPress={() => this.onSubscribeBtnClicked()}>
               <View style={styles.subBillTypeSection}>
-                <Text style={styles.subBillType}>{subScriptType === 1 ? 'MONTHLY' : 'YEARLY'}</Text>
+                <Text style={styles.subBillType}>{chosenSubscription == "monthly" ? 'MONTHLY' : 'YEARLY'}</Text>
               </View>
               <View style={styles.subPriceContent}>
                 <View style={{
                   flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
                 }}>
-                  <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{subScriptType === 1 ? strMonthlyPrice : strYearlyPrice}</Text>
+                  <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={[styles.subPrice, { color: chosenSubscription == "monthly" ? '#917FF0' : '#0060EB' }]}>{chosenSubscription == "monthly" ? strMonthlyPrice : strYearlyPrice}</Text>
                 </View>
                 <Text style={styles.subPerMonth}>per month</Text>
-                {subScriptType === 2 && <Text style={styles.subBilled}>*Billed Annually</Text>}
+                {chosenSubscription == "yearly" && <Text style={styles.subBilled}>*Billed Annually</Text>}
               </View>
             </TouchableOpacity>
           </LinearGradient>
@@ -237,14 +201,16 @@ class Subscription extends Component {
           <Text style={styles.nextBillText}>Next billing date:</Text>
           <View style={styles.datePickerSection}>
             <Image style={styles.calendarIcon} source={calendarIcon} />
-            <Text style={styles.dateText}>
-              {subScriptDate}
-            </Text>
+
+            {chosenSubscription == "monthly" ?
+              <Text style={{ color: '#917FF0', paddingTop: 1, marginLeft: 8 }}>{subscriptionDate}</Text>
+              :
+              <Text style={{ color: '#0060EB', paddingTop: 1, marginLeft: 8 }}>{subscriptionDate}</Text>}
           </View>
         </View>
 
         <View style={styles.moreAndCancelSection}>
-          <Text style={styles.subMoreDetails} onPress={() => this.onPaymentDetailsClicked()}>Payment Details</Text>
+          <Text style={styles.subMoreDetails} onPress={() => this.props.dispatch(openPaymentDetailsModal())}>Payment Details</Text>
           <Text
             style={styles.subCancelScription}
             onPress={() => this.onCancelSubScriptionClicked()}
@@ -270,22 +236,22 @@ class Subscription extends Component {
               <View style={styles.circleRight}></View>
             </View>
             <Text style={styles.cardText}>Card Number</Text>
-            <View style={{flexDirection: 'row', display: 'flex', alignItems: 'center', marginBottom: 10}}>
+            <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', marginBottom: 10 }}>
               <Text style={styles.cardBoldText}>****&nbsp; ****&nbsp; ****&nbsp;</Text>
               <Text style={styles.cardNumberText}> 2355</Text>
             </View>
-            <View style={{flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15}}>
-              <View style={{flexDirection: 'column'}}>
+            <View style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15 }}>
+              <View style={{ flexDirection: 'column' }}>
                 <Text style={styles.cardText}>Valid Thru</Text>
                 <Text style={styles.cardDateText}>03/19</Text>
               </View>
-              <View style={{flexDirection: 'column'}}>
+              <View style={{ flexDirection: 'column' }}>
                 <Text style={styles.cardText}>CVV</Text>
                 <Text style={[styles.cardBoldText, styles.cardCVVText]}>***</Text>
               </View>
             </View>
-            <View style={{display: 'flex', justifyContent: 'flex-end'}}>
-              <TouchableHighlight style={{alignSelf: 'flex-end'}} onPress={() => this.onEditBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('edit')} onShowUnderlay={() => this.onShowUnderlay('edit')} underlayColor={'transparent'}>
+            <View style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <TouchableHighlight style={{ alignSelf: 'flex-end' }} onPress={() => this.onEditBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('edit')} onShowUnderlay={() => this.onShowUnderlay('edit')} underlayColor={'transparent'}>
                 <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 16, color: '#30CA9A', opacity: editBtnPressStatus ? 0.7 : 1.0 }}>Edit</Text>
               </TouchableHighlight>
             </View>
@@ -300,17 +266,15 @@ class Subscription extends Component {
           style={styles.main}
           scrollEnabled={true}
         >
-          {!subScriptType && chooseSubscription}
-          {subScriptType > 0 && currentSubscription}
-          {/* {subScriptType > 0 && cardPanel}
-          {subScriptType > 0 && <TouchableHighlight style={{marginTop: 5}} onPress={() => this.onAddBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('addCard')} onShowUnderlay={() => this.onShowUnderlay('addCard')} underlayColor={'transparent'}>
+          {chosenSubscription != "monthly" && chosenSubscription != "yearly" && chooseSubscription}
+          {(chosenSubscription == "monthly" || chosenSubscription == "yearly") && currentSubscription}
+          {/* {subscriptionType > 0 && cardPanel}
+          {subscriptionType > 0 && <TouchableHighlight style={{marginTop: 5}} onPress={() => this.onAddBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('addCard')} onShowUnderlay={() => this.onShowUnderlay('addCard')} underlayColor={'transparent'}>
             <View style={{flexDirection: 'row', alignItems: 'center', display: 'flex'}} >
               <Text style={styles.plusSymbol}>+ </Text>
               <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 16, color: '#30CA9A', opacity: addBtnPressStatus ? 0.7 : 1.0 }}>Add another card</Text>
             </View>
           </TouchableHighlight>} */}
-
-          {this.openPaymentDetailsModal()}
 
         </ScrollView>
       </View>
@@ -435,6 +399,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     display: "flex",
+    letterSpacing: 1.36
   },
   btn: {
     width: width / 2 - 25,
@@ -452,7 +417,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     textAlign: "center"
   },
-  pricePerMonth: {
+  price: {
     fontSize: 35,
     textAlign: "center",
     color: "white",
@@ -492,7 +457,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.FONT_SEMIBOLD,
     fontSize: 13,
     textAlign: "right",
-    color: "#0096F4",
+    color: "#0060EB",
     paddingTop: 3
   },
   nextBillDate: {
@@ -518,7 +483,8 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 16,
     color: "#0080F0",
-    marginLeft: 10
+    marginLeft: 10,
+    fontFamily: Theme.FONT_SEMIBOLD
   },
   txtUpper: {
     fontSize: 16,
@@ -648,63 +614,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginRight: 3
   },
-
-  modalContainer: {
-    ...Platform.select({
-      ios: {
-        height: height - 280,
-      },
-      android: {
-        height: height - 140
-      },
-    }),
-    width: '100%',
-    paddingLeft: 15,
-    paddingRight: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-
-    position: 'absolute',
-    ...Platform.select({
-      ios: {
-        top: '20%',
-      },
-      android: {
-        top: '12%',
-      },
-    }),
-
-    // backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  modalBanner: {
-    borderRadius: 12,
-    paddingRight: 38,
-    paddingLeft: 25,
-    paddingBottom: 40,
-    backgroundColor: '#383938',
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    shadowColor: "black",
-    shadowOpacity: 0.5,
-    elevation: 2,
-    alignItems: 'center'
-  },
-  crossButton: {
-    width: 20,
-    height: 20,
-    marginTop: 20,
-    alignSelf: 'flex-end',
-  },
-  crossIcon: {
-    resizeMode: 'contain'
-  },
   dollarSign: {
     resizeMode: 'cover',
     alignSelf: 'center',
     marginRight: 3,
     marginLeft: 3
   },
+  calendarIcon: {
+    width: 17,
+    height: 19
+  }
 });
 
 Subscription.propTypes = {
@@ -713,10 +632,9 @@ Subscription.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    chosenSubscription: state.subscriptionReducer.chosenSubscription,
+  }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Subscription);
+export default connect(mapStateToProps, null)(Subscription);

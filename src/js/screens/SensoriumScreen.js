@@ -188,7 +188,7 @@ class Sensorium extends Component {
                   <CustomButton
                     disabled={false}
                     style={styles.button}
-                    title="Create a Free Account"
+                    title="Create a free account"
                     onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
                   />
                 </View>

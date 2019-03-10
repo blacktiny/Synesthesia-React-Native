@@ -55,3 +55,17 @@ export function closeErrorModal() {
     payload: {}
   }
 }
+
+export function openPaymentDetailsModal() {
+  return {
+    type: ActionTypes.OPEN_PAYMENT_DETAILS_MODAL,
+    payload: {}
+  }
+}
+
+export function closePaymentDetailsModal() {
+  return {
+    type: ActionTypes.CLOSE_PAYMENT_DETAILS_MODAL,
+    payload: {}
+  }
+}

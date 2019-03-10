@@ -6,6 +6,7 @@ import CustomButton from '../components/CustomButton';
 import LoginModal from '../components/LoginModal';
 import RegisterModal from '../components/RegisterModal';
 import ForgotPasswordModal from '../components/ForgotPasswordModal';
+import PaymentDetailsModal from '../components/PaymentDetailsModal';
 import SuccessModal from '../components/SuccessModal';
 import ErrorModal from '../components/ErrorModal';
 import { iPhoneX } from '../../js/util';
@@ -24,7 +25,9 @@ import {
   closeForgotPasswordModal,
   closeSuccessModal,
   closeErrorModal,
-  openRegisterModal
+  openRegisterModal,
+  openForgotPasswordModal,
+  closePaymentDetailsModal
 } from '../actions/ToggleFormModalAction'
 import { addBlur, removeBlur } from '../actions/BlurAction'
 
@@ -161,7 +164,7 @@ class SideMenu extends Component {
           <CustomButton
             disabled={false}
             style={styles.button}
-            title="Create a Free Account"
+            title="Create a free account"
             onPress={() => {
               this.props.navigation.closeDrawer();
               this.props.dispatch(addBlur());
@@ -203,7 +206,7 @@ class SideMenu extends Component {
   renderData = (item, index) => {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
     const { currentItem, isLoggedIn, userType,
-      isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible,
+      isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible, isPaymentDetailsModalVisible,
       isSuccessModalVisible, isErrorModalVisible, modalType } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
@@ -253,7 +256,23 @@ class SideMenu extends Component {
         <ErrorModal
           modalVisible={isErrorModalVisible}
           modalType={modalType}
-          closeModal={() => { this.props.dispatch(closeErrorModal()); this.props.dispatch(removeBlur()) }}
+          closeModal={() => {
+            this.props.dispatch(closeErrorModal());
+            if (modalType === "LogIn") {
+              this.props.dispatch(openLoginModal());
+            } else if (modalType === "Register") {
+              this.props.dispatch(openRegisterModal());
+            } else if (modalType === "ForgotPassword") {
+              this.props.dispatch(openForgotPasswordModal());
+            } else {
+              this.props.dispatch(removeBlur())
+            }
+          }}
+        />
+
+        <PaymentDetailsModal
+          modalVisible={isPaymentDetailsModalVisible}
+          closeModal={() => { this.props.dispatch(closePaymentDetailsModal()); this.props.dispatch(removeBlur()) }}
         />
 
         {item.name == 'Meditate' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
@@ -363,6 +382,7 @@ function mapStateToProps(state) {
     isLoginModalVisible: state.toggleFormModalReducer.isLoginModalVisible,
     isRegisterModalVisible: state.toggleFormModalReducer.isRegisterModalVisible,
     isForgotPasswordModalVisible: state.toggleFormModalReducer.isForgotPasswordModalVisible,
+    isPaymentDetailsModalVisible: state.toggleFormModalReducer.isPaymentDetailsModalVisible,
     isSuccessModalVisible: state.toggleFormModalReducer.isSuccessModalVisible,
     isErrorModalVisible: state.toggleFormModalReducer.isErrorModalVisible,
     modalType: state.toggleFormModalReducer.modalType
