@@ -45,6 +45,8 @@ import Button from '../components/Button'
 import Video from 'react-native-video'
 import YouTube from 'react-native-youtube';
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { stopBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
+
 
 
 Sound.setCategory('Playback');
@@ -597,6 +599,7 @@ class AudioPlayer extends Component {
     this.props.removeBlur()
     const { isLoggedIn, navigation } = this.props;
     const screen = navigation.state.params.backScreen;
+    this.props.stopBackgroundSoundVolume()
     this.setState({ modalVisible: false })
     if (isLoggedIn) {
       this.props.navigation.navigate('Progress')
@@ -984,7 +987,8 @@ const mapDispatchToProps = {
   cleanProgress,
   getUserProgress,
   setHeaderItem,
-  setBottomBarItem
+  setBottomBarItem,
+  stopBackgroundSoundVolume
 }
 export default connect(
   mapStateToProps,

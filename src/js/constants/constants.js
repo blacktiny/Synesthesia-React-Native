@@ -125,58 +125,72 @@ export const FILES_URL = 'https://s3-us-west-2.amazonaws.com/synesthesia-files/'
 
 export const BACKGROUND_SOUNDS = [
   {
+    id: 0,
     name: 'None',
     file: ''
   },
   {
+    id: 1,
     name: 'Tropical Night (Listening Earth)',
     file: 'media/audio/background/01+Tropical+Night.mp3'
   },
   {
+    id: 2,
     name: 'African Savannah (L. Earth)',
     file: 'media/audio/background/African+night.mp3'
   },
   {
+    id: 3,
     name: 'Coral Beach (Listening Earth)',
     file: 'media/audio/background/01+Coral+Beach.mp3'
   },
   {
-    name: 'Open Water',
+    id: 4,
+    name: '"Open Water" (Sirius)',
     file: 'media/audio/background/236_full_open-water_1103.mp3'
   },
   {
-    name: '"Timescape"',
+    id: 5,
+    name: '"Timescape" (Sirius)',
     file: 'media/audio/background/236_full_timescape_1122.mp3'
   },
   {
-    name: '"Rock Formation"',
+    id: 6,
+    name: '"Rock Formation" (Sirius)',
     file: 'media/audio/background/236_full_rock-formations_1089.mp3'
   },
   {
+    id: 7,
     name: 'LA 1 (Moby)',
     file: 'media/audio/background/01+LA1.mp3'
   },
   {
+    id: 8,
     name: 'LA 4 (Moby)',
     file: 'media/audio/background/04+LA4.mp3'
   },
   {
+    id: 9,
     name: 'LA 7 (Moby)',
     file: 'media/audio/background/07+LA7.mp3'
   },
   {
+    id: 10,
     name: 'Birch Wood (Listening Earth)',
     file: 'media/audio/background/02+Birch+Wood,+part+2.mp3'
   },
   {
+    id: 11,
     name: 'African Woodland (L.Earth)',
     file: 'media/audio/background/03+African+Woodland+with+Impalas+Grazing.mp3'
   },
   {
+    id: 12,
     name: 'Himalaya (Listening Earth)',
     file: 'media/audio/background/03+Dewfall,+with+Ravens+and+Barred+Owl.mp3'
   },
   {
+    id: 13,
     name: 'Redwoods (Listening Earth)',
     file: 'media/audio/background/07+The+Karka+Meadow.mp3'
   }
