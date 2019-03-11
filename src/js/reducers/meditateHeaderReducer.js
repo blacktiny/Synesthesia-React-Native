@@ -1,7 +1,7 @@
 import { ActionTypes } from '../constants/constants'
 
 const initialState = {
-  curHeaderItem: 'Sensorium'
+  curHeaderItem: 'Sensorium',
 };
 
 export const meditateHeaderReducer = (state = initialState, action) => {

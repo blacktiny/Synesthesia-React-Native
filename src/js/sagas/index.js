@@ -9,11 +9,11 @@ import MindFulnessSaga from './MindFulnessSaga'
 import BeingAwareSaga from './BeingAwareSaga'
 import NodeSaga from './NodeSaga'
 import completionSaga from './Completion'
+import ExerciseNodeSaga from './ExerciseNodeSaga'
 import ProgressSaga from './ProgressSaga'
-
+import BackgroundSoundSaga from './BackgroundSoundSaga'
 const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGIN_USER, LoginUserSaga)
-  yield takeLatest(ActionTypes.IS_LOGGEDIN, LoginUserSaga)
   yield takeLatest(ActionTypes.REGISTER_USER, RegisterUserSaga)
   yield takeLatest(ActionTypes.SEND_RESET_LINK, ForgotPasswordSaga)
   yield takeLatest(ActionTypes.LOGOUT_USER, LogoutUserSaga)
@@ -22,7 +22,10 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.GET_BEINGAWARE, BeingAwareSaga)
   yield takeLatest(ActionTypes.GET_NODE, NodeSaga)
   yield takeLatest(ActionTypes.COMPLETE_NODE, completionSaga)
+  yield takeLatest(ActionTypes.GET_EXERCISE_NODE, ExerciseNodeSaga)
   yield takeLatest(ActionTypes.GET_PROGRESS, ProgressSaga)
+  yield takeLatest(ActionTypes.UPDATE_USER, LoginUserSaga)
+  yield takeLatest(ActionTypes.SET_BACKGROUND_SOUND, BackgroundSoundSaga)
 
 }
 

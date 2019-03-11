@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  Modal,
+  Linking,
+  Platform
 } from "react-native";
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
@@ -17,13 +20,19 @@ import { Theme } from "../constants/constants";
 
 const { width, height } = Dimensions.get("screen");
 
-const calendarIcon = require("../../assets/calendar_icon.png");
+import BannerCloseIcon from '../icons/BannerCloseIcon';
+
+const calendarIcon = require("../../assets/blue_calendar_icon.png");
 const cancelIcon = require("../../assets/cancel_x.png");
 const slider1 = require("../../assets/Slider/slider_1.png");
 const slider2 = require("../../assets/Slider/slider_2.png");
 const slider3 = require("../../assets/Slider/slider_3.png");
 const slider4 = require("../../assets/Slider/slider_4.png");
 const slider5 = require("../../assets/Slider/slider_5.png");
+import DollarSign from '../icons/DollarSign';
+import BottomBar from '../components/BottomBar';
+
+import { openPaymentDetailsModal } from '../actions/ToggleFormModalAction';
 
 class PricingScreen extends Component {
   constructor() {
@@ -35,7 +44,7 @@ class PricingScreen extends Component {
       subScriptType: 1,
       monthlyPrice: 4.99,
       yearlyPrice: 2.99,
-      size: { width, height }
+      size: { width, height },
     };
   }
 
@@ -88,10 +97,14 @@ class PricingScreen extends Component {
               >
                 <TouchableOpacity style={styles.subBtnYear}>
                   <View style={styles.subBillTypeSection}>
-                    <Text style={styles.subBillType}>Yearly</Text>
+                    <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
-                    <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
+                    }}>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                    </View>
                     <Text style={styles.subPerMonth}>per month</Text>
                     <Text style={styles.subBilled}>*Billed Annually</Text>
                   </View>
@@ -110,7 +123,7 @@ class PricingScreen extends Component {
             </View>
 
             <View style={styles.moreAndCancelSection}>
-              <Text style={styles.subMoreDetails}>Payment Details</Text>
+              <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.subMoreDetails}>Payment Details</Text>
               <Text
                 style={styles.subCancelScription}
                 onPress={() => this.onCancelSubScriptionClicked()}
@@ -144,10 +157,14 @@ class PricingScreen extends Component {
               >
                 <TouchableOpacity style={styles.subBtnYear}>
                   <View style={styles.subBillTypeSection}>
-                    <Text style={styles.subBillType}>Yearly</Text>
+                    <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
-                    <Text style={styles.subPrice}>$ {strYearlyPrice}</Text>
+                    <View style={{
+                      flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
+                    }}>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                    </View>
                     <Text style={styles.subPerMonth}>per month</Text>
                     <Text style={styles.subBilled}>*Billed Annually</Text>
                   </View>
@@ -156,7 +173,7 @@ class PricingScreen extends Component {
             </View>
 
             <View style={styles.moreAndCancelSection}>
-              <Text style={styles.subMoreDetails}>Payment Details</Text>
+              <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.subMoreDetails}>Payment Details</Text>
               <Text
                 style={styles.subCancelScription}
                 onPress={() => this.onCancelSubScriptionClicked()}
@@ -174,7 +191,6 @@ class PricingScreen extends Component {
       output = (
         <View>
           <Text style={styles.meditateFree}>Meditate 7 days for free</Text>
-          <Text style={styles.totalBill}>Total bill today: 0$</Text>
 
           <View style={styles.btnSection}>
             <LinearGradient
@@ -184,15 +200,19 @@ class PricingScreen extends Component {
               style={styles.LinearGradient}
             >
               <TouchableOpacity
-                style={[styles.btn, styles.btnMonthly]}
+                style={[styles.btn, styles.btnMonthly, { alignItems: "center", }]}
                 onPress={() => this.onBtnMonthlyClicked()}
               >
-                <Text style={styles.billType}>Monthly</Text>
-                <Text style={styles.pricePerMonth}>$ {strMonthlyPrice}</Text>
+                <Text style={styles.billType}>MONTHLY</Text>
+                <View style={{
+                  flexDirection: 'row', flexWrap: 'wrap'
+                }}>
+                  <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.pricePerMonth}>{strMonthlyPrice}</Text>
+                </View>
                 <Text style={styles.perMonth}>per month</Text>
               </TouchableOpacity>
             </LinearGradient>
-            <View style={{ width: 20 }} />
+            <View style={{ width: 15 }} />
             <LinearGradient
               start={{ x: 1, y: 0 }}
               end={{ x: 0, y: 1 }}
@@ -200,126 +220,139 @@ class PricingScreen extends Component {
               style={styles.LinearGradient}
             >
               <TouchableOpacity
-                style={[styles.btn, styles.btnYearly]}
+                style={[styles.btn, styles.btnYearly, { alignItems: "center" }]}
                 onPress={() => this.onBtnYearlyClicked()}
               >
-                <Text style={styles.billType}>Yearly</Text>
-                <Text style={styles.pricePerMonth}>$ {strYearlyPrice}</Text>
+                <Text style={styles.billType}>YEARLY</Text>
+                <View style={{
+                  flexDirection: 'row', flexWrap: 'wrap'
+                }}>
+                  <DollarSign style={styles.dollarSign} width={20} height={34} viewBox={'0 0 20 34'} opacity={0.5} /><Text style={styles.pricePerMonth}>{strYearlyPrice}</Text>
+                </View>
                 <Text style={styles.perMonth}>per month</Text>
                 <Text style={styles.billed}>*is billed yearly</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
 
-          <Text style={styles.renews}>
-            Renews automatically, cancels anytime.
-          </Text>
-        </View>
+          <View style={{
+            flexDirection: 'row', flexWrap: 'wrap', alignItems: "center", justifyContent: "center"
+          }}>
+            <Text style={styles.totalBill}>Total bill today: 0</Text><DollarSign style={styles.dollarSign} width={9} height={15} viewBox={'0 0 20 34'} opacity={1} />
+          </View>
+        </View >
       );
       moreDetailsSec = (
-        <View>
-          <Text style={styles.moreDetails}>More Payment Details</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 80 }}>
+          <Text onPress={() => { this.props.dispatch(openPaymentDetailsModal()) }} style={styles.moreDetails}>More Payment Details </Text>
+          <Text style={styles.moreDetailsAndWord}>and </Text>
+          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }} style={styles.moreDetails}>FAQ</Text>
         </View>
       );
     }
 
     return (
-      <ScrollView
-        style={styles.main}
-        scrollEnabled={true}
-      >
-        <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
-          <View style={styles.backgroundColor}>
-          </View>
-          <LinearGradient
-            colors={["rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E"]}
-            style={styles.backgroundLinearGradient}
-          >
-          </LinearGradient>
+      <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+        <BottomBar navigation={this.props.navigation} />
 
-          {output}
-
-          <View style={styles.newsCarousel}>
-            <Carousel
-              delay={2000}
-              style={styles.carousel_section}
-              autoplay={false}
-              bullets
-              bulletsContainerStyle={styles.carousel_bulletsContainer}
-              currentPage={0}
-              onAnimateNextPage={p => console.log(p)}
-            >
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider1} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider1TextUpper]}>
-                    Over 200 original Synesthesia Meditations
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider1TextLower]}>
-                    Increase your sensory awareness in daily life.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider2} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider2TextUpper]}>
-                    Synesthesia Meditation: a unique fusion
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider2TextLower]}>
-                    A mix between traditional meditation, sensory nature awareness
-                    techniques and synesthetic exploration.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider3} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider3TextUpper]}>
-                    Re-activate, tune and blend your senses
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider3TextLower]}>
-                    Increase your awareness with mindful synesthetic exercises
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider4TextUpper]}>
-                    Enjoy little more Life Quality
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider4TextLower]}>
-                    Experience your surrounding more aware, less stress, more
-                    focus, more happiness, better sleep. Be more present in daily
-                    life.
-                </Text>
-                </ImageBackground>
-              </View>
-              <View style={styles.carousel_slider}>
-                <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
-                  <Text style={[styles.sliderText, styles.slider5TextUpper]}>
-                    Sensorium – not just another meditation app.
-                </Text>
-                  <Text style={[styles.sliderText, styles.slider5TextLower]}>
-                    Many hours of interactive, multisensory and multimedia
-                    activities, exercises and tests.
-                </Text>
-                </ImageBackground>
-              </View>
-            </Carousel>
-            <View style={styles.carousel_pagination}>
+        <ScrollView
+          style={styles.main}
+          scrollEnabled={true}
+        >
+          <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
+            <View style={styles.backgroundColor}>
             </View>
-          </View>
+            <LinearGradient
+              colors={["rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "rgba(18, 16, 30, 0)", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E", "#1E1E1E"]}
+              style={styles.backgroundLinearGradient}
+            >
+            </LinearGradient>
 
-          <Text style={styles.txtUpper}>
-            Access all Meditations 7 days for free. {"\n"}
-            If you do not like it, simply cancel.
+            {output}
+
+            <View style={styles.newsCarousel}>
+              <Carousel
+                delay={2000}
+                style={styles.carousel_section}
+                autoplay={false}
+                bullets
+                bulletsContainerStyle={styles.carousel_bulletsContainer}
+                currentPage={0}
+                onAnimateNextPage={p => console.log(p)}
+              >
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider1} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider1TextUpper]}>
+                      Over 200 original Synesthesia Meditations
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider1TextLower]}>
+                      Increase your sensory awareness in daily life.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider2} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider2TextUpper]}>
+                      Synesthesia Meditation: a unique fusion
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider2TextLower]}>
+                      A mix between traditional meditation, sensory nature awareness
+                      techniques and synesthetic exploration.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider3} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider3TextUpper]}>
+                      Re-activate, tune and blend your senses
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider3TextLower]}>
+                      Increase your awareness with mindful synesthetic exercises
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider4TextUpper]}>
+                      Enjoy little more Life Quality
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider4TextLower]}>
+                      Experience your surrounding more aware, less stress, more
+                      focus, more happiness, better sleep. Be more present in daily
+                      life.
+                </Text>
+                  </ImageBackground>
+                </View>
+                <View style={styles.carousel_slider}>
+                  <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
+                    <Text style={[styles.sliderText, styles.slider5TextUpper]}>
+                      Sensorium – not just another meditation app.
+                </Text>
+                    <Text style={[styles.sliderText, styles.slider5TextLower]}>
+                      Many hours of interactive, multisensory and multimedia
+                      activities, exercises and tests.
+                </Text>
+                  </ImageBackground>
+                </View>
+              </Carousel>
+              <View style={styles.carousel_pagination}>
+              </View>
+            </View>
+
+            <Text style={styles.txtUpper}>
+              Access all Meditations 7 days for free. {"\n"}
+              <Text style={{ fontFamily: Theme.FONT_BOLD }}>If you do not like it, simply cancel.</Text>
+            </Text>
+            <Text style={styles.txtLower}>
+              After 7 days your paid subscription starts automatically.
         </Text>
-          <Text style={styles.txtLower}>
-            After 7 days your paid subscription starts automatically.
-        </Text>
 
-          {moreDetailsSec}
+            {moreDetailsSec}
 
-        </ImageBackground>
-      </ScrollView>
+          </ImageBackground>
+
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -327,28 +360,32 @@ class PricingScreen extends Component {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: "#1F1F20"
+    backgroundColor: "#1F1F20",
+    paddingBottom: 70
   },
   backgroundImage: {
     width: width,
-    height: height,
+    // height: height,
     padding: 15,
     paddingTop: 10
   },
   backgroundColor: {
     position: 'absolute',
     width: width,
-    height: height,
+    height: 920,
     backgroundColor: "#1F1F1F",
     opacity: 0.68
   },
   backgroundLinearGradient: {
     position: 'absolute',
     width: width,
-    height: height
+    height: 920
   },
   meditateFree: {
+    paddingBottom: 13,
+    paddingTop: 13,
     fontSize: 20,
+    textAlign: "center",
     color: "white",
     fontFamily: Theme.FONT_BOLD
   },
@@ -362,7 +399,10 @@ const styles = StyleSheet.create({
   totalBill: {
     fontSize: 16,
     color: "white",
-    marginTop: 8
+    marginTop: 12,
+    marginBottom: 12,
+    textAlign: "center",
+    fontFamily: Theme.FONT_BOLD
   },
   btnSection: {
     display: "flex",
@@ -372,13 +412,15 @@ const styles = StyleSheet.create({
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
-    shadowOpacity: 0.47
+    shadowOpacity: 0.47,
+    elevation: 2
   },
   subBtnSection: {
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     shadowColor: "black",
-    shadowOpacity: 0.47
+    shadowOpacity: 0.47,
+    elevation: 2
   },
   LinearGradient: {
     borderRadius: 12
@@ -428,33 +470,34 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     display: "flex",
-    textTransform: "uppercase"
   },
   btn: {
     width: width / 2 - 25,
-    height: width / 2 - 25,
+    height: 160,
     color: "white",
     backgroundColor: "transparent",
-    borderRadius: 12
+    borderRadius: 12,
   },
   billType: {
     fontFamily: Theme.FONT_SEMIBOLD,
     fontSize: 15,
-    textAlign: "center",
     color: "white",
     letterSpacing: 1,
-    textTransform: "uppercase",
     paddingTop: 15,
-    paddingBottom: 15
+    paddingBottom: 15,
+    textAlign: "center"
   },
   pricePerMonth: {
     fontSize: 35,
     textAlign: "center",
     color: "white",
-    paddingTop: 20
+    paddingTop: 0,
+    fontFamily: Theme.FONT_BOLD
   },
   subPrice: {
+    fontFamily: Theme.FONT_BOLD,
     display: "flex",
+    alignSelf: "flex-end",
     fontSize: 23,
     color: "#0096F4",
     textAlign: "right"
@@ -468,7 +511,7 @@ const styles = StyleSheet.create({
   },
   subPerMonth: {
     display: "flex",
-    fontFamily: Theme.FONT_LIGHT,
+    fontFamily: Theme.FONT_REGULAR,
     fontSize: 14,
     textAlign: "right",
     color: "white"
@@ -483,7 +526,7 @@ const styles = StyleSheet.create({
   subBilled: {
     fontFamily: Theme.FONT_SEMIBOLD,
     fontSize: 13,
-    textAlign: "center",
+    textAlign: "right",
     color: "#0096F4",
     paddingTop: 3
   },
@@ -511,12 +554,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#0080F0",
     marginLeft: 10
-  },
-  renews: {
-    fontFamily: Theme.FONT_BOLD,
-    fontSize: 15,
-    color: "white",
-    paddingTop: 5
   },
   newsCarousel: {
     backgroundColor: "#1F1F20",
@@ -550,59 +587,70 @@ const styles = StyleSheet.create({
     lineHeight: 25
   },
   slider1TextUpper: {
-    width: width - 140,
-    marginTop: 35
+    width: width - 95,
+    marginTop: 35,
+    fontFamily: Theme.FONT_BOLD
   },
   slider1TextLower: {
-    width: width - 140,
-    marginTop: 12
+    width: width - 95,
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider2TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 30
+    marginTop: 30,
+    fontFamily: Theme.FONT_BOLD
   },
   slider2TextLower: {
-    width: width - 140,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider3TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily: Theme.FONT_BOLD
   },
   slider3TextLower: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider4TextUpper: {
-    width: width - 180,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 30
+    marginTop: 30,
+    fontFamily: Theme.FONT_BOLD
   },
   slider4TextLower: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 12
+    marginTop: 12,
+    fontFamily: Theme.FONT_REGULAR
   },
   slider5TextUpper: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 40
+    marginTop: 40,
+    fontFamily: Theme.FONT_BOLD
   },
   slider5TextLower: {
-    width: width - 100,
+    width: width - 95,
     lineHeight: 22,
-    marginTop: 10
+    marginTop: 10,
+    fontFamily: Theme.FONT_REGULAR
   },
   txtUpper: {
     fontSize: 16,
     color: "white",
     lineHeight: 25,
     marginTop: 5,
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: Theme.FONT_LIGHT
   },
   txtLower: {
     fontFamily: Theme.FONT_LIGHT,
@@ -616,6 +664,12 @@ const styles = StyleSheet.create({
     fontFamily: Theme.FONT_BOLD,
     fontSize: 16,
     color: "#25B999",
+    lineHeight: 24
+  },
+  moreDetailsAndWord: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 16,
+    color: "#fff",
     lineHeight: 24
   },
   moreAndCancelSection: {
@@ -636,7 +690,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     marginRight: 3
-  }
+  },
+  dollarSign: {
+    resizeMode: 'cover',
+    alignSelf: 'center',
+    marginRight: 3,
+    marginLeft: 3
+  },
 });
 
 function mapStateToProps(state) {

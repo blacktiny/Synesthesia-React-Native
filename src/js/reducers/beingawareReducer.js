@@ -2,12 +2,17 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   error: false,
-  isFetchingData: true,
+  isFetchingData: false,
   beingawareData: [],
 };
 
 export const beingawareReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.GET_BEINGAWARE:
+      return {
+        ...state,
+        isFetchingData: true
+      }
     case ActionTypes.GET_BEINGAWARE_SUCCESS:
       return {
         ...state,

@@ -7,6 +7,9 @@ const RegisterUserSaga = function* (action) {
 
   const registeredObject = yield call(doRegister, data);
 
+  const email = action.payload.email;
+  const password = action.payload.password;
+
   if (registeredObject.status.success) {
     yield put({
       type: ActionTypes.REGISTER_USER_SUCCESS,
@@ -14,9 +17,22 @@ const RegisterUserSaga = function* (action) {
         ...registeredObject
       }
     })
+    yield put({
+      type: ActionTypes.OPEN_SUCCESS_MODAL
+    })
+    yield put({
+      type: ActionTypes.LOGIN_USER,
+      payload: {
+        email,
+        password
+      }
+    });
   } else {
     yield put({
       type: ActionTypes.REGISTER_USER_FAIL
+    })
+    yield put({
+      type: ActionTypes.OPEN_ERROR_MODAL
     })
   }
 

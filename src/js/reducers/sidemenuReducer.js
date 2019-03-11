@@ -2,7 +2,7 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   error: false,
-  currentItem: 'Meditate in Sensorium',
+  currentItem: 'Meditate',
 };
 
 export const sidemenuReducer = (state = initialState, action) => {

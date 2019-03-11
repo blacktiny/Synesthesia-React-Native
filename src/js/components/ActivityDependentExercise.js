@@ -6,11 +6,14 @@ import {
   Text,
   View
 } from "react-native";
+import LinearGradient from 'react-native-linear-gradient';
 import { Theme } from "../constants/constants";
+import FastImage from "react-native-fast-image";
 
 const tick = require("../../assets/tick.png");
 const lock1 = require("../../assets/lock1.png");
 const lock2 = require("../../assets/lock2.png");
+const redLock = require("../../assets/red_lock.png");
 
 class ActivityDependentExercise extends Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class ActivityDependentExercise extends Component {
       index: this.props.index,
       numberCount: this.props.numberCount,
       item: this.props.item,
+      userType: this.props.userType,
       onLeafClicked: this.props.onPress,
       onClickedFlg: false
     };
@@ -32,9 +36,10 @@ class ActivityDependentExercise extends Component {
   };
 
   render() {
-    const { id, index, numberCount, item, onClickedFlg } = this.state;
+    const { id, index, numberCount, item, userType, onClickedFlg } = this.state;
     return (
-      <View key={id} style={{ width: 90, alignItems: "center", margin: 10, marginLeft: 0 }}>
+      <View key={id} style={{ width: 117, alignItems: "flex-start", marginTop: 10, marginLeft: 0, marginRight: 0 }}>
+
         <View
           style={{
             flexDirection: "row",
@@ -42,106 +47,200 @@ class ActivityDependentExercise extends Component {
             width: 80,
             height: 80,
             borderRadius: 50,
-            shadowRadius: 16,
-            shadowOffset: { width: 0, height: 8 },
-            shadowColor: "black",
-            shadowOpacity: 0.5
+            shadowRadius: 7,
+            shadowOffset: { width: 0, height: 2 },
+            shadowColor: "#000",
+            shadowOpacity: 0.5,
+            elevation: 2,
           }}
         >
-          <TouchableHighlight
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 50,
-              borderWidth:
-                item.is_free == "0" &&
-                  item.is_locked == "0" &&
-                  item.is_done != "1"
-                  ? 3
-                  : 0,
-              backgroundColor: "#383938",
-              borderColor:
-                item.is_free == "0" &&
-                  item.is_locked == "0" &&
-                  item.is_done != "1"
-                  ? "#27BF9E"
-                  : "#383938",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            underlayColor={'#ffffff18'}
-            onPress={() => this.onClicked()}
-          >
-            <View>
-              <Text style={{
-                fontSize: 27,
-                color:
-                  item.is_free == "0" &&
-                    item.is_locked == "0" &&
-                    item.is_done != "1"
-                    ? "#ffffff"
-                    : "#545260"
-              }}>
-                {item.number}
-              </Text>
-              {item.is_done == "1" && (
-                <Image
+
+          {
+            ((item.is_free == "1" || userType > '0') &&
+              item.is_locked == "0"
+              && item.is_done == "0")
+
+              ?
+              <TouchableHighlight
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 50,
+                  backgroundColor: "#383938",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden"
+                }}
+                underlayColor={'#ffffff18'}
+                onPress={() => this.onClicked()}
+              >
+
+                <LinearGradient
+                  start={{ x: 0.19, y: 0.87 }} end={{ x: 0.81, y: 0.15 }}
+                  locations={[0, 1]}
+                  colors={['#27BF9E', '#84FAB0']}
+                  style={{ borderRadius: 50 }}>
+                  <View style={{
+                    width: 73,
+                    height: 73,
+                    margin: 4,
+                    backgroundColor: "#383938",
+                    borderRadius: 50
+                  }}>
+                    <Text style={{
+                      fontSize: 27,
+                      position: "absolute",
+                      top: 18,
+                      left: 29,
+                      fontFamily: Theme.FONT_BOLD,
+                      color: "#ffffff"
+                    }}>
+                      {item.number}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              </TouchableHighlight>
+
+              :
+
+              <View>
+                <TouchableHighlight
                   style={{
-                    height: 30,
-                    width: 30,
-                    alignSelf: "flex-end",
-                    position: "absolute",
-                    top: 30,
-                    left: 20
+                    width: 80,
+                    height: 80,
+                    borderRadius: 50,
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  source={tick}
-                />
-              )}
-              {item.is_locked != "0" && (
-                <ImageBackground
-                  style={{
-                    height: 30,
-                    width: 30,
-                    alignSelf: "flex-end",
-                    position: "absolute",
-                    top: 32,
-                    left: 26
-                  }}
-                  source={lock1}
+                  underlayColor={'#ffffff18'}
+                  onPress={() => this.onClicked()}
                 >
-                  <Image
+
+                  <LinearGradient
+                    start={{ x: 0.17, y: 0.85 }} end={{ x: 0.67, y: 0.44 }}
+                    locations={[0, 1]}
+                    colors={['#505052', '#3D3D3E']}
                     style={{
-                      alignSelf: "center",
-                      height: 38,
-                      width: 38,
-                      marginTop: 2
+                      width: 80,
+                      height: 80,
+                      borderRadius: 50
+                    }}>
+                    <View
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: 50
+                      }}>
+                      <Text style={{
+                        position: "absolute",
+                        top: 21,
+                        left: 32,
+                        fontSize: 27,
+                        fontFamily: Theme.FONT_BOLD,
+                        color:
+
+                          item.is_locked > "0"
+                            ? "#5F605F"
+                            : "#ffffff"
+                      }}>
+                        {item.number}
+                      </Text>
+
+                    </View>
+                  </LinearGradient>
+                </TouchableHighlight>
+
+                {(item.is_locked != '0' && item.is_free == '1') || (userType > '0' && item.is_done != "1") ?
+                  <FastImage
+                    style={{
+                      height: 33,
+                      width: 33,
+                      alignSelf: "flex-end",
+                      position: "absolute",
+                      top: 53,
+                      left: 56
                     }}
-                    resizeMode="contain"
-                    source={lock2}
-                  />
-                </ImageBackground>
-              )}
-            </View>
-          </TouchableHighlight>
+                    source={lock1}
+                  >
+                    <FastImage
+                      style={{
+                        alignSelf: "center",
+                        height: 41,
+                        width: 41,
+                        marginTop: 3
+                      }}
+                      resizeMode={FastImage.resizeMode.contain}
+                      source={lock2}
+                    />
+                  </FastImage>
+                  :
+                  item.is_done == "1" ?
+                    <FastImage
+                      style={{
+                        height: 33,
+                        width: 33,
+                        alignSelf: "flex-end",
+                        position: "absolute",
+                        top: 53,
+                        left: 56
+                      }}
+                      source={tick}
+                      resizeMode={FastImage.resizeMode.contain}
+                    />
+                    :
+                    <FastImage
+                      style={{
+                        height: 33,
+                        width: 33,
+                        alignSelf: "flex-end",
+                        position: "absolute",
+                        top: 53,
+                        left: 56
+                      }}
+                      source={lock1}
+                    >
+                      <FastImage
+                        style={{
+                          alignSelf: "center",
+                          height: 14,
+                          width: 14,
+                          marginTop: 9
+                        }}
+                        resizeMode={FastImage.resizeMode.contain}
+                        source={redLock}
+                      />
+                    </FastImage>
+                }
+
+              </View>
+
+          }
           {index !== numberCount - 1 && (
             <View
               style={{
-                width: 30,
-                height: 5,
+                width: 37,
+                height: 6,
+                zIndex: 999,
                 backgroundColor: "#383938",
                 alignSelf: "center"
               }}
             />
           )}
-          {index === numberCount - 1 && <View style={{ paddingRight: 27 }} />}
         </View>
-        <View style={{ width: 90, marginTop: 10 }}>
+        <View style={{
+          position: 'absolute',
+          width: 120,
+          paddingRight: 18,
+          paddingLeft: 18,
+          top: 90,
+          left: -20
+        }}>
           <Text
             style={{
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
-              color: (item.is_locked != "0" || item.is_done == "1") ? "#707070" : "#FFFFFF"
+              color: (item.is_locked != "0") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
             }}
           >
             {item.name}

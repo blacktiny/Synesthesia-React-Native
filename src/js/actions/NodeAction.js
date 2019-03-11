@@ -7,6 +7,13 @@ export function getNodeByID() {
   }
 }
 
+export function getExerciseNodeByID() {
+  return {
+    type: ActionTypes.GET_EXERCISE_NODE,
+    payload: {}
+  }
+}
+
 export function completeNode() {
   return {
     type: ActionTypes.COMPLETE_NODE,
@@ -18,5 +25,12 @@ export function clearNode() {
   return {
     type: ActionTypes.CLEAR_NODE,
     payload: {}
+  }
+}
+
+export function setVolume(volume) {
+  return {
+    type: ActionTypes.SET_VOLUME,
+    payload: { volume }
   }
 }

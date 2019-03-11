@@ -13,31 +13,20 @@ export function loginUser({
   }
 }
 
-export function isLoggedInUser() {
+export function updateUser(
+  user
+) {
   return {
-    type: ActionTypes.IS_LOGGEDIN,
-    payload: {}
+    type: ActionTypes.UPDATE_USER,
+    payload: {
+      user
+    }
   }
 }
 
-export function closeLoginErrorBanner() {
+export function updateUserForm() {
   return {
-    type: ActionTypes.CLOSE_LOGIN_BANNER_ERROR,
+    type: ActionTypes.UPDATE_USER_FORM,
     payload: {}
   }
 }
-
-export function closeLoginSuccessBanner() {
-  return {
-    type: ActionTypes.CLOSE_LOGIN_BANNER_SUCCESS,
-    payload: {}
-  }
-}
-
-export function logoutUser() {
-  return {
-    type: ActionTypes.LOGOUT_USER_SUCCESS,
-    payload: {}
-  }
-}
-

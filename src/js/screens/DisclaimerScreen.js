@@ -14,26 +14,28 @@ class DisclaimerScreen extends Component {
           <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Sensorium')}>
             <ModalCloseIcon style={styles.crossIcon} color="#777778" />
           </TouchableOpacity>
-          <Text style={{ fontFamily: Theme.FONT_REGULAR, fontSize: 17, color: "#fff" }}>
-            The science of synesthesia, mindfulness, as well as synesthetic training
-              is still in its infancy. Mindful synesthetic awareness is subjective and
-              varies from person to person. There is no guarantee that you achieve synesthetic
-              experiences with Synesthesia Meditation. You must try it out yourself to find
-              out if you resonate with Synesthesia and if the practices are beneficial for you.
-              Check our
+          <View style={{ paddingBottom: 15, paddingRight: 10, paddingLeft: 7, paddingTop: 20 }}>
+            <Text style={{ fontFamily: Theme.FONT_REGULAR, fontSize: 17, color: "#fff" }}>
+              The science of synesthesia, mindfulness, as well as synesthetic training
+                is still in its infancy. Mindful synesthetic awareness is subjective and
+                varies from person to person. There is no guarantee that you achieve synesthetic
+                experiences with Synesthesia Meditation. You must try it out yourself to find
+                out if you resonate with Synesthesia and if the practices are beneficial for you.
+                Check our
                 <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/faq') }}>
-              <Text style={{ fontFamily: Theme.FONT_REGULAR, color: '#25B999' }}>
-                {' FAQ '}
+                <Text style={{ fontFamily: Theme.FONT_REGULAR, color: '#25B999' }}>
+                  {' FAQ '}
+                </Text>
               </Text>
-            </Text>
-            and read more in our
+              and read more in our
                 <Text onPress={() => { Linking.openURL('https://synesthesia.com/blog') }}>
-              <Text style={{ fontFamily: Theme.FONT_REGULAR, color: '#25B999' }}>
-                {' Blog'}
+                <Text style={{ fontFamily: Theme.FONT_REGULAR, color: '#25B999' }}>
+                  {' Blog'}
+                </Text>
               </Text>
-            </Text>
-            .
+              .
           </Text>
+          </View>
         </View>
       </View>
     )
@@ -54,18 +56,17 @@ const styles = StyleSheet.create({
   },
   disclaimerContainer: {
     height: '100%',
-    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000000'
   },
   disclaimerContent: {
-    height: iPhoneX() ? height - 480 : height - 330,
-    width: width - 30,
+    width: '93%',
     backgroundColor: '#3D3D3E',
     borderRadius: 12,
     paddingRight: 20,
     paddingLeft: 20,
+    paddingBottom: 20,
     borderColor: '#3D3D3E',
     borderWidth: 1
   }

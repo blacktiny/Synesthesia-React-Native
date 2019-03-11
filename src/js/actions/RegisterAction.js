@@ -21,16 +21,3 @@ export function registerUser({
   }
 }
 
-export function closeRegisterErrorBanner() {
-  return {
-    type: ActionTypes.CLOSE_REGISTER_BANNER_ERROR,
-    payload: {}
-  }
-}
-
-export function closeRegisterSuccessBanner() {
-  return {
-    type: ActionTypes.CLOSE_REGISTER_BANNER_SUCCESS,
-    payload: {}
-  }
-}

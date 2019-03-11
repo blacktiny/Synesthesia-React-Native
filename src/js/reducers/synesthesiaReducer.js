@@ -2,12 +2,17 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   error: false,
-  isFetchingData: true,
+  isFetchingData: false,
   synesthesiaData: [],
 };
 
 export const synesthesiaReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.GET_SYNESTHESIA:
+      return {
+        ...state,
+        isFetchingData: true
+      }
     case ActionTypes.GET_SYNESTHESIA_SUCCESS:
       return {
         ...state,

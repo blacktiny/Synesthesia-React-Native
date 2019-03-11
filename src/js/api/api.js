@@ -28,6 +28,13 @@ export const doRegister = (payload) => fetch(`${baseUrl}user`, {
   body: JSON.stringify(payload)
 }).then(response => response.json());
 
+export const updateUser = (payload, token) => fetch(`${baseUrl}user?token=${token}&user=${payload}`, {
+  method: 'PUT',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
 export const forgotPassword = (email) => fetch(`${baseUrl}resetmail/${email}`, {
   method: 'GET',
   headers: {
