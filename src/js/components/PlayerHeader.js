@@ -19,10 +19,6 @@ class PlayerHeader extends Component {
     onSettingClicked: false,
     settingsModal: false,
   };
-  
-  componentWillUnmount() {
-    this.props.stopBackgroundSoundVolume()
-  }
 
   setModalVisible = (visible) => {
     if (visible) {
@@ -44,6 +40,7 @@ class PlayerHeader extends Component {
 
   onPressLeave = () => {
     if (this.props.noBanner) {
+      this.props.stopBackgroundSoundVolume()
       this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
     } else {
       this.setModalVisible(true)
@@ -51,6 +48,7 @@ class PlayerHeader extends Component {
   }
   leave = () => {
     this.setState({ modalVisible: false })
+    this.props.stopBackgroundSoundVolume()
     this.props.removeBlur()
     this.props.navigation.navigate(this.props.navigation.state.params.backScreen)
   }

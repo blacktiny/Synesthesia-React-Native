@@ -26,8 +26,9 @@ class SettingsModal extends Component {
     }
     return null
   }
+
   state = {
-    sound: this.props.backgroundSound,
+    sound: this.props.backgroundSound
   };
 
   onBackgroundSoundChoosed = (sound) => {
@@ -90,6 +91,7 @@ class SettingsModal extends Component {
                 step={0.01}
                 value={this.props.volume}
                 onValueChange={this.onSoundVolumeChange}
+                trackPressable={true}
               />
             </View>
             {this.props.showSettings && <View style={styles.backgroundSoundContainer}>
@@ -98,7 +100,11 @@ class SettingsModal extends Component {
               </View>}
               <Text style={[styles.text, { alignSelf: 'flex-start', marginTop: 40, marginBottom: 10 }]}>Background Sound</Text>
               <FlatList
+                initialScrollIndex={this.state.sound.id}
                 data={BACKGROUND_SOUNDS}
+                getItemLayout={(data, index) => (
+                  {length: 20, offset: 20 * index, index}
+                )}
                 extraData={this.state.sound}
                 renderItem={this.renderList}
                 keyExtractor={(item, index) => item.name}
@@ -125,6 +131,7 @@ class SettingsModal extends Component {
                   step={0.01}
                   value={this.props.backgroundSoundVolume}
                   onValueChange={this.onBackgroundSoundVolumeChange}
+                  trackPressable={true}
                 />
               </View>
             </View>}
