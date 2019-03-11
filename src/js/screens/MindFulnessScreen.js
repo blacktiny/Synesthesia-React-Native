@@ -19,6 +19,8 @@ import loginAndCreateAccountBannerImage from '../../assets/login_create_account_
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { cleanProgress } from '../actions/ProgressAction'
+import { setBottomBarItem } from '../actions/BottomBarAction'
 import FastImage from 'react-native-fast-image';
 
 const { width, height } = Dimensions.get('screen');
@@ -34,6 +36,8 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
+    this.props.dispatch(cleanProgress());
+    this.props.dispatch(setBottomBarItem(""));
   }
 
   loadingPage = () => {
@@ -273,7 +277,7 @@ class MindFulness extends Component {
     const mindFulnessDatas = mindfulnessData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'mindfullness'} navigation={this.props.navigation} />
+        <BottomBar screen={'MindFullness'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData && <FastImage
             style={{

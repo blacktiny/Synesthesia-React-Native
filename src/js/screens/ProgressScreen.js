@@ -18,6 +18,7 @@ import BottomBar from '../components/BottomBar';
 import ProgressBar from "../components/ProgressBar";
 
 import { getUserProgress } from '../actions/ProgressAction'
+import { getBottomBarItem } from '../actions/BottomBarAction'
 
 import { Theme } from "../constants/constants";
 
@@ -35,6 +36,7 @@ class ProgressScreen extends Component {
 
   componentDidMount() {
     this.props.dispatch(getUserProgress());
+    this.props.dispatch(getBottomBarItem());
   }
 
   loadingPage = () => {
@@ -46,7 +48,8 @@ class ProgressScreen extends Component {
   }
 
   render() {
-    const { isFetchingData, progressData, curBottomBarItem } = this.props;
+    const { isFetchingData, progressData } = this.props;
+    let { curBottomBarItem } = this.props;
     let summary = {
       minutes: 0,
       total: 0,
@@ -77,6 +80,7 @@ class ProgressScreen extends Component {
         summary = progressData.summary;
         summary.percentage = (progressData.summary.percentage * 100).toFixed(1)
         exercise[0] = progressData['Garden of Synesthesia'];
+        console.log('exercise[0] = ', exercise[0]);
         exercise[0].percentage = exercise[0].percentage.toFixed(1);
         exercise[1] = progressData['Path of Mindfulness'];
         exercise[1].percentage = exercise[1].percentage.toFixed(1);
@@ -97,7 +101,25 @@ class ProgressScreen extends Component {
             <View style={styles.title}>
               <Text style={styles.titleText}>Your Progress</Text>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
-                this.props.navigation.goBack(null);
+                console.log('curBottomBarItem = `', curBottomBarItem, "`");
+                let backScreen = "";
+                if (curBottomBarItem == "BeingAware") {
+                  backScreen = "BeingAware"
+                }
+                if (curBottomBarItem == "Synesthesia") {
+                  backScreen = "Synesthesia"
+                }
+                if (curBottomBarItem == "BeingAware" || curBottomBarItem == "Synesthesia") {
+                  curBottomBarItem = "SynesthesiaItem"
+                }
+                // this.props.navigation.navigate(curBottomBarItem);
+                if (curBottomBarItem.length > 2) {
+                  // this.props.navigation.goBack();
+                  this.props.navigation.push(curBottomBarItem, { backScreen: backScreen })
+
+                } else {
+                  this.props.navigation.goBack(null);
+                }
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
               }}>
@@ -338,7 +360,8 @@ function mapStateToProps(state) {
   return {
     error: state.progressReducer.error,
     isFetchingData: state.progressReducer.isFetchingData,
-    progressData: state.progressReducer.progressData
+    progressData: state.progressReducer.progressData,
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem
   };
 }
 

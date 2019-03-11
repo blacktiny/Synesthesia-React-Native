@@ -20,6 +20,9 @@ import ProgressPlayButton from '../components/ProgressPlayButton'
 import { iPhoneX, iPhone5 } from '../util'
 import CloseModal from '../components/CloseModal'
 import { completeNode, clearNode } from '../actions/NodeAction'
+import { cleanAwareness } from '../actions/BeingAwareAction'
+import { cleanMindFulness } from '../actions/MindFulnessAction'
+import { cleanSynesthesia } from '../actions/SynesthesiaAction'
 import Sound from 'react-native-sound'
 import { nextExercise } from '../actions/ExerciseAction'
 import { FILES_URL, ITEMS_TYPES, Theme } from '../constants/constants'
@@ -170,7 +173,7 @@ class AudioPlayer extends Component {
       this.player.release()
     }
     clearInterval(this.tracker)
-    this.props.clearNode()
+    // this.props.clearNode()
     AsyncStorage.removeItem('isDone')
   }
 
@@ -602,9 +605,21 @@ class AudioPlayer extends Component {
     this.props.stopBackgroundSoundVolume()
     this.setState({ modalVisible: false })
     if (isLoggedIn) {
-      this.props.navigation.navigate('Progress')
+      // this.props.navigation.navigate('Sensorium')
+      if (screen === 'SynesthesiaItem') {
+        this.props.clearNode();
+      } else if (screen === 'MindFulness') {
+        this.props.cleanMindFulness();
+      } else if (screen === 'BeingAware') {
+        this.props.cleanAwareness();
+      } else if (screen === 'Synesthesia') {
+        this.props.cleanSynesthesia();
+      }
+      // this.props.navigation.navigate(screen);
+      // this.props.navigation.goBack(null);
       this.props.cleanProgress();
       this.props.getUserProgress();
+      this.props.navigation.navigate('Progress');
       this.props.setHeaderItem('Progress');
       this.props.setBottomBarItem(screen);
     } else {
@@ -984,6 +999,9 @@ const mapDispatchToProps = {
   clearNode,
   addBlur,
   removeBlur,
+  cleanAwareness,
+  cleanMindFulness,
+  cleanSynesthesia,
   cleanProgress,
   getUserProgress,
   setHeaderItem,
