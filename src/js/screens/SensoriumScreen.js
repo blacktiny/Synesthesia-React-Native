@@ -13,6 +13,7 @@ import CustomButton from '../components/CustomButton';
 import { openRegisterModal } from '../actions/ToggleFormModalAction'
 import FastImage from 'react-native-fast-image';
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { setBottomBarItem } from '../actions/BottomBarAction'
 
 class Sensorium extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class Sensorium extends Component {
 
   componentDidMount() {
     this.props.dispatch(removeBlur());
+    this.props.dispatch(setBottomBarItem(''));
   }
 
   onHideUnderlay = (itemName) => {
@@ -94,7 +96,7 @@ class Sensorium extends Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
-            this.props.navigation.push('BeingAware')
+            this.props.navigation.push('BeingAware', { backScreen: "Sensorium" })
           }}
             onHideUnderlay={() => this.onHideUnderlay('awareness')}
             onShowUnderlay={() => this.onShowUnderlay('awareness')}

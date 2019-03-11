@@ -17,6 +17,8 @@ import ExerciseModal from '../components/ExerciseModal';
 import CustomButton from '../components/CustomButton';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { cleanProgress } from '../actions/ProgressAction'
+import { setBottomBarItem } from '../actions/BottomBarAction'
 
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
@@ -32,17 +34,15 @@ class Synesthesia extends Component {
   }
 
   componentDidMount() {
-    // const { isLoggedIn } = this.props;
-
-    // if (isLoggedIn) {
     this.props.dispatch(getSynesthesia());
-    // }
+    this.props.dispatch(cleanProgress());
+    this.props.dispatch(setBottomBarItem(""));
   }
 
   onItemButtonClicked = (id) => {
     AsyncStorage.setItem('nodeID', id);
     // this.props.navigation.navigate('SynesthesiaItem');
-    this.props.navigation.push('SynesthesiaItem', 'synesthesia')
+    this.props.navigation.push('SynesthesiaItem', { backScreen: "Synesthesia" });
   }
 
   loadingPage = () => {
@@ -287,7 +287,7 @@ class Synesthesia extends Component {
     if (userType == '3') {
       AsyncStorage.setItem('nodeID', item.id);
       AsyncStorage.setItem('isDone', isDone);
-      this.props.navigation.navigate('Player')
+      this.props.navigation.navigate('Player', { backScreen: "Synesthesia" })
       return true;
     }
     if (item.is_locked != '0') {
@@ -299,7 +299,7 @@ class Synesthesia extends Component {
     } else {
       AsyncStorage.setItem('nodeID', item.id);
       AsyncStorage.setItem('isDone', isDone);
-      this.props.navigation.navigate('Player')
+      this.props.navigation.navigate('Player', { backScreen: "Synesthesia" })
     }
   }
 
@@ -311,7 +311,7 @@ class Synesthesia extends Component {
     const synesthesiaDatas = synesthesiaData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'synesthesia'} navigation={this.props.navigation} />
+        <BottomBar screen={'Synesthesia'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData &&
             <View>
