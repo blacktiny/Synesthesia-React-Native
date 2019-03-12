@@ -219,7 +219,7 @@ class AudioPlayer extends Component {
               }
             ).start();
           }
-          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - triggerTime.fadeOut : triggerTime.endAt)) && triggerPictureShowed) {
+          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - (triggerTime.fadeOut) : triggerTime.endAt)) && triggerPictureShowed) {
             this.setState({ triggerPictureShowed: false })
 
             Animated.timing(
@@ -267,7 +267,7 @@ class AudioPlayer extends Component {
           }
         });
       }
-    }, 500);
+    }, 1000);
   }
 
   setVolume = (value) => {
@@ -308,7 +308,9 @@ class AudioPlayer extends Component {
       this.initAudioPlayer()
     }
   }
+
   videoPlayer = null
+  
   nextTrigger = () => {
     const { triggers, play } = this.state.items
     const { triggerIndex, triggerTime, trigger, triggerFadeAnim } = this.state
@@ -525,7 +527,7 @@ class AudioPlayer extends Component {
       newTime = duration
       mainType === ITEMS_TYPES.audio ? this.player.stop() : this.player.paused = true
 
-      this.setState({ currentTime: 0, play: false })
+      this.setState({ play: false })
       if (this.props.exercisesLength > 1 && this.props.currentExerciseIndex + 1 <= this.props.exercisesLength - 1) {
         this.nextExercise()
       } else {

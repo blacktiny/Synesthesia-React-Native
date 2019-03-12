@@ -73,7 +73,8 @@ export const nodeReducer = (state = initialState, action) => {
     case ActionTypes.COMPLETE_NODE:
       return {
         ...state,
-        isFetchingData: true
+        isFetchingData: true,
+        nodeComplete: true
       }
     default:
       return state
