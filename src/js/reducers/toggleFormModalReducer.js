@@ -12,6 +12,11 @@ const initialState = {
 
 export const toggleFormModalReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.SET_MODAL_TYPE:
+      return {
+        ...state,
+        modalType: action.payload.modalType
+      }
     case ActionTypes.OPEN_LOGIN_MODAL:
       return {
         ...state,

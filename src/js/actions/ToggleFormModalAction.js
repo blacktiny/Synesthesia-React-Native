@@ -1,5 +1,14 @@
 import { ActionTypes } from '../constants/constants'
 
+export function setModalType(modalType) {
+  return {
+    type: ActionTypes.SET_MODAL_TYPE,
+    payload: {
+      modalType
+    }
+  }
+}
+
 export function openLoginModal() {
   return {
     type: ActionTypes.OPEN_LOGIN_MODAL,

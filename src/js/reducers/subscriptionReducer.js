@@ -6,10 +6,10 @@ const initialState = {
 
 export const subscriptionReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.SET_SUBSCRIPTION_TYPE:
+    case ActionTypes.SET_SUBSCRIPTION_TYPE_SUCCESS:
       return {
         ...state,
-        chosenSubscription: action.payload.subscriptionType
+        chosenSubscription: action.payload
       }
     default:
       return state
