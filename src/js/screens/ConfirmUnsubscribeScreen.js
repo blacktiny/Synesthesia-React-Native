@@ -12,6 +12,8 @@ import { connect } from "react-redux";
 
 import { Theme } from "../constants/constants";
 
+import { setSubscriptionType } from '../actions/SubscriptionAction';
+
 const unsubscribe_1 = require("../../assets/unsubscribe_1.png");
 const unsubscribe_2 = require("../../assets/unsubscribe_2.png");
 const unsubscribe_3 = require("../../assets/unsubscribe_3.png");
@@ -76,7 +78,7 @@ class ConfirmUnsubscribeScreen extends Component {
           <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => this.props.navigation.navigate('User')}>
             <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>{'No, I don`t want to'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={() => console.log('Unsubscribe')}>
+          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={() => {this.props.dispatch(setSubscriptionType("")); this.props.navigation.navigate('User')}}>
             <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Yes, I want to'}</Text>
           </TouchableOpacity>
           <View style={{width: '100%', height: 150}} />

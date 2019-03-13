@@ -207,7 +207,7 @@ class SideMenu extends Component {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
     const { currentItem, isLoggedIn, userType,
       isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible, isPaymentDetailsModalVisible,
-      isSuccessModalVisible, isErrorModalVisible, modalType } = this.props;
+      isSuccessModalVisible, isErrorModalVisible, modalType, subscriptionFlow } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
       curItem = 'Meditate';
@@ -251,7 +251,13 @@ class SideMenu extends Component {
         <SuccessModal
           modalVisible={isSuccessModalVisible}
           modalType={modalType}
-          closeModal={() => { this.props.dispatch(closeSuccessModal()); this.props.dispatch(removeBlur()) }}
+          closeModal={() => { 
+            if (subscriptionFlow !== '') {
+              this.props.navigation.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow }); 
+            }
+            this.props.dispatch(closeSuccessModal()); 
+            this.props.dispatch(removeBlur())
+          }}
         />
         <ErrorModal
           modalVisible={isErrorModalVisible}
@@ -385,6 +391,7 @@ function mapStateToProps(state) {
     isPaymentDetailsModalVisible: state.toggleFormModalReducer.isPaymentDetailsModalVisible,
     isSuccessModalVisible: state.toggleFormModalReducer.isSuccessModalVisible,
     isErrorModalVisible: state.toggleFormModalReducer.isErrorModalVisible,
+    subscriptionFlow: state.toggleFormModalReducer.subscriptionFlow,
     modalType: state.toggleFormModalReducer.modalType
   }
 }

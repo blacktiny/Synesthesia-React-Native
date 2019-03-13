@@ -1,5 +1,14 @@
 import { ActionTypes } from '../constants/constants'
 
+export function setModalType(modalType) {
+  return {
+    type: ActionTypes.SET_MODAL_TYPE,
+    payload: {
+      modalType
+    }
+  }
+}
+
 export function openLoginModal() {
   return {
     type: ActionTypes.OPEN_LOGIN_MODAL,
@@ -14,10 +23,12 @@ export function closeLoginModal() {
   }
 }
 
-export function openRegisterModal() {
+export function openRegisterModal(subscriptionFlow = '') {
   return {
     type: ActionTypes.OPEN_REGISTER_MODAL,
-    payload: {}
+    payload: {
+      subscriptionFlow
+    }
   }
 }
 

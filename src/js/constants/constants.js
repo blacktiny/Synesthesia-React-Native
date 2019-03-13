@@ -81,6 +81,8 @@ export const ActionTypes = keyMirror({
   SET_VOLUME: null,
   UPDATE_USER_FORM: null,
 
+  SET_MODAL_TYPE: null,
+
   OPEN_LOGIN_MODAL: null,
   CLOSE_LOGIN_MODAL: null,
 
@@ -105,7 +107,8 @@ export const ActionTypes = keyMirror({
   OPEN_PAYMENT_DETAILS_MODAL: null,
   CLOSE_PAYMENT_DETAILS_MODAL: null,
 
-  SET_SUBSCRIPTION_TYPE: null
+  SET_SUBSCRIPTION_TYPE: null,
+  SET_SUBSCRIPTION_TYPE_SUCCESS: null,
 })
 
 export const Theme = {

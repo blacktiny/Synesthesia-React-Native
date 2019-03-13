@@ -12,6 +12,7 @@ import completionSaga from './Completion'
 import ExerciseNodeSaga from './ExerciseNodeSaga'
 import ProgressSaga from './ProgressSaga'
 import BackgroundSoundSaga from './BackgroundSoundSaga'
+import SubscriptionSaga from './SubscriptionSaga'
 const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGIN_USER, LoginUserSaga)
   yield takeLatest(ActionTypes.REGISTER_USER, RegisterUserSaga)
@@ -26,7 +27,7 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.GET_PROGRESS, ProgressSaga)
   yield takeLatest(ActionTypes.UPDATE_USER, LoginUserSaga)
   yield takeLatest(ActionTypes.SET_BACKGROUND_SOUND, BackgroundSoundSaga)
-
+  yield takeLatest(ActionTypes.SET_SUBSCRIPTION_TYPE, SubscriptionSaga)
 }
 
 export default rootSaga

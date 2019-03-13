@@ -41,6 +41,9 @@ const SuccessModal = (props) => {
             {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
             {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'User updated successfully!'}</Text>}
 
+            {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
+            {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Start to meditate!'}</Text>}
+
           </View>
         </LinearGradient>
       </View>
