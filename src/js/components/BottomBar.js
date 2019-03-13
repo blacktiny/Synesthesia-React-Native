@@ -37,11 +37,11 @@ class BottomBar extends Component {
     this.props.dispatch(setHeaderItem('Sensorium'))
   }
 
-  onButtomItemClicked = (itemName) => {
-    this.props.navigation.push(itemName)
+  onBottomItemClicked = (itemName) => {
+    this.props.navigation.navigate(itemName)
 
-    // this.props.dispatch(setBottomBarItem(itemName));
-    this.setState({ screen: itemName });
+    this.props.dispatch(setBottomBarItem(itemName));
+    // this.setState({ screen: itemName });
     this.props.dispatch(setHeaderItem('Sensorium'))
   }
 
@@ -52,17 +52,17 @@ class BottomBar extends Component {
         <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
           <FastImage style={styles.leftArrow} source={leftArrow} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('MindFulness')}>
-          <Text style={[styles.textStyle, { color: (this.state.screen == 'MindFullness' || curBottomBarItem == 'MindFulness') ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-          {(this.state.screen == 'MindFullness' || curBottomBarItem == 'MindFulness') && <FastImage style={styles.imageStyle} source={rectangle} />}
+        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('MindFulness')}>
+          <Text style={[styles.textStyle, { color: curBottomBarItem == 'MindFulness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+          {curBottomBarItem == 'MindFulness' && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('BeingAware')}>
-          <Text style={[styles.textStyle, { color: (this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-          {(this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('BeingAware')}>
+          <Text style={[styles.textStyle, { color: curBottomBarItem == 'BeingAware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+          {curBottomBarItem == 'BeingAware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onButtomItemClicked('Synesthesia')}>
-          <Text style={[styles.textStyle, { color: (this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-          {(this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
+        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('Synesthesia')}>
+          <Text style={[styles.textStyle, { color: curBottomBarItem == 'Synesthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+          {curBottomBarItem == 'Synesthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
         </TouchableOpacity>
       </SafeAreaView>
     );

@@ -36,8 +36,6 @@ class BeingAware extends Component {
 
   componentDidMount() {
     this.props.dispatch(getBeingAware());
-    this.props.dispatch(cleanProgress());
-    this.props.dispatch(setBottomBarItem(""));
   }
 
   onItemButtonClicked = (id) => {
@@ -311,7 +309,7 @@ class BeingAware extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'BeingAware'} navigation={this.props.navigation} />
+        <BottomBar screen={this.props.dispatch(setBottomBarItem('BeingAware'))} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData &&
