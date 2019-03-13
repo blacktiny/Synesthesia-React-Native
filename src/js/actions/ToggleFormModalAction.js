@@ -23,10 +23,12 @@ export function closeLoginModal() {
   }
 }
 
-export function openRegisterModal() {
+export function openRegisterModal(subscriptionFlow = '') {
   return {
     type: ActionTypes.OPEN_REGISTER_MODAL,
-    payload: {}
+    payload: {
+      subscriptionFlow
+    }
   }
 }
 

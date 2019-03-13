@@ -7,6 +7,7 @@ const initialState = {
   isSuccessModalVisible: false,
   isErrorModalVisible: false,
   isPaymentDetailsModalVisible: false,
+  subscriptionFlow: '',
   modalType: ''
 };
 
@@ -32,7 +33,8 @@ export const toggleFormModalReducer = (state = initialState, action) => {
       return {
         ...state,
         isRegisterModalVisible: true,
-        modalType: 'Register'
+        modalType: 'Register',
+        subscriptionFlow: action.payload.subscriptionFlow
       }
     case ActionTypes.CLOSE_REGISTER_MODAL:
       return {
@@ -51,7 +53,8 @@ export const toggleFormModalReducer = (state = initialState, action) => {
     case ActionTypes.CLOSE_SUCCESS_MODAL:
       return {
         ...state,
-        isSuccessModalVisible: false
+        isSuccessModalVisible: false,
+        subscriptionFlow: ''
       }
     case ActionTypes.OPEN_ERROR_MODAL:
       return {
