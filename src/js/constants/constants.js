@@ -164,40 +164,84 @@ export const BACKGROUND_SOUNDS = [
   },
   {
     id: 7,
+    name: '"Peace Garden" (Sirius)',
+    file: 'media/audio/background/236_full_peace-garden_1059.mp3'
+  },
+  {
+    id: 8,
+    name: '"Meteors" (Sirius)',
+    file: 'media/audio/background/236_full_meteors_1064.mp3'
+  },
+  {
+    id: 9,
     name: 'LA 1 (Moby)',
     file: 'media/audio/background/01+LA1.mp3'
   },
   {
-    id: 8,
+    id: 10,
     name: 'LA 4 (Moby)',
     file: 'media/audio/background/04+LA4.mp3'
   },
   {
-    id: 9,
+    id: 11,
     name: 'LA 7 (Moby)',
     file: 'media/audio/background/07+LA7.mp3'
   },
   {
-    id: 10,
+    id: 12,
+    name: 'LA 11 (Moby)',
+    file: 'media/audio/background/11+LA11.mp3'
+  },
+  {
+    id: 13,
     name: 'Birch Wood (Listening Earth)',
     file: 'media/audio/background/02+Birch+Wood,+part+2.mp3'
   },
   {
-    id: 11,
+    id: 14,
     name: 'African Woodland (L.Earth)',
     file: 'media/audio/background/03+African+Woodland+with+Impalas+Grazing.mp3'
   },
   {
-    id: 12,
+    id: 15,
     name: 'Himalaya (Listening Earth)',
+    file: 'media/audio/background/07+The+Karka+Meadow.mp3'
+  },
+  {
+    id: 16,
+    name: 'Redwoods (Listening Earth)',
     file: 'media/audio/background/03+Dewfall,+with+Ravens+and+Barred+Owl.mp3'
   },
   {
-    id: 13,
-    name: 'Redwoods (Listening Earth)',
-    file: 'media/audio/background/07+The+Karka+Meadow.mp3'
+    id: 17,
+    name: '"Whale Serenade" (Clarke)',
+    file: 'media/audio/background/whale_serenade.mp3'
+  },
+  {
+    id: 18,
+    name: '"Earth Embrace" (Clarke)',
+    file: 'media/audio/background/01+Earths+Embrace.mp3'
+  },
+  {
+    id: 19,
+    name: '"Ohm Mantra" (Clarke)',
+    file: 'media/audio/background/ohm_mantra.mp3'
+  },
+  {
+    id: 20,
+    name: 'Torrential Rain',
+    file: 'media/audio/background/Torrential_Rain.mp3'
+  },
+  {
+    id: 21,
+    name: 'Waterfall',
+    file: 'media/audio/background/Waterfall.mp3'
+  },
+  {
+    id: 22,
+    name: 'Tropical Storm',
+    file: 'media/audio/background/Tropical+storm.mp3'
   }
-
 ]
 
 export const ITEMS_TYPES = {
