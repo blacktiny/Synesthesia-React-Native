@@ -14,6 +14,7 @@ import { FILES_URL } from '../constants/constants'
 import ProgressiveImage from '../components/ProgressiveImage';
 import ExerciseModal from '../components/ExerciseModal';
 import CustomButton from '../components/CustomButton';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
@@ -35,14 +36,6 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
-  }
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 320, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
   }
 
   renderData = (mindFulnessDatas) => {
@@ -302,7 +295,7 @@ class MindFulness extends Component {
               }}>{subHeader}</Text>
             </View>
           </FastImage>}
-          {isFetchingData && this.loadingPage()}
+          {isFetchingData && <LoadingIndicator />}
           {this.renderData(mindFulnessDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

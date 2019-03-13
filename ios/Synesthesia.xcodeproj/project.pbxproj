@@ -70,6 +70,7 @@
 		E8A7D4E11C174BA1A6324D75 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1641E17D03B24EEAA0D0F325 /* libRNSound.a */; };
 		EA045A3E51BC4C3BB9C0B012 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8EAA1826C26E4E6EB92D8580 /* FontAwesome5_Brands.ttf */; };
 		EA7D0A9083A1409B82D61605 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6573015F375D4E199FBB2398 /* AntDesign.ttf */; };
+		EC61FDA816F643C6900AD546 /* libRNTextGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9753658AEFEA48309F6B0C06 /* libRNTextGradient.a */; };
 		EE9BF7B9C2674581A2F134B1 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72EAE0048A894A8EBA9AC776 /* Foundation.ttf */; };
 		F40A8BE8783347428398407B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 044E592C99C74B4E8FC41F3B /* FontAwesome5_Solid.ttf */; };
 		F77DBD09C2BA436E97B51FF9 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60FB0F3E3F8541B6B3E6F0E3 /* MaterialIcons.ttf */; };
@@ -139,6 +140,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		1A01238822317B5400C6997A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9117ED8A3F749DDA8894B60 /* RNTextGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNTextGradient;
 		};
 		2A53B8C0221D71A800FA1D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -504,6 +512,7 @@
 		8F5B39F1DD0F416598E4F51D /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		90D4DE1934F945A1A9AEA6EA /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		922A066975E94FA39F355482 /* Raleway-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Raleway-SemiBold.ttf"; path = "../assets/fonts/Raleway-SemiBold.ttf"; sourceTree = "<group>"; };
+		9753658AEFEA48309F6B0C06 /* libRNTextGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNTextGradient.a; sourceTree = "<group>"; };
 		9CD45227EE924C6E8ED19325 /* Raleway-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Raleway-Medium.ttf"; path = "../assets/fonts/Raleway-Medium.ttf"; sourceTree = "<group>"; };
 		9FC52B32195340AA98C60200 /* Rawline-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rawline-Bold.ttf"; path = "../assets/fonts/Rawline-Bold.ttf"; sourceTree = "<group>"; };
 		A025DFB8085E429F94C230C4 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
@@ -522,6 +531,7 @@
 		F164E4E783B3480B9F36A0CB /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		F1DD18C70CA045889A6B21EC /* RCTYouTube.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTYouTube.xcodeproj; path = "../node_modules/react-native-youtube/RCTYouTube.xcodeproj"; sourceTree = "<group>"; };
 		F5086587040D499DA082E33A /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
+		F9117ED8A3F749DDA8894B60 /* RNTextGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNTextGradient.xcodeproj; path = "../node_modules/react-native-text-gradient/ios/RNTextGradient.xcodeproj"; sourceTree = "<group>"; };
 		FA17F166AA5C48B8B56EEE9D /* libRNBlur.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBlur.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -559,6 +569,7 @@
 				9B1C7086112744EA9B9CBCF4 /* libRCTVideo.a in Frameworks */,
 				4C468D98896E4C1085F72E54 /* libFastImage.a in Frameworks */,
 				042936A7AE5B4570A194E29C /* libRNBlur.a in Frameworks */,
+				EC61FDA816F643C6900AD546 /* libRNTextGradient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,6 +717,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1A01238522317B5400C6997A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A01238922317B5400C6997A /* libRNTextGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2A53B892221D71A600FA1D8A /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -720,6 +739,7 @@
 				4EEC21FC9A85435A81A97B91 /* libRNVectorIcons-tvOS.a */,
 				F164E4E783B3480B9F36A0CB /* libFastImage.a */,
 				FA17F166AA5C48B8B56EEE9D /* libRNBlur.a */,
+				9753658AEFEA48309F6B0C06 /* libRNTextGradient.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -884,6 +904,7 @@
 				74F5566289F747BE90293691 /* RCTVideo.xcodeproj */,
 				501133A8338044828F05584B /* FastImage.xcodeproj */,
 				3CCB89C6402445A994ADD8A0 /* RNBlur.xcodeproj */,
+				F9117ED8A3F749DDA8894B60 /* RNTextGradient.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1125,6 +1146,10 @@
 					ProjectRef = E25F728C96464BB09D25A1FF /* RNSVG.xcodeproj */;
 				},
 				{
+					ProductGroup = 1A01238522317B5400C6997A /* Products */;
+					ProjectRef = F9117ED8A3F749DDA8894B60 /* RNTextGradient.xcodeproj */;
+				},
+				{
 					ProductGroup = 2A53B8D2221D71A800FA1D8A /* Products */;
 					ProjectRef = BEAF9A16CA564A87BD20541A /* RNVectorIcons.xcodeproj */;
 				},
@@ -1194,6 +1219,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1A01238922317B5400C6997A /* libRNTextGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNTextGradient.a;
+			remoteRef = 1A01238822317B5400C6997A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2A53B8C1221D71A800FA1D8A /* libBVLinearGradient.a */ = {
@@ -1670,12 +1702,14 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = SynesthesiaTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1712,12 +1746,14 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = SynesthesiaTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1755,6 +1791,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = Synesthesia/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1783,6 +1820,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = Synesthesia/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1818,11 +1856,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = "Synesthesia-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1868,11 +1908,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = "Synesthesia-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1917,11 +1959,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = "Synesthesia-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1966,11 +2010,13 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../node_modules/react-native-text-gradient/ios/**",
 				);
 				INFOPLIST_FILE = "Synesthesia-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
