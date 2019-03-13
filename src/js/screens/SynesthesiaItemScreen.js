@@ -31,8 +31,7 @@ class SynesthesiaItemScreen extends Component {
   }
   componentDidMount() {
     this.props.dispatch(getNodeByID());
-    this.props.dispatch(cleanProgress());
-    this.props.dispatch(setBottomBarItem(""));
+    this.props.dispatch(setBottomBarItem(this.props.navigation.state.params.backScreen));
   }
   componentWillUnmount() {
     this.props.dispatch(clearNode());
@@ -206,10 +205,9 @@ class SynesthesiaItemScreen extends Component {
     const header = nodeData.header;
     const subHeader = nodeData.subheader;
     const imageBanner = FILES_URL + nodeData.image_banner;
-    const screen = navigation.state.params.backScreen;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={screen} navigation={this.props.navigation} />
+        <BottomBar navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData && <FastImage

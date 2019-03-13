@@ -113,7 +113,7 @@ const UserStackNavigator = createStackNavigator({
   ConfirmUnsubscribe: {
     screen: ConfirmUnsubscribeScreen
   },
-  ConfirmMonthySubscribe: {
+  ConfirmMonthlySubscribe: {
     screen: ConfirmMonthlySubscribeScreen
   }
 }, {
@@ -195,7 +195,9 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-        <View style={{ height: '100%', width: '100%', flex: 1 }} ref={(viewRef) => { this.viewRef = viewRef; }}
+          <View
+            style={{ height: '100%', width: '100%', flex: 1 }}
+            ref={(viewRef) => { this.viewRef = viewRef; }}
             onLayout={() => { this.onViewLoaded(); }} >
             <AppContainer />
           </View>

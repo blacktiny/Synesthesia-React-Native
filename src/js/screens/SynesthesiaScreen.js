@@ -35,8 +35,6 @@ class Synesthesia extends Component {
 
   componentDidMount() {
     this.props.dispatch(getSynesthesia());
-    this.props.dispatch(cleanProgress());
-    this.props.dispatch(setBottomBarItem(""));
   }
 
   onItemButtonClicked = (id) => {
@@ -311,7 +309,7 @@ class Synesthesia extends Component {
     const synesthesiaDatas = synesthesiaData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'Synesthesia'} navigation={this.props.navigation} />
+        <BottomBar screen={this.props.dispatch(setBottomBarItem('Synesthesia'))} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData &&
             <View>
