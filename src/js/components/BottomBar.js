@@ -10,7 +10,7 @@ const leftArrow = require('../../assets/leftArrow.png')
 import { Theme } from '../constants/constants'
 import FastImage from 'react-native-fast-image';
 import { getBottomBarItem, setBottomBarItem } from '../actions/BottomBarAction'
-
+import { BoxShadow } from 'react-native-shadow'
 const { width, height } = Dimensions.get('screen');
 
 class BottomBar extends Component {
@@ -47,24 +47,48 @@ class BottomBar extends Component {
 
   render() {
     const { curBottomBarItem } = this.props;
+    const shadowOpt = {
+      width: 500,
+      ...Platform.select({
+        ios: {
+          height: 80
+        },
+        android: {
+          height: 70
+        },
+      }),
+      color: "#0e0d0d",
+      border: 10,
+      radius: 0,
+      opacity: 0.4,
+      x: 0,
+      y: -1,
+      style: {
+        position: 'absolute',
+        bottom: 0,
+        zIndex: 111111,
+      }
+    }
     return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
-          <FastImage style={styles.leftArrow} source={leftArrow} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('MindFulness')}>
-          <Text style={[styles.textStyle, { color: curBottomBarItem == 'MindFulness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-          {curBottomBarItem == 'MindFulness' && <FastImage style={styles.imageStyle} source={rectangle} />}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('BeingAware')}>
-          <Text style={[styles.textStyle, { color: curBottomBarItem == 'BeingAware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-          {curBottomBarItem == 'BeingAware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('Synesthesia')}>
-          <Text style={[styles.textStyle, { color: curBottomBarItem == 'Synesthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-          {curBottomBarItem == 'Synesthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
-        </TouchableOpacity>
-      </SafeAreaView>
+      <BoxShadow setting={shadowOpt}>
+        <SafeAreaView style={styles.container}>
+          <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
+            <FastImage style={styles.leftArrow} source={leftArrow} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('MindFulness')}>
+            <Text style={[styles.textStyle, { color: curBottomBarItem == 'MindFulness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+            {curBottomBarItem == 'MindFulness' && <FastImage style={styles.imageStyle} source={rectangle} />}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('BeingAware')}>
+            <Text style={[styles.textStyle, { color: curBottomBarItem == 'BeingAware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+            {curBottomBarItem == 'BeingAware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('Synesthesia')}>
+            <Text style={[styles.textStyle, { color: curBottomBarItem == 'Synesthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+            {curBottomBarItem == 'Synesthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
+          </TouchableOpacity>
+        </SafeAreaView>
+      </BoxShadow>
     );
   }
 }
@@ -78,25 +102,24 @@ const styles = StyleSheet.create({
         height: 80
       },
       android: {
-        height: 60
+        height: 70
       },
     }),
     paddingTop: 12,
     paddingBottom: 0,
     paddingLeft: 10,
-    paddingRight: 10,
-    position: 'absolute',
-    bottom: 0,
-    // justifyContent: 'space-between',
+
+    position: 'relative',
+    overflow: 'hidden',
     flexDirection: 'row',
-    zIndex: 111111,
     backgroundColor: '#1F1F20',
 
-    shadowColor: 'rgb(14,13,13)',
-    shadowOpacity: 0.7,
-    shadowRadius: 10,
-    shadowOffset: { height: 1, width: 1 },
-    elevation: 10
+
+    // shadowColor: 'rgb(14,13,13)',
+    // shadowOpacity: 0.7,
+    // shadowRadius: 10,
+    // shadowOffset: { height: 1, width: 1 },
+    // elevation: 10
   },
   direction: {
     display: 'flex',

@@ -17,6 +17,7 @@
     "react-native-linear-gradient": "^2.5.3",
     "react-native-modal": "^7.0.2",
     "react-native-progress-circle": "^2.0.1",
+    "react-native-shadow": "^1.2.2",
     "react-native-slider-custom": "git+https://github.com/thodwris/react-native-slider.git",
     "react-native-sound": "^0.10.9",
     "react-native-svg": "^8.0.10",
