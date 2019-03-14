@@ -36,11 +36,10 @@ class MeditateHeader extends Component {
         this.props.dispatch(addBlur());
         this.props.dispatch(openRegisterModal());
       } else {
-        this.props.navigation.navigate(headerItem);
-
-        this.props.dispatch(cleanProgress());
-        this.props.dispatch(getUserProgress());
         this.props.dispatch(setHeaderItem(headerItem));
+        this.props.navigation.navigate(headerItem, { backScreen: this.props.navigation.state.routeName });
+        // this.props.dispatch(cleanProgress());
+        // this.props.dispatch(getUserProgress());
       }
       this.props.dispatch(setMenuItem(''));
     }

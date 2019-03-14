@@ -14,12 +14,12 @@ import { FILES_URL } from '../constants/constants'
 import ProgressiveImage from '../components/ProgressiveImage';
 import ExerciseModal from '../components/ExerciseModal';
 import CustomButton from '../components/CustomButton';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur, removeBlur } from '../actions/BlurAction'
-import { cleanProgress } from '../actions/ProgressAction'
 import { setBottomBarItem } from '../actions/BottomBarAction'
 import FastImage from 'react-native-fast-image';
 
@@ -36,16 +36,6 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
-    this.props.dispatch(cleanProgress());
-    this.props.dispatch(setBottomBarItem(""));
-  }
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 320, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
   }
 
   renderData = (mindFulnessDatas) => {
@@ -277,7 +267,8 @@ class MindFulness extends Component {
     const mindFulnessDatas = mindfulnessData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'mindfullness'} navigation={this.props.navigation} />
+        {isFetchingData && <LoadingIndicator />}
+        <BottomBar navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData && <FastImage
             style={{
@@ -305,7 +296,7 @@ class MindFulness extends Component {
               }}>{subHeader}</Text>
             </View>
           </FastImage>}
-          {isFetchingData && this.loadingPage()}
+          
           {this.renderData(mindFulnessDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

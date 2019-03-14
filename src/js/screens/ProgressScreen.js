@@ -18,7 +18,7 @@ import BottomBar from '../components/BottomBar';
 import ProgressBar from "../components/ProgressBar";
 
 import { getUserProgress } from '../actions/ProgressAction'
-import { getBottomBarItem } from '../actions/BottomBarAction'
+import { getBottomBarItem, setBottomBarItem } from '../actions/BottomBarAction'
 
 import { Theme } from "../constants/constants";
 
@@ -26,12 +26,13 @@ import { setHeaderItem } from '../actions/MeditateHeaderAction';
 
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 const closeX = require("../../assets/x.png");
+import { NavigationEvents } from 'react-navigation';
 
 const { width, height } = Dimensions.get("screen");
 
 class ProgressScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
@@ -48,7 +49,8 @@ class ProgressScreen extends Component {
   }
 
   render() {
-    const { isFetchingData, progressData, curBottomBarItem } = this.props;
+    const { isFetchingData, progressData } = this.props;
+    let { curBottomBarItem } = this.props;
     let summary = {
       minutes: 0,
       total: 0,
@@ -76,21 +78,21 @@ class ProgressScreen extends Component {
 
     if (progressData && !isFetchingData) {
       if (progressData != null) {
-        summary = progressData.summary;
+        summary = Object.assign(summary, progressData.summary);
         summary.percentage = (progressData.summary.percentage * 100).toFixed(1)
-        exercise[0] = progressData['Garden of Synesthesia'];
-        console.log('exercise[0] = ', exercise[0]);
+        exercise[0] = Object.assign(exercise[0], progressData['Garden of Synesthesia']);
         exercise[0].percentage = exercise[0].percentage.toFixed(1);
-        exercise[1] = progressData['Path of Mindfulness'];
+        exercise[1] = Object.assign(exercise[1], progressData['Path of Mindfulness']);
         exercise[1].percentage = exercise[1].percentage.toFixed(1);
-        exercise[2] = progressData['Sensory Awareness'];
+        exercise[2] = Object.assign(exercise[2], progressData['Sensory Awareness']);
         exercise[2].percentage = exercise[2].percentage.toFixed(1);
       }
     }
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={curBottomBarItem} navigation={this.props.navigation} />
+        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} />
+        <BottomBar navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {isFetchingData && this.loadingPage()}
           {!isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
@@ -101,16 +103,28 @@ class ProgressScreen extends Component {
               <Text style={styles.titleText}>Your Progress</Text>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
                 console.log('curBottomBarItem = `', curBottomBarItem, "`");
+                let backScreen = "";
+                if (curBottomBarItem == "BeingAware") {
+                  backScreen = "BeingAware"
+                }
+                if (curBottomBarItem == "Synesthesia") {
+                  backScreen = "Synesthesia"
+                }
+                if (curBottomBarItem == "BeingAware" || curBottomBarItem == "Synesthesia") {
+                  curBottomBarItem = "SynesthesiaItem"
+                }
                 // this.props.navigation.navigate(curBottomBarItem);
                 if (curBottomBarItem.length > 2) {
                   // this.props.navigation.goBack();
-                  this.props.navigation.push(curBottomBarItem)
+                  this.props.navigation.push(curBottomBarItem, { backScreen: backScreen })
 
                 } else {
+
                   this.props.navigation.goBack(null);
                 }
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
+                this.props.dispatch(setBottomBarItem(this.props.navigation.getParam('backScreen')));
               }}>
                 <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end', }} />
               </TouchableOpacity>

@@ -14,6 +14,7 @@ import { openRegisterModal } from '../actions/ToggleFormModalAction'
 import FastImage from 'react-native-fast-image';
 import { addBlur, removeBlur } from '../actions/BlurAction'
 import { setBottomBarItem } from '../actions/BottomBarAction'
+import { NavigationEvents } from 'react-navigation';
 
 class Sensorium extends Component {
   constructor(props) {
@@ -27,7 +28,6 @@ class Sensorium extends Component {
 
   componentDidMount() {
     this.props.dispatch(removeBlur());
-    this.props.dispatch(setBottomBarItem(''));
   }
 
   onHideUnderlay = (itemName) => {
@@ -55,6 +55,7 @@ class Sensorium extends Component {
     const { isLoggedIn, user } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
+        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} />
         <BottomBar navigation={this.props.navigation} />
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
 
@@ -62,7 +63,8 @@ class Sensorium extends Component {
           <Text style={{ fontSize: 18, textAlign: 'center', color: '#fff', fontFamily: Theme.FONT_REGULAR, marginTop: 10, marginBottom: 18 }}>{'What would you like to do?'}</Text>
 
           <TouchableHighlight onPress={() => {
-            this.props.navigation.push('MindFulness')
+            this.props.navigation.navigate('MindFulness')
+            this.props.dispatch(setBottomBarItem('MindFulness'))
           }}
             onHideUnderlay={() => this.onHideUnderlay('mindfulness')}
             onShowUnderlay={() => this.onShowUnderlay('mindfulness')}
@@ -96,7 +98,8 @@ class Sensorium extends Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
-            this.props.navigation.push('BeingAware', { backScreen: "Sensorium" })
+            this.props.navigation.navigate('BeingAware')
+            this.props.dispatch(setBottomBarItem('BeingAware'))
           }}
             onHideUnderlay={() => this.onHideUnderlay('awareness')}
             onShowUnderlay={() => this.onShowUnderlay('awareness')}
@@ -131,7 +134,8 @@ class Sensorium extends Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={() => {
-            this.props.navigation.push('Synesthesia')
+            this.props.navigation.navigate('Synesthesia')
+            this.props.dispatch(setBottomBarItem('Synesthesia'))
           }}
             onHideUnderlay={() => this.onHideUnderlay('synesthesia')}
             onShowUnderlay={() => this.onShowUnderlay('synesthesia')}

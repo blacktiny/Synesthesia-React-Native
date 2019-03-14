@@ -36,13 +36,11 @@ class BeingAware extends Component {
 
   componentDidMount() {
     this.props.dispatch(getBeingAware());
-    this.props.dispatch(cleanProgress());
-    this.props.dispatch(setBottomBarItem(""));
   }
 
   onItemButtonClicked = (id) => {
     AsyncStorage.setItem('nodeID', id);
-    this.props.navigation.push('SynesthesiaItem', 'beingaware', { backScreen: "BeingAware" });
+    this.props.navigation.push('SynesthesiaItem', { backScreen: "BeingAware" });
   }
 
 
@@ -311,7 +309,7 @@ class BeingAware extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'beingaware'} navigation={this.props.navigation} />
+        <BottomBar screen={this.props.dispatch(setBottomBarItem('BeingAware'))} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData &&

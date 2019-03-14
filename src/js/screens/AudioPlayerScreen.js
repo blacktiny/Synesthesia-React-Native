@@ -48,6 +48,8 @@ import Button from '../components/Button'
 import Video from 'react-native-video'
 import YouTube from 'react-native-youtube';
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { stopBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
+
 
 
 Sound.setCategory('Playback');
@@ -217,7 +219,7 @@ class AudioPlayer extends Component {
               }
             ).start();
           }
-          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - triggerTime.fadeOut : triggerTime.endAt)) && triggerPictureShowed) {
+          if (trigger && (Math.floor(seconds) >= (triggerTime.fadeOut ? triggerTime.endAt - (triggerTime.fadeOut) : triggerTime.endAt)) && triggerPictureShowed) {
             this.setState({ triggerPictureShowed: false })
 
             Animated.timing(
@@ -265,7 +267,7 @@ class AudioPlayer extends Component {
           }
         });
       }
-    }, 500);
+    }, 1000);
   }
 
   setVolume = (value) => {
@@ -306,7 +308,9 @@ class AudioPlayer extends Component {
       this.initAudioPlayer()
     }
   }
+
   videoPlayer = null
+  
   nextTrigger = () => {
     const { triggers, play } = this.state.items
     const { triggerIndex, triggerTime, trigger, triggerFadeAnim } = this.state
@@ -523,7 +527,7 @@ class AudioPlayer extends Component {
       newTime = duration
       mainType === ITEMS_TYPES.audio ? this.player.stop() : this.player.paused = true
 
-      this.setState({ currentTime: 0, play: false })
+      this.setState({ play: false })
       if (this.props.exercisesLength > 1 && this.props.currentExerciseIndex + 1 <= this.props.exercisesLength - 1) {
         this.nextExercise()
       } else {
@@ -600,7 +604,7 @@ class AudioPlayer extends Component {
     this.props.removeBlur()
     const { isLoggedIn, navigation } = this.props;
     const screen = navigation.state.params.backScreen;
-    console.log(navigation.state);
+    this.props.stopBackgroundSoundVolume()
     this.setState({ modalVisible: false })
     if (isLoggedIn) {
       // this.props.navigation.navigate('Sensorium')
@@ -613,11 +617,11 @@ class AudioPlayer extends Component {
       } else if (screen === 'Synesthesia') {
         this.props.cleanSynesthesia();
       }
-      this.props.navigation.navigate(screen);
-      this.props.navigation.goBack(null);
-      this.props.navigation.navigate('Progress')
+      // this.props.navigation.navigate(screen);
+      // this.props.navigation.goBack(null);
       this.props.cleanProgress();
       this.props.getUserProgress();
+      this.props.navigation.navigate('Progress');
       this.props.setHeaderItem('Progress');
       this.props.setBottomBarItem(screen);
     } else {
@@ -1003,7 +1007,8 @@ const mapDispatchToProps = {
   cleanProgress,
   getUserProgress,
   setHeaderItem,
-  setBottomBarItem
+  setBottomBarItem,
+  stopBackgroundSoundVolume
 }
 export default connect(
   mapStateToProps,

@@ -20,9 +20,8 @@ import { Theme } from "../constants/constants";
 
 const { width, height } = Dimensions.get("screen");
 
-import BannerCloseIcon from '../icons/BannerCloseIcon';
-
-const calendarIcon = require("../../assets/blue_calendar_icon.png");
+const blueCalendarIcon = require("../../assets/blue_calendar_icon.png");
+const lilaCalendarIcon = require("../../assets/lila_calendar_icon.png");
 const cancelIcon = require("../../assets/cancel_x.png");
 const slider1 = require("../../assets/Slider/slider_1.png");
 const slider2 = require("../../assets/Slider/slider_2.png");
@@ -32,7 +31,8 @@ const slider5 = require("../../assets/Slider/slider_5.png");
 import DollarSign from '../icons/DollarSign';
 import BottomBar from '../components/BottomBar';
 
-import { openPaymentDetailsModal } from '../actions/ToggleFormModalAction';
+import { openPaymentDetailsModal, openRegisterModal } from '../actions/ToggleFormModalAction';
+import { addBlur, removeBlur } from '../actions/BlurAction'
 
 class PricingScreen extends Component {
   constructor() {
@@ -68,6 +68,11 @@ class PricingScreen extends Component {
     this.setState({ bSubScription: false });
   };
 
+  onSubscriptionClicked = (subTier) => {
+    this.props.dispatch(addBlur())
+    this.props.dispatch(openRegisterModal(subTier))
+  }
+
   render() {
     const {
       subScriptDate,
@@ -90,23 +95,22 @@ class PricingScreen extends Component {
 
             <View style={styles.subBtnSection}>
               <LinearGradient
-                colors={["#00C2FB", "#00AAF7", "#0092F3", "#0078EF", "#0060EB"]}
+                colors={['#AEA2F2', '#725BEE']}
                 start={{ x: 0.0, y: 1.0 }}
                 end={{ x: 1.0, y: 1.0 }}
                 style={styles.subGradient}
               >
-                <TouchableOpacity style={styles.subBtnYear}>
+                <TouchableOpacity style={styles.subBtnYear} onPress={() => this.onSubscriptionClicked('monthly')}>
                   <View style={styles.subBillTypeSection}>
-                    <Text style={styles.subBillType}>YEARLY</Text>
+                    <Text style={styles.subBillType}>MONTHLY</Text>
                   </View>
                   <View style={styles.subPriceContent}>
                     <View style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
                     }}>
-                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subMonthlyPrice}>{strYearlyPrice}</Text>
                     </View>
                     <Text style={styles.subPerMonth}>per month</Text>
-                    <Text style={styles.subBilled}>*Billed Annually</Text>
                   </View>
                 </TouchableOpacity>
               </LinearGradient>
@@ -115,8 +119,8 @@ class PricingScreen extends Component {
             <View style={styles.nextBillDate}>
               <Text style={styles.nextBillText}>Next billing date:</Text>
               <View style={styles.datePickerSection}>
-                <Image style={styles.calendarIcon} source={calendarIcon} />
-                <Text style={styles.dateText}>
+                <Image style={styles.calendarIcon} source={lilaCalendarIcon} />
+                <Text style={[styles.dateText, styles.colorMonthly]}>
                   {subScriptDate}
                 </Text>
               </View>
@@ -143,7 +147,7 @@ class PricingScreen extends Component {
             </Text>
 
             <View style={[styles.datePickerSection, styles.datePickerMargin]}>
-              <Image style={styles.calendarIcon} source={calendarIcon} />
+              <Image style={styles.calendarIcon} source={blueCalendarIcon} />
               <Text style={styles.dateText}>
                 {subScriptDate}
               </Text>
@@ -155,7 +159,7 @@ class PricingScreen extends Component {
                 end={{ x: 1.0, y: 1.0 }}
                 style={styles.subGradient}
               >
-                <TouchableOpacity style={styles.subBtnYear}>
+                <TouchableOpacity style={styles.subBtnYear} onPress={() => this.onSubscriptionClicked('yearly')}>
                   <View style={styles.subBillTypeSection}>
                     <Text style={styles.subBillType}>YEARLY</Text>
                   </View>
@@ -163,7 +167,7 @@ class PricingScreen extends Component {
                     <View style={{
                       flexDirection: 'row', flexWrap: 'wrap', justifyContent: "flex-end"
                     }}>
-                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subPrice}>{strYearlyPrice}</Text>
+                      <DollarSign style={styles.dollarSign} width={15} height={22} viewBox={'0 0 20 34'} opacity={0.85} /><Text style={styles.subYearlyPrice}>{strYearlyPrice}</Text>
                     </View>
                     <Text style={styles.subPerMonth}>per month</Text>
                     <Text style={styles.subBilled}>*Billed Annually</Text>
@@ -494,12 +498,20 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     fontFamily: Theme.FONT_BOLD
   },
-  subPrice: {
+  subMonthlyPrice: {
     fontFamily: Theme.FONT_BOLD,
     display: "flex",
     alignSelf: "flex-end",
     fontSize: 23,
-    color: "#0096F4",
+    color: '#917FF0',
+    textAlign: "right"
+  },
+  subYearlyPrice: {
+    fontFamily: Theme.FONT_BOLD,
+    display: "flex",
+    alignSelf: "flex-end",
+    fontSize: 23,
+    color: '#0096F4',
     textAlign: "right"
   },
   perMonth: {
@@ -554,6 +566,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#0080F0",
     marginLeft: 10
+  },
+  colorMonthly: {
+    color: '#917FF0'
+  },
+  colorYearly: {
+    color: '#0096F4'
   },
   newsCarousel: {
     backgroundColor: "#1F1F20",
@@ -697,6 +715,10 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginLeft: 3
   },
+  calendarIcon: {
+    width: 17,
+    height: 19
+  }
 });
 
 function mapStateToProps(state) {
