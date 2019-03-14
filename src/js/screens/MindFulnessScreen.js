@@ -267,6 +267,7 @@ class MindFulness extends Component {
     const mindFulnessDatas = mindfulnessData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+        {isFetchingData && <LoadingIndicator />}
         <BottomBar navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData && <FastImage
@@ -295,7 +296,7 @@ class MindFulness extends Component {
               }}>{subHeader}</Text>
             </View>
           </FastImage>}
-          {isFetchingData && <LoadingIndicator />}
+          
           {this.renderData(mindFulnessDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

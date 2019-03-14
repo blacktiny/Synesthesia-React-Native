@@ -3,12 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Text, TouchableHighlight, View, Image, StyleSheet, ImageBackground, FlatList, Linking } from 'react-native';
 import CustomButton from '../components/CustomButton';
-import LoginModal from '../components/LoginModal';
-import RegisterModal from '../components/RegisterModal';
-import ForgotPasswordModal from '../components/ForgotPasswordModal';
-import PaymentDetailsModal from '../components/PaymentDetailsModal';
-import SuccessModal from '../components/SuccessModal';
-import ErrorModal from '../components/ErrorModal';
 import { iPhoneX } from '../../js/util';
 
 import { logoutUser } from '../../js/actions/LogoutAction';
@@ -20,16 +14,9 @@ import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
 import {
   openLoginModal,
-  closeLoginModal,
-  closeRegisterModal,
-  closeForgotPasswordModal,
-  closeSuccessModal,
-  closeErrorModal,
   openRegisterModal,
-  openForgotPasswordModal,
-  closePaymentDetailsModal
 } from '../actions/ToggleFormModalAction'
-import { addBlur, removeBlur } from '../actions/BlurAction'
+import { addBlur } from '../actions/BlurAction'
 
 import { Theme } from '../constants/constants'
 
@@ -205,9 +192,7 @@ class SideMenu extends Component {
 
   renderData = (item, index) => {
     const { loginBtnPressStatus, logoutBtnPressStatus } = this.state;
-    const { currentItem, isLoggedIn, userType,
-      isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible, isPaymentDetailsModalVisible,
-      isSuccessModalVisible, isErrorModalVisible, modalType, subscriptionFlow } = this.props;
+    const { currentItem, isLoggedIn, userType } = this.props;
     var curItem;
     if (currentItem == 'Login' || currentItem == 'Log out') {
       curItem = 'Meditate';
@@ -235,51 +220,6 @@ class SideMenu extends Component {
               <Text style={{ fontSize: 18, color: '#30CA9A', marginLeft: 10, opacity: loginBtnPressStatus ? 0.7 : 1.0 }}>{'Login'}</Text>
             </View>
           </TouchableHighlight>}
-
-        <LoginModal
-          modalVisible={isLoginModalVisible}
-          closeModal={() => { this.props.dispatch(closeLoginModal()); this.props.dispatch(removeBlur()) }}
-        />
-        <RegisterModal
-          modalVisible={isRegisterModalVisible}
-          closeModal={() => { this.props.dispatch(closeRegisterModal()); this.props.dispatch(removeBlur()) }}
-        />
-        <ForgotPasswordModal
-          modalVisible={isForgotPasswordModalVisible}
-          closeModal={() => { this.props.dispatch(closeForgotPasswordModal()); this.props.dispatch(removeBlur()) }}
-        />
-        <SuccessModal
-          modalVisible={isSuccessModalVisible}
-          modalType={modalType}
-          closeModal={() => { 
-            if (subscriptionFlow !== '') {
-              this.props.navigation.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow }); 
-            }
-            this.props.dispatch(closeSuccessModal()); 
-            this.props.dispatch(removeBlur())
-          }}
-        />
-        <ErrorModal
-          modalVisible={isErrorModalVisible}
-          modalType={modalType}
-          closeModal={() => {
-            this.props.dispatch(closeErrorModal());
-            if (modalType === "LogIn") {
-              this.props.dispatch(openLoginModal());
-            } else if (modalType === "Register") {
-              this.props.dispatch(openRegisterModal());
-            } else if (modalType === "ForgotPassword") {
-              this.props.dispatch(openForgotPasswordModal());
-            } else {
-              this.props.dispatch(removeBlur())
-            }
-          }}
-        />
-
-        <PaymentDetailsModal
-          modalVisible={isPaymentDetailsModalVisible}
-          closeModal={() => { this.props.dispatch(closePaymentDetailsModal()); this.props.dispatch(removeBlur()) }}
-        />
 
         {item.name == 'Meditate' && item.name == curItem && <View style={{ marginTop: 25, flexDirection: 'row', backgroundColor: '#1B1B1C' }}>
           <Image source={gradientLine} style={{ height: 45, width: 3 }} />
@@ -384,15 +324,7 @@ function mapStateToProps(state) {
     isLoggedIn: state.loginReducer.isLoggedIn,
     user: state.loginReducer.user,
     userType: state.loginReducer.user.user_type || '-1',
-    currentItem: state.sidemenuReducer.currentItem,
-    isLoginModalVisible: state.toggleFormModalReducer.isLoginModalVisible,
-    isRegisterModalVisible: state.toggleFormModalReducer.isRegisterModalVisible,
-    isForgotPasswordModalVisible: state.toggleFormModalReducer.isForgotPasswordModalVisible,
-    isPaymentDetailsModalVisible: state.toggleFormModalReducer.isPaymentDetailsModalVisible,
-    isSuccessModalVisible: state.toggleFormModalReducer.isSuccessModalVisible,
-    isErrorModalVisible: state.toggleFormModalReducer.isErrorModalVisible,
-    subscriptionFlow: state.toggleFormModalReducer.subscriptionFlow,
-    modalType: state.toggleFormModalReducer.modalType
+    currentItem: state.sidemenuReducer.currentItem
   }
 }
 

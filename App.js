@@ -36,7 +36,7 @@ import AudioPlayerScreen from './src/js/screens/AudioPlayerScreen';
 import PlayerHeader from './src/js/components/PlayerHeader';
 import ConfirmUnsubscribeScreen from './src/js/screens/ConfirmUnsubscribeScreen';
 import ConfirmMonthlySubscribeScreen from './src/js/screens/ConfirmMonthlySubscribeScreen';
-
+import ModalContainer from './src/js/components/ModalContainer'
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
 }
@@ -201,6 +201,7 @@ class App extends Component {
             onLayout={() => { this.onViewLoaded(); }} >
             <AppContainer />
           </View>
+          <ModalContainer />
           <BlurBackground viewRef={this.state.viewRef} {...this.props} />
         </PersistGate>
       </Provider>
