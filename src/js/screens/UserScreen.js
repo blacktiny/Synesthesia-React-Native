@@ -5,6 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { Theme } from '../constants/constants';
 import PersonalSettings from './MyAccount/PersonalSettings';
 import Subscription from './MyAccount/Subscription';
+import BottomBar from '../components/BottomBar';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -43,7 +44,10 @@ export default class UserScreen extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.main}>
+        <BottomBar navigation={this.props.navigation} />
+
         <ScrollView style={styles.formContainer}>
+
           {isToggleBtnShow && <View style={{ height: 50, marginBottom: 10, width: '100%', flexDirection: 'row' }}>
             <LinearGradient
               start={{ x: 1, y: 1 }}
