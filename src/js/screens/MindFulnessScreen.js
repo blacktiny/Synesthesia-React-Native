@@ -296,7 +296,7 @@ class MindFulness extends Component {
               }}>{subHeader}</Text>
             </View>
           </FastImage>}
-          
+
           {this.renderData(mindFulnessDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

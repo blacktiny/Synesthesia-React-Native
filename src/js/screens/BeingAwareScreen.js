@@ -24,6 +24,7 @@ import { cleanProgress } from '../actions/ProgressAction'
 import { setBottomBarItem } from '../actions/BottomBarAction'
 import FastImage from 'react-native-fast-image';
 const { width, height } = Dimensions.get('screen');
+import LoadingIndicator from '../components/LoadingIndicator';
 
 class BeingAware extends Component {
   constructor(props) {
@@ -41,15 +42,6 @@ class BeingAware extends Component {
   onItemButtonClicked = (id) => {
     AsyncStorage.setItem('nodeID', id);
     this.props.navigation.push('SynesthesiaItem', { backScreen: "BeingAware" });
-  }
-
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
   }
 
   renderData = (beingAwareDatas) => {
@@ -309,6 +301,7 @@ class BeingAware extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+        {isFetchingData && <LoadingIndicator />}
         <BottomBar screen={this.props.dispatch(setBottomBarItem('BeingAware'))} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
@@ -346,7 +339,6 @@ class BeingAware extends Component {
               }}>{subHeader}</Text>
             </View>}
 
-          {isFetchingData && this.loadingPage()}
           {this.renderData(beingawareDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

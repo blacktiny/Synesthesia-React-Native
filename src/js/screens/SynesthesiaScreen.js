@@ -23,6 +23,7 @@ import { setBottomBarItem } from '../actions/BottomBarAction'
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.png';
 import FastImage from 'react-native-fast-image';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -41,14 +42,6 @@ class Synesthesia extends Component {
     AsyncStorage.setItem('nodeID', id);
     // this.props.navigation.navigate('SynesthesiaItem');
     this.props.navigation.push('SynesthesiaItem', { backScreen: "Synesthesia" });
-  }
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
   }
 
   renderData = (synesthesiaDatas) => {
@@ -309,6 +302,7 @@ class Synesthesia extends Component {
     const synesthesiaDatas = synesthesiaData.children;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
+        {isFetchingData && <LoadingIndicator />}
         <BottomBar screen={this.props.dispatch(setBottomBarItem('Synesthesia'))} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData &&
@@ -345,8 +339,6 @@ class Synesthesia extends Component {
               }}>{subHeader}</Text>
             </View>}
 
-
-          {isFetchingData && this.loadingPage()}
           {this.renderData(synesthesiaDatas)}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

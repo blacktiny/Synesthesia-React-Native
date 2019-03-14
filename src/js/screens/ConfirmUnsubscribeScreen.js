@@ -13,10 +13,7 @@ import { connect } from "react-redux";
 import { Theme } from "../constants/constants";
 
 import { setSubscriptionType } from '../actions/SubscriptionAction';
-
-const unsubscribe_1 = require("../../assets/unsubscribe_1.png");
-const unsubscribe_2 = require("../../assets/unsubscribe_2.png");
-const unsubscribe_3 = require("../../assets/unsubscribe_3.png");
+import CarouselSlider from "../components/CarouselSlider";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -43,9 +40,9 @@ class ConfirmUnsubscribeScreen extends Component {
     }
   }
 
-  onNoBtnClicked = () => {};
+  onNoBtnClicked = () => { };
 
-  onYesBtnClicked = () => {};
+  onYesBtnClicked = () => { };
 
   render() {
     return (
@@ -55,33 +52,22 @@ class ConfirmUnsubscribeScreen extends Component {
             {"Are you sure you want to unsubscribe?"}
           </Text>
           <Text style={styles.desciption}>
-            {"If you unsubscribe, you still have access to all the Synesthesia Meditation activities until your paid period ends"}
+            {"A regular meditation practice can be challenging, we know."}
           </Text>
-          <View style={styles.ImageSection}>
-            <Image source={unsubscribe_1} />
-            <Text style={styles.imageDesciption}>
-              {"Over 30 hours of mindful Synesthetic activities."}
-            </Text>
-          </View>
-          <View style={styles.ImageSection}>
-            <Image source={unsubscribe_2} />
-            <Text style={styles.imageDesciption}>
-              {"Sharpen your synesthetic senses"}
-            </Text>
-          </View>
-          <View style={styles.ImageSection}>
-            <Image source={unsubscribe_3} />
-            <Text style={styles.imageDesciption}>
-              {"A break for your body and mind in your busy life"}
-            </Text>
-          </View>
+          <Text style={styles.desciption}>
+            {"If you unsubscribe, you may miss out of the many benefits of Synesthesia Meditation here in the Sensorium."}
+          </Text>
+          <CarouselSlider />
+          <Text style={styles.sliderDesciption}>
+            {"If you unsubscribe, you still have access to all the Synesthesia Meditation activities until your paid period ends."}
+          </Text>
           <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => this.props.navigation.navigate('User')}>
-            <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>{'No, I don`t want to'}</Text>
+            <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>{'Stay subscribed'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={() => {this.props.dispatch(setSubscriptionType("")); this.props.navigation.navigate('User')}}>
-            <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Yes, I want to'}</Text>
+          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={() => { this.props.dispatch(setSubscriptionType("")); this.props.navigation.navigate('User') }}>
+            <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Unsubscribe'}</Text>
           </TouchableOpacity>
-          <View style={{width: '100%', height: 150}} />
+          <View style={{ width: '100%', height: 150 }} />
         </ScrollView>
       </View>
     );
@@ -95,7 +81,6 @@ const styles = StyleSheet.create({
     padding: 15
   },
   unsubscribe: {
-    width: "70%",
     fontFamily: Theme.FONT_BOLD,
     fontSize: 22,
     lineHeight: 28,
@@ -106,33 +91,25 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   desciption: {
-    width: width - 30,
     fontFamily: Theme.FONT_REGULAR,
     fontSize: 16,
     lineHeight: 24,
     color: "white",
-    alignSelf: "center",
-    textAlign: "center",
+    textAlign: "left",
     paddingTop: 10,
     paddingBottom: 10
   },
-  ImageSection: {
-    alignSelf: "center"
-  },
-  imageDesciption: {
-    width: width - 30,
+  sliderDesciption: {
     fontFamily: Theme.FONT_REGULAR,
     fontSize: 16,
     lineHeight: 24,
     color: "white",
-    alignSelf: "center",
-    paddingLeft: 15,
-    paddingRight: 15
+    textAlign: "left",
   },
   modalButton: {
-    width: width - 100,
-    height: 45,
-    borderWidth: 1,
+    width: '100%',
+    height: 50,
+    borderWidth: 2,
     borderRadius: 25,
     borderColor: '#FFFFFF',
     alignItems: 'center',
@@ -144,7 +121,7 @@ const styles = StyleSheet.create({
   },
   nothanksButton: {
     backgroundColor: '#25B999',
-    marginTop: 40,
+    marginTop: 20,
     borderWidth: 0
   }
 });
