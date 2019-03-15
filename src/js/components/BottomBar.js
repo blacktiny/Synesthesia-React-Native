@@ -70,7 +70,7 @@ class BottomBar extends Component {
           height: 80
         },
         android: {
-          height: 70
+          height: 60
         },
       }),
       color: "#0e0d0d",
@@ -92,16 +92,16 @@ class BottomBar extends Component {
             <FastImage style={styles.leftArrow} source={leftArrow} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('MindFulness')}>
-            <Text style={[styles.textStyle, { color: curBottomBarItem == 'MindFulness' ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-            {curBottomBarItem == 'MindFulness' && <FastImage style={styles.imageStyle} source={rectangle} />}
+            <Text style={[styles.textStyle, { color: (this.state.screen == 'MindFulness' || curBottomBarItem == 'MindFulness') ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+            {(this.state.screen == 'MindFulness' || curBottomBarItem == 'MindFulness') && <FastImage style={styles.imageStyle} source={rectangle} />}
           </TouchableOpacity>
           <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('BeingAware')}>
-            <Text style={[styles.textStyle, { color: curBottomBarItem == 'BeingAware' ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-            {curBottomBarItem == 'BeingAware' && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+            <Text style={[styles.textStyle, { color: (this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+            {(this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
           </TouchableOpacity>
           <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('Synesthesia')}>
-            <Text style={[styles.textStyle, { color: curBottomBarItem == 'Synesthesia' ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-            {curBottomBarItem == 'Synesthesia' && <FastImage style={styles.imageStyle} source={rectangle} />}
+            <Text style={[styles.textStyle, { color: (this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+            {(this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
           </TouchableOpacity>
         </SafeAreaView>
       </BoxShadow>
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         height: 80
       },
       android: {
-        height: 70
+        height: 60
       },
     }),
     paddingTop: 12,

@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   firstStepText: {
     fontFamily: Theme.FONT_BOLD,
-    fontSize: 30,
+    fontSize: 20,
     color: '#FFFFFF'
   },
   loginText: {
