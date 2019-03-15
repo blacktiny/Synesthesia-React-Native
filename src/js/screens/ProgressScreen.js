@@ -91,8 +91,8 @@ class ProgressScreen extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} />
-        <BottomBar navigation={this.props.navigation} />
+        {/* <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} /> */}
+        <BottomBar screen={'Progress'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {isFetchingData && this.loadingPage()}
           {!isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
@@ -102,29 +102,16 @@ class ProgressScreen extends Component {
             <View style={styles.title}>
               <Text style={styles.titleText}>Your Progress</Text>
               <TouchableOpacity style={styles.crossButton} onPress={() => {
-                console.log('curBottomBarItem = `', curBottomBarItem, "`");
-                let backScreen = "";
-                if (curBottomBarItem == "BeingAware") {
-                  backScreen = "BeingAware"
-                }
-                if (curBottomBarItem == "Synesthesia") {
-                  backScreen = "Synesthesia"
-                }
-                if (curBottomBarItem == "BeingAware" || curBottomBarItem == "Synesthesia") {
-                  curBottomBarItem = "SynesthesiaItem"
-                }
-                // this.props.navigation.navigate(curBottomBarItem);
-                if (curBottomBarItem.length > 2) {
-                  // this.props.navigation.goBack();
-                  this.props.navigation.push(curBottomBarItem, { backScreen: backScreen })
-
+                const { curActiveScreen } = this.props;
+                if (curActiveScreen) {
+                  this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+                  this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
                 } else {
-
                   this.props.navigation.goBack(null);
                 }
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
-                this.props.dispatch(setBottomBarItem(this.props.navigation.getParam('backScreen')));
+                // this.props.dispatch(setBottomBarItem(this.props.navigation.getParam('backScreen')));
               }}>
                 <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end', }} />
               </TouchableOpacity>
@@ -364,7 +351,8 @@ function mapStateToProps(state) {
     error: state.progressReducer.error,
     isFetchingData: state.progressReducer.isFetchingData,
     progressData: state.progressReducer.progressData,
-    curBottomBarItem: state.bottomBarReducer.curBottomBarItem
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem,
+    curActiveScreen: state.bottomBarReducer.curActiveScreen
   };
 }
 

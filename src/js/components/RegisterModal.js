@@ -139,7 +139,7 @@ class RegisterScreen extends Component {
   }
 
   render() {
-    let { requestPending } = this.props;
+    let { requestPending, subscriptionFlow } = this.props;
     const registerButtonDisabled = this.state.userNameSuccessBorder && this.state.emailSuccessBorder &&
       this.state.passwordSuccessBorder && this.state.isChecked1;
     return (
@@ -167,6 +167,7 @@ class RegisterScreen extends Component {
                   onContentSizeChange={this.onContentSizeChange}
                 >
                   <View style={styles.textContainer}>
+                    {subscriptionFlow !== '' && <Text style={styles.firstStepText}>First step:</Text>}
                     <Text style={styles.loginText}>{'Create a free account'}</Text>
                     <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.addBlur(); this.props.openLoginModal(); }}>
                       <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
@@ -304,6 +305,11 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     fontFamily: Theme.FONT_BOLD
   },
+  firstStepText: {
+    fontFamily: Theme.FONT_BOLD,
+    fontSize: 30,
+    color: '#FFFFFF'
+  },
   loginText: {
     color: '#FFFFFF',
     fontSize: 20,
@@ -358,7 +364,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    requestPending: state.registerReducer.requestPending
+    requestPending: state.registerReducer.requestPending,
+    subscriptionFlow: state.toggleFormModalReducer.subscriptionFlow,
   }
 }
 

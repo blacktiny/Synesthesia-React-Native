@@ -48,7 +48,9 @@ class ModalContainer extends Component {
           modalType={modalType}
           closeModal={() => { 
             if (subscriptionFlow !== '') {
-              this.props.navigation.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow }); 
+              // this.props.navigation.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow }); error
+            } else {
+              // this.props.navigation.goBack('Sensorium'); error
             }
             this.props.dispatch(closeSuccessModal()); 
             this.props.dispatch(removeBlur())

@@ -18,8 +18,8 @@ import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
 import FastImage from 'react-native-fast-image';
 import { removeBlur } from '../actions/BlurAction'
-import { cleanProgress } from '../actions/ProgressAction'
-import { setBottomBarItem } from '../actions/BottomBarAction'
+// import { cleanProgress } from '../actions/ProgressAction'
+// import { setBottomBarItem } from '../actions/BottomBarAction'
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class SynesthesiaItemScreen extends Component {
   }
   componentDidMount() {
     this.props.dispatch(getNodeByID());
-    this.props.dispatch(setBottomBarItem(this.props.navigation.state.params.backScreen));
+    // this.props.dispatch(setBottomBarItem(this.props.navigation.state.params.backScreen, ''));
   }
   componentWillUnmount() {
     this.props.dispatch(clearNode());
@@ -183,7 +183,7 @@ class SynesthesiaItemScreen extends Component {
     if (userType == '3') {
       AsyncStorage.setItem('exerciseNodeID', item.id);
       AsyncStorage.setItem('isDone', isDone);
-      this.props.navigation.navigate('Player', { backScreen: backScreen })
+      this.props.navigation.navigate('Player', { backScreen: 'SynesthesiaItem' })
       return true;
     }
     if (item.is_locked != '0') {
@@ -195,9 +195,8 @@ class SynesthesiaItemScreen extends Component {
     } else {
       AsyncStorage.setItem('exerciseNodeID', item.id);
       AsyncStorage.setItem('isDone', isDone);
-      this.props.navigation.navigate('Player', { backScreen: backScreen })
+      this.props.navigation.navigate('Player', { backScreen: 'SynesthesiaItem' })
     }
-
   }
 
   render() {
@@ -207,7 +206,7 @@ class SynesthesiaItemScreen extends Component {
     const imageBanner = FILES_URL + nodeData.image_banner;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar navigation={this.props.navigation} />
+        <BottomBar screen={'SynesthesiaItem'} navigation={this.props.navigation} />
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData && <FastImage

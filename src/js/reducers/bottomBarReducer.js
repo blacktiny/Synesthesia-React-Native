@@ -2,6 +2,7 @@ import { ActionTypes } from '../constants/constants'
 
 const initialState = {
   curBottomBarItem: '',
+  curActiveScreen: ''
 };
 
 export const bottomBarReducer = (state = initialState, action) => {
@@ -13,7 +14,8 @@ export const bottomBarReducer = (state = initialState, action) => {
     case ActionTypes.SET_BOTTOM_BAR_ITEM:
       return {
         ...state,
-        curBottomBarItem: action.payload.bottomBarItem
+        curBottomBarItem: action.payload.bottomBarItem,
+        curActiveScreen: action.payload.curActiveScreen
       }
     default:
       return state

@@ -32,15 +32,31 @@ class BottomBar extends Component {
     //   actions: [NavigationActions.navigate({ routeName: 'Sensorium' })]
     // })
     // this.props.navigation.dispatch(resetAction);
-    this.props.navigation.navigate('Sensorium');
+    const { screen } = this.state;
+    const { curActiveScreen, curBottomBarItem } = this.props;
 
-    this.props.dispatch(setHeaderItem('Sensorium'))
+    if (screen == 'Progress' && curActiveScreen) {
+      this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+      this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
+    } else {
+      this.props.navigation.navigate('Sensorium');
+      this.props.dispatch(setHeaderItem('Sensorium'))
+    }
   }
 
   onBottomItemClicked = (itemName) => {
-    this.props.navigation.navigate(itemName)
+    const { screen } = this.state
+    const { curActiveScreen, curBottomBarItem } = this.props;
 
-    this.props.dispatch(setBottomBarItem(itemName));
+    if (itemName == curBottomBarItem && curActiveScreen) {
+      this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+    } else {
+      if (curBottomBarItem != itemName) {
+        this.props.navigation.navigate('Sensorium')
+      }
+      this.props.navigation.navigate(itemName)
+    }
+    this.props.dispatch(setBottomBarItem(itemName, ''));
     // this.setState({ screen: itemName });
     this.props.dispatch(setHeaderItem('Sensorium'))
   }
@@ -148,7 +164,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    curBottomBarItem: state.bottomBarReducer.curBottomBarItem
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem,
+    curActiveScreen: state.bottomBarReducer.curActiveScreen
   }
 }
 

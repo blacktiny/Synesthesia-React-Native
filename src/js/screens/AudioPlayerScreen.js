@@ -602,28 +602,29 @@ class AudioPlayer extends Component {
 
   onLeave = () => {
     this.props.removeBlur()
-    const { isLoggedIn, navigation } = this.props;
+    const { isLoggedIn, navigation, curBottomBarItem } = this.props;
     const screen = navigation.state.params.backScreen;
     this.props.stopBackgroundSoundVolume()
     this.setState({ modalVisible: false })
     if (isLoggedIn) {
-      // this.props.navigation.navigate('Sensorium')
       if (screen === 'SynesthesiaItem') {
         this.props.clearNode();
-      } else if (screen === 'MindFulness') {
-        this.props.cleanMindFulness();
-      } else if (screen === 'BeingAware') {
-        this.props.cleanAwareness();
-      } else if (screen === 'Synesthesia') {
-        this.props.cleanSynesthesia();
+        this.props.navigation.navigate(curBottomBarItem);
+      } else {
+        if (screen === 'MindFulness') {
+          this.props.cleanMindFulness();
+        } else if (screen === 'BeingAware') {
+          this.props.cleanAwareness();
+        } else if (screen === 'Synesthesia') {
+          this.props.cleanSynesthesia();
+        }
+        this.props.navigation.navigate('Sensorium');
       }
-      // this.props.navigation.navigate(screen);
-      // this.props.navigation.goBack(null);
       this.props.cleanProgress();
       this.props.getUserProgress();
       this.props.navigation.navigate('Progress');
       this.props.setHeaderItem('Progress');
-      this.props.setBottomBarItem(screen);
+      this.props.setBottomBarItem(curBottomBarItem, screen);
     } else {
       this.props.navigation.navigate('Sensorium')
     }
@@ -993,6 +994,7 @@ function mapStateToProps(state) {
     exercisesLength: state.exerciseReducer.exercisesLength,
     currentExerciseIndex: state.exerciseReducer.currentExerciseIndex,
     volume: state.nodeReducer.volume,
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem
   }
 }
 const mapDispatchToProps = {

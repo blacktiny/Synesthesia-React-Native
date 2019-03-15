@@ -252,7 +252,7 @@ class PricingScreen extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar navigation={this.props.navigation} />
+        <BottomBar screen={'Pricing'} navigation={this.props.navigation} />
 
         <ScrollView
           style={styles.main}

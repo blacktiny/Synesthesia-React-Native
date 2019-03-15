@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setMenuItem } from '../../js/actions/SideMenuAction';
 import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
+import { setBottomBarItem } from '../actions/BottomBarAction'
 import { Theme } from "../constants/constants";
 
 const menu = require('../../assets/menu.png')
@@ -45,7 +46,14 @@ class MeditateHeader extends Component {
     }
 
     if (headerItem == 'Sensorium') {
-      this.props.navigation.navigate(headerItem);
+      const { curActiveScreen, curBottomBarItem } = this.props;
+
+      if (curActiveScreen) {
+        this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+        this.props.dispatch(setBottomBarItem(curBottomBarItem, ''));
+      } else {
+        this.props.navigation.navigate(headerItem);
+      }
       this.props.dispatch(setMenuItem('Meditate'));
       // this.props.dispatch(cleanProgress());
       this.props.dispatch(setHeaderItem(headerItem));
@@ -107,7 +115,9 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.loginReducer.isLoggedIn,
-    curHeaderItem: state.meditateHeaderReducer.curHeaderItem
+    curHeaderItem: state.meditateHeaderReducer.curHeaderItem,
+    curBottomBarItem: state.bottomBarReducer.curBottomBarItem,
+    curActiveScreen: state.bottomBarReducer.curActiveScreen
   }
 }
 
