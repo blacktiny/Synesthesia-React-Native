@@ -55,8 +55,8 @@ class Sensorium extends Component {
     const { isLoggedIn, user } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
-        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} />
-        <BottomBar navigation={this.props.navigation} />
+        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem('', ''))} />
+        <BottomBar screen={'Sensorium'} navigation={this.props.navigation} />
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
 
           <Text style={{ fontSize: 22, textAlign: 'center', color: '#fff', fontFamily: Theme.FONT_BOLD, marginTop: 15 }}>{'Meditate in the Sensorium'}</Text>

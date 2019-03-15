@@ -44,7 +44,7 @@ export default class UserScreen extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.main}>
-        <BottomBar navigation={this.props.navigation} />
+        <BottomBar screen={'User'} navigation={this.props.navigation} />
 
         <ScrollView style={styles.formContainer}>
 

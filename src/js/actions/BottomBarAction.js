@@ -7,11 +7,12 @@ export function getBottomBarItem() {
   }
 }
 
-export function setBottomBarItem(bottomBarItem) {
+export function setBottomBarItem(bottomBarItem, curActiveScreen = '') {
   return {
     type: ActionTypes.SET_BOTTOM_BAR_ITEM,
     payload: {
-      bottomBarItem
+      bottomBarItem,
+      curActiveScreen
     }
   }
 }
