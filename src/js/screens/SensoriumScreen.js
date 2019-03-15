@@ -14,7 +14,6 @@ import { openRegisterModal } from '../actions/ToggleFormModalAction'
 import FastImage from 'react-native-fast-image';
 import { addBlur, removeBlur } from '../actions/BlurAction'
 import { setBottomBarItem } from '../actions/BottomBarAction'
-import { NavigationEvents } from 'react-navigation';
 
 class Sensorium extends Component {
   constructor(props) {
@@ -55,7 +54,6 @@ class Sensorium extends Component {
     const { isLoggedIn, user } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
-        <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem('', ''))} />
         <BottomBar screen={'Sensorium'} navigation={this.props.navigation} />
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
 

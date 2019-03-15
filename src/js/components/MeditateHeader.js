@@ -47,10 +47,10 @@ class MeditateHeader extends Component {
 
     if (headerItem == 'Sensorium') {
       const { curActiveScreen, curBottomBarItem } = this.props;
+      this.props.dispatch(setBottomBarItem('', ''));
 
       if (curActiveScreen) {
         this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
-        this.props.dispatch(setBottomBarItem(curBottomBarItem, ''));
       } else {
         this.props.navigation.navigate(headerItem);
       }
