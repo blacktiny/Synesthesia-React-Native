@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, TouchableHighlight, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, ScrollView, TouchableHighlight } from 'react-native'
 import LinearGradient from "react-native-linear-gradient";
 
 import { Theme } from '../constants/constants';
@@ -44,7 +44,7 @@ export default class UserScreen extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.main}>
-        <BottomBar screen={'User'} navigation={this.props.navigation} />
+        {/* <BottomBar screen={'User'} navigation={this.props.navigation} /> */}
 
         <ScrollView style={styles.formContainer}>
 

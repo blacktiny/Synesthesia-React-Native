@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, SafeAreaView, Platform, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import NavigationService from '../helpers/navigationService'
 
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
 
@@ -36,7 +37,7 @@ class BottomBar extends Component {
     const { curActiveScreen, curBottomBarItem } = this.props;
 
     if (screen == 'Progress' && curActiveScreen) {
-      this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+      NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
       this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
     } else {
       this.props.navigation.navigate('Sensorium');
@@ -49,12 +50,12 @@ class BottomBar extends Component {
     const { curActiveScreen, curBottomBarItem } = this.props;
 
     if (itemName == curBottomBarItem && curActiveScreen) {
-      this.props.navigation.push(curActiveScreen, { backScreen: curBottomBarItem })
+      NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
     } else {
       if (curBottomBarItem != itemName) {
-        this.props.navigation.navigate('Sensorium')
+        NavigationService.navigate('Sensorium')
       }
-      this.props.navigation.navigate(itemName)
+      NavigationService.navigate(itemName)
     }
     this.props.dispatch(setBottomBarItem(itemName, ''));
     // this.setState({ screen: itemName });
@@ -86,7 +87,9 @@ class BottomBar extends Component {
       }
     }
     return (
-      <BoxShadow setting={shadowOpt}>
+      <View style={styles.appContainer}>
+      {this.props.children}
+      {this.props.showBottomBar && <BoxShadow setting={shadowOpt}>
         <SafeAreaView style={styles.container}>
           <TouchableOpacity style={{ width: 40, marginLeft: 5 }} onPress={() => this.moveToRootScreen()}>
             <FastImage style={styles.leftArrow} source={leftArrow} />
@@ -104,13 +107,19 @@ class BottomBar extends Component {
             {(this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
           </TouchableOpacity>
         </SafeAreaView>
-      </BoxShadow>
+      </BoxShadow>}
+      </View>
     );
   }
 }
 
 
 const styles = StyleSheet.create({
+  appContainer: {
+    flex: 1,
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+  },
   container: {
     width: '100%',
     ...Platform.select({
@@ -165,7 +174,8 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     curBottomBarItem: state.bottomBarReducer.curBottomBarItem,
-    curActiveScreen: state.bottomBarReducer.curActiveScreen
+    curActiveScreen: state.bottomBarReducer.curActiveScreen,
+    showBottomBar: state.bottomBarReducer.showBottomBar
   }
 }
 

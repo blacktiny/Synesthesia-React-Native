@@ -19,6 +19,7 @@ import {
   openForgotPasswordModal,
   closePaymentDetailsModal
 } from '../actions/ToggleFormModalAction'
+import { setMenuItem } from '../../js/actions/SideMenuAction';
 import { removeBlur } from '../actions/BlurAction'
 
 class ModalContainer extends Component {
@@ -49,6 +50,7 @@ class ModalContainer extends Component {
           closeModal={() => { 
             if (subscriptionFlow !== '') {
               NavigationService.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow });
+              this.props.dispatch(setMenuItem('My account'));
             } else {
               NavigationService.goBack('Sensorium');
             }

@@ -52,14 +52,14 @@ class ConfirmUnsubscribeScreen extends Component {
             {"Are you sure you want to unsubscribe?"}
           </Text>
           <Text style={styles.desciption}>
-            {"A regular meditation practice can be challenging, we know."}
+            <Text style={styles.bold}>{"A regular meditation practice can be challenging"}</Text>{", we know."}
           </Text>
           <Text style={styles.desciption}>
             {"If you unsubscribe, you may miss out of the many benefits of Synesthesia Meditation here in the Sensorium."}
           </Text>
           <CarouselSlider />
           <Text style={styles.sliderDesciption}>
-            {"If you unsubscribe, you still have access to all the Synesthesia Meditation activities until your paid period ends."}
+            {"If you unsubscribe,"} <Text style={styles.bold}>{"you still have access"}</Text>{" to all the Synesthesia Meditation activities"} <Text style={styles.bold}>{" until your paid period ends"}</Text>{"."}
           </Text>
           <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => this.props.navigation.navigate('User')}>
             <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>{'Stay subscribed'}</Text>
@@ -98,6 +98,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
     paddingTop: 10,
     paddingBottom: 10
+  },
+  bold: {
+    fontFamily: Theme.FONT_BOLD,
+    fontSize: 16,
+    color: "white",
   },
   sliderDesciption: {
     fontFamily: Theme.FONT_REGULAR,

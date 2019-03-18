@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ImageBackground,
   ScrollView,
-  ActivityIndicator,
   TouchableOpacity,
   Platform,
   Image
@@ -38,14 +37,6 @@ class ProgressScreen extends Component {
   componentDidMount() {
     this.props.dispatch(getUserProgress());
     this.props.dispatch(getBottomBarItem());
-  }
-
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
   }
 
   render() {
@@ -91,10 +82,8 @@ class ProgressScreen extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        {/* <NavigationEvents onDidFocus={() => this.props.dispatch(setBottomBarItem(''))} /> */}
-        <BottomBar screen={'Progress'} navigation={this.props.navigation} />
+        {isFetchingData && <LoadingIndicator />}
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
-          {isFetchingData && this.loadingPage()}
           {!isFetchingData && <ImageBackground style={styles.backgroundImage} source={backgroundImage} blurRadius={9.63}>
             <View style={styles.backgroundColor}>
             </View>

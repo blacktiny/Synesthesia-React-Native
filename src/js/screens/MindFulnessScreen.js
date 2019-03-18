@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, TouchableOpacity, ActivityIndicator, AsyncStorage, FlatList, Dimensions } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, AsyncStorage, FlatList, Dimensions } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
@@ -267,7 +267,7 @@ class MindFulness extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         {isFetchingData && <LoadingIndicator />}
-        <BottomBar screen={'MindFulness'} navigation={this.props.navigation} />
+        {/* <BottomBar screen={'MindFulness'} navigation={this.props.navigation} /> */}
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
           {!isFetchingData && <FastImage
             style={{

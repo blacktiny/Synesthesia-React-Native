@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types"
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, TouchableHighlight, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, TouchableOpacity, ScrollView, TouchableHighlight, Image } from 'react-native'
 import { connect } from 'react-redux'
 import LinearGradient from "react-native-linear-gradient";
 
@@ -9,6 +9,7 @@ import ModalCloseIcon from '../../icons/ModalCloseIcon';
 
 import InputTextField from '../../components/InputTextField';
 import CustomCheckBox from '../../components/CustomCheckBox';
+import LoadingIndicator from '../../components/LoadingIndicator';
 
 import { updateUser, updateUserForm } from '../../actions/LoginAction';
 
@@ -206,14 +207,6 @@ class PersonalSettings extends Component {
     })
   }
 
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 455, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
-  }
-
   render() {
     const { requestPending, modalType } = this.props;
     const { bLoadingShow, userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
@@ -221,6 +214,7 @@ class PersonalSettings extends Component {
     return (
       <View style={styles.main}>
         <ScrollView style={styles.formContainer}>
+          {requestPending && <LoadingIndicator />}
           {!bLoadingShow && !requestPending && !bEditView && <View>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Personal information</Text>
             <View style={styles.personalInfo}>
@@ -343,7 +337,6 @@ class PersonalSettings extends Component {
               </TouchableHighlight>
             </View>
           </View>}
-          {requestPending && this.loadingPage()}
         </ScrollView>
       </View>
     )

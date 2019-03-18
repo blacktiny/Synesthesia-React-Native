@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, ImageBackground } from 'react-native';
+import { AsyncStorage, Text, View, ScrollView, Image, TouchableOpacity, FlatList, Dimensions, ImageBackground } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
@@ -300,7 +300,7 @@ class BeingAware extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
         {isFetchingData && <LoadingIndicator />}
-        <BottomBar screen={'BeingAware'} navigation={this.props.navigation} />
+        {/* <BottomBar screen={'BeingAware'} navigation={this.props.navigation} /> */}
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData &&

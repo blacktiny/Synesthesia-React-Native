@@ -16,3 +16,12 @@ export function setBottomBarItem(bottomBarItem, curActiveScreen = '') {
     }
   }
 }
+
+export function toggleBottomBar(showBottomBar) {
+  return {
+    type: ActionTypes.TOGGLE_BOTTOM_BAR,
+    payload: {
+      showBottomBar
+    }
+  }
+}
