@@ -200,7 +200,7 @@ class PricingScreen extends Component {
             >
               <TouchableOpacity
                 style={[styles.btn, styles.btnMonthly, { alignItems: "center", }]}
-                onPress={() => this.onBtnMonthlyClicked()}
+                onPress={() => this.onSubscriptionClicked('monthly')}
               >
                 <Text style={styles.billType}>MONTHLY</Text>
                 <View style={{
@@ -220,7 +220,7 @@ class PricingScreen extends Component {
             >
               <TouchableOpacity
                 style={[styles.btn, styles.btnYearly, { alignItems: "center" }]}
-                onPress={() => this.onBtnYearlyClicked()}
+                onPress={() => this.onSubscriptionClicked('yearly')}
               >
                 <Text style={styles.billType}>YEARLY</Text>
                 <View style={{

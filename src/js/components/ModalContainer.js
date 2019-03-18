@@ -52,7 +52,7 @@ class ModalContainer extends Component {
             } else {
               NavigationService.goBack('Sensorium');
             }
-            this.props.dispatch(closeSuccessModal()); 
+            this.props.dispatch(closeSuccessModal());
             this.props.dispatch(removeBlur())
           }}
         />,

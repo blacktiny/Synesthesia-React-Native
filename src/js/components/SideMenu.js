@@ -12,6 +12,7 @@ import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
+import { setSubscriptionType } from '../actions/SubscriptionAction'
 import {
   openLoginModal,
   openRegisterModal,
@@ -67,6 +68,7 @@ class SideMenu extends Component {
       this.props.dispatch(cleanMindFulness());
       this.props.dispatch(cleanAwareness());
       this.props.dispatch(cleanProgress());
+      this.props.dispatch(setSubscriptionType(''));
       this.props.dispatch(logoutUser());
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.navigation.navigate('Sensorium');
