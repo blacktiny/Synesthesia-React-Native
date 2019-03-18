@@ -7,6 +7,7 @@ import ForgotPasswordModal from '../components/ForgotPasswordModal';
 import PaymentDetailsModal from '../components/PaymentDetailsModal';
 import SuccessModal from '../components/SuccessModal';
 import ErrorModal from '../components/ErrorModal';
+import NavigationService from '../helpers/navigationService'
 import {
   openLoginModal,
   closeLoginModal,
@@ -18,10 +19,9 @@ import {
   openForgotPasswordModal,
   closePaymentDetailsModal
 } from '../actions/ToggleFormModalAction'
-import { addBlur, removeBlur } from '../actions/BlurAction'
+import { removeBlur } from '../actions/BlurAction'
 
 class ModalContainer extends Component {
-  
   render() {
     const {
       isLoginModalVisible, isRegisterModalVisible, isForgotPasswordModalVisible, isPaymentDetailsModalVisible,
@@ -48,9 +48,9 @@ class ModalContainer extends Component {
           modalType={modalType}
           closeModal={() => { 
             if (subscriptionFlow !== '') {
-              // this.props.navigation.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow }); error
+              NavigationService.navigate('ConfirmMonthlySubscribe', { tier: subscriptionFlow });
             } else {
-              // this.props.navigation.goBack('Sensorium'); error
+              NavigationService.goBack('Sensorium');
             }
             this.props.dispatch(closeSuccessModal()); 
             this.props.dispatch(removeBlur())
