@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, ActivityIndicator, Animated } from 'react-native';
+import { Text, View, ScrollView, ImageBackground, Image, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { connect } from 'react-redux'
 import PlayButton from '../components/PlayButton'
 import Button from '../components/Button'
@@ -8,6 +8,8 @@ import { iPhoneX, iPhone5 } from '../util'
 import { getExerciseNodeByID } from '../actions/NodeAction'
 import { FILES_URL, Theme } from '../constants/constants'
 import { addBlur, removeBlur } from '../actions/BlurAction'
+import { toggleBottomBar } from '../actions/BottomBarAction'
+import LoadingIndicator from '../components/LoadingIndicator';
 
 const settings = require('../../assets/settings.png')
 
@@ -35,8 +37,11 @@ class Player extends Component {
   }
   componentDidMount() {
     this.props.getExerciseNodeByID()
+    this.props.toggleBottomBar(false)
   }
-
+  componentWillUnmount() {
+    this.props.toggleBottomBar(true)
+  }
   triggerFadeAnim = () => {
     Animated.timing(
       this.state.fadeAnim,
@@ -89,7 +94,7 @@ class Player extends Component {
     if (this.state.loading) {
       return (
         <View style={[styles.container, { justifyContent: 'center' }]}>
-          <ActivityIndicator />
+          <LoadingIndicator />
         </View>
       )
     }
@@ -251,7 +256,8 @@ const mapDispatchToProps = {
   openLoginModal,
   openRegisterModal,
   addBlur,
-  removeBlur
+  removeBlur,
+  toggleBottomBar
 }
 
 export default connect(

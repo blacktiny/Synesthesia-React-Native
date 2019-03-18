@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView, ImageBackground, FlatList, Image, TouchableOpacity, ActivityIndicator, Modal, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
+import { Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, AsyncStorage } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import ActivityDependentExercise from '../components/ActivityDependentExercise';
 import NotActivityDependentExercise from '../components/NotActivityDependentExercise';
@@ -17,9 +17,12 @@ import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.p
 import { Theme } from '../constants/constants'
 import CustomButton from '../components/CustomButton';
 import FastImage from 'react-native-fast-image';
-import { removeBlur } from '../actions/BlurAction'
+import { addBlur, removeBlur } from '../actions/BlurAction'
 // import { cleanProgress } from '../actions/ProgressAction'
 // import { setBottomBarItem } from '../actions/BottomBarAction'
+import LoadingIndicator from '../components/LoadingIndicator';
+import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
+import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -37,16 +40,8 @@ class SynesthesiaItemScreen extends Component {
     this.props.dispatch(clearNode());
   }
 
-  loadingPage = () => {
-    return (
-      <View style={{ height: height - 195, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator />
-      </View>
-    )
-  }
-
   renderData = () => {
-    const { nodeData } = this.props;
+    const { nodeData, isLoggedIn, userType } = this.props;
     if (nodeData.length !== 0) {
       let arrData = [];
       if (nodeData.children[0] && nodeData.children[0].type == 'leaf') {
@@ -71,8 +66,60 @@ class SynesthesiaItemScreen extends Component {
           }
         })
         arrData.push(this.renderContainers(nodeData.id, null, null, itemDataList));
+        if (!isLoggedIn || userType == -1) {
+          let loginBanner = (
+            <View key={nodeData.length + 1} style={{
+              width: width,
+              height: 258,
+              marginBottom: 30,
+              borderRadius: 12,
+              shadowRadius: 16,
+              shadowOffset: { width: 0, height: 8 },
+              shadowColor: "black",
+              shadowOpacity: 0.47,
+              elevation: 2
+            }}
+            >
+              <FastImage style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{
+                    fontSize: 20,
+                    color: '#FFFFFF',
+                    textAlign: 'center',
+                    position: 'absolute',
+                    top: 40,
+                    fontFamily: Theme.FONT_BOLD
+                  }}>{'Do you want to save your \n progress?'}</Text>
+
+                  <CustomButton
+                    disabled={false}
+                    style={{
+                      height: 50,
+                      alignSelf: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: 65,
+                      width: 230,
+                      borderRadius: 45,
+                      backgroundColor: '#25B999',
+                      opacity: 1
+                    }}
+                    title="Create a free account"
+                    onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
+                  />
+
+                  <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openLoginModal()) }}>
+                    <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
+                  </TouchableOpacity>
+
+                </View>
+              </FastImage>
+            </View>
+          )
+          arrData.push(loginBanner);
+        }
       } else {
-        nodeData.children.map((data) => {
+        nodeData.children.map((data, i) => {
           let itemList = [];
           const header = data.header;
           const subHeader = data.subheader;
@@ -94,6 +141,58 @@ class SynesthesiaItemScreen extends Component {
             }
           })
           arrData.push(this.renderContainers(data.id, header, subHeader, itemList));
+          if (i == 0 && (!isLoggedIn || userType == -1)) {
+            let loginBanner = (
+              <View key={nodeData.length + 1} style={{
+                width: width,
+                height: 258,
+                marginBottom: 30,
+                borderRadius: 12,
+                shadowRadius: 16,
+                shadowOffset: { width: 0, height: 8 },
+                shadowColor: "black",
+                shadowOpacity: 0.47,
+                elevation: 2
+              }}
+              >
+                <FastImage style={{ width: '100%', height: '100%' }} source={loginAndCreateAccountBannerImage}>
+                  <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{
+                      fontSize: 20,
+                      color: '#FFFFFF',
+                      textAlign: 'center',
+                      position: 'absolute',
+                      top: 40,
+                      fontFamily: Theme.FONT_BOLD
+                    }}>{'Do you want to save your \n progress?'}</Text>
+
+                    <CustomButton
+                      disabled={false}
+                      style={{
+                        height: 50,
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: 65,
+                        width: 230,
+                        borderRadius: 45,
+                        backgroundColor: '#25B999',
+                        opacity: 1
+                      }}
+                      title="Create a free account"
+                      onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openRegisterModal()) }}
+                    />
+
+                    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15, width: 100, height: 30 }} onPress={() => { this.props.dispatch(addBlur()); this.props.dispatch(openLoginModal()) }}>
+                      <Text style={{ color: '#25B999', fontSize: 16, fontFamily: Theme.FONT_BOLD }}>Log in here</Text>
+                    </TouchableOpacity>
+
+                  </View>
+                </FastImage>
+              </View>
+            )
+            arrData.push(loginBanner);
+          }
         });
       }
       return arrData;
@@ -206,7 +305,7 @@ class SynesthesiaItemScreen extends Component {
     const imageBanner = FILES_URL + nodeData.image_banner;
     return (
       <View style={{ flex: 1, backgroundColor: '#1F1F20' }}>
-        <BottomBar screen={'SynesthesiaItem'} navigation={this.props.navigation} />
+        {isFetchingData && <LoadingIndicator />}
         <ScrollView style={{ flexGrow: 1, marginBottom: 35 }}>
 
           {!isFetchingData && <FastImage
@@ -233,7 +332,6 @@ class SynesthesiaItemScreen extends Component {
               }}>{subHeader}</Text>
             </View>
           </FastImage>}
-          {isFetchingData && this.loadingPage()}
           {!isFetchingData && this.renderData()}
 
           {!isFetchingData && isLoggedIn && userType == 0 && <View style={{

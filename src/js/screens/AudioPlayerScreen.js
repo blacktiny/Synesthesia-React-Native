@@ -5,7 +5,6 @@ import {
   ImageBackground,
   TouchableHighlight,
   StyleSheet,
-  ActivityIndicator,
   Animated,
   Image,
   Linking,
@@ -49,7 +48,8 @@ import Video from 'react-native-video'
 import YouTube from 'react-native-youtube';
 import { addBlur, removeBlur } from '../actions/BlurAction'
 import { stopBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
-
+import { toggleBottomBar } from '../actions/BottomBarAction'
+import LoadingIndicator from '../components/LoadingIndicator';
 
 
 Sound.setCategory('Playback');
@@ -165,6 +165,8 @@ class AudioPlayer extends Component {
     if (mainType === ITEMS_TYPES.audio) {
       this.initAudioPlayer()
     }
+    this.props.toggleBottomBar(false)
+
   }
 
   componentWillUnmount() {
@@ -173,6 +175,8 @@ class AudioPlayer extends Component {
       this.player.release()
     }
     clearInterval(this.tracker)
+    this.props.toggleBottomBar(true)
+
     // this.props.clearNode()
     AsyncStorage.removeItem('isDone')
   }
@@ -310,7 +314,7 @@ class AudioPlayer extends Component {
   }
 
   videoPlayer = null
-  
+
   nextTrigger = () => {
     const { triggers, play } = this.state.items
     const { triggerIndex, triggerTime, trigger, triggerFadeAnim } = this.state
@@ -659,7 +663,7 @@ class AudioPlayer extends Component {
     return (
       <ImageBackground source={{ uri: backgroundImage }} style={styles.container}>
         {!loaded && <ImageBackground source={{ uri: backgroundImage }} style={[styles.container, styles.indicatorStyle]}>
-          <ActivityIndicator />
+          <LoadingIndicator />
         </ImageBackground>}
         <CloseModal modalVisible={this.state.modalVisible} >
           <ImageBackground source={{ uri: backgroundImage }} style={styles.containerModal}>
@@ -1010,7 +1014,8 @@ const mapDispatchToProps = {
   getUserProgress,
   setHeaderItem,
   setBottomBarItem,
-  stopBackgroundSoundVolume
+  stopBackgroundSoundVolume,
+  toggleBottomBar
 }
 export default connect(
   mapStateToProps,

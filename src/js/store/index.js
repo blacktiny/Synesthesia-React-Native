@@ -10,7 +10,7 @@ import logger from 'redux-logger'
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['backgroundSoundReducer']
+  blacklist: ['backgroundSoundReducer', 'bottomBarReducer']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

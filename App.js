@@ -14,6 +14,7 @@ import {
   createDrawerNavigator,
   createStackNavigator
 } from 'react-navigation';
+import NavigationService from './src/js/helpers/navigationService'
 import { findNodeHandle, View } from 'react-native';
 import BlurBackground from './src/js/components/BlurBackground';
 import { Provider } from 'react-redux'
@@ -199,7 +200,10 @@ class App extends Component {
             style={{ height: '100%', width: '100%', flex: 1 }}
             ref={(viewRef) => { this.viewRef = viewRef; }}
             onLayout={() => { this.onViewLoaded(); }} >
-            <AppContainer />
+            <AppContainer ref={navigatorRef => {
+                NavigationService.setTopLevelNavigator(navigatorRef);
+              }}
+            />
           </View>
           <ModalContainer />
           <BlurBackground viewRef={this.state.viewRef} {...this.props} />

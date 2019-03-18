@@ -12,6 +12,7 @@ import { cleanMindFulness } from '../actions/MindFulnessAction'
 import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
+import { setSubscriptionType } from '../actions/SubscriptionAction'
 import {
   openLoginModal,
   openRegisterModal,
@@ -67,6 +68,7 @@ class SideMenu extends Component {
       this.props.dispatch(cleanMindFulness());
       this.props.dispatch(cleanAwareness());
       this.props.dispatch(cleanProgress());
+      this.props.dispatch(setSubscriptionType(''));
       this.props.dispatch(logoutUser());
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.navigation.navigate('Sensorium');
@@ -204,7 +206,7 @@ class SideMenu extends Component {
         {item.name != '7 days for free' && item.name != 'Blog' && item.name != 'My account' && item.name != 'Contact' && item.name != 'About us' && item.name != 'FAQ' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Log out' && item.name != curItem && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
         {item.name != '7 days for free' && item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != curItem && item.name != 'Meditate' && item.name != 'Rate the app' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
-        {parseInt(userType) <= 0 && item.name == '7 days for free' && curItem != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {parseInt(userType) < 0 && item.name == '7 days for free' && curItem != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 

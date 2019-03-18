@@ -16,6 +16,7 @@ export const ActionTypes = keyMirror({
   AUTH: null,
   AUTH_SUCCESS: null,
   AUTH_FAIL: null,
+
   LOADED: null,
   STOP_BACKGROUND_SOUND: null,
   START_BACKGROUND_SOUND: null,
@@ -103,7 +104,8 @@ export const ActionTypes = keyMirror({
 
   GET_BOTTOM_BAR_ITEM: null,
   SET_BOTTOM_BAR_ITEM: null,
-
+  TOGGLE_BOTTOM_BAR: null,
+  
   OPEN_PAYMENT_DETAILS_MODAL: null,
   CLOSE_PAYMENT_DETAILS_MODAL: null,
 

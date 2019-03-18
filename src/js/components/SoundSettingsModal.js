@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import debounce from 'lodash/debounce'
 import { clearNode, setVolume } from '../actions/NodeAction'
 import { setBackgroundSound, setBackgroundSoundVolume, stopBackgroundSoundVolume, startBackgroundSoundVolume } from '../actions/BackgroundSoundAction'
-import { View, Image, TouchableOpacity, StyleSheet, Modal, Text, Dimensions, FlatList, ActivityIndicator } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, Modal, Text, Dimensions, FlatList } from 'react-native';
 import CloseIcon from '../icons/ModalCloseIcon'
 import CloseModal from './CloseModal'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +11,7 @@ import { FILES_URL, Theme, BACKGROUND_SOUNDS } from '../constants/constants'
 import Slider from "react-native-slider-custom";
 import LinearGradient from 'react-native-linear-gradient'
 import { removeBlur } from '../actions/BlurAction'
-
+import LoadingIndicator from '../components/LoadingIndicator';
 
 const settings = require('../../assets/settings.png')
 const playerBG = require('../../assets/bgPlayer.png')
@@ -96,14 +96,14 @@ class SettingsModal extends Component {
             </View>
             {this.props.showSettings && <View style={styles.backgroundSoundContainer}>
               {this.props.isLoading && <View style={styles.activityContainer}>
-                <ActivityIndicator />
+                <LoadingIndicator soundSettings />
               </View>}
               <Text style={[styles.text, { alignSelf: 'flex-start', marginTop: 40, marginBottom: 10 }]}>Background Sound</Text>
               <FlatList
                 initialScrollIndex={this.state.sound.id}
                 data={BACKGROUND_SOUNDS}
                 getItemLayout={(data, index) => (
-                  {length: 20, offset: 20 * index, index}
+                  { length: 20, offset: 20 * index, index }
                 )}
                 extraData={this.state.sound}
                 renderItem={this.renderList}
