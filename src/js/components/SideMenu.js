@@ -20,6 +20,7 @@ import {
   openRegisterModal,
 } from '../actions/ToggleFormModalAction'
 import { addBlur } from '../actions/BlurAction'
+import { setToggleType } from '../actions/UserAction'
 
 import { Theme } from '../constants/constants'
 
@@ -67,7 +68,6 @@ class SideMenu extends Component {
       this.props.dispatch(addBlur());
     }
     if (itemName == 'Log out') {
-
       this.props.navigation.closeDrawer();
       this.props.dispatch(cleanSynesthesia());
       this.props.dispatch(cleanMindFulness());
@@ -88,6 +88,7 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem('7 days for free'));
     }
     if (itemName == 'My account') {
+      this.props.dispatch(setToggleType(true))
       this.props.dispatch(setHeaderItem('My account'));
     }
     this.props.dispatch(setMenuItem(itemName));
@@ -129,8 +130,19 @@ class SideMenu extends Component {
               source={cross}
             />
           </TouchableHighlight>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.dispatch(setToggleType(false))
+              this.props.dispatch(setMenuItem(''))
+              navigation.navigate('User')
+            }}
+            underlayColor={'transparent'}
+          >
+            <View>
+              <Text style={styles.userName}>{user.name}</Text>
+              <Text style={styles.userEmail}>{user.email}</Text>
+            </View>
+          </TouchableHighlight>
         </View>
       );
     } else {

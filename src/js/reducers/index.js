@@ -15,6 +15,8 @@ import { backgroundSoundReducer } from './backgroundSoundReducer'
 import { blurReducer } from './blurReducer'
 import { bottomBarReducer } from './bottomBarReducer'
 import { subscriptionReducer } from './subscriptionReducer'
+import { userReducer } from './userReducer'
+
 export default combineReducers({
   registerReducer,
   loginReducer,
@@ -31,5 +33,6 @@ export default combineReducers({
   backgroundSoundReducer,
   blurReducer,
   bottomBarReducer,
-  subscriptionReducer
+  subscriptionReducer,
+  userReducer
 })
