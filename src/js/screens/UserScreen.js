@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { View, Text, Dimensions, StyleSheet, ScrollView, TouchableHighlight } from 'react-native'
 import LinearGradient from "react-native-linear-gradient";
+
+import { setToggleType } from '../actions/UserAction'
 
 import { Theme } from '../constants/constants';
 import PersonalSettings from './MyAccount/PersonalSettings';
@@ -9,20 +12,19 @@ import BottomBar from '../components/BottomBar';
 
 const { width, height } = Dimensions.get('screen');
 
-export default class UserScreen extends Component {
+class UserScreen extends Component {
   constructor() {
     super();
     this.state = {
-      toggleType: true,
       isToggleBtnShow: true,
       isConfirmUnsubscribeShowed: false,
     }
   }
 
   onToggleBtnClicked = (bToggle) => {
-    const { toggleType } = this.state;
-    if (toggleType != bToggle) {
-      this.setState({ toggleType: bToggle });
+    const { toggleType } = this.props;
+    if (toggleType !== bToggle) {
+      this.props.dispatch(setToggleType(bToggle));
     }
   }
 
@@ -40,8 +42,8 @@ export default class UserScreen extends Component {
   }
 
   render() {
-    const { toggleType, isToggleBtnShow } = this.state;
-    const { navigation } = this.props;
+    const { isToggleBtnShow } = this.state;
+    const { toggleType, navigation } = this.props;
     return (
       <View style={styles.main}>
         {/* <BottomBar screen={'User'} navigation={this.props.navigation} /> */}
@@ -106,3 +108,10 @@ const styles = StyleSheet.create({
   }
 })
 
+function mapStateToProps(state) {
+  return {
+    toggleType: state.userReducer.toggleType
+  }
+}
+
+export default connect(mapStateToProps)(UserScreen);

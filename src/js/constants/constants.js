@@ -111,6 +111,8 @@ export const ActionTypes = keyMirror({
 
   SET_SUBSCRIPTION_TYPE: null,
   SET_SUBSCRIPTION_TYPE_SUCCESS: null,
+
+  SET_USER_TOGGLE_TYPE: null
 })
 
 export const Theme = {

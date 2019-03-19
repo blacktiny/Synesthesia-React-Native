@@ -13,11 +13,14 @@ import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setSubscriptionType } from '../actions/SubscriptionAction'
+import { toggleBottomBar } from '../actions/BottomBarAction'
+
 import {
   openLoginModal,
   openRegisterModal,
 } from '../actions/ToggleFormModalAction'
 import { addBlur } from '../actions/BlurAction'
+import { setToggleType } from '../actions/UserAction'
 
 import { Theme } from '../constants/constants'
 
@@ -56,6 +59,8 @@ class SideMenu extends Component {
   }
 
   onMenuItemClicked = (routeName, itemName, url) => {
+    this.props.dispatch(toggleBottomBar(true))
+
     if (itemName == 'Login') {
       this.props.dispatch(setHeaderItem(''));
       this.props.navigation.closeDrawer();
@@ -83,6 +88,7 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem('7 days for free'));
     }
     if (itemName == 'My account') {
+      this.props.dispatch(setToggleType(true))
       this.props.dispatch(setHeaderItem('My account'));
     }
     this.props.dispatch(setMenuItem(itemName));
@@ -105,6 +111,7 @@ class SideMenu extends Component {
         <View style={styles.userInfo}>
           <TouchableHighlight
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               navigation.closeDrawer();
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
@@ -123,8 +130,19 @@ class SideMenu extends Component {
               source={cross}
             />
           </TouchableHighlight>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
+          <TouchableHighlight
+            onPress={() => {
+              this.props.dispatch(setToggleType(false))
+              this.props.dispatch(setMenuItem(''))
+              navigation.navigate('User')
+            }}
+            underlayColor={'transparent'}
+          >
+            <View>
+              <Text style={styles.userName}>{user.name}</Text>
+              <Text style={styles.userEmail}>{user.email}</Text>
+            </View>
+          </TouchableHighlight>
         </View>
       );
     } else {
@@ -132,6 +150,7 @@ class SideMenu extends Component {
         <View>
           <TouchableHighlight
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               navigation.closeDrawer();
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
@@ -155,6 +174,7 @@ class SideMenu extends Component {
             style={styles.button}
             title="Create a free account"
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               this.props.navigation.closeDrawer();
               this.props.dispatch(addBlur());
               this.props.dispatch(openRegisterModal());
