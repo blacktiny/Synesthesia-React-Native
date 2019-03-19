@@ -57,7 +57,7 @@ const ExerciseModal = (props) => {
           </View>
         </LinearGradient>
       </View>
-    </Modal >
+    </Modal>
   )
 }
 

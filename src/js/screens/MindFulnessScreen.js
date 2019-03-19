@@ -347,6 +347,7 @@ class MindFulness extends Component {
             completeOtherExercise={this.state.completeOtherExercise}
             subscribeButton={
               () => {
+                this.props.dispatch(removeBlur())
                 this.setModalVisible(false)
                 this.props.dispatch(setMenuItem('7 days for free'))
                 this.props.navigation.navigate('Pricing')

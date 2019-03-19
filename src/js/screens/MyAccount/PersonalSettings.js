@@ -12,6 +12,8 @@ import CustomCheckBox from '../../components/CustomCheckBox';
 import LoadingIndicator from '../../components/LoadingIndicator';
 
 import { updateUser, updateUserForm } from '../../actions/LoginAction';
+import DeleteAccountModal from '../../components/DeleteAccountModal';
+import { addBlur, removeBlur } from '../../actions/BlurAction'
 
 const mail_want = require('../../../assets/mail_want.png');
 
@@ -38,7 +40,8 @@ class PersonalSettings extends Component {
       confirmEmailError: '',
       confirmEmailSuccessBorder: false,
       confirmEmailErrorBorder: false,
-      isChecked: false
+      isChecked: false,
+      deleteAccountModal: false
     }
   }
 
@@ -76,8 +79,13 @@ class PersonalSettings extends Component {
     }
   }
 
-  onDeleteBtnClicked = () => {
-
+  deleteAccountModalVisible = () => {
+    if (!this.state.deleteAccountModal) {
+      this.props.addBlur()
+    } else {
+      this.props.removeBlur()
+    }
+    this.setState({ deleteAccountModal: !this.state.deleteAccountModal })
   }
 
   onEditBtnClicked = () => {
@@ -208,7 +216,7 @@ class PersonalSettings extends Component {
   }
 
   render() {
-    const { requestPending, modalType } = this.props;
+    const { requestPending, modalType, userType } = this.props;
     const { bLoadingShow, userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
     const saveInfoDisabled = this.state.emailSuccessBorder && this.state.confirmEmailSuccessBorder;
     return (
@@ -250,7 +258,7 @@ class PersonalSettings extends Component {
                 </View>
               </LinearGradient>
             </View>
-            <TouchableHighlight style={{ flexDirection: 'row', marginTop: 25, marginBottom: 10 }} onPress={() => this.onDeleteBtnClicked()} onHideUnderlay={() => this.onHideUnderlay('delete')} onShowUnderlay={() => this.onShowUnderlay('delete')} underlayColor={'transparent'}>
+            <TouchableHighlight style={{ flexDirection: 'row', marginTop: 25, marginBottom: 10 }} onPress={this.deleteAccountModalVisible} onHideUnderlay={() => this.onHideUnderlay('delete')} onShowUnderlay={() => this.onShowUnderlay('delete')} underlayColor={'transparent'}>
               <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <ModalCloseIcon style={{ opacity: deleteBtnPressStatus ? 0.7 : 1.0 }} color="#30CA9A" />
                 <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: '#30CA9A', opacity: deleteBtnPressStatus ? 0.7 : 1.0, marginLeft: 15 }}>{'Delete account'}</Text>
@@ -337,6 +345,7 @@ class PersonalSettings extends Component {
               </TouchableHighlight>
             </View>
           </View>}
+          <DeleteAccountModal visible={this.state.deleteAccountModal} onClose={this.deleteAccountModalVisible} userType={userType} />
         </ScrollView>
       </View>
     )
@@ -448,7 +457,8 @@ function mapStateToProps(state) {
   return {
     user: state.loginReducer.user,
     requestPending: state.loginReducer.requestPending,
-    modalType: state.toggleFormModalReducer.modalType
+    modalType: state.toggleFormModalReducer.modalType,
+    userType: state.loginReducer.user.user_type
   }
 }
 
@@ -456,7 +466,12 @@ PersonalSettings.propTypes = {
   onHideAndShowToggleBtn: PropTypes.func
 };
 
+const mapDispatchToProps = {
+  addBlur,
+  removeBlur
+}
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(PersonalSettings)

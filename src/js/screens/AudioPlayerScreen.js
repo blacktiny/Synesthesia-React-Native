@@ -252,10 +252,10 @@ class AudioPlayer extends Component {
             this.setState({ disableMoveForeward: false })
           }
 
-          if (trigger && triggerTime.endAt && Math.floor(seconds) === triggerTime.endAt) {
+          if (trigger && triggerTime.endAt && Math.floor(seconds) >= triggerTime.endAt) {
             this.nextTrigger()
           }
-          if (trigger && Math.floor(seconds) === triggerTime.startAt) {
+          if (trigger && Math.floor(seconds) >= triggerTime.startAt) {
             if (stopMain) {
               this.setState({ play: false })
               this.player.pause()

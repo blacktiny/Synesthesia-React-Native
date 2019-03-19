@@ -13,6 +13,8 @@ import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setSubscriptionType } from '../actions/SubscriptionAction'
+import { toggleBottomBar } from '../actions/BottomBarAction'
+
 import {
   openLoginModal,
   openRegisterModal,
@@ -56,6 +58,8 @@ class SideMenu extends Component {
   }
 
   onMenuItemClicked = (routeName, itemName, url) => {
+    this.props.dispatch(toggleBottomBar(true))
+
     if (itemName == 'Login') {
       this.props.dispatch(setHeaderItem(''));
       this.props.navigation.closeDrawer();
@@ -63,6 +67,7 @@ class SideMenu extends Component {
       this.props.dispatch(addBlur());
     }
     if (itemName == 'Log out') {
+
       this.props.navigation.closeDrawer();
       this.props.dispatch(cleanSynesthesia());
       this.props.dispatch(cleanMindFulness());
@@ -105,6 +110,7 @@ class SideMenu extends Component {
         <View style={styles.userInfo}>
           <TouchableHighlight
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               navigation.closeDrawer();
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
@@ -132,6 +138,7 @@ class SideMenu extends Component {
         <View>
           <TouchableHighlight
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               navigation.closeDrawer();
             }}
             onHideUnderlay={() => this.onHideUnderlay('closeDrawer')}
@@ -155,6 +162,7 @@ class SideMenu extends Component {
             style={styles.button}
             title="Create a free account"
             onPress={() => {
+              this.props.dispatch(toggleBottomBar(true))
               this.props.navigation.closeDrawer();
               this.props.dispatch(addBlur());
               this.props.dispatch(openRegisterModal());

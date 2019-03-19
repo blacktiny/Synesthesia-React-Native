@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { getHeaderItem, setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setMenuItem } from '../../js/actions/SideMenuAction';
 import { getUserProgress, cleanProgress } from '../actions/ProgressAction';
-import { setBottomBarItem } from '../actions/BottomBarAction'
+import { setBottomBarItem, toggleBottomBar } from '../actions/BottomBarAction'
 import { Theme } from "../constants/constants";
 
 const menu = require('../../assets/menu.png')
@@ -64,7 +64,10 @@ class MeditateHeader extends Component {
     const { curHeaderItem } = this.props;
     return (
       <View style={{ flex: 1, flexDirection: 'row' }} >
-        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} style={[styles.menuView]}>
+        <TouchableOpacity onPress={() => {
+          this.props.dispatch(toggleBottomBar(false))
+          this.props.navigation.openDrawer()
+        }} style={[styles.menuView]}>
           <FastImage resizeMode={FastImage.resizeMode.contain} style={styles.imageStyle} source={curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? menu_active : menu} />
           <Text style={[styles.textStyle, { color: curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? '#ffffff' : '#777778' }]}>{'Menu'}</Text>
         </TouchableOpacity>

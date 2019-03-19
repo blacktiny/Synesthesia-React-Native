@@ -30,55 +30,59 @@ export default CarouselSlider = () => (
       <View style={styles.carousel_slider}>
         <ImageBackground style={styles.slider} source={slider1} borderRadius={12}>
           <Text style={[styles.sliderText, styles.slider1TextUpper]}>
-            Over 200 original Synesthesia Meditations
-                </Text>
+            Investment in your life quality
+          </Text>
           <Text style={[styles.sliderText, styles.slider1TextLower]}>
-            Increase your sensory awareness in daily life.
-                </Text>
+            Feel less stress, more inner balance and find better sleep. Rewire your brain positively & make healthier decisions.
+          </Text>
         </ImageBackground>
       </View>
       <View style={styles.carousel_slider}>
         <ImageBackground style={styles.slider} source={slider2} borderRadius={12}>
-          <Text style={[styles.sliderText, styles.slider2TextUpper]}>
-            Synesthesia Meditation: a unique fusion
-                </Text>
-          <Text style={[styles.sliderText, styles.slider2TextLower]}>
-            A mix between traditional meditation, sensory nature awareness
-            techniques and synesthetic exploration.
-                </Text>
+          <View style={styles.overlay}>
+            <Text style={[styles.sliderText, styles.slider2TextUpper]}>
+              Re-activate, tune and blend your senses
+            </Text>
+            <Text style={[styles.sliderText, styles.slider2TextLower]}>
+              Experience your surrounding with more sensory awareness. See more, hear more; perceive more of the beauty of this planet.
+            </Text>
+          </View>
         </ImageBackground>
       </View>
       <View style={styles.carousel_slider}>
         <ImageBackground style={styles.slider} source={slider3} borderRadius={12}>
-          <Text style={[styles.sliderText, styles.slider3TextUpper]}>
-            Re-activate, tune and blend your senses
-                </Text>
-          <Text style={[styles.sliderText, styles.slider3TextLower]}>
-            Increase your awareness with mindful synesthetic exercises
-                </Text>
+          <View style={styles.overlay}>
+            <Text style={[styles.sliderText, styles.slider3TextUpper]}>
+              Meditation cultivates synesthesia
+            </Text>
+            <Text style={[styles.sliderText, styles.slider3TextLower]}>
+              As you become more mindful of your senses, you may discover your synesthetic abilities to blend the senses.
+            </Text>
+          </View>
         </ImageBackground>
       </View>
       <View style={styles.carousel_slider}>
         <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
-          <Text style={[styles.sliderText, styles.slider4TextUpper]}>
-            Enjoy little more Life Quality
-                </Text>
-          <Text style={[styles.sliderText, styles.slider4TextLower]}>
-            Experience your surrounding more aware, less stress, more
-            focus, more happiness, better sleep. Be more present in daily
-            life.
-                </Text>
+          <View style={styles.overlay}>
+            <Text style={[styles.sliderText, styles.slider4TextUpper]}>
+              A fusion of mindfulness, awareness & synesthesia
+            </Text>
+            <Text style={[styles.sliderText, styles.slider4TextLower]}>
+              SynesthesiaMeditation is a unique mix of traditional mindfulness, sensory nature awareness techniques, and synesthetic explorations. For beginners and advanced.
+            </Text>
+          </View>
         </ImageBackground>
       </View>
       <View style={styles.carousel_slider}>
         <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
-          <Text style={[styles.sliderText, styles.slider5TextUpper]}>
-            Sensorium – not just another meditation app.
-                </Text>
-          <Text style={[styles.sliderText, styles.slider5TextLower]}>
-            Many hours of interactive, multisensory and multimedia
-            activities, exercises and tests.
-                </Text>
+          <View style={styles.overlay}>
+            <Text style={[styles.sliderText, styles.slider5TextUpper]}>
+              Sensorium – your sensory awareness space
+            </Text>
+            <Text style={[styles.sliderText, styles.slider5TextLower]}>
+              Unique interactive and multimedia meditations to sharpen your senses. Customize background themes and length of your meditation experiences.
+            </Text>
+          </View>
         </ImageBackground>
       </View>
     </Carousel>
@@ -122,61 +126,68 @@ const styles = StyleSheet.create({
     lineHeight: 25
   },
   slider1TextUpper: {
-    width: width - 95,
-    marginTop: 35,
+    width: width - 65,
+    marginTop: 30,
     fontFamily: Theme.FONT_BOLD
   },
   slider1TextLower: {
-    width: width - 95,
+    width: width - 65,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider2TextUpper: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
-    marginTop: 30,
+    marginTop: 25,
     fontFamily: Theme.FONT_BOLD
   },
   slider2TextLower: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider3TextUpper: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
-    marginTop: 40,
+    marginTop: 35,
     fontFamily: Theme.FONT_BOLD
   },
   slider3TextLower: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider4TextUpper: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
-    marginTop: 30,
+    marginTop: 25,
     fontFamily: Theme.FONT_BOLD
   },
   slider4TextLower: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
     marginTop: 12,
     fontFamily: Theme.FONT_REGULAR
   },
   slider5TextUpper: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
-    marginTop: 40,
+    marginTop: 25,
     fontFamily: Theme.FONT_BOLD
   },
   slider5TextLower: {
-    width: width - 95,
+    width: width - 65,
     lineHeight: 22,
     marginTop: 10,
     fontFamily: Theme.FONT_REGULAR
   },
+  overlay: {
+    backgroundColor: 'rgba(31,31,32,0.5)',
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+    alignItems: "center",
+  }
 });
