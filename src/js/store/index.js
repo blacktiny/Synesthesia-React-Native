@@ -10,6 +10,7 @@ import logger from 'redux-logger'
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['backgroundSoundReducer', 'bottomBarReducer']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -34,7 +35,8 @@ sagaMiddleware.run(rootSaga)
 
 export default store
 
-window.persistor = persistor.purge()
+// redux persist. If the below line is open then redux state will not be stored
+// window.persistor = persistor.purge()
 
 window.store = store
 

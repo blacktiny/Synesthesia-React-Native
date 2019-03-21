@@ -6,3 +6,10 @@ export function setSubscriptionType(subscriptionType) {
     payload: { subscriptionType }
   }
 }
+
+export function paySubsctiption(planId, stripeToken) {
+  return {
+    type: ActionTypes.PAY_SUBSCTIPTION,
+    payload: { planId, stripeToken }
+  }
+}

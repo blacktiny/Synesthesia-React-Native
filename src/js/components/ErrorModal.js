@@ -32,6 +32,9 @@ const ErrorModal = (props) => {
             {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
             {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>}
 
+            {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
+            {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Logged out. See you later.'}</Text>}
+
             {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>}
             {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>}
 
