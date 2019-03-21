@@ -71,7 +71,8 @@ class ModalContainer extends Component {
             } else if (modalType === "ForgotPassword") {
               this.props.dispatch(openForgotPasswordModal());
             } else if (modalType === "LogOut") {
-              this.props.dispatch(openLoginModal());
+              NavigationService.goBack('Sensorium');
+              this.props.dispatch(removeBlur())
             } else {
               this.props.dispatch(removeBlur())
             }
