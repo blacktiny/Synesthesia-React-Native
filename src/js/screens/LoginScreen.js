@@ -1,370 +1,357 @@
-import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { connect } from 'react-redux'
-import LinearGradient from 'react-native-linear-gradient';
+import React, { Component } from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  Dimensions,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  BackHandler
+} from 'react-native';
+import { Item, Label, Input, Form } from 'native-base';
+import { connect } from 'react-redux';
+import * as Progress from 'react-native-progress';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import InputTextField from '../components/InputTextField';
-import PasswordTextField from '../components/PasswordTextField';
-import { Theme } from '../constants/constants'
-import CustomButton from '../components/CustomButton'
-import { iPhoneX } from '../../js/util';
+import {
+  isIDNumberExistedAction,
+  getUserProfileInfo,
+  storeIDNumber
+} from '../actions/LoginUserAction';
 
-import { loginUser, isLoggedInUser } from '../actions/LoginAction'
-import { closeLoginErrorBanner } from '../actions/LoginAction'
-import { closeLoginSuccessBanner } from '../actions/LoginAction'
-import { cleanSynesthesia } from '../actions/SynesthesiaAction'
-import { cleanMindFulness } from '../actions/MindFulnessAction'
-import { cleanAwareness } from '../actions/BeingAwareAction'
-import { cleanProgress } from '../actions/ProgressAction'
-import { setHeaderItem } from '../actions/MeditateHeaderAction'
+import { Theme } from '../constants/constants';
+
+import { SvgIcon } from '../components/SvgIcon';
+
+import { db } from '../../../Firebase';
+
+const splash = require('../../assets/splash.png');
+const yes_mark = require('../../assets/yes_mark.png');
 
 const { width, height } = Dimensions.get('screen');
-import BannerCloseIcon from '../icons/BannerCloseIcon';
-import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      emailError: '',
-      emailSuccessBorder: false,
-      emailErrorBorder: false,
-      password: '',
-      passwordError: '',
-      passwordSuccessBorder: false,
-      passwordErrorBorder: false
+      isProgressShow: true,
+      indeterminate: true,
+      isPinCodeInputShow: false,
+      validationIDNumber: false,
+      // isIDNumberExisted: false,
+      idNumber: '',
+      inputValue: '',
+      inputedPinCode: '',
+      showedPinCode: '',
+      isInputFocused: false
+    };
+
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick
+    );
+  }
+
+  handleBackButtonClick() {
+    const { isPinCodeInputShow, idNumber } = this.state;
+    if (isPinCodeInputShow) {
+      this.setState({
+        isPinCodeInputShow: false,
+        showedPinCode: '',
+        inputedPinCode: '',
+        inputValue: idNumber
+      });
+    } else {
+      BackHandler.exitApp();
     }
+    return true;
   }
 
   componentDidMount() {
-    this.props.isLoggedInUser();
+    this.splashAnimate();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.bGotoMainScreen)
-      this.gotoMainScreen();
-    if (this.props.isLoggedIn)
-      this.cleanSensorium();
+  splashAnimate() {
+    setTimeout(() => {
+      this.setState({ indeterminate: false, isProgressShow: false });
+    }, 1500);
   }
 
-  handleOnSubmit = () => {
-    // event.preventDefault();
-    // if (this.state.email != undefined && this.state.email != "" && this.state.password != undefined && this.state.password != "")
-    let email = this.state.email;
-    let password = this.state.password;
-    this.props.loginUser({ email, password });
-  }
+  is_luhn_valid = cardNumber => {
+    const arr = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
-  validateEmailRegex = (email) => {
-    const re = /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    return re.test(email)
-  }
+    let len = cardNumber.length;
+    let bit = 1;
+    let sum = 0;
+    let val;
 
-  validateEmail = (email) => {
-    let error = '';
-    if (email.trim() === '') {
-      error = 'Must not be blank';
-      this.setState({
-        emailErrorBorder: true,
-        emailSuccessBorder: false
-      })
-    } else if (email) {
-      if (!this.validateEmailRegex(email)) {
-        error = 'Please enter valid email';
-        this.setState({
-          emailErrorBorder: true,
-          emailSuccessBorder: false
-        })
-      } else {
-        this.setState({
-          emailErrorBorder: false,
-          emailSuccessBorder: true
-        })
-      }
+    while (len) {
+      val = parseInt(cardNumber.charAt(--len), 10);
+      sum += (bit ^= 1) ? arr[val] : val;
     }
-    this.setState({
-      emailError: error
-    })
-  }
 
-  validatePassword = (password) => {
-    let error = '';
-    if (password.trim() === '') {
-      error = 'Must not be blank';
-      this.setState({
-        passwordErrorBorder: true,
-        passwordSuccessBorder: false
-      })
+    return sum && sum % 10 === 0;
+  };
+
+  onInputIDNumberChanged = value => {
+    if (this.is_luhn_valid(value) && value.length === 13) {
+      this.setState({ validationIDNumber: true });
     } else {
-      this.setState({
-        passwordErrorBorder: false,
-        passwordSuccessBorder: true
-      })
+      this.setState({ validationIDNumber: false });
     }
+
+    this.setState({ inputValue: value });
+  };
+
+  onInputPinCodeChanged = value => {
+    let passwordInputFormart = '•••••••••••••••••••••••••••••••••••';
+    const { inputedPinCode, showedPinCode } = this.state;
+
     this.setState({
-      passwordError: error
-    })
-  }
+      showedPinCode: passwordInputFormart.substr(1, value.length),
+      inputedPinCode: inputedPinCode + value.substr(value.length - 1, 1)
+    });
+  };
 
-  loginErrorBanner = () => {
-    return (
-      <LinearGradient
-        start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
-        locations={[0, 1]}
-        colors={['#7059ED', '#DA152C']}
-        style={styles.loginBanner}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => {
-          this.props.closeLoginErrorBanner();
-          this.setState({
-            email: '',
-            password: '',
-            emailSuccessBorder: false,
-            passwordSuccessBorder: false
-          })
-        }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>
-        </View>
-      </LinearGradient>
-    )
-  }
+  checkIDNumberExisted = snapshot => {
+    const { inputValue } = this.state;
+    if (snapshot.hasChild(inputValue)) {
+      this.setState({ isPinCodeInputShow: true, idNumber: inputValue });
+    }
+  };
 
-  cleanSensorium = () => {
-    this.props.cleanSynesthesia();
-    this.props.cleanMindFulness();
-    this.props.cleanAwareness();
-    this.props.cleanProgress();
-    this.props.setHeaderItem('Sensorium');
-  }
+  onGoButtonClicked = () => {
+    const { isPinCodeInputShow, inputedPinCode, idNumber, validationIDNumber } = this.state;
 
-  loginSuccessBanner = () => {
-    return (
-      <LinearGradient
-        start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
-        locations={[0, 1]}
-        colors={['#7059ED', '#00C2FB']}
-        style={styles.loginBanner}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => {
-          this.props.closeLoginSuccessBanner();
-          this.props.navigation.navigate('Sensorium');
-          this.setState({
-            email: '',
-            password: '',
-            emailSuccessBorder: false,
-            passwordSuccessBorder: false,
-          })
-        }}>
-          <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>
-          <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login Successful!'}</Text>
-        </View>
-      </LinearGradient>
-    )
-  }
+    if (!isPinCodeInputShow) {
+      if (validationIDNumber) {
+        let usersRef = db.ref('users');
+        usersRef.once('value', snapshot => this.checkIDNumberExisted(snapshot));
+      } else {
+        alert('Invalid ID Number');
+      }
+    } else {
+      let usersRef = db.ref('users/' + idNumber + '/pin');
+      usersRef.on('value', snapshot => {
+        if (snapshot.val() === Number(inputedPinCode)) {
+          this.props.storeIDNumber(idNumber);
+          this.props.navigation.navigate('Dashboard');
+        }
+      });
+    }
+  };
 
-  loginForm = () => {
-    const loginButtonDisabled = this.state.emailSuccessBorder && this.state.passwordSuccessBorder;
-    let { requestPending } = this.props;
-    return (
-      <View style={styles.loginContent}>
-        <TouchableOpacity style={styles.crossButton} onPress={() => this.props.navigation.navigate('Sensorium')}>
-          <ModalCloseIcon style={styles.crossIcon} color="#777778" />
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text style={styles.loginText}>{'Login'}</Text>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
-            <Text style={styles.noAccountYet}>{'No account yet?'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text style={styles.emailText}>{'Email'}</Text>
-          <InputTextField
-            onChange={(value) => {
-              this.setState({
-                email: value.trim()
-              })
-            }}
-            value={this.state.email}
-            onBlur={() => this.validateEmail(this.state.email)}
-            error={this.state.emailError}
-            showSuccessBorder={this.state.emailSuccessBorder}
-            showErrorBorder={this.state.emailErrorBorder}
-          />
-          <View style={{ paddingTop: 10 }} />
-          <Text style={styles.emailText}>{'Password'}</Text>
-          <PasswordTextField
-            onChange={(value) => {
-              this.setState({ password: value.trim() })
-              this.validatePassword(value)
-            }}
-            onBlur={() => this.validatePassword(this.state.password)}
-            error={this.state.passwordError}
-            showSuccessBorder={this.state.passwordSuccessBorder}
-            showErrorBorder={this.state.passwordErrorBorder}
-          />
-        </View>
-        <View style={styles.buttonArea}>
-          <CustomButton
-            disabled={!loginButtonDisabled || requestPending}
-            title="Log in"
-            onPress={this.handleOnSubmit}
-          />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-            <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
-          </TouchableOpacity>
-        </View>
+  onInputFocused = () => {
+    this.setState({ isInputFocused: true });
+  };
 
-      </View>
-
-    )
-  }
-
-  gotoMainScreen = () => {
-    this.props.navigation.navigate('Sensorium');
-  }
-
-  loadingPage = () => {
-    return (
-      <View>
-        <ActivityIndicator />
-      </View>
-    )
-  }
+  onInputBlur = () => {
+    this.setState({ isInputFocused: false });
+  };
 
   render() {
-    let { isCheckingLoggedIn, wrongCredentials, isLoggedIn } = this.props;
+    const {
+      isProgressShow,
+      indeterminate,
+      isPinCodeInputShow,
+      validationIDNumber,
+      showedPinCode,
+      isInputFocused
+    } = this.state;
+    let { inputValue } = this.props;
+
+    let authenticate;
+    if (!isPinCodeInputShow) {
+      authenticate = (
+        // {/* <KeyboardAvoidingView behavior='position' enabled> */}
+        <View style={styles.authenticate}>
+          <Form style={styles.form}>
+            <Item floatingLabel style={styles.inputItem}>
+              <Label style={styles.label}>ID NUMBER</Label>
+              <Input
+                style={styles.input}
+                keyboardType='numeric'
+                onChangeText={value => this.onInputIDNumberChanged(value)}
+                onFocus={() => this.onInputFocused()}
+                onBlur={() => this.onInputBlur()}
+                underlineColorAndroid='#fff'
+                maxLength={13}
+              />
+            </Item>
+          </Form>
+          {validationIDNumber && (
+            <SvgIcon name='ok' color={Theme.colorLightGreen} />
+          )}
+          <TouchableOpacity
+            style={styles.goButton}
+            onPress={() => this.onGoButtonClicked()}
+          >
+            <Text style={styles.goText}>{'Go'.toUpperCase()}</Text>
+          </TouchableOpacity>
+        </View>
+        // </KeyboardAvoidingView>
+      );
+    } else {
+      authenticate = (
+        <View style={styles.authenticate}>
+          <Form style={styles.form}>
+            <Item floatingLabel style={styles.inputItem}>
+              <Label style={styles.label}>PIN CODE</Label>
+              <Input
+                style={styles.input}
+                keyboardType='numeric'
+                value={showedPinCode}
+                onChangeText={value => this.onInputPinCodeChanged(value)}
+                underlineColorAndroid={'white'}
+                maxLength={5}
+              />
+            </Item>
+          </Form>
+          <TouchableOpacity
+            style={styles.goButton}
+            onPress={() => this.onGoButtonClicked()}
+          >
+            <Text style={styles.goText}>{'Go'.toUpperCase()}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        {isCheckingLoggedIn && this.loadingPage()}
-        {!isCheckingLoggedIn && !wrongCredentials && !isLoggedIn && this.loginForm()}
-        {!isCheckingLoggedIn && !wrongCredentials && isLoggedIn && this.loginSuccessBanner()}
-        {!isCheckingLoggedIn && wrongCredentials && !isLoggedIn && this.loginErrorBanner()}
+        <Image
+          style={[styles.splash, isInputFocused ? styles.imageMarginTop : '']}
+          source={splash}
+        />
+        {/* <ImageBackground style={[styles.splash, isInputFocused ? styles.imageMarginTop : '']} source={splash}> */}
+        <View style={styles.blankViewForMark} />
+        <Image style={styles.yes_mark} source={yes_mark} />
+        {isProgressShow && (
+          <View>
+            <View style={styles.blankView} />
+            <Progress.Bar
+              progress={0.5}
+              width={250}
+              borderColor={'#f6a72333'}
+              color={'#f6a723'}
+              indeterminate={indeterminate}
+              style={styles.progressBack}
+            />
+          </View>
+        )}
+        {!isProgressShow && (
+          <View style={{ width: '100%' }}>
+            <View style={styles.blankViewForInput} />
+            {authenticate}
+          </View>
+        )}
+        {/* </ImageBackground> */}
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     height: '100%',
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000000'
-  },
-  buttonArea: {
-    marginTop: 23,
-    justifyContent: 'center',
+    backgroundColor: '#000000',
     alignItems: 'center'
   },
-  emailText: {
-    color: '#777778',
-    fontSize: 15,
-    fontFamily: Theme.FONT_MEDIUM
+  splash: {
+    position: 'absolute',
+    height: height,
+    width: width,
+    alignItems: 'center'
   },
-  checkBoxText: {
-    color: '#777778',
-    fontSize: 14,
+  imageMarginTop: {
+    marginTop: 170
   },
-  loginGoogleText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    marginLeft: 10,
-    fontFamily: Theme.FONT_REGULAR
+  blankViewForMark: {
+    height: '40%'
   },
-  crossIcon: {
-    alignSelf: 'flex-end',
-    marginRight: -12,
-    marginTop: 10,
-    resizeMode: 'contain'
+  yes_mark: {
+    height: 140,
+    width: 140
   },
-  createAccount: {
-    color: '#25B999',
-    fontSize: 14,
-    paddingTop: 4,
-    fontFamily: Theme.FONT_BOLD
+  progressBack: {
+    marginTop: '50%',
+    backgroundColor: '#f6a72333'
   },
-  noAccountYet: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    paddingTop: 15,
-    fontFamily: Theme.FONT_MEDIUM
+  blankViewForInput: {
+    height: '45%'
   },
-  loginText: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontFamily: Theme.FONT_BOLD
-  },
-  textContainer: {
-    paddingTop: 10,
-    justifyContent: 'center',
+  authenticate: {
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 25
+    justifyContent: 'space-between',
+    backgroundColor: 'white'
+    // marginTop: -10
+    // marginTop: 100
   },
-  crossButton: {
-    paddingRight: 8,
-    paddingTop: 5
+  form: {
+    width: 300,
+    alignSelf: 'center'
   },
-  loginContent: {
-    height: iPhoneX() ? height - 420 : height - 250,
-    width: width - 30,
-    backgroundColor: '#3D3D3E',
-    borderRadius: 12,
-    paddingRight: 20,
-    paddingLeft: 20,
-    borderColor: '#3D3D3E',
-    borderWidth: 1
+  inputItem: {},
+  label: {
+    fontFamily: Theme.FONT_BOLD,
+    fontSize: 10,
+    letterSpacing: 1,
+    color: Theme.colorLightGrey,
+    marginTop: -10,
+    marginLeft: 4
   },
-  loginBanner: {
-    height: height - 685,
-    width: width - 30,
-    borderRadius: 12,
-    paddingRight: 20,
-    paddingLeft: 20,
-    borderWidth: 1
+  input: {
+    fontFamily: Theme.FONT_REGULAR,
+    fontSize: 15,
+    color: Theme.colorBlack,
+    marginTop: -15
+  },
+  okIcon: {
+    marginRight: 23
+  },
+  goButton: {
+    width: 72,
+    height: 67,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2a3549'
+  },
+  goText: {
+    fontSize: 11,
+    letterSpacing: 2,
+    color: Theme.colorWhite
   }
 });
 
-// const mapStateToProps = state => ({
-//   isLoggedIn: state.isLoggedIn
-// })
 function mapStateToProps(state) {
   return {
-    bGotoMainScreen: state.loginReducer.bGotoMainScreen,
-    isCheckingLoggedIn: state.loginReducer.isCheckingLoggedIn,
-    isLoggedIn: state.loginReducer.isLoggedIn,
-    wrongCredentials: state.loginReducer.wrongCredentials,
-    requestPending: state.loginReducer.requestPending
-  }
+    isIDNumberExisted: state.loginUserReducer.isIDNumberExisted
+  };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   debugger;
-//   return {
-//     actions: bindActionCreators(loginActions, dispatch)
-//   };
-// }
 
 const mapDispatchToProps = {
-  cleanSynesthesia,
-  cleanMindFulness,
-  cleanAwareness,
-  cleanProgress,
-  setHeaderItem,
-  isLoggedInUser,
-  loginUser,
-  closeLoginErrorBanner,
-  closeLoginSuccessBanner
-}
+  // isIDNumberExistedAction,
+  // getUserProfileInfo
+  storeIDNumber
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginScreen)
+)(LoginScreen);
