@@ -20,6 +20,7 @@ const { width, height } = Dimensions.get("screen");
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 import DollarSign from '../icons/DollarSign';
 import BottomBar from '../components/BottomBar';
+import stripe from 'tipsi-stripe'
 
 import { openPaymentDetailsModal, openRegisterModal } from '../actions/ToggleFormModalAction';
 import { addBlur, removeBlur } from '../actions/BlurAction'
@@ -48,9 +49,40 @@ class PricingScreen extends Component {
     this.setState({ bSubScription: false });
   };
 
-  onSubscriptionClicked = (subTier) => {
-    this.props.dispatch(addBlur())
-    this.props.dispatch(openRegisterModal(subTier))
+  onSubscriptionClicked = async (subTier) => {
+    // this.props.dispatch(addBlur())
+    // this.props.dispatch(openRegisterModal(subTier))
+    try {
+      let planId = ''
+      if (subTier === 'yearly') {
+        planId = 'plan_DV5jpbVX2EW1rV'
+      } else {
+        planId = 'plan_DV5jKe1Q03Hr7N'
+      }
+      this.setState({
+        loading: true,
+        token: null,
+      })
+      const token = await stripe.paymentRequestWithNativePay({
+        total_price: '0.00',
+        currency_code: 'USD',
+        shipping_address_required: false,
+        phone_number_required: false,
+        shipping_countries: ['US', 'CA'],
+        line_items: [{
+          currency_code: 'USD',
+          description: 'Whisky',
+          total_price: '0.00',
+          unit_price: '0.00',
+          quantity: '1',
+        }],
+      })
+      console.log(token.tokenId, planId)
+      this.setState({ loading: false, token })
+    } catch (error) {
+      console.log(error)
+      this.setState({ loading: false })
+    }
   }
 
   render() {
