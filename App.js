@@ -14,6 +14,8 @@ import {
   createDrawerNavigator,
   createStackNavigator
 } from 'react-navigation';
+import BottomBar from './src/js/components/BottomBar';
+
 import NavigationService from './src/js/helpers/navigationService'
 import { findNodeHandle, View } from 'react-native';
 import BlurBackground from './src/js/components/BlurBackground';
@@ -38,6 +40,8 @@ import PlayerHeader from './src/js/components/PlayerHeader';
 import ConfirmUnsubscribeScreen from './src/js/screens/ConfirmUnsubscribeScreen';
 import ConfirmMonthlySubscribeScreen from './src/js/screens/ConfirmMonthlySubscribeScreen';
 import ModalContainer from './src/js/components/ModalContainer'
+import stripe from 'tipsi-stripe'
+
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
 }
@@ -56,7 +60,11 @@ global.fetch = function (uri, options, ...args) {
   });
 };
 
-
+stripe.setOptions({
+  publishableKey: 'pk_test_7213By7um63HqYMjh9KbwF0L',
+  merchantId: '10962320458374913571', // Optional
+  androidPayMode: 'test', // Android only
+})
 
 const SensoriumStackNavigator = createStackNavigator({
   Sensorium: {
@@ -200,10 +208,13 @@ class App extends Component {
             style={{ height: '100%', width: '100%', flex: 1 }}
             ref={(viewRef) => { this.viewRef = viewRef; }}
             onLayout={() => { this.onViewLoaded(); }} >
+            <BottomBar>
             <AppContainer ref={navigatorRef => {
                 NavigationService.setTopLevelNavigator(navigatorRef);
               }}
             />
+            </BottomBar>
+
           </View>
           <ModalContainer />
           <BlurBackground viewRef={this.state.viewRef} {...this.props} />
