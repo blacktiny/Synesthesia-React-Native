@@ -25,7 +25,8 @@ import {
   setModalType,
   openPaymentDetailsModal
 } from '../actions/ToggleFormModalAction';
-import { setSubscriptionType } from '../actions/SubscriptionAction';
+import { setSubscriptionType, paySubsctiption } from '../actions/SubscriptionAction';
+import stripe from 'tipsi-stripe'
 
 const credit_card_icon = require('../../assets/credit-card.png');
 const paypal_mark = require('../../assets/paypal_mark.png');
@@ -145,6 +146,44 @@ class ConfirmMonthlySubscribeScreen extends Component {
 
   onYesBtnClicked = () => {};
 
+  onSubscribe = async () => {
+    try {
+      const tier = this.props.navigation.getParam('tier');
+      let planId = ''
+      if (tier === 'yearly') {
+        planId = 'plan_DV5jpbVX2EW1rV'
+      } else {
+        planId = 'plan_DV5jKe1Q03Hr7N'
+      }
+      this.setState({
+        loading: true,
+        token: null,
+      })
+      const token = await stripe.paymentRequestWithNativePay({
+        total_price: '0.00',
+        currency_code: 'USD',
+        shipping_address_required: false,
+        phone_number_required: false,
+        shipping_countries: ['US', 'CA'],
+        line_items: [{
+          currency_code: 'USD',
+          description: 'Whisky',
+          total_price: '0.00',
+          unit_price: '0.00',
+          quantity: '1',
+        }],
+      })
+      console.log(token.tokenId, planId)
+      this.props.dispatch(paySubsctiption(planId, token.tokenId))
+      this.setState({ loading: false, token })
+      // this.props.dispatch(setModalType('7-dayTrial'));
+      // this.props.dispatch(setSubscriptionType(tier));
+      // this.props.navigation.navigate('User');
+    } catch (error) {
+      console.log(error)
+      this.setState({ loading: false })
+    }
+  }
   render() {
     const { toggleType, modalType } = this.state;
     const {
@@ -335,11 +374,7 @@ class ConfirmMonthlySubscribeScreen extends Component {
             {tier == 'monthly' && (
               <TouchableOpacity
                 style={[styles.modalButton, styles.subscribeButton]}
-                onPress={() => {
-                  this.props.dispatch(setModalType('7-dayTrial'));
-                  this.props.dispatch(setSubscriptionType('monthly'));
-                  this.props.navigation.navigate('User');
-                }}
+                onPress={this.onSubscribe}
               >
                 <Text
                   style={{
@@ -356,11 +391,7 @@ class ConfirmMonthlySubscribeScreen extends Component {
             {tier == 'yearly' && (
               <TouchableOpacity
                 style={[styles.modalButton, styles.subscribeButton]}
-                onPress={() => {
-                  this.props.dispatch(setModalType('7-dayTrial'));
-                  this.props.dispatch(setSubscriptionType('yearly'));
-                  this.props.navigation.navigate('User');
-                }}
+                onPress={this.onSubscribe}
               >
                 <Text
                   style={{

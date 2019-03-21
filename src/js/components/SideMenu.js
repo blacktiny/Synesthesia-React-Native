@@ -21,6 +21,7 @@ import {
 } from '../actions/ToggleFormModalAction'
 import { addBlur } from '../actions/BlurAction'
 import { setToggleType } from '../actions/UserAction'
+import { setModalType } from '../actions/ToggleFormModalAction'
 
 import { Theme } from '../constants/constants'
 
@@ -74,6 +75,7 @@ class SideMenu extends Component {
       this.props.dispatch(cleanAwareness());
       this.props.dispatch(cleanProgress());
       this.props.dispatch(setSubscriptionType(''));
+      this.props.dispatch(setModalType('LogOut'));
       this.props.dispatch(logoutUser());
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.navigation.navigate('Sensorium');

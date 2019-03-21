@@ -23,6 +23,8 @@ import BottomBar from '../components/BottomBar';
 import stripe from 'tipsi-stripe'
 
 import { openPaymentDetailsModal, openRegisterModal } from '../actions/ToggleFormModalAction';
+import { paySubsctiption } from '../actions/SubscriptionAction';
+
 import { addBlur, removeBlur } from '../actions/BlurAction'
 
 class PricingScreen extends Component {
@@ -78,6 +80,7 @@ class PricingScreen extends Component {
         }],
       })
       console.log(token.tokenId, planId)
+      this.props.dispatch(paySubsctiption(planId, token.tokenId))
       this.setState({ loading: false, token })
     } catch (error) {
       console.log(error)
