@@ -25,7 +25,7 @@ import {
   setModalType,
   openPaymentDetailsModal
 } from '../actions/ToggleFormModalAction';
-import { setSubscriptionType, paySubsctiption } from '../actions/SubscriptionAction';
+import { setSubscriptionType, paySubscription } from '../actions/SubscriptionAction';
 import stripe from 'tipsi-stripe'
 
 const credit_card_icon = require('../../assets/credit-card.png');
@@ -142,9 +142,9 @@ class ConfirmMonthlySubscribeScreen extends Component {
     }
   };
 
-  onCancelBtnClicked = () => {};
+  onCancelBtnClicked = () => { };
 
-  onYesBtnClicked = () => {};
+  onYesBtnClicked = () => { };
 
   onSubscribe = async () => {
     try {
@@ -174,7 +174,7 @@ class ConfirmMonthlySubscribeScreen extends Component {
         }],
       })
       console.log(token.tokenId, planId)
-      this.props.dispatch(paySubsctiption(planId, token.tokenId))
+      this.props.dispatch(paySubscription(planId, token.tokenId))
       this.setState({ loading: false, token })
       // this.props.dispatch(setModalType('7-dayTrial'));
       // this.props.dispatch(setSubscriptionType(tier));

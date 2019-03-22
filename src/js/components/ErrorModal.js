@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -19,31 +19,42 @@ const ErrorModal = (props) => {
       transparent={true}
       onRequestClose={() => console.log('closed')}
     >
-      <View style={styles.modalContainer}>
-        <LinearGradient
-          start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
-          locations={[0, 1]}
-          colors={['#7059ED', '#DA152C']}
-          style={[styles.banner, { height: props.modalType == "Register" ? height - 650 : height - 685 }]}>
-          <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
-            <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-          </TouchableOpacity>
-          <View style={styles.textContainer}>
-            {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
-            {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>}
+      <TouchableOpacity
+        style={styles.modalContainer}
+        activeOpacity={1}
+        onPressOut={props.closeModal}
+      >
+        <View>
+          <TouchableWithoutFeedback>
+            <LinearGradient
+              start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
+              locations={[0, 1]}
+              colors={['#7059ED', '#DA152C']}
+              style={[styles.banner, { height: props.modalType == "Register" ? height - 650 : height - 685 }]}>
+              <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
+                <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+              </TouchableOpacity>
+              <View style={styles.textContainer}>
+                {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
+                {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>}
 
-            {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
-            {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Logged out. See you later.'}</Text>}
+                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
+                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Logged out. See you later.'}</Text>}
 
-            {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>}
-            {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>}
+                {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>}
+                {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>}
 
-            {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
-            {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset link not sent.'}</Text>}
-          </View>
-        </LinearGradient>
-      </View>
-    </Modal >
+                {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
+                {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset link not sent.'}</Text>}
+
+                {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
+                {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong with payment\n try again later'}</Text>}
+              </View>
+            </LinearGradient>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableOpacity>
+    </Modal>
   )
 }
 

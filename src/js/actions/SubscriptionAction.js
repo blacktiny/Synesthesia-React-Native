@@ -7,9 +7,15 @@ export function setSubscriptionType(subscriptionType) {
   }
 }
 
-export function paySubsctiption(planId, stripeToken) {
+export function paySubscription(planId, stripeToken) {
   return {
-    type: ActionTypes.PAY_SUBSCTIPTION,
+    type: ActionTypes.PAY_SUBSCRIPTION,
     payload: { planId, stripeToken }
+  }
+}
+
+export function unsubscribe() {
+  return {
+    type: ActionTypes.UNSUBSCRIBE,
   }
 }

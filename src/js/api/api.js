@@ -113,10 +113,17 @@ export const getProgress = (token) => fetch(`${baseUrl}progress?token=${token}`,
   },
 }).then(response => response.json());
 
-export const subscriptionPayment = (token, payload) => fetch(`${baseUrl}stripe/charge?token=${token}`, {
+export const subscriptionPayment = (token, payload) => fetch(`http://demo-synesthesia.zimalab.com/stripe/charge?token=${token}`, {
   method: 'POST',
   headers: {
     ...commonHeaders,
   },
   body: JSON.stringify(payload)
+}).then(response => response.json());
+
+export const unSubscribe = (token) => fetch(`http://demo-synesthesia.zimalab.com/stripe/cancel?token=${token}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
 }).then(response => response.json());

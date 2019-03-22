@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux'
 
 import InputTextField from '../components/InputTextField';
@@ -13,6 +13,7 @@ import { closeLoginModal, openRegisterModal, openForgotPasswordModal } from '../
 
 const { width, height } = Dimensions.get('screen');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
+import LoadingIndicator from '../components/LoadingIndicator'
 
 const initialState = {
   email: '',
@@ -102,82 +103,87 @@ class LoginModal extends Component {
     let { requestPending } = this.props;
     const loginButtonDisabled = this.state.emailSuccessBorder && this.state.passwordSuccessBorder;
     return (
-
       <View>
-
         <Modal
           visible={this.props.modalVisible}
           animationType="fade"
           transparent={true}
           onRequestClose={() => console.log('closed')}
         >
-          <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.modalContainer}
+            activeOpacity={1}
+            onPressOut={() => { this.props.closeModal(); }}
+          >
+            {requestPending && <LoadingIndicator />}
             <View>
-
-              <View style={styles.loginContent}>
-                <TouchableOpacity style={styles.crossButton} onPress={() => {
-                  this.clearForm();
-                  this.props.closeModal();
-                }}>
-                  <ModalCloseIcon style={styles.crossIcon} color="#777778" />
-                </TouchableOpacity>
-                <View style={styles.textContainer}>
-                  <Text style={styles.loginText}>{'Login'}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.closeLoginModal();
-                      this.props.openRegisterModal();
-                    }}>
-                    <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
-                  </TouchableOpacity>
-                </View>
+              <TouchableWithoutFeedback>
                 <View>
-                  <Text style={styles.emailText}>{'Email'}</Text>
-                  <InputTextField
-                    onChange={(value) => {
-                      this.setState({
-                        email: value.trim()
-                      })
-                    }}
-                    value={this.state.email}
-                    onBlur={() => this.validateEmail(this.state.email)}
-                    error={this.state.emailError}
-                    showSuccessBorder={this.state.emailSuccessBorder}
-                    showErrorBorder={this.state.emailErrorBorder}
-                  />
-                  <View style={{ paddingTop: 10 }} />
-                  <Text style={styles.emailText}>{'Password'}</Text>
-                  <PasswordTextField
-                    onChange={(value) => {
-                      this.setState({ password: value.trim() })
-                      this.validatePassword(value)
-                    }}
-                    onBlur={() => this.validatePassword(this.state.password)}
-                    error={this.state.passwordError}
-                    showSuccessBorder={this.state.passwordSuccessBorder}
-                    showErrorBorder={this.state.passwordErrorBorder}
-                  />
-                </View>
-                <View style={styles.buttonArea}>
-                  <CustomButton
-                    disabled={!loginButtonDisabled || requestPending}
-                    title="Log in"
-                    onPress={this.handleOnSubmit}
-                  />
-                  <TouchableOpacity onPress={() => {
-                    this.props.closeLoginModal();
-                    this.props.openForgotPasswordModal();
-                  }}>
-                    <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
-                  </TouchableOpacity>
-                </View>
+                  <View style={styles.loginContent}>
+                    <TouchableOpacity style={styles.crossButton} onPress={() => {
+                      this.clearForm();
+                      this.props.closeModal();
+                    }}>
+                      <ModalCloseIcon style={styles.crossIcon} color="#777778" />
+                    </TouchableOpacity>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.loginText}>{'Login'}</Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.props.closeLoginModal();
+                          this.props.openRegisterModal();
+                        }}>
+                        <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Create an account'}</Text></Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <Text style={styles.emailText}>{'Email'}</Text>
+                      <InputTextField
+                        onChange={(value) => {
+                          this.setState({
+                            email: value.trim()
+                          })
+                        }}
+                        value={this.state.email}
+                        onBlur={() => this.validateEmail(this.state.email)}
+                        error={this.state.emailError}
+                        showSuccessBorder={this.state.emailSuccessBorder}
+                        showErrorBorder={this.state.emailErrorBorder}
+                      />
+                      <View style={{ paddingTop: 10 }} />
+                      <Text style={styles.emailText}>{'Password'}</Text>
+                      <PasswordTextField
+                        onChange={(value) => {
+                          this.setState({ password: value.trim() })
+                          this.validatePassword(value)
+                        }}
+                        onBlur={() => this.validatePassword(this.state.password)}
+                        error={this.state.passwordError}
+                        showSuccessBorder={this.state.passwordSuccessBorder}
+                        showErrorBorder={this.state.passwordErrorBorder}
+                      />
+                    </View>
+                    <View style={styles.buttonArea}>
+                      <CustomButton
+                        disabled={!loginButtonDisabled || requestPending}
+                        title="Log in"
+                        onPress={this.handleOnSubmit}
+                      />
+                      <TouchableOpacity onPress={() => {
+                        this.props.closeLoginModal();
+                        this.props.openForgotPasswordModal();
+                      }}>
+                        <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
+                      </TouchableOpacity>
+                    </View>
 
-              </View>
+                  </View>
 
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-          </View>
+          </TouchableOpacity>
         </Modal>
-
       </View>
     )
   }

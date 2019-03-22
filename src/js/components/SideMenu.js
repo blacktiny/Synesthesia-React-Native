@@ -92,6 +92,7 @@ class SideMenu extends Component {
     if (itemName == 'My account') {
       this.props.dispatch(setToggleType(true))
       this.props.dispatch(setHeaderItem('My account'));
+      this.props.navigation.closeDrawer();
     }
     this.props.dispatch(setMenuItem(itemName));
     if (url) {
@@ -137,6 +138,7 @@ class SideMenu extends Component {
               this.props.dispatch(setToggleType(false))
               this.props.dispatch(setMenuItem(''))
               navigation.navigate('User')
+              navigation.closeDrawer();
             }}
             underlayColor={'transparent'}
           >

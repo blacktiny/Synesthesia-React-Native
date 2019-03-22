@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity, Platform, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Dimensions, Linking, TouchableOpacity, Platform, Modal, TouchableWithoutFeedback } from 'react-native';
 import InputTextField from '../components/InputTextField';
 import PasswordTextField from '../components/PasswordTextField';
 import CustomButton from '../components/CustomButton';
@@ -144,136 +144,133 @@ class RegisterScreen extends Component {
       this.state.passwordSuccessBorder && this.state.isChecked1;
     return (
       <View>
-
         <Modal
           visible={this.props.modalVisible}
           animationType="fade"
           transparent={true}
           onRequestClose={() => console.log('closed')}
         >
-          <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.modalContainer}
+            activeOpacity={1}
+            onPressOut={() => { this.props.closeModal(); }}
+          >
             <View>
-
-              <View style={styles.createContent}>
-                <TouchableOpacity style={styles.crossButton} onPress={() => {
-                  this.clearForm();
-                  this.props.closeModal();
-                }}>
-                  <ModalCloseIcon style={styles.crossIcon} color="#777778" />
-                </TouchableOpacity>
-                <ScrollView
-                  style={{ flex: 1, marginBottom: 15 }}
-                  scrollEnabled={true}
-                  onContentSizeChange={this.onContentSizeChange}
-                >
-                  <View style={styles.textContainer}>
-                    {subscriptionFlow !== '' && <Text style={styles.firstStepText}>First step:</Text>}
-                    <Text style={styles.loginText}>{'Create a free account'}</Text>
-                    <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.addBlur(); this.props.openLoginModal(); }}>
-                      <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
+              <TouchableWithoutFeedback>
+                <View>
+                  <View style={styles.createContent}>
+                    <TouchableOpacity style={styles.crossButton} onPress={() => {
+                      this.clearForm();
+                      this.props.closeModal();
+                    }}>
+                      <ModalCloseIcon style={styles.crossIcon} color="#777778" />
                     </TouchableOpacity>
-                  </View>
-                  <View>
-                    <Text style={styles.emailText}>{'Name'}</Text>
-                    <InputTextField
-                      onChange={(value) => {
-                        this.setState({ userName: value.trim() })
-                      }}
-                      onBlur={() => this.validateUserName(this.state.userName)}
-                      error={this.state.userNameError}
-                      showSuccessBorder={this.state.userNameSuccessBorder}
-                      showErrorBorder={this.state.userNameErrorBorder}
-                    />
-                    <View style={{ paddingTop: 10 }} />
-                    <Text style={styles.emailText}>{'Email'}</Text>
-                    <InputTextField
-                      onChange={(value) => {
-                        this.setState({ email: value.trim() })
-                      }}
-                      onBlur={() => this.validateEmail(this.state.email)}
-                      error={this.state.emailError}
-                      showSuccessBorder={this.state.emailSuccessBorder}
-                      showErrorBorder={this.state.emailErrorBorder}
-                    />
-                    <View style={{ paddingTop: 10 }} />
-                    <Text style={styles.emailText}>{'Password'}</Text>
-                    <PasswordTextField
-                      onChange={(value) => {
-                        this.setState({ password: value.trim() })
-                      }}
-                      onBlur={() => this.validatePassword(this.state.password)}
-                      error={this.state.passwordError}
-                      showSuccessBorder={this.state.passwordSuccessBorder}
-                      showErrorBorder={this.state.passwordErrorBorder}
-                    />
-                    <View style={{ paddingTop: 10 }} />
-                    <CustomCheckBox
-                      size={24}
-                      checked={this.state.isChecked1}
-                      onClickCustomCheckbox={() => {
-                        this.setState({
-                          isChecked1: !this.state.isChecked1
-                        })
-                      }}
-                      label={
-                        <Text>
-                          <Text style={styles.checkBoxText}>{'By creating an account, you agree on the'}</Text>
-                          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/TermsAndConditions') }}>
-                            <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
-                              {' Terms & Conditions'}
+                    <ScrollView
+                      style={{ flex: 1, marginBottom: 15 }}
+                      scrollEnabled={true}
+                      onContentSizeChange={this.onContentSizeChange}
+                    >
+                      <View style={styles.textContainer}>
+                        {subscriptionFlow !== '' && <Text style={styles.firstStepText}>First step:</Text>}
+                        <Text style={styles.loginText}>{'Create a free account'}</Text>
+                        <TouchableOpacity onPress={() => { this.props.closeRegisterModal(); this.props.addBlur(); this.props.openLoginModal(); }}>
+                          <Text style={styles.noAccountYet}>{'Or'}<Text style={styles.createAccount}>{' Log in'}</Text></Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View>
+                        <Text style={styles.emailText}>{'Name'}</Text>
+                        <InputTextField
+                          onChange={(value) => {
+                            this.setState({ userName: value.trim() })
+                          }}
+                          onBlur={() => this.validateUserName(this.state.userName)}
+                          error={this.state.userNameError}
+                          showSuccessBorder={this.state.userNameSuccessBorder}
+                          showErrorBorder={this.state.userNameErrorBorder}
+                        />
+                        <View style={{ paddingTop: 10 }} />
+                        <Text style={styles.emailText}>{'Email'}</Text>
+                        <InputTextField
+                          onChange={(value) => {
+                            this.setState({ email: value.trim() })
+                          }}
+                          onBlur={() => this.validateEmail(this.state.email)}
+                          error={this.state.emailError}
+                          showSuccessBorder={this.state.emailSuccessBorder}
+                          showErrorBorder={this.state.emailErrorBorder}
+                        />
+                        <View style={{ paddingTop: 10 }} />
+                        <Text style={styles.emailText}>{'Password'}</Text>
+                        <PasswordTextField
+                          onChange={(value) => {
+                            this.setState({ password: value.trim() })
+                          }}
+                          onBlur={() => this.validatePassword(this.state.password)}
+                          error={this.state.passwordError}
+                          showSuccessBorder={this.state.passwordSuccessBorder}
+                          showErrorBorder={this.state.passwordErrorBorder}
+                        />
+                        <View style={{ paddingTop: 10 }} />
+                        <CustomCheckBox
+                          size={24}
+                          checked={this.state.isChecked1}
+                          onClickCustomCheckbox={() => {
+                            this.setState({
+                              isChecked1: !this.state.isChecked1
+                            })
+                          }}
+                          label={
+                            <Text>
+                              <Text style={styles.checkBoxText}>{'By creating an account, you agree on the'}</Text>
+                              <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/TermsAndConditions') }}>
+                                <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                                  {' Terms & Conditions'}
+                                </Text>
+                              </Text>
+                              <Text style={styles.checkBoxText}>{' and'}</Text>
+                              <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/privacy') }}>
+                                <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
+                                  {' Privacy Policy'}
+                                </Text>
+                              </Text>
+                              <Text style={styles.checkBoxText}>{'.'}</Text>
                             </Text>
-                          </Text>
-                          <Text style={styles.checkBoxText}>{' and'}</Text>
-                          <Text onPress={() => { Linking.openURL('https://synesthesia.com/#/privacy') }}>
-                            <Text style={[styles.checkBoxText, { color: '#25B999' }]}>
-                              {' Privacy Policy'}
-                            </Text>
-                          </Text>
-                          <Text style={styles.checkBoxText}>{'.'}</Text>
-                        </Text>
-                      }
-                    />
-                    <CustomCheckBox
-                      size={24}
-                      checked={this.state.isChecked2}
-                      onClickCustomCheckbox={() => {
-                        this.setState({
-                          isChecked2: !this.state.isChecked2
-                        })
-                      }}
-                      label={<Text style={styles.checkBoxText}>{'I want to receive informative emails on Synesthesia and Meditation'}</Text>}
-                    />
+                          }
+                        />
+                        <CustomCheckBox
+                          size={24}
+                          checked={this.state.isChecked2}
+                          onClickCustomCheckbox={() => {
+                            this.setState({
+                              isChecked2: !this.state.isChecked2
+                            })
+                          }}
+                          label={<Text style={styles.checkBoxText}>{'I want to receive informative emails on Synesthesia and Meditation'}</Text>}
+                        />
 
-                    <View style={[styles.buttonArea, { marginTop: 20 }]}>
-                      <CustomButton
-                        disabled={!registerButtonDisabled || requestPending}
-                        title="Create account"
-                        onPress={this.handleOnSubmit}
-                      />
-                    </View>
+                        <View style={[styles.buttonArea, { marginTop: 20 }]}>
+                          <CustomButton
+                            disabled={!registerButtonDisabled || requestPending}
+                            title="Create account"
+                            onPress={this.handleOnSubmit}
+                          />
+                        </View>
+                      </View>
+                    </ScrollView>
+
                   </View>
-                </ScrollView>
 
-              </View>
-
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-          </View>
+          </TouchableOpacity>
         </Modal>
-
-
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000000'
-  },
   buttonArea: {
     marginTop: 100,
     justifyContent: 'center',
@@ -340,14 +337,6 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     borderColor: '#3D3D3E',
-    borderWidth: 1
-  },
-  registerErrorBanner: {
-    height: height - 645,
-    width: width - 30,
-    borderRadius: 12,
-    paddingRight: 20,
-    paddingLeft: 20,
     borderWidth: 1
   },
   modalContainer: {

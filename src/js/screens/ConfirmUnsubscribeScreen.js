@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 
 import { Theme } from "../constants/constants";
 
-import { setSubscriptionType } from '../actions/SubscriptionAction';
+import { unsubscribe } from '../actions/SubscriptionAction';
 import CarouselSlider from "../components/CarouselSlider";
 
 const { width, height } = Dimensions.get("screen");
@@ -44,6 +44,10 @@ class ConfirmUnsubscribeScreen extends Component {
 
   onYesBtnClicked = () => { };
 
+  onUnsubscribe = () => {
+    this.props.dispatch(unsubscribe());
+  }
+  
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#1F1F20" }}>
@@ -64,7 +68,7 @@ class ConfirmUnsubscribeScreen extends Component {
           <TouchableOpacity style={[styles.modalButton, styles.nothanksButton]} onPress={() => this.props.navigation.navigate('User')}>
             <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_SEMIBOLD }}>{'Stay subscribed'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={() => { this.props.dispatch(setSubscriptionType("")); this.props.navigation.navigate('User') }}>
+          <TouchableOpacity style={[styles.modalButton, styles.unsubscribeButton]} onPress={this.onUnsubscribe}>
             <Text style={{ fontSize: 15, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>{'Unsubscribe'}</Text>
           </TouchableOpacity>
           <View style={{ width: '100%', height: 150 }} />

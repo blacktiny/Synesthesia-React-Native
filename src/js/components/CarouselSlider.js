@@ -65,10 +65,10 @@ export default CarouselSlider = () => (
         <ImageBackground style={styles.slider} source={slider4} borderRadius={12}>
           <View style={styles.overlay}>
             <Text style={[styles.sliderText, styles.slider4TextUpper]}>
-              A fusion of mindfulness, awareness & synesthesia
+              Mindfulness, awareness & synesthesia
             </Text>
             <Text style={[styles.sliderText, styles.slider4TextLower]}>
-              SynesthesiaMeditation is a unique mix of traditional mindfulness, sensory nature awareness techniques, and synesthetic explorations. For beginners and advanced.
+              Synesthesia Meditation is a unique mix of traditional mindfulness, sensory nature awareness techniques, and synesthetic explorations.
             </Text>
           </View>
         </ImageBackground>
@@ -77,7 +77,7 @@ export default CarouselSlider = () => (
         <ImageBackground style={styles.slider} source={slider5} borderRadius={12}>
           <View style={styles.overlay}>
             <Text style={[styles.sliderText, styles.slider5TextUpper]}>
-              Sensorium – your sensory awareness space
+              Your sensory awareness space
             </Text>
             <Text style={[styles.sliderText, styles.slider5TextLower]}>
               Unique interactive and multimedia meditations to sharpen your senses. Customize background themes and length of your meditation experiences.
