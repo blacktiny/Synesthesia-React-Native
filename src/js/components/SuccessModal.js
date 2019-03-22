@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -19,35 +19,42 @@ const SuccessModal = (props) => {
       transparent={true}
       onRequestClose={() => console.log('closed')}
     >
-      <View style={styles.modalContainer}>
-        <LinearGradient
-          start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
-          locations={[0, 1]}
-          colors={['#7059ED', '#00C2FB']}
-          style={styles.loginBanner}>
-          <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
-            <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
-          </TouchableOpacity>
-          <View style={styles.textContainer}>
-            {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
-            {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login Successful!'}</Text>}
+      <TouchableOpacity
+        style={styles.modalContainer}
+        activeOpacity={1}
+        onPressOut={props.closeModal}
+      >
+        <View>
+          <TouchableWithoutFeedback>
+            <LinearGradient
+              start={{ x: 0.93, y: 0.14 }} end={{ x: 0, y: 1.0 }}
+              locations={[0, 1]}
+              colors={['#7059ED', '#00C2FB']}
+              style={styles.loginBanner}>
+              <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
+                <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
+              </TouchableOpacity>
+              <View style={styles.textContainer}>
+                {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
+                {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login Successful!'}</Text>}
 
-            {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
-            {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Account successfully created!'}</Text>}
+                {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
+                {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Account successfully created!'}</Text>}
 
-            {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
-            {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset code sent!'}</Text>}
+                {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
+                {props.modalType == "ForgotPassword" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Reset code sent!'}</Text>}
 
-            {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
-            {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'User updated successfully!'}</Text>}
+                {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Yeah! :)'}</Text>}
+                {props.modalType == "UpdateUser" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'User updated successfully!'}</Text>}
 
-            {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
-            {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Start to meditate!'}</Text>}
-
-          </View>
-        </LinearGradient>
-      </View>
-    </Modal >
+                {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
+                {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Start to meditate!'}</Text>}
+              </View>
+            </LinearGradient>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableOpacity>
+    </Modal>
   )
 }
 
