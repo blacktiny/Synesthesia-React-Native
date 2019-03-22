@@ -225,14 +225,14 @@ class ConfirmMonthlySubscribeScreen extends Component {
           <Text
             style={{
               fontFamily: Theme.FONT_REGULAR,
-              color: '#717171',
+              color: '#ffffff',
               fontSize: 16,
               lineHeight: 24
             }}
           >
             {'If you do not cancel within 7 days, you will be charged '}
             {tier === 'monthly' ? 'monthly ' : 'yearly '}
-            <Text style={{ color: 'white' }}>
+            <Text style={{ color: '#ffffff', fontFamily: Theme.FONT_BOLD }}>
               ${tier === 'monthly' ? '4.99' : '35.88'}
             </Text>
             {'. You can cancel anytime.'}
@@ -240,7 +240,7 @@ class ConfirmMonthlySubscribeScreen extends Component {
               onPress={() => {
                 this.props.dispatch(openPaymentDetailsModal());
               }}
-              style={{ color: '#25B999' }}
+              style={{ color: '#25B999', fontFamily: Theme.FONT_BOLD }}
             >
               {' More Payment Details'}
             </Text>

@@ -13,7 +13,7 @@ import { cleanAwareness } from '../actions/BeingAwareAction'
 import { cleanProgress } from '../actions/ProgressAction'
 import { setHeaderItem } from '../actions/MeditateHeaderAction'
 import { setSubscriptionType } from '../actions/SubscriptionAction'
-import { toggleBottomBar } from '../actions/BottomBarAction'
+import { toggleBottomBar, setBottomBarItem } from '../actions/BottomBarAction'
 
 import {
   openLoginModal,
@@ -78,6 +78,7 @@ class SideMenu extends Component {
       this.props.dispatch(setModalType('LogOut'));
       this.props.dispatch(logoutUser());
       this.props.dispatch(setHeaderItem('Sensorium'));
+      this.props.dispatch(setBottomBarItem('', ''));
       this.props.navigation.navigate('Sensorium');
     }
 

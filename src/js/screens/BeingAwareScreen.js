@@ -23,6 +23,7 @@ import { addBlur, removeBlur } from '../actions/BlurAction'
 import FastImage from 'react-native-fast-image';
 const { width, height } = Dimensions.get('screen');
 import LoadingIndicator from '../components/LoadingIndicator';
+import { BoxShadow } from 'react-native-shadow'
 
 class BeingAware extends Component {
   constructor(props) {
@@ -189,6 +190,16 @@ class BeingAware extends Component {
   renderContainerItem = (id, item, index, itemList) => {
     const { beingawareData, userType } = this.props;
     const nodes = beingawareData.children;
+    const shadowOpt = {
+      width: 120,
+      height: 120,
+      color: "#0e0d0d",
+      border: 12,
+      radius: 12,
+      opacity: 0.6,
+      x: 0,
+      y: 6
+    }
     return (
 
       <View>
@@ -224,15 +235,17 @@ class BeingAware extends Component {
                     resizeMode={FastImage.resizeMode.contain}
                   />
                   :
-                  <ProgressiveImage
-                    thumbnailSource={{ uri: item.icon }}
-                    source={{ uri: item.icon }}
-                    style={{ width: 120, height: 120, borderRadius: 12 }}
-                    resizeMode="cover"
-                  />
+                  <BoxShadow setting={shadowOpt}>
+                    <ProgressiveImage
+                      thumbnailSource={{ uri: item.icon }}
+                      source={{ uri: item.icon }}
+                      style={{ width: 120, height: 120, borderRadius: 12 }}
+                      resizeMode="cover"
+                    />
+                  </BoxShadow>
                 }
               </TouchableOpacity>
-              <View style={{ marginTop: 8, marginLeft: 0, width: 120 }}>
+              <View style={{ marginTop: 14, marginLeft: 0, width: 120 }}>
                 <Text style={{ fontSize: 14, color: '#FFFFFF' }}>
                   {item.name}
                 </Text>

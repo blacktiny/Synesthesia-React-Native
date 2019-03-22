@@ -39,6 +39,9 @@ const LoginUserSaga = function* (action) {
         yield put({
           type: ActionTypes.GET_BEINGAWARE
         })
+        yield put({
+          type: ActionTypes.GET_NODE
+        })
       } else {
         yield put({
           type: ActionTypes.LOGIN_USER_FAIL

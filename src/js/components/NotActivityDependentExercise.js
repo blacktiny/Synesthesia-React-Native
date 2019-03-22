@@ -19,6 +19,7 @@ const redLock = require("../../assets/red_lock.png");
 const greenPlayIconNotCompleted = require("../../assets/greenPlayIconNotCompleted.png");
 const greyPlayIconNotCompleted = require("../../assets/greyPlayIconNotCompleted.png");
 const purplePlayIconNotCompleted = require("../../assets/purplePlayIconNotCompleted.png");
+import { BoxShadow } from 'react-native-shadow'
 
 class NotActivityDependentExercise extends Component {
   constructor(props) {
@@ -43,133 +44,138 @@ class NotActivityDependentExercise extends Component {
   render() {
     const { id, index, numberCount, item, userType, onClickedFlg } = this.state;
     let icon = item.is_done == "1" ? purplePlayIconNotCompleted : item.is_locked != "0" ? greyPlayIconNotCompleted : greenPlayIconNotCompleted;
+    const shadowOpt = {
+      width: 80,
+      height: 80,
+      color: "#0e0d0d",
+      border: 10,
+      radius: 40,
+      opacity: 0.6,
+      x: 0,
+      y: 5
+    }
     return (
-      <View key={id} style={{ width: 117, alignItems: "flex-start", marginTop: 10, marginLeft: 0, marginBottom: 10, marginRight: 0 }}>
+      <View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            backgroundColor: '#1F1F20',
-            width: 80,
-            height: 80,
-            borderRadius: 50,
-            shadowRadius: 7,
-            shadowOffset: { width: 0, height: 2 },
-            shadowColor: "#000",
-            shadowOpacity: 0.5,
-            elevation: 1
-          }}
-        >
+        <View key={id} style={{ width: 117, alignItems: "flex-start", marginTop: 10, marginLeft: 0, marginBottom: 10, marginRight: 0 }}>
 
-          <TouchableHighlight
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 50,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            underlayColor={'#ffffff18'}
-            onPress={() => this.onClicked()}
-          >
-
-            <LinearGradient
-              start={{ x: 0.17, y: 0.85 }} end={{ x: 0.67, y: 0.44 }}
-              locations={[0, 1]}
-              colors={['#505052', '#3D3D3E']}
+          <BoxShadow setting={shadowOpt}>
+            <View
               style={{
+                flexDirection: "row",
+                backgroundColor: '#1F1F20',
                 width: 80,
                 height: 80,
                 borderRadius: 50
-              }}>
+              }}
+            >
 
-              <View
+              <TouchableHighlight
                 style={{
                   width: 80,
                   height: 80,
-                  borderRadius: 50
-                }}>
+                  borderRadius: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                underlayColor={'#ffffff18'}
+                onPress={() => this.onClicked()}
+              >
+
+                <LinearGradient
+                  start={{ x: 0.17, y: 0.85 }} end={{ x: 0.67, y: 0.44 }}
+                  locations={[0, 1]}
+                  colors={['#505052', '#3D3D3E']}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 50
+                  }}>
+
+                  <View
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 50
+                    }}>
+                    <FastImage
+                      style={{
+                        height: 30,
+                        width: 30,
+                        position: "absolute",
+                        top: 25,
+                        left: 28,
+                      }}
+                      resizeMode={FastImage.resizeMode.contain}
+                      source={icon}
+                    />
+
+                  </View>
+
+                </LinearGradient>
+
+
+              </TouchableHighlight>
+
+
+              {item.is_locked != '0' &&
                 <FastImage
                   style={{
-                    height: 30,
-                    width: 30,
+                    height: 33,
+                    width: 33,
+                    alignSelf: "flex-end",
                     position: "absolute",
-                    top: 25,
-                    left: 28,
+                    top: 53,
+                    left: 56
+                  }}
+                  source={lock1}
+                >
+                  <FastImage
+                    style={{
+                      alignSelf: "center",
+                      height: 14,
+                      width: 14,
+                      marginTop: 9
+                    }}
+                    resizeMode={FastImage.resizeMode.contain}
+                    source={redLock}
+                  />
+                </FastImage>}
+
+              {item.is_done == '1' &&
+                <FastImage
+                  style={{
+                    height: 33,
+                    width: 33,
+                    alignSelf: "flex-end",
+                    position: "absolute",
+                    top: 53,
+                    left: 56
                   }}
                   resizeMode={FastImage.resizeMode.contain}
-                  source={icon}
-                />
-
-              </View>
-
-            </LinearGradient>
-
-
-          </TouchableHighlight>
-
-
-          {item.is_locked != '0' &&
-            <FastImage
-              style={{
-                height: 33,
-                width: 33,
-                alignSelf: "flex-end",
-                position: "absolute",
-                top: 53,
-                left: 56
-              }}
-              source={lock1}
-            >
-              <FastImage
-                style={{
-                  alignSelf: "center",
-                  height: 14,
-                  width: 14,
-                  marginTop: 9
-                }}
-                resizeMode={FastImage.resizeMode.contain}
-                source={redLock}
-              />
-            </FastImage>}
-
-          {item.is_done == '1' &&
-            <FastImage
-              style={{
-                height: 33,
-                width: 33,
-                alignSelf: "flex-end",
-                position: "absolute",
-                top: 53,
-                left: 56
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-              source={tick}
-            />}
-
-
+                  source={tick}
+                />}
+            </View>
+          </BoxShadow>
         </View>
         <View style={{
-          position: 'absolute',
-          width: 120,
-          paddingRight: 18,
-          paddingLeft: 18,
-          top: 90,
-          left: -20
+          marginLeft: -5,
+          marginTop: 10,
         }}>
           <Text
             style={{
               fontFamily: Theme.FONT_SEMIBOLD,
               textAlign: "center",
               fontSize: 14,
+              width: 95,
+              paddingLeft: 5,
+              paddingRight: 5,
               color: (item.is_locked != "0") ? "rgba(255, 255, 255, 0.4)" : "#FFFFFF"
             }}
           >
             {item.name}
           </Text>
         </View>
-
-
       </View>
     );
   }
