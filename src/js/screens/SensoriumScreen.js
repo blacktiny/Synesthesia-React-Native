@@ -31,6 +31,7 @@ class Sensorium extends Component {
     this.props.dispatch(removeBlur());
     this.props.dispatch(setMenuItem('Meditate'));
     this.props.dispatch(setHeaderItem('Sensorium'));
+    this.props.dispatch(setBottomBarItem(''));
   }
 
   onHideUnderlay = (itemName) => {

@@ -206,17 +206,17 @@ class SynesthesiaItemScreen extends Component {
           <Text style={{ fontSize: 19, color: '#FFFFFF' }}>{header}</Text>
           <Text style={{ fontSize: 14, color: '#FFFFFF', marginTop: 5, lineHeight: 19 }}>{subHeader}</Text>
         </View>}
-        <View style={{ height: 175, paddingLeft: 8, paddingTop: 0, paddingBottom: 0, marginTop: 20 }}>
+        <View style={{ paddingLeft: 8, paddingTop: 0, paddingBottom: 0 }}>
           <FlatList
             data={itemList}
-            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12 }}
+            contentContainerStyle={{ justifyContent: 'space-between', flexDirection: 'row', paddingLeft: 12, paddingRight: 12, marginTop: 20, marginBottom: 20 }}
             keyExtractor={(item, index) => index.toString()}
             horizontal={true}
             renderItem={({ item, index }) => this.renderNumber(itemList.id, itemList.length, item, index, 'videos')}
             extraData={itemList}
           />
         </View>
-        <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, marginTop: 15, marginBottom: 15 }} />
+        <View style={{ height: 1, color: 'rgba(9,9,9, 0.26)', width: '100%', borderColor: 'rgba(9,9,9, 0.26)', borderWidth: 1, }} />
       </View>
     )
   }

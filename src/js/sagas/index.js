@@ -8,7 +8,7 @@ import SynesthesiaSaga from './SynesthesiaSaga'
 import MindFulnessSaga from './MindFulnessSaga'
 import BeingAwareSaga from './BeingAwareSaga'
 import NodeSaga from './NodeSaga'
-import completionSaga from './Completion'
+import completionSaga from './CompletionSaga'
 import ExerciseNodeSaga from './ExerciseNodeSaga'
 import ProgressSaga from './ProgressSaga'
 import BackgroundSoundSaga from './BackgroundSoundSaga'
@@ -31,8 +31,8 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.UPDATE_USER, LoginUserSaga)
   yield takeLatest(ActionTypes.SET_BACKGROUND_SOUND, BackgroundSoundSaga)
   yield takeLatest(ActionTypes.SET_SUBSCRIPTION_TYPE, SubscriptionSaga),
-  yield takeLatest(ActionTypes.PAY_SUBSCRIPTION, PaymentSaga),
-  yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga)
+    yield takeLatest(ActionTypes.PAY_SUBSCRIPTION, PaymentSaga),
+    yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga)
 
 }
 
