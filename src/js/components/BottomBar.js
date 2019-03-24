@@ -40,8 +40,9 @@ class BottomBar extends Component {
       NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
       this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
     } else {
-      this.props.navigation.navigate('Sensorium');
-      this.props.dispatch(setHeaderItem('Sensorium'))
+      NavigationService.navigate('Sensorium');
+      this.props.dispatch(setHeaderItem('Sensorium'));
+      this.props.dispatch(setBottomBarItem(''));
     }
   }
 

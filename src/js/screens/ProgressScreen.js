@@ -26,6 +26,7 @@ import { setHeaderItem } from '../actions/MeditateHeaderAction';
 const backgroundImage = require("../../assets/kiwihug-266154-unsplash.png");
 const closeX = require("../../assets/x.png");
 import { NavigationEvents } from 'react-navigation';
+import { setMenuItem } from '../actions/SideMenuAction';
 
 const { width, height } = Dimensions.get("screen");
 
@@ -100,9 +101,10 @@ class ProgressScreen extends Component {
                 }
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
+                this.props.dispatch(setMenuItem('Meditate'));
                 // this.props.dispatch(setBottomBarItem(this.props.navigation.getParam('backScreen')));
               }}>
-                <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end', }} />
+                <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end' }} />
               </TouchableOpacity>
             </View>
             <View style={styles.completedSession}>

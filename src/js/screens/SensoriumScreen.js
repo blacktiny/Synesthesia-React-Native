@@ -58,7 +58,7 @@ class Sensorium extends Component {
     const { mindBtnPressStatus, awareBtnPressStatus, synesBtnPressStatus } = this.state;
     const { isLoggedIn, user } = this.props;
     return (
-      <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 70 }}>
+      <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 0 }}>
         {/* <BottomBar screen={'Sensorium'} navigation={this.props.navigation} /> */}
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
 

@@ -41,8 +41,8 @@ class MeditateHeader extends Component {
         this.props.navigation.navigate(headerItem, { backScreen: this.props.navigation.state.routeName });
         // this.props.dispatch(cleanProgress());
         // this.props.dispatch(getUserProgress());
+        this.props.dispatch(setMenuItem(''));
       }
-      this.props.dispatch(setMenuItem(''));
     }
 
     if (headerItem == 'Sensorium') {
