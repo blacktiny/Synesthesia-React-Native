@@ -23,6 +23,7 @@ import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.p
 import FastImage from 'react-native-fast-image';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { BoxShadow } from 'react-native-shadow'
+import { toggleBottomBar } from '../actions/BottomBarAction';
 
 class Synesthesia extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class Synesthesia extends Component {
 
   componentDidMount() {
     this.props.dispatch(getSynesthesia());
+    this.props.dispatch(toggleBottomBar(true));
   }
 
   onItemButtonClicked = (id) => {

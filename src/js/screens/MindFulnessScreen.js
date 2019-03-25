@@ -21,6 +21,7 @@ import unlockActivitiesBannerImage from '../../assets/unlock_activities_banner.p
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur, removeBlur } from '../actions/BlurAction'
 import FastImage from 'react-native-fast-image';
+import { toggleBottomBar } from '../actions/BottomBarAction';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -35,6 +36,7 @@ class MindFulness extends Component {
 
   componentDidMount() {
     this.props.dispatch(getMindFulness());
+    this.props.dispatch(toggleBottomBar(true));
   }
 
   renderData = (mindFulnessDatas) => {

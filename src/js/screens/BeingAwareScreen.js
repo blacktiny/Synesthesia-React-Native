@@ -24,6 +24,7 @@ import FastImage from 'react-native-fast-image';
 const { width, height } = Dimensions.get('screen');
 import LoadingIndicator from '../components/LoadingIndicator';
 import { BoxShadow } from 'react-native-shadow'
+import { toggleBottomBar } from '../actions/BottomBarAction';
 
 class BeingAware extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class BeingAware extends Component {
 
   componentDidMount() {
     this.props.dispatch(getBeingAware());
+    this.props.dispatch(toggleBottomBar(true));
   }
 
   onItemButtonClicked = (id) => {

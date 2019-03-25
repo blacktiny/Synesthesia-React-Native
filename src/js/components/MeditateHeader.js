@@ -58,6 +58,8 @@ class MeditateHeader extends Component {
       // this.props.dispatch(cleanProgress());
       this.props.dispatch(setHeaderItem(headerItem));
     }
+
+    this.props.dispatch(toggleBottomBar(true));
   }
 
   render() {

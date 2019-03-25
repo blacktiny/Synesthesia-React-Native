@@ -71,7 +71,7 @@ class PlayerHeader extends Component {
     return (
       <View style={styles.container}>
         <CloseModal modalVisible={this.state.modalVisible} >
-        <View style={styles.containerModal}>
+          <View style={styles.containerModal}>
             <View style={styles.content}>
               <Text style={styles.text}>Are you sure you want to close this exercise?</Text>
               <View style={styles.row}>
@@ -79,8 +79,7 @@ class PlayerHeader extends Component {
                 <TouchableHighlight style={styles.rightButton} onPress={() => this.setModalVisible(false)} underlayColor={"#25b999cc"}><Text style={styles.buttonText}>No, continue</Text></TouchableHighlight>
               </View>
             </View>
-        </View>
-       
+          </View>
         </CloseModal>
         <SettingsModal visible={this.state.settingsModal} onClose={this.settingsModalVisible}/>
 

@@ -17,7 +17,7 @@ import BottomBar from '../components/BottomBar';
 import ProgressBar from "../components/ProgressBar";
 
 import { getUserProgress } from '../actions/ProgressAction'
-import { getBottomBarItem, setBottomBarItem } from '../actions/BottomBarAction'
+import { getBottomBarItem, setBottomBarItem, toggleBottomBar } from '../actions/BottomBarAction'
 
 import { Theme } from "../constants/constants";
 
@@ -102,6 +102,7 @@ class ProgressScreen extends Component {
 
                 this.props.dispatch(setHeaderItem('Sensorium'));
                 this.props.dispatch(setMenuItem('Meditate'));
+                this.props.dispatch(toggleBottomBar(true));
                 // this.props.dispatch(setBottomBarItem(this.props.navigation.getParam('backScreen')));
               }}>
                 <Image source={closeX} resizeMode='contain' style={{ width: 17, height: 17, justifyContent: 'flex-end' }} />
