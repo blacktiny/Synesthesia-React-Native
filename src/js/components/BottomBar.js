@@ -12,6 +12,7 @@ import { Theme } from '../constants/constants'
 import FastImage from 'react-native-fast-image';
 import { getBottomBarItem, setBottomBarItem } from '../actions/BottomBarAction'
 import { BoxShadow } from 'react-native-shadow'
+import { setMenuItem } from '../actions/SideMenuAction';
 const { width, height } = Dimensions.get('screen');
 
 class BottomBar extends Component {
@@ -36,13 +37,18 @@ class BottomBar extends Component {
     const { screen } = this.state;
     const { curActiveScreen, curBottomBarItem } = this.props;
 
-    if (screen == 'Progress' && curActiveScreen) {
-      NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
-      this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
+    if (screen == 'Progress') {
+      if (curActiveScreen) {
+        NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
+        this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
+      } else {
+        NavigationService.navigate('Sensorium');
+      }
     } else {
       NavigationService.navigate('Sensorium');
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(setBottomBarItem(''));
+      this.props.dispatch(setMenuItem('Meditate'));
     }
   }
 

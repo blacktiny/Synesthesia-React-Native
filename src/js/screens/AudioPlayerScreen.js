@@ -632,6 +632,7 @@ class AudioPlayer extends Component {
     } else {
       this.props.navigation.navigate('Sensorium')
     }
+    this.props.toggleBottomBar(true);
   }
 
   render() {

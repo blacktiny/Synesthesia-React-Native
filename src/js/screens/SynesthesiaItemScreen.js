@@ -23,6 +23,7 @@ import { addBlur, removeBlur } from '../actions/BlurAction'
 import LoadingIndicator from '../components/LoadingIndicator';
 import loginAndCreateAccountBannerImage from '../../assets/login_create_account_banner.png';
 import { openLoginModal, openRegisterModal } from '../actions/ToggleFormModalAction'
+import { toggleBottomBar } from '../actions/BottomBarAction';
 
 class SynesthesiaItemScreen extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class SynesthesiaItemScreen extends Component {
   }
   componentDidMount() {
     this.props.dispatch(getNodeByID());
+    this.props.dispatch(toggleBottomBar(true));
     // this.props.dispatch(setBottomBarItem(this.props.navigation.state.params.backScreen, ''));
   }
   componentWillUnmount() {
