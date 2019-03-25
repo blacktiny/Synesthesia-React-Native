@@ -116,7 +116,7 @@ class LoginModal extends Component {
             onPressOut={() => { this.props.closeModal(); }}
           >
             {requestPending && <LoadingIndicator />}
-            <View>
+            {!requestPending && <View>
               <TouchableWithoutFeedback>
                 <View>
                   <View style={styles.loginContent}>
@@ -181,7 +181,7 @@ class LoginModal extends Component {
 
                 </View>
               </TouchableWithoutFeedback>
-            </View>
+            </View>}
           </TouchableOpacity>
         </Modal>
       </View>

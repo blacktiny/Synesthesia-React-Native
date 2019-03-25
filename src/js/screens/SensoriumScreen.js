@@ -173,7 +173,7 @@ class Sensorium extends Component {
           </TouchableHighlight>
           {
             !isLoggedIn &&
-            <View style={{ marginTop: -32 }}>
+            <View style={{ marginTop: -32, marginBottom: 50 }}>
               <FastImage
                 style={{
                   width: '100%',

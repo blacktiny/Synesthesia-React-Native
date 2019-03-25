@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   top: {
     paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
     paddingHorizontal: 10,
-    marginTop: iPhoneX() ? 60 : 45,
+    marginTop: iPhoneX() ? 60 : 65,
   },
   topTextTitle: {
     fontFamily: Theme.FONT_BOLD,

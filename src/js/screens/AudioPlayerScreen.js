@@ -804,7 +804,7 @@ const styles = StyleSheet.create({
   top: {
     paddingVertical: iPhoneX() ? 30 : iPhone5() ? 7 : 15,
     paddingHorizontal: 10,
-    marginTop: iPhoneX() ? 50 : 35,
+    marginTop: iPhoneX() ? 50 : 65,
     alignItems: 'center'
   },
   topTextTitle: {
