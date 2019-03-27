@@ -25,6 +25,7 @@ const { width, height } = Dimensions.get('screen');
 import LoadingIndicator from '../components/LoadingIndicator';
 import { BoxShadow } from 'react-native-shadow'
 import { toggleBottomBar } from '../actions/BottomBarAction';
+import { setMenuItem } from '../actions/SideMenuAction';
 
 class BeingAware extends Component {
   constructor(props) {
@@ -375,7 +376,7 @@ class BeingAware extends Component {
                   position: 'absolute',
                   top: 40,
                   fontFamily: Theme.FONT_BOLD
-                }}>{'Meditate 7 days for free'}</Text>
+                }}>{'All Synesthesia Meditations \n 7 days for free'}</Text>
 
                 <CustomButton
                   disabled={false}
@@ -390,8 +391,11 @@ class BeingAware extends Component {
                     backgroundColor: '#25B999',
                     opacity: 1
                   }}
-                  title="Free Trial"
-                  onPress={() => { }}
+                  title="Start free trial"
+                  onPress={() => {
+                    this.props.dispatch(setMenuItem('7 days for free'))
+                    this.props.navigation.navigate('Pricing')
+                  }}
                 />
               </View>
             </FastImage>

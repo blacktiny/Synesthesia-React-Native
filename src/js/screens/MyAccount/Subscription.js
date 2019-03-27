@@ -109,8 +109,7 @@ class Subscription extends Component {
 
     let chooseSubscription = (
       <View>
-        <Text style={styles.meditateFree}>Get 7 days for free</Text>
-        <Text style={styles.chooseSubscription}>Choose your subscription</Text>
+        <Text style={styles.meditateFree}>{"All Synesthesia Meditations \n 7 days for free"}</Text>
 
         <View style={styles.btnSection}>
           <LinearGradient
@@ -309,14 +308,9 @@ const styles = StyleSheet.create({
     paddingBottom: 13,
     paddingTop: 13,
     fontSize: 20,
-    textAlign: "left",
+    textAlign: "center",
     color: "white",
     fontFamily: Theme.FONT_BOLD
-  },
-  chooseSubscription: {
-    fontFamily: Theme.FONT_REGULAR,
-    color: 'white',
-    fontSize: 16
   },
   currentSubScpt: {
     fontSize: 20,

@@ -10,9 +10,11 @@ const LogoutUserSaga = function* (action) {
     yield put({
       type: ActionTypes.LOGOUT_USER_SUCCESS
     })
-    yield put({
-      type: ActionTypes.OPEN_ERROR_MODAL
-    })
+    if (action.payload.logoutFrom == 'fromSideMenu') {
+      yield put({
+        type: ActionTypes.OPEN_SUCCESS_MODAL
+      })
+    }
   } catch (e) {
     yield put({
       type: ActionTypes.LOGOUT_USER_FAIL

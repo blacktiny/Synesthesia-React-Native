@@ -50,8 +50,17 @@ class PricingScreen extends Component {
   };
 
   onSubscriptionClicked = (subTier) => {
-    this.props.dispatch(addBlur())
-    this.props.dispatch(openRegisterModal(subTier))
+    const { userType, navigation } = this.props;
+    if (userType == 0) {
+      if (subTier == 'monthly') {
+        navigation.navigate('ConfirmMonthlySubscribe', { tier: 'monthly' })
+      } else {
+        navigation.navigate('ConfirmMonthlySubscribe', { tier: 'yearly' })
+      }
+    } else {
+      this.props.dispatch(addBlur())
+      this.props.dispatch(openRegisterModal(subTier))
+    }
   }
 
   render() {
@@ -90,7 +99,7 @@ class PricingScreen extends Component {
             </LinearGradient>
 
             <View>
-              <Text style={styles.meditateFree}>Meditate 7 days for free</Text>
+              <Text style={styles.meditateFree}>{"All Synesthesia Meditations \n 7 days for free"}</Text>
 
               <View style={styles.btnSection}>
                 <LinearGradient
@@ -140,7 +149,7 @@ class PricingScreen extends Component {
               }}>
                 <Text style={styles.totalBill}>Total bill today: 0</Text><DollarSign style={styles.dollarSign} width={9} height={15} viewBox={'0 0 20 34'} opacity={1} />
               </View>
-            </View >
+            </View>
 
             <CarouselSlider />
 
@@ -289,7 +298,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    userType: state.loginReducer.user.user_type || '-1'
+  }
 }
 
 export default connect(

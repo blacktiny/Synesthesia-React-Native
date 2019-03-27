@@ -12,12 +12,19 @@ export const doLogin = (payload) => fetch(`${baseUrl}auth`, {
   body: JSON.stringify(payload)
 }).then(response => response.json());
 
-export const getUser = (payload, token) => fetch(`${baseUrl}user?token=${token}`, {
+export const getUser = (token) => fetch(`${baseUrl}user?token=${token}`, {
   method: 'GET',
   headers: {
     ...commonHeaders,
   },
   // body: JSON.stringify(payload)
+}).then(response => response.json());
+
+export const deleteUser = (token) => fetch(`${baseUrl}user?token=${token}`, {
+  method: 'DELETE',
+  headers: {
+    ...commonHeaders,
+  },
 }).then(response => response.json());
 
 export const doRegister = (payload) => fetch(`${baseUrl}user`, {
@@ -47,7 +54,8 @@ export const getSynesthesia = (token) => fetch(`${baseUrl}node/338?token=${token
   headers: {
     ...commonHeaders,
   },
-}).then(response => response.json());
+}).then(response => response.json())
+  .catch(error => error)
 
 export const getSynesthesiaAnonymous = () => fetch(`${baseUrl}node/338`, {
   method: 'GET',

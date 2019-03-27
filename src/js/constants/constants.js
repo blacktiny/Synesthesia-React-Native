@@ -111,8 +111,8 @@ export const ActionTypes = keyMirror({
 
   PAY_SUBSCRIPTION: null,
   PAY_SUBSCRIPTION_SUCCESS: null,
-  PAY_SUBSCRIPTION_FAILED: null,
-  
+  PAY_SUBSCRIPTION_FAIL: null,
+
   UNSUBSCRIBE: null,
   UNSUBSCRIBE_SUCCESS: null,
   UNSUBSCRIBE_FAILED: null,
@@ -120,7 +120,11 @@ export const ActionTypes = keyMirror({
   SET_SUBSCRIPTION_TYPE: null,
   SET_SUBSCRIPTION_TYPE_SUCCESS: null,
 
-  SET_USER_TOGGLE_TYPE: null
+  SET_USER_TOGGLE_TYPE: null,
+
+  DELETE_USER: null,
+  DELETE_USER_SUCCESS: null,
+  DELETE_USER_FAIL: null,
 })
 
 export const Theme = {

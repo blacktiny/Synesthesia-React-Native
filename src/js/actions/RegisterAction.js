@@ -6,7 +6,8 @@ export function registerUser({
   first_name,
   last_name,
   name,
-  user_type_id
+  user_type_id,
+  email_list
 }) {
   return {
     type: ActionTypes.REGISTER_USER,
@@ -16,7 +17,8 @@ export function registerUser({
       first_name,
       last_name,
       name,
-      user_type_id
+      user_type_id,
+      email_list
     }
   }
 }

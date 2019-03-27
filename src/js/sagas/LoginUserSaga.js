@@ -18,7 +18,7 @@ const LoginUserSaga = function* (action) {
       })
 
       AsyncStorage.setItem('token', authObject.token);
-      const user = yield call(getUser, action.payload, authObject.token);
+      const user = yield call(getUser, authObject.token);
 
       if (user.status.success) {
         yield put({
@@ -72,17 +72,17 @@ const LoginUserSaga = function* (action) {
           type: ActionTypes.OPEN_SUCCESS_MODAL
         })
 
-        const user = yield call(getUser, action.payload, token);
-        if (user.status.success) {
+        const updatedUser = yield call(getUser, token);
+        if (updatedUser.status.success) {
           yield put({
             type: ActionTypes.LOGIN_USER_SUCCESS,
             payload: {
-              ...user
+              ...updatedUser
             }
           })
         } else {
           yield put({
-            type: ActionTypes.UPDATE_USER_FAIL
+            type: ActionTypes.LOGIN_USER_FAIL
           })
         }
       } else {

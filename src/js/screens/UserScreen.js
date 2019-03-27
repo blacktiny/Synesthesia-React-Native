@@ -43,12 +43,14 @@ class UserScreen extends Component {
 
   render() {
     const { isToggleBtnShow } = this.state;
-    const { toggleType, navigation } = this.props;
+    const { requestPending, toggleType, navigation } = this.props;
     return (
       <View style={styles.main}>
         {/* <BottomBar screen={'User'} navigation={this.props.navigation} /> */}
 
-        <ScrollView style={styles.formContainer}>
+        {requestPending && <LoadingIndicator />}
+
+        {!requestPending && <ScrollView style={styles.formContainer}>
 
           {isToggleBtnShow && <View style={{ height: 50, marginBottom: 10, width: '100%', flexDirection: 'row' }}>
             <LinearGradient
@@ -79,7 +81,7 @@ class UserScreen extends Component {
               onSubscribeClicked={(subscribeType) => this.onSubscribeClicked(subscribeType)}
               navigation={navigation}
             />}
-        </ScrollView>
+        </ScrollView>}
       </View>
     )
   }
@@ -110,7 +112,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    toggleType: state.userReducer.toggleType
+    toggleType: state.userReducer.toggleType,
+    requestPending: state.loginReducer.requestPending
   }
 }
 

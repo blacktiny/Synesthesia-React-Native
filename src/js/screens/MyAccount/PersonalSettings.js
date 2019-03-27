@@ -9,13 +9,24 @@ import ModalCloseIcon from '../../icons/ModalCloseIcon';
 
 import InputTextField from '../../components/InputTextField';
 import CustomCheckBox from '../../components/CustomCheckBox';
-import LoadingIndicator from '../../components/LoadingIndicator';
 
 import { updateUser, updateUserForm } from '../../actions/LoginAction';
 import DeleteAccountModal from '../../components/DeleteAccountModal';
 import { addBlur, removeBlur } from '../../actions/BlurAction'
 
 const mail_want = require('../../../assets/mail_want.png');
+const mail_notwant = require('../../../assets/mail_notwant.png');
+import { deleteUser } from '../../actions/UserAction';
+
+import { cleanSynesthesia } from '../../actions/SynesthesiaAction'
+import { cleanMindFulness } from '../../actions/MindFulnessAction'
+import { cleanAwareness } from '../../actions/BeingAwareAction'
+import { cleanProgress } from '../../actions/ProgressAction'
+import { setHeaderItem } from '../../actions/MeditateHeaderAction'
+import { setSubscriptionType } from '../../actions/SubscriptionAction'
+import { logoutUser } from '../../../js/actions/LogoutAction';
+import { setBottomBarItem } from '../../actions/BottomBarAction'
+import NavigationService from '../../helpers/navigationService'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -25,7 +36,6 @@ class PersonalSettings extends Component {
     this.state = {
       userId: 0,
       bEditView: false,
-      bLoadingShow: false,
       editBtnPressStatus: false,
       deleteBtnPressStatus: false,
       userName: '',
@@ -40,7 +50,7 @@ class PersonalSettings extends Component {
       confirmEmailError: '',
       confirmEmailSuccessBorder: false,
       confirmEmailErrorBorder: false,
-      isChecked: false,
+      email_list: false,
       deleteAccountModal: false
     }
   }
@@ -88,6 +98,22 @@ class PersonalSettings extends Component {
     this.setState({ deleteAccountModal: !this.state.deleteAccountModal })
   }
 
+  deleteAccount = () => {
+    this.deleteAccountModalVisible();
+    this.props.deleteUser();
+
+    // TODO refactor this - maybe make a generic logout logic with saga and reducer
+    this.props.cleanSynesthesia();
+    this.props.cleanMindFulness();
+    this.props.cleanAwareness();
+    this.props.cleanProgress();
+    this.props.setSubscriptionType('');
+    this.props.logoutUser();
+    this.props.setHeaderItem('Sensorium');
+    this.props.setBottomBarItem('', '');
+    NavigationService.navigate('Sensorium');
+  }
+
   onEditBtnClicked = () => {
     const { onHideAndShowToggleBtn } = this.props;
 
@@ -99,6 +125,7 @@ class PersonalSettings extends Component {
     const { onHideAndShowToggleBtn } = this.props;
 
     this.setState({ bEditView: false });
+    onHideAndShowToggleBtn(true);
 
     this.setState({ userNameSuccessBorder: false });
     this.setState({ userNameErrorBorder: false });
@@ -106,10 +133,10 @@ class PersonalSettings extends Component {
     this.setState({ emailErrorBorder: false });
     this.setState({ confirmEmailSuccessBorder: false });
     this.setState({ confirmEmailErrorBorder: false });
+    this.setState({ editBtnPressStatus: false });
 
     this.initState();
 
-    onHideAndShowToggleBtn(true);
   }
 
   onSaveBtnClicked = () => {
@@ -117,14 +144,18 @@ class PersonalSettings extends Component {
       "id": this.state.userId,
       "name": this.state.userName,
       "email": this.state.email,
+      "confirmEmail": this.state.confirmEmail,
+      "email_list": this.state.email_list,
       "first_name": "",
-      "last_name": "",
-      "confirmEmail": this.state.confirmEmail
+      "last_name": ""
     }
-    this.setState({ bLoadingShow: true });
-    this.props.dispatch(updateUser(user));
-    this.props.dispatch(updateUserForm());
-    this.setState({ bEditView: false, bLoadingShow: false });
+    this.props.updateUser(user);
+    this.props.updateUserForm();
+    this.setState({ bEditView: false });
+    this.setState({ editBtnPressStatus: false });
+
+    const { onHideAndShowToggleBtn } = this.props;
+    onHideAndShowToggleBtn(true);
   }
 
   validateUserName = (userName) => {
@@ -216,14 +247,13 @@ class PersonalSettings extends Component {
   }
 
   render() {
-    const { requestPending, modalType, userType } = this.props;
-    const { bLoadingShow, userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
+    const { user } = this.props;
+    const { userName, email, confirmEmail, bEditView, editBtnPressStatus, deleteBtnPressStatus } = this.state;
     const saveInfoDisabled = this.state.emailSuccessBorder && this.state.confirmEmailSuccessBorder;
     return (
       <View style={styles.main}>
         <ScrollView style={styles.formContainer}>
-          {requestPending && <LoadingIndicator />}
-          {!bLoadingShow && !requestPending && !bEditView && <View>
+          {!bEditView && <View>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -245,7 +275,7 @@ class PersonalSettings extends Component {
                   <Text style={styles.label}>Email</Text>
                   <Text style={styles.textEdit}>{email}</Text>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                {user.email_list == "1" ? <View style={{ flexDirection: 'row' }}>
                   <Image
                     style={{
                       height: 20,
@@ -256,16 +286,33 @@ class PersonalSettings extends Component {
                   />
                   <Text style={{ fontFamily: Theme.FONT_MEDIUM, fontSize: 16, color: 'white', marginLeft: 15 }}>I  want  to  receive  emails</Text>
                 </View>
+                  :
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      style={{
+                        height: 20,
+                        width: 20
+                      }}
+                      resizeMode='contain'
+                      source={mail_notwant}
+                    />
+                    <Text style={{ fontFamily: Theme.FONT_MEDIUM, fontSize: 16, color: 'white', marginLeft: 15 }}>I  do  not  want  to  receive  emails</Text>
+                  </View>}
               </LinearGradient>
             </View>
-            <TouchableHighlight style={{ flexDirection: 'row', marginTop: 25, marginBottom: 10 }} onPress={this.deleteAccountModalVisible} onHideUnderlay={() => this.onHideUnderlay('delete')} onShowUnderlay={() => this.onShowUnderlay('delete')} underlayColor={'transparent'}>
+            <TouchableHighlight
+              style={{ flexDirection: 'row', marginTop: 25, marginBottom: 10 }}
+              onPress={this.deleteAccountModalVisible}
+              onHideUnderlay={() => this.onHideUnderlay('delete')}
+              onShowUnderlay={() => this.onShowUnderlay('delete')}
+              underlayColor={'transparent'}>
               <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <ModalCloseIcon style={{ opacity: deleteBtnPressStatus ? 0.7 : 1.0 }} color="#30CA9A" />
-                <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: '#30CA9A', opacity: deleteBtnPressStatus ? 0.7 : 1.0, marginLeft: 15 }}>{'Delete account'}</Text>
+                <ModalCloseIcon style={{ opacity: deleteBtnPressStatus ? 0.7 : 1.0 }} color="#DA152C" />
+                <Text style={{ fontFamily: Theme.FONT_BOLD, fontSize: 16, color: '#DA152C', opacity: deleteBtnPressStatus ? 0.7 : 1.0, marginLeft: 15 }}>{'Delete account'}</Text>
               </View>
             </TouchableHighlight>
           </View>}
-          {!bLoadingShow && !requestPending && bEditView && <View style={{ height: height + 150 }}>
+          {bEditView && <View style={{ height: height + 150 }}>
             <Text style={{ fontFamily: Theme.FONT_SEMIBOLD, fontSize: 22, marginTop: 15, marginBottom: 15, color: 'white' }}>Edit personal information</Text>
             <View style={styles.personalInfo}>
               <LinearGradient
@@ -320,10 +367,10 @@ class PersonalSettings extends Component {
                 <View style={{ paddingTop: 10 }} />
                 <CustomCheckBox
                   size={24}
-                  checked={this.state.isChecked}
+                  checked={user.email_list == "1" ? true : false}
                   onClickCustomCheckbox={() => {
                     this.setState({
-                      isChecked: !this.state.isChecked
+                      email_list: user.email_list == "1" ? false : true //the opposite
                     })
                   }}
                   label={<Text>
@@ -345,7 +392,7 @@ class PersonalSettings extends Component {
               </TouchableHighlight>
             </View>
           </View>}
-          <DeleteAccountModal visible={this.state.deleteAccountModal} onClose={this.deleteAccountModalVisible} userType={userType} />
+          <DeleteAccountModal visible={this.state.deleteAccountModal} onClose={this.deleteAccountModalVisible} userType={user.user_type} deleteAccount={this.deleteAccount} />
         </ScrollView>
       </View>
     )
@@ -358,7 +405,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#1F1F20'
   },
   formContainer: {
-    // padding: 15
+    // width: '100%',
+    // height: '100%'
   },
   toggleBtnBack: {
     width: '50%',
@@ -456,9 +504,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     user: state.loginReducer.user,
-    requestPending: state.loginReducer.requestPending,
-    modalType: state.toggleFormModalReducer.modalType,
-    userType: state.loginReducer.user.user_type
+    modalType: state.toggleFormModalReducer.modalType
   }
 }
 
@@ -468,7 +514,19 @@ PersonalSettings.propTypes = {
 
 const mapDispatchToProps = {
   addBlur,
-  removeBlur
+  removeBlur,
+  updateUser,
+  updateUserForm,
+  deleteUser,
+
+  cleanSynesthesia,
+  cleanMindFulness,
+  cleanAwareness,
+  cleanProgress,
+  setSubscriptionType,
+  logoutUser,
+  setHeaderItem,
+  setBottomBarItem
 }
 
 export default connect(

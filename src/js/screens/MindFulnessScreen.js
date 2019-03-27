@@ -321,7 +321,7 @@ class MindFulness extends Component {
                   position: 'absolute',
                   top: 40,
                   fontFamily: Theme.FONT_BOLD
-                }}>{'Meditate 7 days for free'}</Text>
+                }}>{'All Synesthesia Meditations \n 7 days for free'}</Text>
 
                 <CustomButton
                   disabled={false}
@@ -336,8 +336,11 @@ class MindFulness extends Component {
                     backgroundColor: '#25B999',
                     opacity: 1
                   }}
-                  title="Free Trial"
-                  onPress={() => { }}
+                  title="Start free trial"
+                  onPress={() => {
+                    this.props.dispatch(setMenuItem('7 days for free'))
+                    this.props.navigation.navigate('Pricing')
+                  }}
                 />
               </View>
             </FastImage>

@@ -53,7 +53,7 @@ const DeleteAccountModal = (props) => {
                     <TouchableOpacity style={[styles.modalButton, styles.continueButton]} onPress={props.onClose}>
                       <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Keep my account</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.modalButton, styles.deleteAccountButton]} onPress={props.onClose}>
+                    <TouchableOpacity style={[styles.modalButton, styles.deleteAccountButton]} onPress={props.deleteAccount}>
                       <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: Theme.FONT_BOLD }}>Delete my account</Text>
                     </TouchableOpacity>
                   </View>}

@@ -49,6 +49,9 @@ const SuccessModal = (props) => {
 
                 {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Welcome! :)'}</Text>}
                 {props.modalType == "7-dayTrial" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Start to meditate!'}</Text>}
+
+                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Logged out'}</Text>}
+                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'See you later.'}</Text>}
               </View>
             </LinearGradient>
           </TouchableWithoutFeedback>

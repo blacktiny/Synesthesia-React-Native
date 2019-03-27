@@ -173,7 +173,7 @@ class LoginModal extends Component {
                         this.props.closeLoginModal();
                         this.props.openForgotPasswordModal();
                       }}>
-                        <Text style={[styles.loginGoogleText, { color: '#25B999', marginTop: 13, fontFamily: Theme.FONT_MEDIUM }]}>{'Forgot password?'}</Text>
+                        <Text style={styles.forgotPasswordText}>{'Forgot password?'}</Text>
                       </TouchableOpacity>
                     </View>
 
@@ -200,11 +200,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: Theme.FONT_MEDIUM
   },
-  loginGoogleText: {
-    color: '#FFFFFF',
+  forgotPasswordText: {
     fontSize: 14,
     marginLeft: 10,
-    fontFamily: Theme.FONT_REGULAR
+    color: '#25B999',
+    marginTop: 13,
+    fontFamily: Theme.FONT_MEDIUM
   },
   crossIcon: {
     alignSelf: 'flex-end',

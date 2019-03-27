@@ -38,7 +38,7 @@ const PaymentSaga = function* (action) {
     }
     else {
       yield put({
-        type: ActionTypes.PAY_SUBSCRIPTION_FAILED
+        type: ActionTypes.PAY_SUBSCRIPTION_FAIL
       })
       yield put({
         type: ActionTypes.SET_MODAL_TYPE,

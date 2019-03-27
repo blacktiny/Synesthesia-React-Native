@@ -18,11 +18,12 @@ import ModalCloseIcon from '../icons/ModalCloseIcon';
 
 import { openLoginModal, closeRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur } from '../actions/BlurAction'
+import LoadingIndicator from '../components/LoadingIndicator'
 
 const initialState = {
   screenHeight: 0,
-  isChecked1: false,
-  isChecked2: false,
+  termsAndPrivacy: false,
+  email_list: false,
   userName: '',
   userNameError: '',
   userNameSuccessBorder: false,
@@ -56,7 +57,8 @@ class RegisterScreen extends Component {
     let first_name = "";
     let last_name = "";
     let user_type_id = "1";
-    this.props.registerUser({ email, password, first_name, last_name, name, user_type_id });
+    let email_list = this.state.email_list;
+    this.props.registerUser({ email, password, first_name, last_name, name, user_type_id, email_list });
   }
 
   validateUserName = (userName) => {
@@ -141,7 +143,7 @@ class RegisterScreen extends Component {
   render() {
     let { requestPending, subscriptionFlow } = this.props;
     const registerButtonDisabled = this.state.userNameSuccessBorder && this.state.emailSuccessBorder &&
-      this.state.passwordSuccessBorder && this.state.isChecked1;
+      this.state.passwordSuccessBorder && this.state.termsAndPrivacy;
     return (
       <View>
         <Modal
@@ -155,7 +157,8 @@ class RegisterScreen extends Component {
             activeOpacity={1}
             onPressOut={() => { this.props.closeModal(); }}
           >
-            <View>
+            {requestPending && <LoadingIndicator />}
+            {!requestPending && <View>
               <TouchableWithoutFeedback>
                 <View>
                   <View style={styles.createContent}>
@@ -213,10 +216,10 @@ class RegisterScreen extends Component {
                         <View style={{ paddingTop: 10 }} />
                         <CustomCheckBox
                           size={24}
-                          checked={this.state.isChecked1}
+                          checked={this.state.termsAndPrivacy}
                           onClickCustomCheckbox={() => {
                             this.setState({
-                              isChecked1: !this.state.isChecked1
+                              termsAndPrivacy: !this.state.termsAndPrivacy
                             })
                           }}
                           label={
@@ -239,10 +242,10 @@ class RegisterScreen extends Component {
                         />
                         <CustomCheckBox
                           size={24}
-                          checked={this.state.isChecked2}
+                          checked={this.state.email_list}
                           onClickCustomCheckbox={() => {
                             this.setState({
-                              isChecked2: !this.state.isChecked2
+                              email_list: !this.state.email_list
                             })
                           }}
                           label={<Text style={styles.checkBoxText}>{'I want to receive informative emails on Synesthesia and Meditation'}</Text>}
@@ -262,7 +265,7 @@ class RegisterScreen extends Component {
 
                 </View>
               </TouchableWithoutFeedback>
-            </View>
+            </View>}
           </TouchableOpacity>
         </Modal>
       </View>

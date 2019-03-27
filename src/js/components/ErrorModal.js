@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import BannerCloseIcon from '../icons/BannerCloseIcon';
 import { Theme } from '../constants/constants';
 import { addBlur } from '../actions/BlurAction'
+import { closeLoginModal, openForgotPasswordModal } from '../actions/ToggleFormModalAction'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -30,16 +31,23 @@ const ErrorModal = (props) => {
               start={{ x: 0.98, y: 0.06 }} end={{ x: 0.03, y: 1.0 }}
               locations={[0, 1]}
               colors={['#7059ED', '#DA152C']}
-              style={[styles.banner, { height: props.modalType == "Register" ? height - 650 : height - 685 }]}>
+              style={[styles.banner, { height: props.modalType == "Register" ? height - 650 : height - 675 }]}>
               <TouchableOpacity style={styles.crossButton} onPress={props.closeModal}>
                 <BannerCloseIcon style={styles.crossIcon} color="#AC9FF4" />
               </TouchableOpacity>
               <View style={styles.textContainer}>
                 {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
                 {props.modalType == "LogIn" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Login failed. Please try again.'}</Text>}
+                {props.modalType == "LogIn" && (
+                  <TouchableOpacity onPress={() => {
+                    props.closeModal();
+                    props.dispatch(closeLoginModal());
+                    props.dispatch(openForgotPasswordModal());
+                  }}>
+                    <Text style={{ color: '#FFFFFF', marginTop: 13, fontFamily: Theme.FONT_MEDIUM, textDecorationLine: 'underline' }}>{'Forgot password?'}</Text>
+                  </TouchableOpacity>
+                )}
 
-                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Ooops! :('}</Text>}
-                {props.modalType == "LogOut" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, fontFamily: Theme.FONT_REGULAR }}>{'Logged out. See you later.'}</Text>}
 
                 {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 19, fontFamily: Theme.FONT_BOLD }}>{'Oh no! :('}</Text>}
                 {props.modalType == "Register" && <Text style={{ color: '#FFFFFF', fontSize: 15, marginTop: 10, textAlign: 'center', fontFamily: Theme.FONT_REGULAR }}>{'Something went wrong \n while creating an account. \n Please try again.'}</Text>}

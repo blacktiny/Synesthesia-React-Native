@@ -17,7 +17,7 @@ export const subscriptionReducer = (state = initialState, action) => {
         ...state,
         subscriptionPaid: true
       }
-    case ActionTypes.PAY_SUBSCRIPTION_FAILED:
+    case ActionTypes.PAY_SUBSCRIPTION_FAIL:
       return {
         ...state,
         subscriptionPaid: false
@@ -27,12 +27,12 @@ export const subscriptionReducer = (state = initialState, action) => {
         ...state,
         subscriptionPaid: true
       }
-    case ActionTypes.PAY_SUBSCRIPTION_FAILED:
+    case ActionTypes.PAY_SUBSCRIPTION_FAIL:
       return {
         ...state,
         subscriptionPaid: false
       }
-      case ActionTypes.UNSUBSCRIBE_SUCCESS:
+    case ActionTypes.UNSUBSCRIBE_SUCCESS:
       return {
         ...state,
         subscriptionPaid: false,
