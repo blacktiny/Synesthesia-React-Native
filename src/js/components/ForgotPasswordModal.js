@@ -11,6 +11,7 @@ import { sendResetLink } from '../actions/ForgotPasswordAction'
 
 const { width, height } = Dimensions.get('screen');
 import ModalCloseIcon from '../icons/ModalCloseIcon';
+import LoadingIndicator from '../components/LoadingIndicator'
 
 const initialState = {
   email: '',
@@ -83,46 +84,48 @@ class ForgotPasswordModal extends Component {
             activeOpacity={1}
             onPressOut={() => { this.props.closeModal(); }}
           >
-            <View>
-              <TouchableWithoutFeedback>
-                <View>
-                  <View style={styles.forgotPasswordContent}>
-                    <TouchableOpacity style={styles.crossButton} onPress={() => {
-                      this.clearForm();
-                      this.props.closeModal();
-                    }}>
-                      <ModalCloseIcon style={styles.crossIcon} color="#777778" />
-                    </TouchableOpacity>
-                    <View style={[styles.textContainer, { paddingLeft: 25, paddingRight: 25, paddingTop: 20, flexWrap: 'wrap' }]}>
-                      <Text style={styles.loginText}>{'Forgot Password'}</Text>
-                      <Text style={[styles.noAccountYet, { textAlign: 'center', letterSpacing: .5 }]}>{'Submit your email address and we will send you link to reset your password'}</Text>
+            {requestPending && <LoadingIndicator />}
+            {!requestPending &&
+              <View>
+                <TouchableWithoutFeedback>
+                  <View>
+                    <View style={styles.forgotPasswordContent}>
+                      <TouchableOpacity style={styles.crossButton} onPress={() => {
+                        this.clearForm();
+                        this.props.closeModal();
+                      }}>
+                        <ModalCloseIcon style={styles.crossIcon} color="#777778" />
+                      </TouchableOpacity>
+                      <View style={[styles.textContainer, { paddingLeft: 25, paddingRight: 25, paddingTop: 20, flexWrap: 'wrap' }]}>
+                        <Text style={styles.loginText}>{'Forgot Password'}</Text>
+                        <Text style={[styles.noAccountYet, { textAlign: 'center', letterSpacing: .5 }]}>{'Submit your email address and we will send you link to reset your password'}</Text>
+                      </View>
+                      <View style={styles.spacer} />
+                      <View>
+                        <Text style={styles.emailText}>{'Email'}</Text>
+                        <InputTextField
+                          onChange={(value) => {
+                            this.setState({ email: value.trim() })
+                            this.validateEmail(value)
+                          }}
+                          onBlur={() => this.validateEmail(this.state.email)}
+                          error={this.state.emailError}
+                          showSuccessBorder={this.state.emailSuccessBorder}
+                          showErrorBorder={this.state.emailErrorBorder}
+                        />
+                      </View>
+                      <View style={styles.resetLinkButton}>
+                        <CustomButton
+                          title="Send reset link"
+                          disabled={!resetLinkButtonDisabled || requestPending}
+                          onPress={this.handleOnSubmit}
+                        />
+                      </View>
                     </View>
-                    <View style={styles.spacer} />
-                    <View>
-                      <Text style={styles.emailText}>{'Email'}</Text>
-                      <InputTextField
-                        onChange={(value) => {
-                          this.setState({ email: value.trim() })
-                          this.validateEmail(value)
-                        }}
-                        onBlur={() => this.validateEmail(this.state.email)}
-                        error={this.state.emailError}
-                        showSuccessBorder={this.state.emailSuccessBorder}
-                        showErrorBorder={this.state.emailErrorBorder}
-                      />
-                    </View>
-                    <View style={styles.resetLinkButton}>
-                      <CustomButton
-                        title="Send reset link"
-                        disabled={!resetLinkButtonDisabled || requestPending}
-                        onPress={this.handleOnSubmit}
-                      />
-                    </View>
-                  </View>
 
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>}
           </TouchableOpacity>
         </Modal>
 
@@ -206,7 +209,7 @@ const styles = StyleSheet.create({
 // })
 function mapStateToProps(state) {
   return {
-    requestPending: state.loginReducer.requestPending
+    requestPending: state.forgotPasswordReducer.requestPending
   }
 }
 

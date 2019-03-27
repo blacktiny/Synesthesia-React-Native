@@ -76,7 +76,7 @@ class SideMenu extends Component {
       this.props.dispatch(cleanProgress());
       this.props.dispatch(setSubscriptionType(''));
       this.props.dispatch(setModalType('LogOut'));
-      this.props.dispatch(logoutUser());
+      this.props.dispatch(logoutUser('fromSideMenu'));
       this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(setBottomBarItem('', ''));
       this.props.navigation.navigate('Sensorium');
@@ -91,7 +91,8 @@ class SideMenu extends Component {
       this.props.dispatch(setHeaderItem('7 days for free'));
     }
     if (itemName == 'My account') {
-      this.props.dispatch(setToggleType(true))
+      this.props.dispatch(setToggleType(false));
+      this.props.navigation.navigate('User');
       this.props.dispatch(setHeaderItem('My account'));
       this.props.navigation.closeDrawer();
     }
@@ -136,9 +137,9 @@ class SideMenu extends Component {
           </TouchableHighlight>
           <TouchableHighlight
             onPress={() => {
-              this.props.dispatch(setToggleType(false))
+              this.props.dispatch(setToggleType(true))
+              navigation.navigate('User');
               this.props.dispatch(setMenuItem(''))
-              navigation.navigate('User')
               navigation.closeDrawer();
             }}
             underlayColor={'transparent'}
@@ -231,7 +232,7 @@ class SideMenu extends Component {
         {item.name != '7 days for free' && item.name != 'Blog' && item.name != 'My account' && item.name != 'Contact' && item.name != 'About us' && item.name != 'FAQ' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != 'Meditate' && item.name != 'Login' && item.name != 'Log out' && item.name != curItem && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
         {item.name != '7 days for free' && item.name != 'My account' && item.name != 'Login' && item.name != 'Log out' && item.name != 'Privacy Policy, T&C, Disclaimer' && item.name != curItem && item.name != 'Meditate' && item.name != 'Rate the app' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
-        {parseInt(userType) < 0 && item.name == '7 days for free' && curItem != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
+        {(parseInt(userType) == 0 || parseInt(userType) == -1) && item.name == '7 days for free' && curItem != '7 days for free' && <Text style={[styles.textStyle, { fontFamily: Theme.FONT_LIGHT }]} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
         {isLoggedIn && item.name == 'My account' && curItem != 'My account' && <Text style={styles.textStyle} onPress={() => this.onMenuItemClicked(item.route, item.name, item.url)}>{item.name}</Text>}
 
@@ -291,7 +292,7 @@ class SideMenu extends Component {
           renderItem={({ item, index }) => this.renderData(item, index)}
           extraData={this.state.menuData}
         />
-      </View >
+      </View>
     );
   }
 }

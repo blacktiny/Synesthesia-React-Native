@@ -62,7 +62,7 @@ global.fetch = function (uri, options, ...args) {
 
 stripe.setOptions({
   publishableKey: 'pk_test_7213By7um63HqYMjh9KbwF0L',
-  merchantId: '10962320458374913571', // Optional
+  merchantId: '00529024585176074453', // Optional //10962320458374913571 (old)
   androidPayMode: 'test', // Android only
 })
 
@@ -209,10 +209,10 @@ class App extends Component {
             ref={(viewRef) => { this.viewRef = viewRef; }}
             onLayout={() => { this.onViewLoaded(); }} >
             <BottomBar>
-            <AppContainer ref={navigatorRef => {
+              <AppContainer ref={navigatorRef => {
                 NavigationService.setTopLevelNavigator(navigatorRef);
               }}
-            />
+              />
             </BottomBar>
 
           </View>

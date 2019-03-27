@@ -15,6 +15,7 @@ import BackgroundSoundSaga from './BackgroundSoundSaga'
 import SubscriptionSaga from './SubscriptionSaga'
 import PaymentSaga from './PaymentSaga'
 import UnsubscribeSaga from './UnsubscribeSaga'
+import UserSaga from './UserSaga'
 
 const rootSaga = function* () {
   yield takeLatest(ActionTypes.LOGIN_USER, LoginUserSaga)
@@ -32,8 +33,8 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.SET_BACKGROUND_SOUND, BackgroundSoundSaga)
   yield takeLatest(ActionTypes.SET_SUBSCRIPTION_TYPE, SubscriptionSaga),
     yield takeLatest(ActionTypes.PAY_SUBSCRIPTION, PaymentSaga),
-    yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga)
-
+    yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga),
+    yield takeLatest(ActionTypes.DELETE_USER, UserSaga)
 }
 
 export default rootSaga

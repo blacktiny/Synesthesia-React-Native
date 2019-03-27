@@ -8,3 +8,9 @@ export function setToggleType(toggleType) {
     }
   }
 }
+
+export function deleteUser() {
+  return {
+    type: ActionTypes.DELETE_USER
+  }
+}

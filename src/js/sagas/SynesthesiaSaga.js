@@ -6,10 +6,9 @@ import { getSynesthesia, getSynesthesiaAnonymous } from '../api/api'
 
 const SynesthesiaSaga = function* (action) {
   const token = yield AsyncStorage.getItem('token');
-
   if (token !== null) {
     const dataObject = yield call(getSynesthesia, token);
-    if (dataObject.status.success) {
+    if (dataObject.status && dataObject.status.success) {
       yield put({
         type: ActionTypes.GET_SYNESTHESIA_SUCCESS,
         payload: {
