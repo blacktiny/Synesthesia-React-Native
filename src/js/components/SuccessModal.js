@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { Platform, Text, View, TouchableOpacity, StyleSheet, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import BannerCloseIcon from '../icons/BannerCloseIcon';
@@ -73,7 +73,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   loginBanner: {
-    height: height - 685,
+    ...Platform.select({
+      ios: {
+        height: height - 685,
+      },
+      android: {
+        height: height - 585
+      },
+    }),
     width: width - 30,
     borderRadius: 12,
     paddingRight: 20,

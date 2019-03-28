@@ -19,7 +19,7 @@ class BottomBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      screen: this.props.screen,
+      curHeaderItem: this.props.curHeaderItem,
       navigation: this.props.navigation
     }
   }
@@ -34,10 +34,10 @@ class BottomBar extends Component {
     //   actions: [NavigationActions.navigate({ routeName: 'Sensorium' })]
     // })
     // this.props.navigation.dispatch(resetAction);
-    const { screen } = this.state;
+    const { curHeaderItem } = this.props;
     const { curActiveScreen, curBottomBarItem } = this.props;
 
-    if (screen == 'Progress') {
+    if (curHeaderItem == 'Progress') {
       if (curActiveScreen) {
         NavigationService.navigate(curActiveScreen, { backScreen: curBottomBarItem })
         this.props.dispatch(setBottomBarItem(curBottomBarItem, ''))
@@ -46,14 +46,13 @@ class BottomBar extends Component {
       }
     } else {
       NavigationService.navigate('Sensorium');
-      this.props.dispatch(setHeaderItem('Sensorium'));
       this.props.dispatch(setBottomBarItem(''));
-      this.props.dispatch(setMenuItem('Meditate'));
     }
+    this.props.dispatch(setHeaderItem('Sensorium'));
+    this.props.dispatch(setMenuItem('Meditate'));
   }
 
   onBottomItemClicked = (itemName) => {
-    const { screen } = this.state
     const { curActiveScreen, curBottomBarItem } = this.props;
 
     if (itemName == curBottomBarItem && curActiveScreen) {
@@ -102,16 +101,16 @@ class BottomBar extends Component {
               <FastImage style={styles.leftArrow} source={leftArrow} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('MindFulness')}>
-              <Text style={[styles.textStyle, { color: (this.state.screen == 'MindFulness' || curBottomBarItem == 'MindFulness') ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
-              {(this.state.screen == 'MindFulness' || curBottomBarItem == 'MindFulness') && <FastImage style={styles.imageStyle} source={rectangle} />}
+              <Text style={[styles.textStyle, { color: (curBottomBarItem == 'MindFulness') ? '#FFFFFF' : '#777778' }]}>{'Mindfulness'}</Text>
+              {(curBottomBarItem == 'MindFulness') && <FastImage style={styles.imageStyle} source={rectangle} />}
             </TouchableOpacity>
             <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('BeingAware')}>
-              <Text style={[styles.textStyle, { color: (this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
-              {(this.state.screen == 'BeingAware' || curBottomBarItem == 'BeingAware') && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
+              <Text style={[styles.textStyle, { color: (curBottomBarItem == 'BeingAware') ? '#FFFFFF' : '#777778' }]}>{'Awareness'}</Text>
+              {(curBottomBarItem == 'BeingAware') && <FastImage style={[styles.imageStyle, { width: 77 }]} source={rectangle} />}
             </TouchableOpacity>
             <TouchableOpacity style={styles.direction} onPress={() => this.onBottomItemClicked('Synesthesia')}>
-              <Text style={[styles.textStyle, { color: (this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
-              {(this.state.screen == 'Synesthesia' || curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
+              <Text style={[styles.textStyle, { color: (curBottomBarItem == 'Synesthesia') ? '#FFFFFF' : '#777778' }]}>{'Synesthesia'}</Text>
+              {(curBottomBarItem == 'Synesthesia') && <FastImage style={styles.imageStyle} source={rectangle} />}
             </TouchableOpacity>
           </SafeAreaView>
         </BoxShadow>}
@@ -180,6 +179,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
+    curHeaderItem: state.meditateHeaderReducer.curHeaderItem,
     curBottomBarItem: state.bottomBarReducer.curBottomBarItem,
     curActiveScreen: state.bottomBarReducer.curActiveScreen,
     showBottomBar: state.bottomBarReducer.showBottomBar

@@ -58,7 +58,7 @@ class Sensorium extends Component {
     const { mindBtnPressStatus, awareBtnPressStatus, synesBtnPressStatus } = this.state;
     const { isLoggedIn, user } = this.props;
     return (
-      <View style={{ flex: 1, backgroundColor: '#1F1F20', paddingBottom: 0 }}>
+      <View style={styles.main}>
         {/* <BottomBar screen={'Sensorium'} navigation={this.props.navigation} /> */}
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20 }}>
 
@@ -173,7 +173,7 @@ class Sensorium extends Component {
           </TouchableHighlight>
           {
             !isLoggedIn &&
-            <View style={{ marginTop: -32, marginBottom: 50 }}>
+            <View style={{ marginTop: -32 }}>
               <FastImage
                 style={{
                   width: '100%',
@@ -212,6 +212,18 @@ class Sensorium extends Component {
 }
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: '#1F1F20',
+    ...Platform.select({
+      ios: {
+        paddingBottom: 0
+      },
+      android: {
+        paddingBottom: 50
+      },
+    })
+  },
   button: {
     height: 50,
     alignSelf: 'center',
