@@ -17,6 +17,7 @@ const meditateLogo = require('../../assets/meditate_icon_grey.png')
 const meditateLogo_active = require('../../assets/meditateLogo.png')
 import { openRegisterModal } from '../actions/ToggleFormModalAction'
 import { addBlur } from '../actions/BlurAction'
+import { getNextNode } from '../actions/NodeAction'
 
 import FastImage from 'react-native-fast-image';
 
@@ -42,6 +43,23 @@ class MeditateHeader extends Component {
         // this.props.dispatch(cleanProgress());
         // this.props.dispatch(getUserProgress());
         this.props.dispatch(setMenuItem(''));
+      }
+    }
+
+    if (headerItem == 'Next') {
+      if (!isLoggedIn) {
+        this.props.dispatch(setHeaderItem('Sensorium'));
+        this.props.dispatch(addBlur());
+        this.props.dispatch(openRegisterModal());
+      } else {
+        this.props.dispatch(setHeaderItem(headerItem));
+        this.props.dispatch(setMenuItem(''));
+
+        this.props.dispatch(getNextNode());
+
+        // AsyncStorage.setItem('exerciseNodeID', item.id);
+        // AsyncStorage.setItem('isDone', isDone);
+        this.props.navigation.navigate('Player', { backScreen: '' })
       }
     }
 
@@ -73,7 +91,7 @@ class MeditateHeader extends Component {
           <FastImage resizeMode={FastImage.resizeMode.contain} style={styles.imageStyle} source={curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? menu_active : menu} />
           <Text style={[styles.textStyle, { color: curHeaderItem == '7 days for free' || curHeaderItem == 'My account' ? '#ffffff' : '#777778' }]}>{'Menu'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('')} style={[styles.mainView, { paddingLeft: 0 }]}>
+        <TouchableOpacity onPress={() => this.onChangedHeaderItem('Next')} style={[styles.mainView, { paddingLeft: 0 }]}>
           <FastImage resizeMode={FastImage.resizeMode.contain} style={styles.imageStyle} source={resume} />
           <Text style={styles.textStyle}>{'Next'}</Text>
         </TouchableOpacity>
