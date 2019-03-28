@@ -73,7 +73,6 @@ export const ActionTypes = keyMirror({
 
   GET_PROGRESS: null,
   GET_PROGRESS_SUCCESS: null,
-  GET_PROGRESS_ANONYMOUS: null,
   GET_PROGRESS_FAIL: null,
 
   UPDATE_USER: null,
@@ -125,6 +124,10 @@ export const ActionTypes = keyMirror({
   DELETE_USER: null,
   DELETE_USER_SUCCESS: null,
   DELETE_USER_FAIL: null,
+
+  GET_NEXT_NODE: null,
+  GET_NEXT_NODE_SUCCESS: null,
+  GET_NEXT_NODE_FAIL: null,
 })
 
 export const Theme = {

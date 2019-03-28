@@ -121,6 +121,13 @@ export const getProgress = (token) => fetch(`${baseUrl}progress?token=${token}`,
   },
 }).then(response => response.json());
 
+export const getNextNode = (token) => fetch(`${baseUrl}node/next?token=${token}`, {
+  method: 'GET',
+  headers: {
+    ...commonHeaders,
+  },
+}).then(response => response.json());
+
 export const subscriptionPayment = (token, payload) => fetch(`http://demo-synesthesia.zimalab.com/stripe/charge?token=${token}`, {
   method: 'POST',
   headers: {

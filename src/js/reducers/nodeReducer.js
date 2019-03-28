@@ -76,6 +76,24 @@ export const nodeReducer = (state = initialState, action) => {
         isFetchingData: true,
         nodeComplete: true
       }
+    case ActionTypes.GET_NEXT_NODE:
+      return {
+        ...state,
+        isFetchingData: true,
+      }
+    case ActionTypes.GET_NEXT_NODE_SUCCESS:
+      return {
+        ...state,
+        isFetchingData: false,
+        exerciseNode: action.payload.id,
+        nodeComplete: false
+      }
+    case ActionTypes.GET_NEXT_NODE_FAIL:
+      return {
+        ...state,
+        error: true,
+        isFetchingData: false
+      }
     default:
       return state
   }

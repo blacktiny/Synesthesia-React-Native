@@ -31,10 +31,11 @@ const rootSaga = function* () {
   yield takeLatest(ActionTypes.GET_PROGRESS, ProgressSaga)
   yield takeLatest(ActionTypes.UPDATE_USER, LoginUserSaga)
   yield takeLatest(ActionTypes.SET_BACKGROUND_SOUND, BackgroundSoundSaga)
-  yield takeLatest(ActionTypes.SET_SUBSCRIPTION_TYPE, SubscriptionSaga),
-    yield takeLatest(ActionTypes.PAY_SUBSCRIPTION, PaymentSaga),
-    yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga),
-    yield takeLatest(ActionTypes.DELETE_USER, UserSaga)
+  yield takeLatest(ActionTypes.SET_SUBSCRIPTION_TYPE, SubscriptionSaga)
+  yield takeLatest(ActionTypes.PAY_SUBSCRIPTION, PaymentSaga)
+  yield takeLatest(ActionTypes.UNSUBSCRIBE, UnsubscribeSaga)
+  yield takeLatest(ActionTypes.DELETE_USER, UserSaga)
+  yield takeLatest(ActionTypes.GET_NEXT_NODE, NodeSaga)
 }
 
 export default rootSaga

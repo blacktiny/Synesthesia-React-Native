@@ -10,22 +10,18 @@ const ProgressSaga = function* (action) {
   if (token != null) {
     const dataObject = yield call(getProgress, token);
     // if (dataObject.status.success) {
-      yield put({
-        type: ActionTypes.GET_PROGRESS_SUCCESS,
-        payload: {
-          ...dataObject
-        }
-      })
+    yield put({
+      type: ActionTypes.GET_PROGRESS_SUCCESS,
+      payload: {
+        ...dataObject
+      }
+    })
     // }
     // else {
     //   yield put({
     //     type: ActionTypes.GET_PROGRESS_FAIL
     //   })
     // }
-  } else {
-    yield put({
-      type: ActionTypes.GET_PROGRESS_ANONYMOUS
-    })
   }
 }
 

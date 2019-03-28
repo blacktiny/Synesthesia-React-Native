@@ -34,3 +34,10 @@ export function setVolume(volume) {
     payload: { volume }
   }
 }
+
+export function getNextNode() {
+  return {
+    type: ActionTypes.GET_NEXT_NODE,
+    payload: {}
+  }
+}
