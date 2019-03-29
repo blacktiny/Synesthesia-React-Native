@@ -9,10 +9,10 @@ import {
 import { Theme } from "../constants/constants";
 import Carousel from "../components/Carousel";
 const slider1 = require("../../assets/Slider/slider_1.png");
-const slider2 = require("../../assets/Slider/slider_2.png");
-const slider3 = require("../../assets/Slider/slider_3.png");
-const slider4 = require("../../assets/Slider/slider_4.png");
-const slider5 = require("../../assets/Slider/slider_5.png");
+const slider2 = require("../../assets/Slider/slider_2.jpg");
+const slider3 = require("../../assets/Slider/slider_3.jpg");
+const slider4 = require("../../assets/Slider/slider_4.jpg");
+const slider5 = require("../../assets/Slider/slider_5.jpg");
 const { width, height } = Dimensions.get("screen");
 
 

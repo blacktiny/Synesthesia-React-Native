@@ -215,14 +215,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: '#1F1F20',
-    ...Platform.select({
-      ios: {
-        paddingBottom: 0
-      },
-      android: {
-        paddingBottom: 50
-      },
-    })
+    paddingBottom: 60
   },
   button: {
     height: 50,
