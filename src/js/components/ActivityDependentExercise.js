@@ -137,12 +137,13 @@ class ActivityDependentExercise extends Component {
                           style={{
                             width: 80,
                             height: 80,
-                            borderRadius: 50
+                            borderRadius: 50,
+                            textAlign: 'center',
+                            alignSelf: 'center',
+                            alignItems: 'center'
                           }}>
                           <Text style={{
-                            position: "absolute",
                             top: 21,
-                            left: 32,
                             fontSize: 27,
                             fontFamily: Theme.FONT_BOLD,
                             color:
